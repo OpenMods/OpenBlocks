@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,7 +29,7 @@ public class ItemPaintCan extends ItemOpenBlock {
 	public static class ItemColorHandler implements IItemColor {
 
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+		public int getColorFromItemstack(@Nonnull ItemStack stack, int tintIndex) {
 			return tintIndex == 1? getColorFromStack(stack) : COLOR_WHITE;
 		}
 	}
@@ -39,12 +40,12 @@ public class ItemPaintCan extends ItemOpenBlock {
 		setMaxStackSize(1);
 	}
 
-	public static int getColorFromStack(ItemStack stack) {
+	public static int getColorFromStack(@Nonnull ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		return tag != null? tag.getInteger(TAG_COLOR) : COLOR_WHITE;
 	}
 
-	public static int getAmountFromStack(ItemStack stack) {
+	public static int getAmountFromStack(@Nonnull ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		return tag != null? tag.getInteger(TAG_AMOUNT) : 0;
 	}
@@ -55,6 +56,7 @@ public class ItemPaintCan extends ItemOpenBlock {
 			result.add(createStack(meta.rgb, FULL_CAN_SIZE));
 	}
 
+	@Nonnull
 	public static ItemStack createStack(int color, int amount) {
 		ItemStack stack = new ItemStack(OpenBlocks.Blocks.paintCan);
 		setColorAndAmount(stack, color, amount);
@@ -68,22 +70,22 @@ public class ItemPaintCan extends ItemOpenBlock {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean extended) {
+	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> list, boolean extended) {
 		list.add(String.format("#%06X", getColorFromStack(stack)));
 	}
 
 	@Override
-	public int getDamage(ItemStack stack) {
+	public int getDamage(@Nonnull ItemStack stack) {
 		return FULL_CAN_SIZE - getAmountFromStack(stack);
 	}
 
 	@Override
-	public double getDurabilityForDisplay(ItemStack stack) {
+	public double getDurabilityForDisplay(@Nonnull ItemStack stack) {
 		return 1 - (double)getAmountFromStack(stack) / FULL_CAN_SIZE;
 	}
 
 	@Override
-	public boolean isDamaged(ItemStack stack) {
+	public boolean isDamaged(@Nonnull ItemStack stack) {
 		return stack.hasTagCompound() && getAmountFromStack(stack) < FULL_CAN_SIZE;
 	}
 }

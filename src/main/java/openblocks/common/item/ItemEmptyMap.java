@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,11 +25,12 @@ public class ItemEmptyMap extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack item, EntityPlayer player, List<String> result, boolean extended) {
+	public void addInformation(@Nonnull ItemStack item, EntityPlayer player, List<String> result, boolean extended) {
 		NBTTagCompound tag = ItemUtils.getItemTag(item);
 		result.add(String.format("Scale: 1:%d", 1 << tag.getByte(TAG_SCALE)));
 	}
 
+	@Nonnull
 	public ItemStack createMap(int scale) {
 		ItemStack result = new ItemStack(this);
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
@@ -43,6 +45,7 @@ public class ItemEmptyMap extends Item {
 			result.add(OpenBlocks.Items.emptyMap.createMap(scale));
 	}
 
+	@Nonnull
 	public static ItemStack upgradeToMap(World world, ItemStack emptyMap) {
 		NBTTagCompound tag = ItemUtils.getItemTag(emptyMap);
 		byte scale = tag.getByte(TAG_SCALE);

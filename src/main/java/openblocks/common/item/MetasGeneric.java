@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import com.google.common.collect.ImmutableList;
+import javax.annotation.Nonnull;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
@@ -128,16 +129,17 @@ public enum MetasGeneric implements IMetaItemFactory {
 					new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', new ItemStack(Items.COAL, 1, OreDictionary.WILDCARD_VALUE), 's', "stickWood"));
 		}
 	};
-
+	@Nonnull
 	public ItemStack newItemStack(int size) {
 		return new ItemStack(OpenBlocks.Items.generic, size, ordinal());
 	}
 
+	@Nonnull
 	public ItemStack newItemStack() {
 		return new ItemStack(OpenBlocks.Items.generic, 1, ordinal());
 	}
 
-	public boolean isA(ItemStack stack) {
+	public boolean isA(@Nonnull ItemStack stack) {
 		return (stack.getItem() instanceof ItemOBGeneric) && (stack.getItemDamage() == ordinal());
 	}
 

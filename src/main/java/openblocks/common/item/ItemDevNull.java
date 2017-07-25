@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,7 +42,7 @@ public class ItemDevNull extends Item {
 
 	private static final LoadingCache<ItemStack, Pair<ItemStack, Integer>> cache = CacheBuilder.newBuilder().softValues().expireAfterAccess(10, TimeUnit.SECONDS).build(new CacheLoader<ItemStack, Pair<ItemStack, Integer>>() {
 		@Override
-		public Pair<ItemStack, Integer> load(ItemStack container) throws Exception {
+		public Pair<ItemStack, Integer> load(@Nonnull ItemStack container) throws Exception {
 			ItemStack stack = container;
 			int depth = 0;
 
@@ -65,7 +66,7 @@ public class ItemDevNull extends Item {
 		}
 
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+		public int getColorFromItemstack(@Nonnull ItemStack stack, int tintIndex) {
 			if (tintIndex < NESTED_ITEM_TINT_DELTA)
 				return NO_COLOR;
 
@@ -101,11 +102,11 @@ public class ItemDevNull extends Item {
 		}
 
 		@Override
-		public boolean isItemValidForSlot(int i, ItemStack stack) {
+		public boolean isItemValidForSlot(int i, @Nonnull ItemStack stack) {
 			return getContents(stack).getRight() < STACK_LIMIT;
 		}
 
-		private void checkStack(ItemStack stack) {
+		private void checkStack(@Nonnull ItemStack stack) {
 			if (getContents(stack).getRight() >= STACK_LIMIT)
 				player.addStat(OpenBlocks.stackAchievement);
 		}
@@ -115,7 +116,7 @@ public class ItemDevNull extends Item {
 		setMaxStackSize(1);
 	}
 
-	public static Pair<ItemStack, Integer> getContents(ItemStack container) {
+	public static Pair<ItemStack, Integer> getContents(@Nonnull ItemStack container) {
 		if (container.isEmpty()) return Pair.of(ItemStack.EMPTY, 0);
 		return cache.getUnchecked(container);
 	}

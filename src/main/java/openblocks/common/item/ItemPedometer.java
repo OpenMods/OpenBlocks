@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -84,7 +85,7 @@ public class ItemPedometer extends Item {
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int slotId, boolean isSelected) {
+	public void onUpdate(@Nonnull ItemStack stack, World world, Entity entity, int slotId, boolean isSelected) {
 		if (world.isRemote && slotId < 9) {
 			PedometerState state = PedometerHandler.getProperty(entity);
 			if (state.isRunning()) state.update(entity);

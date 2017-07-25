@@ -1,5 +1,6 @@
 package openblocks.common.entity;
 
+import javax.annotation.Nonnull;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
@@ -20,7 +21,7 @@ public class EntityItemProjectile extends EntityItem {
 		super(world, x, y, z);
 	}
 
-	public EntityItemProjectile(World world, double x, double y, double z, ItemStack stack) {
+	public EntityItemProjectile(World world, double x, double y, double z, @Nonnull ItemStack stack) {
 		super(world, x, y, z, stack);
 	}
 

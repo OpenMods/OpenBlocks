@@ -2,6 +2,7 @@ package openblocks.common.item;
 
 import com.google.common.collect.MapMaker;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +25,7 @@ public class ItemHangGlider extends Item {
 	public ItemHangGlider() {
 		addPropertyOverride(new ResourceLocation("hidden"), new IItemPropertyGetter() {
 			@Override
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float apply(@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				return EntityHangGlider.isEntityWearingGlider(entityIn)? 2 : 0;
 			}
 		});

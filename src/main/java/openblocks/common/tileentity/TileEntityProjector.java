@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -48,7 +49,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 
 	private final GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {
 		@Override
-		public boolean isItemValidForSlot(int i, ItemStack stack) {
+		public boolean isItemValidForSlot(int i, @Nonnull ItemStack stack) {
 			if (stack.isEmpty()) return false;
 			Item item = stack.getItem();
 			return item instanceof ItemHeightMap || item instanceof ItemEmptyMap;

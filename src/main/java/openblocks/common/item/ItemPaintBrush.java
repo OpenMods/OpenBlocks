@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -59,7 +60,7 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean extended) {
+	public void addInformation(@Nonnull ItemStack itemStack, EntityPlayer player, List<String> list, boolean extended) {
 		Integer color = getColorFromStack(itemStack);
 		if (color != null) list.add(String.format("#%06X", color));
 	}
@@ -72,6 +73,7 @@ public class ItemPaintBrush extends Item {
 		}
 	}
 
+	@Nonnull
 	public static ItemStack createStackWithColor(int color) {
 		ItemStack stack = new ItemStack(OpenBlocks.Items.paintBrush);
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
@@ -148,7 +150,7 @@ public class ItemPaintBrush extends Item {
 		return false;
 	}
 
-	public static Integer getColorFromStack(ItemStack stack) {
+	public static Integer getColorFromStack(@Nonnull ItemStack stack) {
 		if (stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag.hasKey(TAG_COLOR)) { return tag.getInteger(TAG_COLOR); }
@@ -156,7 +158,7 @@ public class ItemPaintBrush extends Item {
 		return null;
 	}
 
-	public static void setColor(ItemStack stack, int color) {
+	public static void setColor(@Nonnull ItemStack stack, int color) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		tag.setInteger(TAG_COLOR, color);
 	}

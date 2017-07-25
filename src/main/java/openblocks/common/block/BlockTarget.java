@@ -194,11 +194,10 @@ public class BlockTarget extends OpenBlock.FourDirections {
 				IInventory inventory = fakePlayer.inventory;
 				for (int i = 0; i < inventory.getSizeInventory(); i++) {
 					ItemStack stack = inventory.getStackInSlot(i);
-					if (!stack.isEmpty()) {
+					if (!stack.isEmpty())
 						drops.add(stack);
-						inventory.setInventorySlotContents(i, null);
-					}
 				}
+				inventory.clear();
 
 				return failed;
 

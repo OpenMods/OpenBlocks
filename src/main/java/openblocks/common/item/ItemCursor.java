@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,7 +28,7 @@ public class ItemCursor extends Item {
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack par1ItemStack) {
+	public int getMaxItemUseDuration(@Nonnull ItemStack par1ItemStack) {
 		return 50;
 	}
 

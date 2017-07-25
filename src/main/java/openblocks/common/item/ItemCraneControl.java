@@ -2,6 +2,7 @@ package openblocks.common.item;
 
 import com.google.common.collect.MapMaker;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.entity.Entity;
@@ -45,7 +46,7 @@ public class ItemCraneControl extends Item implements IStateItem {
 	}
 
 	@Override
-	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+	public boolean onEntitySwing(EntityLivingBase entityLiving, @Nonnull ItemStack stack) {
 		if (entityLiving instanceof EntityPlayer && hasClicked(entityLiving)) {
 			final EntityPlayer player = (EntityPlayer)entityLiving;
 			final EntityMagnet magnet = CraneRegistry.instance.getMagnetForPlayer(player);
@@ -56,7 +57,7 @@ public class ItemCraneControl extends Item implements IStateItem {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+	public boolean onLeftClickEntity(@Nonnull ItemStack stack, EntityPlayer player, Entity entity) {
 		return true;
 	}
 
@@ -73,7 +74,7 @@ public class ItemCraneControl extends Item implements IStateItem {
 	}
 
 	@Override
-	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
+	public void onUsingTick(@Nonnull ItemStack stack, EntityLivingBase player, int count) {
 		if (player instanceof EntityPlayerMP
 				&& ItemCraneBackpack.isWearingCrane(player)) {
 			CraneRegistry.Data data = CraneRegistry.instance.getData(player, true);
@@ -82,7 +83,7 @@ public class ItemCraneControl extends Item implements IStateItem {
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
+	public int getMaxItemUseDuration(@Nonnull ItemStack stack) {
 		return 72000; // quite long time!
 	}
 
@@ -118,7 +119,7 @@ public class ItemCraneControl extends Item implements IStateItem {
 	}
 
 	@Override
-	public State getState(ItemStack stack, World world, EntityLivingBase entity) {
+	public State getState(@Nonnull ItemStack stack, World world, EntityLivingBase entity) {
 		if (entity != null && ItemCraneBackpack.isWearingCrane(entity)) {
 			CraneRegistry.Data data = CraneRegistry.instance.getData(entity, false);
 			if (data != null) {

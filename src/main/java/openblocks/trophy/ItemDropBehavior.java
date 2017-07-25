@@ -1,5 +1,6 @@
 package openblocks.trophy;
 
+import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
@@ -9,13 +10,15 @@ public class ItemDropBehavior implements ITrophyBehavior {
 
 	private final int minTicks;
 	private final SoundEvent sound;
+
+	@Nonnull
 	private final ItemStack drop;
 
-	public ItemDropBehavior(int minTicks, ItemStack drop) {
+	public ItemDropBehavior(int minTicks, @Nonnull ItemStack drop) {
 		this(minTicks, drop, null);
 	}
 
-	public ItemDropBehavior(int minTicks, ItemStack drop, SoundEvent sound) {
+	public ItemDropBehavior(int minTicks, @Nonnull ItemStack drop, SoundEvent sound) {
 		this.minTicks = minTicks;
 		this.sound = sound;
 		this.drop = drop.copy();

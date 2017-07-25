@@ -6,6 +6,7 @@ import com.mojang.authlib.GameProfile;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -295,7 +296,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
 		if (!world.isRemote && placer instanceof EntityPlayer) {
 			this.owner = ((EntityPlayer)placer).getGameProfile();
 		}

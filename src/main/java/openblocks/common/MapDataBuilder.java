@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -268,7 +269,7 @@ public class MapDataBuilder {
 		return null;
 	}
 
-	public static ItemStack upgradeToMap(World world, ItemStack stack) {
+	public static ItemStack upgradeToMap(World world, @Nonnull ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ItemHeightMap) return stack;
 		else if (item instanceof ItemEmptyMap) {

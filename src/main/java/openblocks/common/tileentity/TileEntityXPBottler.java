@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -70,7 +71,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "xpbottler", true, 2) {
 		@Override
-		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
+		public boolean isItemValidForSlot(int slot, @Nonnull ItemStack itemstack) {
 			if (slot != Slots.input.ordinal()) return false;
 			return itemstack.getItem() == Items.GLASS_BOTTLE;
 		}

@@ -3,6 +3,7 @@ package openblocks.common.item;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -184,7 +185,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean extended) {
+	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> list, boolean extended) {
 		FluidTank fakeTank = readTank(stack);
 		FluidStack fluidStack = fakeTank.getFluid();
 		if (fluidStack != null && fluidStack.amount > 0) {
@@ -208,6 +209,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 		return super.getItemStackDisplayName(stack);
 	}
 
+	@Nonnull
 	public static ItemStack createFilledTank(Fluid fluid) {
 		final int tankCapacity = TileEntityTank.getTankCapacity();
 		FluidStack stack = FluidRegistry.getFluidStack(fluid.getName(), tankCapacity);
@@ -221,7 +223,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 		return item;
 	}
 
-	private static FluidTank readTank(ItemStack stack) {
+	private static FluidTank readTank(@Nonnull ItemStack stack) {
 		FluidTank tank = new FluidTank(TileEntityTank.getTankCapacity());
 
 		final NBTTagCompound itemTag = stack.getTagCompound();
@@ -233,7 +235,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 		return tank;
 	}
 
-	private static void saveTank(ItemStack container, FluidTank tank) {
+	private static void saveTank(@Nonnull ItemStack container, FluidTank tank) {
 		if (tank.getFluidAmount() > 0) {
 			NBTTagCompound itemTag = ItemUtils.getItemTag(container);
 

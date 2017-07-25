@@ -6,6 +6,7 @@ import net.minecraft.block.BlockFlower;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.math.BlockPos;
@@ -80,7 +81,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
 		final World world = entity.world;
 		if ((world instanceof WorldServer) && blockCoord != null && canHarvestBlock(blockCoord)) {
 			if (entity.getDistanceSqToCenter(blockCoord) < 1.0) {
-				FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new BreakBlockAction(world, blockCoord).setStackToUse(null));
+				FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new BreakBlockAction(world, blockCoord).setStackToUse(ItemStack.EMPTY));
 				blockCoord = null;
 			}
 		}
@@ -88,7 +89,6 @@ public class EntityAIBreakBlock extends EntityAIBase {
 
 	public boolean canHarvestBlock(BlockPos coord) {
 		final Block block = entity.world.getBlockState(coord).getBlock();
-		return block instanceof BlockFlower ||
-				block == Blocks.TORCH;
+		return block instanceof BlockFlower || block == Blocks.TORCH;
 	}
 }

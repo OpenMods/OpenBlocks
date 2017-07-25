@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import javax.annotation.Nonnull;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -65,13 +66,14 @@ public class ItemCartographer extends Item {
 		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
-	public static AssistantType getTypeFromItem(ItemStack stack) {
+	public static AssistantType getTypeFromItem(@Nonnull ItemStack stack) {
 		int typeId = stack.getItemDamage();
 		if (typeId < 0 || typeId > AssistantType.VALUES.length) typeId = 0;
 
 		return AssistantType.VALUES[typeId];
 	}
 
+	@Nonnull
 	public ItemStack createStack(AssistantType type) {
 		return new ItemStack(this, 1, type.ordinal());
 	}

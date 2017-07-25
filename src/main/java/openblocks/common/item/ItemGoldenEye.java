@@ -3,6 +3,7 @@ package openblocks.common.item;
 import com.google.common.base.Strings;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -53,7 +54,7 @@ public class ItemGoldenEye extends Item {
 		return ActionResult.newResult(EnumActionResult.PASS, stack);
 	}
 
-	private static void tryLearnStructure(ItemStack stack, WorldServer world, EntityPlayerMP player) {
+	private static void tryLearnStructure(@Nonnull ItemStack stack, WorldServer world, EntityPlayerMP player) {
 		Map<String, BlockPos> nearbyStructures = StructureRegistry.instance.getNearestStructures(world, player.getPosition());
 
 		String newStructureName = "";
@@ -81,7 +82,7 @@ public class ItemGoldenEye extends Item {
 		}
 	}
 
-	private static boolean trySpawnEntity(ItemStack stack, WorldServer world, EntityPlayerMP player) {
+	private static boolean trySpawnEntity(@Nonnull ItemStack stack, WorldServer world, EntityPlayerMP player) {
 		int damage = stack.getItemDamage();
 		if (damage >= stack.getMaxDamage()) return false;
 
@@ -118,7 +119,7 @@ public class ItemGoldenEye extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean expanded) {
+	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> result, boolean expanded) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		if (tag.hasKey(TAG_STRUCTURE, Constants.NBT.TAG_STRING)) {
 			final String structure = tag.getString(TAG_STRUCTURE);

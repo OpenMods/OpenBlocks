@@ -2,6 +2,7 @@ package openblocks.common.recipe;
 
 import com.google.common.collect.Lists;
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 		return Lists.newArrayList(new ItemStack(Items.PAPER), block);
 	}
 
+	@Nonnull
 	private static ItemStack createFakeResult() {
 		return OpenBlocks.Items.crayonGlasses.createCrayonGlasses(0x00FFFF);
 	}
@@ -50,6 +52,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);

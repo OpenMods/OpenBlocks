@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import com.google.common.base.Optional;
+import javax.annotation.Nonnull;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -36,7 +37,7 @@ public class ItemStencil extends Item {
 		return new ItemStack(this, 1, stencil.ordinal());
 	}
 
-	public static Optional<IStencilPattern> getPattern(ItemStack stack) {
+	public static Optional<IStencilPattern> getPattern(@Nonnull ItemStack stack) {
 		final int patternId = stack.getMetadata();
 		try {
 			return Optional.<IStencilPattern> of(StencilPattern.values()[patternId]);

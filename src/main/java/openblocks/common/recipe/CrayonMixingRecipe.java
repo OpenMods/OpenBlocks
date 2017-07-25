@@ -3,6 +3,7 @@ package openblocks.common.recipe;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import java.util.Iterator;
+import javax.annotation.Nonnull;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,6 +31,7 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		int count = 0;
 		float r = 0, g = 0, b = 0;

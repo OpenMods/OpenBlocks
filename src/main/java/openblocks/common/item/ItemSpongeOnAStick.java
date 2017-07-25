@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import javax.annotation.Nonnull;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -35,7 +36,7 @@ public class ItemSpongeOnAStick extends Item {
 		return ActionResult.newResult(result? EnumActionResult.SUCCESS : EnumActionResult.FAIL, stack);
 	}
 
-	private static boolean soakUp(World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+	private static boolean soakUp(World world, BlockPos pos, EntityPlayer player, @Nonnull ItemStack stack) {
 		boolean absorbedAnything = false;
 		boolean hitLava = false;
 		int damage = stack.getItemDamage();

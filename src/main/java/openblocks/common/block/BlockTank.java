@@ -1,5 +1,6 @@
 package openblocks.common.block;
 
+import javax.annotation.Nonnull;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -68,6 +69,7 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		ItemStack result = new ItemStack(this);
 		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);

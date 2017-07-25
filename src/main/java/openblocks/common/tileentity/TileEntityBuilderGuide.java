@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.Random;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -29,7 +30,7 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 	private int ticks;
 
 	@Override
-	public boolean onItemUse(EntityPlayerMP player, ItemStack heldStack, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(EntityPlayerMP player, @Nonnull ItemStack heldStack, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (active.get()) {
 			final Item heldItem = heldStack.getItem();
 			if (heldItem instanceof ItemBlock) {
@@ -70,7 +71,7 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 		return Math.abs(x) > 1 || Math.abs(y) > 1 || Math.abs(z) > 1;
 	}
 
-	private boolean survivalPlaceBlocks(EntityPlayerMP player, ItemStack heldItem, Block block, int blockMeta, EnumFacing side, float hitX, float hitY, float hitZ) {
+	private boolean survivalPlaceBlocks(EntityPlayerMP player, @Nonnull ItemStack heldItem, Block block, int blockMeta, EnumFacing side, float hitX, float hitY, float hitZ) {
 		for (BlockPos relCoord : getShapeSafe().getCoords()) {
 			BlockPos absPos = pos.add(relCoord);
 			if (world.isBlockLoaded(absPos) && world.isAirBlock(absPos) && absPos.getY() >= 0 && absPos.getY() < 256) {

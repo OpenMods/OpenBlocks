@@ -180,7 +180,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 			if (drained != null && drained.amount == liquidXpCost) {
 				tank.drain(liquidXpCost, true);
 				removeModifiers(helper.getModifierCost());
-				inventory.setInventorySlotContents(Slots.tool.ordinal(), null);
+				inventory.setInventorySlotContents(Slots.tool.ordinal(), ItemStack.EMPTY);
 				inventory.setInventorySlotContents(Slots.output.ordinal(), output);
 				playSoundAtBlock(SoundEvents.BLOCK_ANVIL_USE, 0.3f, 1f);
 			}

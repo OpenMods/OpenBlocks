@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -44,7 +45,7 @@ public class ItemSlimalyzer extends Item {
 		return chunk.getRandomWithSeed(987234911L).nextInt(10) == 0;
 	}
 
-	private static boolean update(ItemStack stack, World world, Entity entity) {
+	private static boolean update(@Nonnull ItemStack stack, World world, Entity entity) {
 		final boolean isActive = isActive(stack);
 		final boolean isInSlimeChunk = isInSlimeChunk(world, entity);
 		if (isActive != isInSlimeChunk) {
@@ -57,7 +58,7 @@ public class ItemSlimalyzer extends Item {
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+	public void onUpdate(@Nonnull ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
 		if (!world.isRemote)
 			update(stack, world, entity);
 	}

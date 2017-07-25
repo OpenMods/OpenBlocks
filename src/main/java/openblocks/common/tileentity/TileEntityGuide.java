@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -585,7 +586,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return shape;
 	}
 
-	public boolean onItemUse(EntityPlayerMP player, ItemStack heldStack, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(EntityPlayerMP player, @Nonnull ItemStack heldStack, EnumFacing side, float hitX, float hitY, float hitZ) {
 		Set<ColorMeta> colors = ColorMeta.fromStack(heldStack);
 		if (!colors.isEmpty()) {
 			ColorMeta selected = CollectionUtils.getRandom(colors);

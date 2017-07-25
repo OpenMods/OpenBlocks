@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import java.util.EnumMap;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -107,7 +108,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	private GenericInventory inventory = new TileEntityInventory(this, "paintmixer", true, 6) {
 		@Override
-		public boolean isItemValidForSlot(int slotId, ItemStack stack) {
+		public boolean isItemValidForSlot(int slotId, @Nonnull ItemStack stack) {
 			Slots[] values = Slots.values();
 			if (stack.isEmpty() || slotId < 0 || slotId > values.length) return false;
 			Slots slot = values[slotId];
@@ -312,7 +313,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 		return hasStack(Slots.paint, PAINT_CAN) || hasStack(Slots.paint, MILK_BUCKET);
 	}
 
-	private static Integer getColor(ItemStack stack, boolean canColor) {
+	private static Integer getColor(@Nonnull ItemStack stack, boolean canColor) {
 		if (stack.isItemEqual(PAINT_CAN)) return ItemPaintCan.getColorFromStack(stack);
 		else if (canColor && stack.isItemEqual(MILK_BUCKET)) return 0xFFFFFF;
 		return null;

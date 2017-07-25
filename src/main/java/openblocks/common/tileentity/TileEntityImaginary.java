@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import com.google.common.base.Preconditions;
+import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -165,6 +166,7 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getPickBlock(EntityPlayer player) {
 		int dmg = isPencil()? ItemImaginary.DAMAGE_PENCIL : ItemImaginary.DAMAGE_CRAYON;
 		return ItemImaginary.setupValues(new ItemStack(getBlockType(), 1, dmg), color, shape, isInverted);

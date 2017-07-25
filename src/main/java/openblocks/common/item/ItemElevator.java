@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,7 +20,7 @@ public class ItemElevator extends ItemOpenBlock {
 		private static final int COLOR_WHITE = 0xFFFFFFFF;
 
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+		public int getColorFromItemstack(@Nonnull ItemStack stack, int tintIndex) {
 			return tintIndex == 0? ColorMeta.fromBlockMeta(stack.getMetadata()).rgb : COLOR_WHITE;
 		}
 	}

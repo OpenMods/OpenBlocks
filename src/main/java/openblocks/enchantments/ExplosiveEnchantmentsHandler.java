@@ -6,6 +6,7 @@ import com.google.common.collect.MapMaker;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -103,7 +104,7 @@ public class ExplosiveEnchantmentsHandler {
 
 	private static final ItemStack gunpowder = new ItemStack(Items.GUNPOWDER);
 
-	private static void useItems(EntityPlayer player, ItemStack resource, EntityEquipmentSlot armorSlot, int gunpowderAmout) {
+	private static void useItems(EntityPlayer player, @Nonnull ItemStack resource, EntityEquipmentSlot armorSlot, int gunpowderAmout) {
 		if (player.capabilities.isCreativeMode) return;
 
 		ItemStack armor = player.getItemStackFromSlot(armorSlot);

@@ -1,5 +1,6 @@
 package openblocks.common.recipe;
 
+import javax.annotation.Nonnull;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,6 +47,7 @@ public class EpicEraserRecipe extends CustomRecipeBase {
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		ItemStack targetItem = ItemStack.EMPTY;
 		boolean eraserFound = false;

@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import java.util.List;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -108,7 +109,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
 		if (!world.isRemote) {
 			if ((placer instanceof EntityPlayer) && !(placer instanceof FakePlayer)) {
 				EntityPlayer player = (EntityPlayer)placer;
@@ -189,7 +190,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		return true;
 	}
 
-	protected void robGrave(EntityPlayer player, ItemStack held) {
+	protected void robGrave(EntityPlayer player, @Nonnull ItemStack held) {
 		boolean dropped = false;
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			final ItemStack stack = inventory.getStackInSlot(i);

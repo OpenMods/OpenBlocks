@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import javax.annotation.Nonnull;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -104,6 +105,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		}
 	}
 
+	@Nonnull
 	private ItemStack findStack() {
 		for (EnumFacing direction : EnumFacing.VALUES) {
 			final IItemHandler inventory = InventoryUtils.tryGetHandler(world, pos.offset(direction), direction.getOpposite());
@@ -118,7 +120,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		return ItemStack.EMPTY;
 	}
 
-	private void fireStack(ItemStack stack) {
+	private void fireStack(@Nonnull ItemStack stack) {
 		final ITriggerable rpc = createServerRpcProxy(ITriggerable.class);
 		rpc.trigger();
 

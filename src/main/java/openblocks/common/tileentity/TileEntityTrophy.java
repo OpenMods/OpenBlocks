@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,7 +60,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
 		Trophy trophy = ItemTrophyBlock.getTrophy(stack);
 		if (trophy != null) trophyIndex.set(trophy);
 
@@ -87,6 +88,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 		return true;
 	}
 
+	@Nonnull
 	private ItemStack getAsItem() {
 		final Trophy trophy = getTrophy();
 		if (trophy != null) {
@@ -106,9 +108,10 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getPickBlock(EntityPlayer player) {
 		final Trophy trophy = getTrophy();
-		return trophy != null? trophy.getItemStack() : null;
+		return trophy != null? trophy.getItemStack() : ItemStack.EMPTY;
 	}
 
 }

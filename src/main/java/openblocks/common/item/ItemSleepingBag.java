@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
@@ -198,16 +199,18 @@ public class ItemSleepingBag extends ItemArmor {
 		return !armor.isEmpty() && armor.getItem() instanceof ItemSleepingBag;
 	}
 
-	private static ItemStack setChestpieceSlot(EntityPlayer player, ItemStack chestpiece) {
+	@Nonnull
+	private static ItemStack setChestpieceSlot(EntityPlayer player, @Nonnull ItemStack chestpiece) {
 		player.setItemStackToSlot(EntityEquipmentSlot.CHEST, chestpiece);
 		return chestpiece;
 	}
 
+	@Nonnull
 	private static ItemStack getChestpieceSlot(EntityPlayer player) {
 		return player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 	}
 
-	private static boolean isChestplate(ItemStack stack) {
+	private static boolean isChestplate(@Nonnull ItemStack stack) {
 		if (stack.isEmpty()) return false;
 		Item item = stack.getItem();
 		if (item instanceof ItemSleepingBag) return false;

@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -117,7 +118,7 @@ public class LoreFlimFlam implements IFlimFlamAction {
 		return result;
 	}
 
-	private static String identityType(ItemStack stack) {
+	private static String identityType(@Nonnull ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ItemArmor) {
 			switch (((ItemArmor)item).armorType) {

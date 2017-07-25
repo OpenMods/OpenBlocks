@@ -1,5 +1,6 @@
 package openblocks.common.recipe;
 
+import javax.annotation.Nonnull;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,6 +48,7 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getCraftingResult(InventoryCrafting inventory) {
 		for (int i = 0; i < 3; i++) {
 			ItemStack middle = inventory.getStackInRowAndColumn(1, i);

@@ -3,6 +3,7 @@ package openblocks.common.entity;
 import io.netty.buffer.ByteBuf;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
+import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -88,6 +89,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 		return true;
 	}
 
+	@Nonnull
 	public abstract ItemStack toItemStack();
 
 	@Override

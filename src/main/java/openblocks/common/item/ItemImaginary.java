@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 import java.util.List;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -45,7 +46,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	@SideOnly(Side.CLIENT)
 	public static class CrayonColorHandler implements IItemColor {
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+		public int getColorFromItemstack(@Nonnull ItemStack stack, int tintIndex) {
 			if (tintIndex == 1) {
 				if (isCrayon(stack)) { return ItemUtils.getItemTag(stack).getInteger(TAG_COLOR); }
 			}
@@ -115,7 +116,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		throw new IllegalStateException("Invalid tag type: " + value);
 	}
 
-	public static float getUses(ItemStack stack) {
+	public static float getUses(@Nonnull ItemStack stack) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		return getUses(tag);
 	}
@@ -125,12 +126,12 @@ public class ItemImaginary extends ItemOpenBlock {
 		return PlacementMode.VALUES[value];
 	}
 
-	public static PlacementMode getMode(ItemStack stack) {
+	public static PlacementMode getMode(@Nonnull ItemStack stack) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		return getMode(tag);
 	}
 
-	public static boolean isCrayon(ItemStack stack) {
+	public static boolean isCrayon(@Nonnull ItemStack stack) {
 		return stack.getItemDamage() == DAMAGE_CRAYON;
 	}
 
@@ -142,30 +143,35 @@ public class ItemImaginary extends ItemOpenBlock {
 
 		addPropertyOverride(new ResourceLocation("mode"), new IItemPropertyGetter() {
 			@Override
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float apply(@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				NBTTagCompound tag = ItemUtils.getItemTag(stack);
 				return tag.getByte(TAG_MODE);
 			}
 		});
 	}
 
-	public static ItemStack setupValues(ItemStack result, Integer color, BlockImaginary.Shape shape, boolean isInverted) {
+	@Nonnull
+	public static ItemStack setupValues(@Nonnull ItemStack result, Integer color, BlockImaginary.Shape shape, boolean isInverted) {
 		return setupValues(result, color, shape, isInverted, Config.imaginaryItemUseCount);
 	}
 
-	public static ItemStack setupValues(ItemStack result, Integer color, BlockImaginary.Shape shape, boolean isInverted, float uses) {
+	@Nonnull
+	public static ItemStack setupValues(@Nonnull ItemStack result, Integer color, BlockImaginary.Shape shape, boolean isInverted, float uses) {
 		return setupValues(result, color, Objects.firstNonNull(shapeToMode.get(shape, isInverted), PlacementMode.BLOCK), uses);
 	}
 
-	public static ItemStack setupValues(ItemStack result, Integer color) {
+	@Nonnull
+	public static ItemStack setupValues(@Nonnull ItemStack result, Integer color) {
 		return setupValues(result, color, PlacementMode.BLOCK);
 	}
 
-	public static ItemStack setupValues(ItemStack result, Integer color, PlacementMode mode) {
+	@Nonnull
+	public static ItemStack setupValues(@Nonnull ItemStack result, Integer color, PlacementMode mode) {
 		return setupValues(result, color, mode, Config.imaginaryItemUseCount);
 	}
 
-	public static ItemStack setupValues(ItemStack result, Integer color, PlacementMode mode, float uses) {
+	@Nonnull
+	public static ItemStack setupValues(@Nonnull ItemStack result, Integer color, PlacementMode mode, float uses) {
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
 
 		if (color != null) {
@@ -179,7 +185,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	protected void afterBlockPlaced(ItemStack stack, EntityPlayer player, World world, BlockPos pos) {
+	protected void afterBlockPlaced(@Nonnull ItemStack stack, EntityPlayer player, World world, BlockPos pos) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
 		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
@@ -210,7 +216,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getUnlocalizedName(@Nonnull ItemStack stack) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		return tag.hasKey(TAG_COLOR)? "item.openblocks.crayon" : "item.openblocks.pencil";
 	}
@@ -222,7 +228,7 @@ public class ItemImaginary extends ItemOpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
+	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
 		result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.uses", getUses(tag)));
@@ -243,15 +249,16 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	public boolean hasContainerItem(ItemStack stack) {
+	public boolean hasContainerItem(@Nonnull ItemStack stack) {
 		return true;
 	}
 
 	@Override
-	public ItemStack getContainerItem(ItemStack stack) {
+	@Nonnull
+	public ItemStack getContainerItem(@Nonnull ItemStack stack) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		float uses = getUses(tag) - CRAFTING_COST;
-		if (uses <= 0) return null;
+		if (uses <= 0) return ItemStack.EMPTY;
 
 		ItemStack copy = stack.copy();
 		NBTTagCompound copyTag = ItemUtils.getItemTag(copy);

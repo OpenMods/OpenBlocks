@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,10 +56,12 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getPickBlock(EntityPlayer player) {
 		return createStack();
 	}
 
+	@Nonnull
 	private ItemStack createStack() {
 		final int colorMeta = color.get().vanillaBlockId;
 		return new ItemStack(OpenBlocks.Blocks.elevatorRotating, 1, colorMeta);
@@ -82,7 +85,7 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
 		ColorMeta colorMeta = ColorMeta.fromBlockMeta(stack.getItemDamage());
 		color.set(colorMeta);
 	}

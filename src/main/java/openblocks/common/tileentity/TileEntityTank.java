@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -249,7 +250,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
 		NBTTagCompound itemTag = stack.getTagCompound();
 
 		if (itemTag != null && itemTag.hasKey(ItemTankBlock.TANK_TAG)) {
@@ -307,7 +308,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return false;
 	}
 
-	protected boolean tryEmptyItem(EntityPlayer player, ItemStack container) {
+	protected boolean tryEmptyItem(EntityPlayer player, @Nonnull ItemStack container) {
 		final IFluidHandler containerFluidHandler = FluidUtil.getFluidHandler(container);
 		if (containerFluidHandler != null) {
 			FluidStack simulatedTransfer = FluidUtil.tryFluidTransfer(tankCapabilityWrapper, containerFluidHandler, Fluid.BUCKET_VOLUME, true);

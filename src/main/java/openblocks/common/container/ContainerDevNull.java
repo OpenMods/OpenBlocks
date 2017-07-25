@@ -1,5 +1,6 @@
 package openblocks.common.container;
 
+import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
@@ -35,9 +36,10 @@ public class ContainerDevNull extends ContainerBase<Void> {
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player) {
-		if (slotId == protectedSlotNumber) return null;
-		if (clickType == ClickType.SWAP && dragType == protectedSlotIndex) return null;
+		if (slotId == protectedSlotNumber) return ItemStack.EMPTY;
+		if (clickType == ClickType.SWAP && dragType == protectedSlotIndex) return ItemStack.EMPTY;
 		return super.slotClick(slotId, dragType, clickType, player);
 	}
 

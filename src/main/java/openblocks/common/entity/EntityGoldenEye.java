@@ -1,5 +1,6 @@
 package openblocks.common.entity;
 
+import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -14,9 +15,10 @@ public class EntityGoldenEye extends EntitySmoothMove {
 
 	private static final int TTL = 60;
 	private int timeToLive;
+	@Nonnull
 	private ItemStack spawningStack = ItemStack.EMPTY;
 
-	public EntityGoldenEye(World world, ItemStack spawningStack, Entity owner, BlockPos target) {
+	public EntityGoldenEye(World world, @Nonnull ItemStack spawningStack, Entity owner, BlockPos target) {
 		super(world);
 		timeToLive = TTL;
 		this.spawningStack = spawningStack.copy();

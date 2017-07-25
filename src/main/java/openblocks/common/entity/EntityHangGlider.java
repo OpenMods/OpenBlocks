@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
+import javax.annotation.Nonnull;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,7 +64,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		return glider != null && glider.isDeployed();
 	}
 
-	private static boolean isItemHangglider(ItemStack stack) {
+	private static boolean isItemHangglider(@Nonnull ItemStack stack) {
 		return !stack.isEmpty() && stack.getItem() instanceof ItemHangGlider;
 	}
 

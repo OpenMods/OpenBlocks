@@ -1,5 +1,6 @@
 package openblocks.common.recipe;
 
+import javax.annotation.Nonnull;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -37,6 +38,7 @@ public class GoldenEyeRechargeRecipe extends ShapelessOreRecipe {
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getCraftingResult(InventoryCrafting inventory) {
 		ItemStack golden = ItemStack.EMPTY;
 		int enderCount = 0;

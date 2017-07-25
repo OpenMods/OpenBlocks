@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -25,11 +26,12 @@ public class InventoryEvent extends PlayerEvent {
 	public static class SubInventory {
 		private final Map<Integer, ItemStack> slots = Maps.newHashMap();
 
-		public SubInventory addItemStack(int slot, ItemStack stack) {
+		public SubInventory addItemStack(int slot, @Nonnull ItemStack stack) {
 			slots.put(slot, stack);
 			return this;
 		}
 
+		@Nonnull
 		public ItemStack getItemStack(int slot) {
 			return slots.get(slot);
 		}

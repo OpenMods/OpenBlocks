@@ -2,6 +2,7 @@ package openblocks.common.entity;
 
 import com.google.common.base.Strings;
 import io.netty.buffer.ByteBuf;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
@@ -116,6 +117,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getPickedResult(RayTraceResult target) {
 		return convertToItem();
 	}
@@ -166,6 +168,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		}
 	}
 
+	@Nonnull
 	protected ItemStack convertToItem() {
 		ItemStack luggageItem = new ItemStack(OpenBlocks.Items.luggage);
 		NBTTagCompound tag = itemTag != null? (NBTTagCompound)itemTag.copy() : new NBTTagCompound();
@@ -178,7 +181,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		return luggageItem;
 	}
 
-	public void restoreFromStack(ItemStack stack) {
+	public void restoreFromStack(@Nonnull ItemStack stack) {
 		final NBTTagCompound tag = stack.getTagCompound();
 
 		if (tag != null) {
@@ -194,7 +197,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		if (stack.hasDisplayName()) setCustomNameTag(stack.getDisplayName());
 	}
 
-	public boolean canConsumeStackPartially(ItemStack stack) {
+	public boolean canConsumeStackPartially(@Nonnull ItemStack stack) {
 		return InventoryUtils.canInsertStack(inventory.getHandler(), stack);
 	}
 

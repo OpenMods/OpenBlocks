@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -23,7 +24,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 		super(block);
 	}
 
-	public static Trophy getTrophy(ItemStack stack) {
+	public static Trophy getTrophy(@Nonnull ItemStack stack) {
 		if (stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag.hasKey(TAG_ENTITY_ID, Constants.NBT.TAG_STRING)) {
@@ -41,20 +42,20 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 	}
 
 	@Override
-	public int getMetadata(ItemStack stack) {
+	public int getMetadata(@Nonnull ItemStack stack) {
 		// for item rendering purposes
 		Trophy trophy = getTrophy(stack);
 		return trophy != null? trophy.ordinal() : 0;
 	}
 
-	public static ItemStack putMetadata(ItemStack stack, Trophy trophy) {
+	public static ItemStack putMetadata(@Nonnull ItemStack stack, Trophy trophy) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		tag.setString(TAG_ENTITY_ID, trophy.id.toString());
 		return stack;
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
+	public String getItemStackDisplayName(@Nonnull ItemStack stack) {
 		Trophy trophyType = getTrophy(stack);
 		if (trophyType != null) {
 			final String name = TranslationUtils.translateToLocal("entity." + trophyType.name() + ".name");

@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,7 +70,7 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
 		final EnumFacing rotation = getOrientation().up();
 		if (rotation == EnumFacing.UP) {
 			final float playerAngle = placer.rotationYawHead;

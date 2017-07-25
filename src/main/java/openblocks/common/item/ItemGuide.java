@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -37,7 +38,7 @@ public class ItemGuide extends ItemOpenBlock {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
+	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null) {
 			if (tag.hasKey(TAG_NEG_X) && tag.hasKey(TAG_NEG_Y) || tag.hasKey(TAG_NEG_Z) ||

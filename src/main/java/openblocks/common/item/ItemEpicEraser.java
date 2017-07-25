@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import javax.annotation.Nonnull;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import openmods.infobook.BookDocumentation;
@@ -20,6 +21,7 @@ public class ItemEpicEraser extends Item {
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getContainerItem(ItemStack itemStack) {
 		final ItemStack result = itemStack.copy();
 		result.setItemDamage(result.getItemDamage() + 1);

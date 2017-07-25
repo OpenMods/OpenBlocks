@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.Random;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -63,7 +64,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "sprinkler", true, 9) {
 		@Override
-		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		public boolean isItemValidForSlot(int i, @Nonnull ItemStack itemstack) {
 			return !itemstack.isEmpty() && itemstack.isItemEqual(BONEMEAL);
 		}
 	});

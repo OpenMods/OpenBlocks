@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector4f;
@@ -227,7 +228,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 		return output;
 	}
 
-	private static IBakedModel getItemModel(ItemStack stack) {
+	private static IBakedModel getItemModel(@Nonnull ItemStack stack) {
 		return Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack);
 	}
 

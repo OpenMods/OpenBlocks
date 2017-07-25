@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -227,7 +228,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return hasChanged;
 	}
 
-	private void dropStackFromSide(ItemStack stack, EnumFacing side) {
+	private void dropStackFromSide(@Nonnull ItemStack stack, EnumFacing side) {
 		if (world.isRemote) return;
 		BlockUtils.dropItemStackInWorld(world, pos.offset(side), stack);
 	}

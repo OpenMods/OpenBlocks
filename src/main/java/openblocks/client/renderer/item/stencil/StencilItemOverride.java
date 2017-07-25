@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import java.util.Collections;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
@@ -54,7 +55,7 @@ public class StencilItemOverride extends ItemOverrideList {
 	}
 
 	@Override
-	public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+	public IBakedModel handleItemState(IBakedModel originalModel, @Nonnull ItemStack stack, World world, EntityLivingBase entity) {
 		final Optional<IStencilPattern> pattern = ItemStencil.getPattern(stack);
 		if (pattern.isPresent()) {
 			return getModelForPattern(pattern.get());

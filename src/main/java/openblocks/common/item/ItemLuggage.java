@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,14 +26,14 @@ public class ItemLuggage extends Item {
 
 		addPropertyOverride(new ResourceLocation("inventory"), new IItemPropertyGetter() {
 			@Override
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float apply(@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				return getInventorySize(stack);
 			}
 		});
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean hasEffect(@Nonnull ItemStack stack) {
 		return getInventorySize(stack) > EntityLuggage.SIZE_NORMAL;
 	}
 
@@ -56,7 +57,7 @@ public class ItemLuggage extends Item {
 		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
-	private static int getInventorySize(ItemStack stack) {
+	private static int getInventorySize(@Nonnull ItemStack stack) {
 		return ItemUtils.getItemTag(stack).getInteger(GenericInventory.TAG_SIZE);
 	}
 }

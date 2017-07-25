@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -20,7 +21,7 @@ public class ItemHeightMap extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack item, EntityPlayer player, List<String> result, boolean extended) {
+	public void addInformation(@Nonnull ItemStack item, EntityPlayer player, List<String> result, boolean extended) {
 		int mapId = item.getItemDamage();
 		HeightMapData data = MapDataManager.getMapData(player.world, mapId);
 

@@ -3,6 +3,7 @@ package openblocks.common.entity;
 import com.google.common.collect.ImmutableSet;
 import java.util.Random;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -130,6 +131,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	public final SyncableBoolean isMapping = new SyncableBoolean(false);
 	public final MapJobs jobs = new MapJobs();
 
+	@Nonnull
 	private ItemStack mapItem = ItemStack.EMPTY;
 	private int mappingDimension;
 
@@ -154,7 +156,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		return syncMap;
 	}
 
-	public EntityCartographer(World world, EntityPlayer owner, ItemStack stack) {
+	public EntityCartographer(World world, EntityPlayer owner, @Nonnull ItemStack stack) {
 		super(world, owner);
 		setSpawnPosition(owner);
 
@@ -237,6 +239,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack toItemStack() {
 		ItemStack result = Items.cartographer.createStack(ItemCartographer.AssistantType.CARTOGRAPHER);
 		NBTTagCompound tag = ItemUtils.getItemTag(result);

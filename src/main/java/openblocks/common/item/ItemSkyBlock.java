@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +34,7 @@ public class ItemSkyBlock extends ItemBlock {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean expanded) {
+	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> result, boolean expanded) {
 		super.addInformation(stack, player, result, expanded);
 		if (BlockSky.isInverted(stack.getItemDamage())) result.add(TranslationUtils.translateToLocal("openblocks.misc.inverted"));
 	}

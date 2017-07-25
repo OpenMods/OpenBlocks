@@ -7,6 +7,7 @@ import dan200.computercraft.api.turtle.TurtleCommandResult;
 import dan200.computercraft.api.turtle.TurtleSide;
 import dan200.computercraft.api.turtle.TurtleUpgradeType;
 import dan200.computercraft.api.turtle.TurtleVerb;
+import javax.annotation.Nonnull;
 import javax.vecmath.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -46,6 +47,7 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getCraftingItem() {
 		return MetasGeneric.miracleMagnet.newItemStack();
 	}

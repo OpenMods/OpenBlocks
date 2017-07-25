@@ -1,5 +1,6 @@
 package openblocks.common.recipe;
 
+import javax.annotation.Nonnull;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -11,10 +12,11 @@ public class TorchBowRecipe extends CustomRecipeBase {
 
 	@Override
 	public boolean matches(InventoryCrafting inventorycrafting, World world) {
-		return getCraftingResult(inventorycrafting) != null;
+		return !getCraftingResult(inventorycrafting).isEmpty();
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getCraftingResult(InventoryCrafting inventorycrafting) {
 		ItemStack bowStack = ItemStack.EMPTY;
 		ItemStack flintStack = ItemStack.EMPTY;
@@ -63,6 +65,7 @@ public class TorchBowRecipe extends CustomRecipeBase {
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack getRecipeOutput() {
 		return new ItemStack(Items.BOW);
 	}

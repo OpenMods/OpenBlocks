@@ -1,5 +1,6 @@
 package openblocks.enchantments;
 
+import javax.annotation.Nonnull;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -33,6 +34,7 @@ public class EnchantmentFlimFlam extends Enchantment {
 	}
 
 	@Override
+	@Nonnull
 	public boolean canApplyAtEnchantingTable(ItemStack stack) {
 		final Item item = stack.getItem();
 		return (item instanceof ItemArmor) || (item instanceof ItemSword);

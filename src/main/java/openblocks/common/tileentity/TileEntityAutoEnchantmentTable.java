@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -96,7 +97,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		final List<ItemStack> lapis = OreDictionary.getOres("gemLapis");
 
 		@Override
-		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
+		public boolean isItemValidForSlot(int slot, @Nonnull ItemStack itemstack) {
 			if (slot == Slots.tool.ordinal()) return itemstack.isItemEnchantable();
 			if (slot == Slots.lapis.ordinal()) {
 				for (ItemStack ore : lapis)
@@ -351,7 +352,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		return stackInSlot.getCount() < stackInSlot.getMaxStackSize();
 	}
 
-	public void setStack(Slots slot, ItemStack stack) {
+	public void setStack(Slots slot, @Nonnull ItemStack stack) {
 		inventory.setInventorySlotContents(slot.ordinal(), stack);
 	}
 
@@ -361,6 +362,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		markDirty();
 	}
 
+	@Nonnull
 	private ItemStack getStack(Slots slot) {
 		return inventory.getStackInSlot(slot);
 	}

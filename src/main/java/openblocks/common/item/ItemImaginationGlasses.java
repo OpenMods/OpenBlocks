@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -24,7 +25,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 	private static final String TAG_COLOR = "Color";
 
-	public static int getGlassesColor(ItemStack stack) {
+	public static int getGlassesColor(@Nonnull ItemStack stack) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		return tag.getInteger(TAG_COLOR);
 	}
@@ -32,7 +33,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 	@SideOnly(Side.CLIENT)
 	public static class CrayonColorHandler implements IItemColor {
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+		public int getColorFromItemstack(@Nonnull ItemStack stack, int tintIndex) {
 			return getGlassesColor(stack);
 		}
 	}
@@ -52,10 +53,11 @@ public class ItemImaginationGlasses extends ItemArmor {
 		}
 
 		@Override
-		public int getColor(ItemStack stack) {
+		public int getColor(@Nonnull ItemStack stack) {
 			return getGlassesColor(stack);
 		}
 
+		@Nonnull
 		public ItemStack createCrayonGlasses(int color) {
 			ItemStack stack = new ItemStack(this);
 
@@ -89,27 +91,27 @@ public class ItemImaginationGlasses extends ItemArmor {
 	public enum Type {
 		PENCIL("pencil") {
 			@Override
-			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
+			protected boolean checkBlock(Property property, @Nonnull ItemStack stack, TileEntityImaginary te) {
 				return te.isPencil() ^ te.isInverted();
 			}
 		},
 		CRAYON("crayon") {
 			@Override
-			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
+			protected boolean checkBlock(Property property, @Nonnull ItemStack stack, TileEntityImaginary te) {
 				return (!te.isPencil() && getGlassesColor(stack) == te.color)
 						^ te.isInverted();
 			}
 		},
 		TECHNICOLOR("technicolor") {
 			@Override
-			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
+			protected boolean checkBlock(Property property, @Nonnull ItemStack stack, TileEntityImaginary te) {
 				if (property == Property.VISIBLE) return true;
 				return te.isInverted();
 			}
 		},
 		BASTARD("admin") {
 			@Override
-			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
+			protected boolean checkBlock(Property property, @Nonnull ItemStack stack, TileEntityImaginary te) {
 				return true;
 			}
 		};
@@ -120,7 +122,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 			this.textureName = OpenBlocks.location("textures/models/glasses_" + name + ".png").toString();
 		}
 
-		protected abstract boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te);
+		protected abstract boolean checkBlock(Property property, @Nonnull ItemStack stack, TileEntityImaginary te);
 
 		public static final Type[] VALUES = values();
 	}
@@ -130,7 +132,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 		return this.type.textureName;
 	}
 
-	public boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
+	public boolean checkBlock(Property property, @Nonnull ItemStack stack, TileEntityImaginary te) {
 		return type.checkBlock(property, stack, te);
 	}
 
