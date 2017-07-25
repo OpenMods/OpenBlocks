@@ -43,6 +43,7 @@ import openblocks.trophy.SquidBehavior;
 import openblocks.trophy.WitchBehavior;
 import openmods.Log;
 import openmods.config.properties.ConfigurationChange;
+import openmods.core.fixes.HorseNullFix;
 import openmods.reflection.ReflectionHelper;
 
 public class TrophyHandler {
@@ -146,8 +147,14 @@ public class TrophyHandler {
 		Guardian(new GuardianBehavior()),
 		Rabbit(new ItemDropBehavior(20000, new ItemStack(Items.CARROT))),
 		PolarBear(new ItemDropBehavior(20000, new ItemStack(Items.FISH))),
-		Shulker(new ShulkerBehavior());
-		// Skipped: Horse (needs non-null, world in ctor), Wither (renders boss bar)
+		Shulker(new ShulkerBehavior()),
+		EntityHorse(0.35, new ItemDropBehavior(20000, new ItemStack(Items.WHEAT))) {
+			@Override
+			protected boolean canInstantiate() {
+				return HorseNullFix.isWorking();
+			}
+		};
+		// Skipped: Wither (renders boss bar), Ender Dragon
 
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
@@ -194,6 +201,12 @@ public class TrophyHandler {
 			return ItemTrophyBlock.putMetadata(new ItemStack(OpenBlocks.Blocks.trophy), this);
 		}
 
+		protected boolean canInstantiate() {
+			return true;
+		}
+
+		private boolean instantiationFailed;
+
 		public void playSound(World world, BlockPos pos) {
 			if (world == null) return;
 
@@ -221,7 +234,15 @@ public class TrophyHandler {
 		}
 
 		protected Entity createEntity() {
-			return EntityList.createEntityByName(name(), null);
+			if (!instantiationFailed && canInstantiate()) {
+				try {
+					return EntityList.createEntityByName(name(), null);
+				} catch (Throwable t) {
+					Log.warn(t, "Failed to create instance of %s", name());
+					instantiationFailed = true;
+				}
+			}
+			return null;
 		}
 
 		static {
