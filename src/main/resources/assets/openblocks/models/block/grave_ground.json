@@ -3,7 +3,7 @@
         "base": "openblocks:blocks/grave_base",
         "back": "openblocks:blocks/grave_back",
         "front": "openblocks:blocks/grave_front",
-        "particle": "blocks/grave_base"
+        "particle": "openblocks:blocks/grave_base"
     },
     "elements": [
         {
