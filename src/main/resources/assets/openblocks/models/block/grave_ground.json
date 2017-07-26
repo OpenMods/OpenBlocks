@@ -1,0 +1,57 @@
+{
+    "textures": {
+        "base": "openblocks:blocks/grave_base",
+        "back": "openblocks:blocks/grave_back",
+        "front": "openblocks:blocks/grave_front",
+        "particle": "blocks/grave_base"
+    },
+    "elements": [
+        {
+            "name": "base",
+            "from": [0, 0, 0],
+            "to": [16, 1, 16],
+            "shade": true,
+            "faces": {
+                "north": {
+                    "uv": [0, 0, 16, 1],
+                    "texture": "#base",
+                    "cullface": "north"
+                },
+                "east": {
+                    "uv": [0, 0, 16, 1],
+                    "texture": "#base",
+                    "cullface": "east"
+                },
+                "south": {
+                    "uv": [0, 0, 16, 1],
+                    "texture": "#base",
+                    "cullface": "south"
+                },
+                "west": {
+                    "uv": [0, 0, 16, 1],
+                    "texture": "#base",
+                    "cullface": "west"
+                },
+                "up": {"uv": [0, 0, 16, 16], "texture": "#base"},
+                "down": {
+                    "uv": [0, 0, 16, 16],
+                    "texture": "#base",
+                    "cullface": "down"
+                }
+            }
+        },
+        {
+            "name": "stone",
+            "from": [2, 1, 14],
+            "to": [14, 16, 16],
+            "shade": true,
+            "faces": {
+                "north": {"uv": [2, 1, 14, 16], "texture": "#front"},
+                "east": {"uv": [14, 1, 16, 16], "texture": "#back"},
+                "south": {"uv": [2, 1, 14, 16], "texture": "#back", "cullface": "south"},
+                "west": {"uv": [0, 1, 2, 16], "texture": "#back"},
+                "up": {"uv": [2, 0, 14, 2], "texture": "#back", "cullface": "up"}
+            }
+        }
+    ]
+}

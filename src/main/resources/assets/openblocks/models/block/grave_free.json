@@ -1,0 +1,22 @@
+{
+    "textures": {
+        "stone_back": "openblocks:blocks/grave_back",
+        "stone_front": "openblocks:blocks/grave_front"
+    },
+    "elements": [
+        {
+            "name": "stone",
+            "from": [2, 0, 14],
+            "to": [14, 15, 16],
+            "shade": true,
+            "faces": {
+                "north": {"uv": [2, 1, 14, 16], "texture": "#stone_front"},
+                "east": {"uv": [14, 1, 16, 16], "texture": "#stone_back"},
+                "south": {"uv": [2, 1, 14, 16], "texture": "#stone_back", "cullface": "south"},
+                "west": {"uv": [0, 1, 2, 16], "texture": "#stone_back"},
+                "up": { "uv": [2, 0, 14, 2], "texture": "#stone_back"},
+                "down": { "uv": [2, 14, 14, 16], "texture": "#stone_back", "cullface": "down"}
+            }
+        }
+    ]
+}

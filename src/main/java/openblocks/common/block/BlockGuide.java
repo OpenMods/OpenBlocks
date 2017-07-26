@@ -1,7 +1,5 @@
 package openblocks.common.block;
 
-import com.google.common.base.Supplier;
-import java.util.List;
 import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -29,6 +27,7 @@ import openmods.block.IBlockRotationMode;
 import openmods.block.OpenBlock;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Hitbox;
+import openmods.geometry.IHitboxSupplier;
 import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 
@@ -42,7 +41,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	private AxisAlignedBB selection;
 
-	private final Supplier<List<Hitbox>> buttonsHitbox = OpenMods.proxy.getHitboxes(OpenBlocks.location("guide_buttons"));
+	private final IHitboxSupplier buttonsHitbox = OpenMods.proxy.getHitboxes(OpenBlocks.location("guide_buttons"));
 
 	public BlockGuide() {
 		super(Material.ROCK);
@@ -72,7 +71,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	private Hitbox findClickBox(Vec3d pos) {
-		for (Hitbox h : buttonsHitbox.get())
+		for (Hitbox h : buttonsHitbox.asList())
 			if (h.aabb().isVecInside(pos))
 				return h;
 
