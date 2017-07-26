@@ -5,7 +5,6 @@ import com.google.common.base.Strings;
 import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -31,17 +30,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.api.IActivateAwareTile;
-import openmods.api.IAddAwareTile;
-import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
-import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
-public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, INeighbourAwareTile, IActivateAwareTile, IAddAwareTile, ITickable {
+public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, IActivateAwareTile, ITickable {
 
 	private static final Predicate<EntityLiving> IS_MOB = new Predicate<EntityLiving>() {
 		@Override
@@ -52,7 +48,6 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 
 	private static final String TAG_MESSAGE = "Message";
 	private SyncableString perishedUsername;
-	public SyncableBoolean onSoil;
 
 	private ITextComponent deathMessage;
 
@@ -63,7 +58,6 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	@Override
 	protected void createSyncedFields() {
 		perishedUsername = new SyncableString();
-		onSoil = new SyncableBoolean(true);
 	}
 
 	@Override
@@ -102,10 +96,6 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		inventory.copyFrom(invent);
 	}
 
-	public boolean isOnSoil() {
-		return onSoil.get();
-	}
-
 	@Override
 	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if (!worldObj.isRemote) {
@@ -115,7 +105,6 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 				if (stack.hasDisplayName()) setUsername(stack.getDisplayName());
 				else setUsername(player.getGameProfile().getName());
 				if (player.capabilities.isCreativeMode) setLoot(player.inventory);
-				updateBlockBelow();
 				sync();
 			}
 		}
@@ -149,23 +138,6 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	@Override
 	public IInventory getInventory() {
 		return inventory;
-	}
-
-	protected void updateBlockBelow() {
-		IBlockState block = worldObj.getBlockState(pos.down());
-		final Material material = block.getMaterial();
-		onSoil.set(material == Material.GRASS || material == Material.GROUND);
-	}
-
-	@Override
-	public void onAdded() {
-		updateBlockBelow();
-	}
-
-	@Override
-	public void onNeighbourChanged(Block block) {
-		updateBlockBelow();
-		sync();
 	}
 
 	@Override

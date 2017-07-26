@@ -379,7 +379,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	private static void visitTesrBlocks(BlockConsumer consumer) {
 		// TODO fully static, migrate to block models
-		consumer.nom(OpenBlocks.Blocks.grave);
 		consumer.nom(OpenBlocks.Blocks.donationStation);
 
 		// TODO migrate static parts to block models
