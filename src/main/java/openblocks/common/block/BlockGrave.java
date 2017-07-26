@@ -63,6 +63,11 @@ public class BlockGrave extends OpenBlock.FourDirections {
 	}
 
 	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
 	public int quantityDropped(Random rand) {
 		return 0;
 	}
