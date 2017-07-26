@@ -1,7 +1,5 @@
 package openblocks.client.renderer.tileentity;
 
-import com.google.common.base.Supplier;
-import java.util.List;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,12 +12,13 @@ import openblocks.common.block.BlockGrave;
 import openblocks.common.tileentity.TileEntityGrave;
 import openmods.OpenMods;
 import openmods.geometry.Hitbox;
+import openmods.geometry.IHitboxSupplier;
 import openmods.utils.BlockUtils;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityGraveRenderer extends TileEntitySpecialRenderer<TileEntityGrave> {
 
-	private final Supplier<List<Hitbox>> textBox = OpenMods.proxy.getHitboxes(OpenBlocks.location("grave_text"));
+	private final IHitboxSupplier textBoxes = OpenMods.proxy.getHitboxes(OpenBlocks.location("grave_text"));
 
 	@Override
 	public void renderTileEntityAt(TileEntityGrave target, double x, double y, double z, float partialTicks, int destroyStage) {
@@ -66,15 +65,7 @@ public class TileEntityGraveRenderer extends TileEntitySpecialRenderer<TileEntit
 	}
 
 	private Hitbox selectBox(boolean hasBase) {
-		for (Hitbox hb : textBox.get()) {
-			if (hasBase) {
-				if ("with_base".equals(hb.name)) return hb;
-			} else {
-				if ("without_base".equals(hb.name)) return hb;
-			}
-		}
-
-		return null;
+		return textBoxes.asMap().get(hasBase? "with_base" : "without_base");
 	}
 
 }
