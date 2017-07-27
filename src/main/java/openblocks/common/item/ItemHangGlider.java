@@ -25,7 +25,7 @@ public class ItemHangGlider extends Item {
 		addPropertyOverride(new ResourceLocation("hidden"), new IItemPropertyGetter() {
 			@Override
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return EntityHangGlider.isEntityWearingGlider(entityIn)? 2 : 0;
+				return EntityHangGlider.isHeldStackDeployedGlider(entityIn, stack)? 2 : 0;
 			}
 		});
 	}
@@ -34,13 +34,13 @@ public class ItemHangGlider extends Item {
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote && player != null) {
 			EntityHangGlider glider = spawnedGlidersMap.get(player);
-			if (glider != null) despawnGlider(player, glider);
-			else spawnGlider(player);
-
-			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+			if (glider != null && !glider.isDead) {
+				if (glider.getHandHeld() == hand) despawnGlider(player, glider);
+				// if deployed glider is in other hand, ignore
+			} else spawnGlider(player, hand);
 		}
 
-		return ActionResult.newResult(EnumActionResult.PASS, stack);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
 	private static void despawnGlider(EntityPlayer player, EntityHangGlider glider) {
@@ -48,8 +48,8 @@ public class ItemHangGlider extends Item {
 		spawnedGlidersMap.remove(player);
 	}
 
-	private static void spawnGlider(EntityPlayer player) {
-		EntityHangGlider glider = new EntityHangGlider(player.worldObj, player);
+	private static void spawnGlider(EntityPlayer player, EnumHand hand) {
+		EntityHangGlider glider = new EntityHangGlider(player.worldObj, player, hand);
 		glider.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationPitch, player.rotationYaw);
 		player.worldObj.spawnEntityInWorld(glider);
 		spawnedGlidersMap.put(player, glider);
