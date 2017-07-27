@@ -49,6 +49,7 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	public BlockFlag() {
 		super(Material.CIRCUITS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
+		setHardness(0.0F);
 		setDefaultState(getDefaultState().withProperty(COLOR, DEFAULT_COLOR));
 	}
 
@@ -98,18 +99,23 @@ public class BlockFlag extends OpenBlock.SixDirections {
 		return MIDDLE_AABB;
 	}
 
+	private boolean isFlagOnGround(IBlockState state) {
+		return state.getValue(getPropertyOrientation()).down() == EnumFacing.DOWN;
+	}
+
+	private boolean isBaseSolidForFlag(World world, BlockPos pos) {
+		final IBlockState belowState = world.getBlockState(pos.down());
+		final Block belowBlock = belowState.getBlock();
+		if (belowBlock instanceof BlockFence) return true;
+		if (belowBlock == this && isFlagOnGround(belowState)) return true;
+
+		return false;
+	}
+
 	@Override
 	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
 		if (side == EnumFacing.DOWN) return false;
-		if (side == EnumFacing.UP) {
-			final BlockPos blockBelow = pos.down();
-			final Block belowBlock = world.getBlockState(blockBelow).getBlock();
-			if (belowBlock instanceof BlockFence) return true;
-			if (belowBlock == this) {
-				TileEntityFlag flag = getTileEntity(world, blockBelow, TileEntityFlag.class);
-				if (flag != null && flag.getOrientation().down() == EnumFacing.DOWN) return true;
-			}
-		}
+		if (side == EnumFacing.UP && isBaseSolidForFlag(world, pos)) return true;
 
 		return isNeighborBlockSolid(world, pos, side.getOpposite());
 	}
@@ -119,7 +125,12 @@ public class BlockFlag extends OpenBlock.SixDirections {
 		super.neighborChanged(state, world, pos, block);
 
 		final Orientation orientation = getOrientation(state);
-		if (!isNeighborBlockSolid(world, pos, orientation.down())) world.destroyBlock(pos, true);
+		final EnumFacing down = orientation.down();
+
+		if (isNeighborBlockSolid(world, pos, down)) return;
+		if (isFlagOnGround(state) && isBaseSolidForFlag(world, pos)) return;
+
+		world.destroyBlock(pos, true);
 	}
 
 	@Override
@@ -155,5 +166,16 @@ public class BlockFlag extends OpenBlock.SixDirections {
 		return (te != null)
 				? ((IExtendedBlockState)state).withProperty(EvalModelState.PROPERTY, te.getRenderState())
 				: state;
+	}
+
+	@Override
+	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
+		final IBlockState actualState = state.getActualState(worldIn, pos); // needed for drop damage when block is destroyed
+		super.dropBlockAsItemWithChance(worldIn, pos, actualState, chance, fortune);
+	}
+
+	@Override
+	public int damageDropped(IBlockState state) {
+		return state.getValue(COLOR).vanillaBlockId;
 	}
 }

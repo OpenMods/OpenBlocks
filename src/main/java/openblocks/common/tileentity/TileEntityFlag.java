@@ -1,14 +1,18 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
 import java.util.Set;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
+import openblocks.OpenBlocks;
 import openmods.api.IActivateAwareTile;
+import openmods.api.ICustomHarvestDrops;
 import openmods.api.IPlaceAwareTile;
 import openmods.colors.ColorMeta;
 import openmods.model.eval.EvalModelState;
@@ -19,7 +23,7 @@ import openmods.sync.SyncableEnum;
 import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
+public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile, ICustomHarvestDrops {
 
 	private SyncableFloat angle;
 	private SyncableEnum<ColorMeta> colorIndex;
@@ -57,6 +61,8 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (heldItem != null && heldItem.getItem() == Item.getItemFromBlock(OpenBlocks.Blocks.flag)) return false;
+
 		if (!worldObj.isRemote && hand == EnumHand.MAIN_HAND) {
 			if (getOrientation().down() == EnumFacing.DOWN) {
 				angle.set(angle.get() + (player.isSneaking()? -10f : +10f));
@@ -88,5 +94,15 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 	private void setStateAngle(float angle) {
 		final float arg = 1 - (MathHelper.wrapDegrees(angle) + 180.0f) / 360.0f; // TODO move to blockstate once model is POWERFULL
 		clipsState = clipsState.withArg("rotation", arg);
+	}
+
+	@Override
+	public boolean suppressBlockHarvestDrops() {
+		return true;
+	}
+
+	@Override
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, IBlockState blockState, int fortune, boolean isSilkTouch) {
+		drops.add(new ItemStack(OpenBlocks.Blocks.flag, 1, colorIndex.get().vanillaBlockId));
 	}
 }
