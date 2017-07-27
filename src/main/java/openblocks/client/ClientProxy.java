@@ -373,8 +373,12 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(OpenBlocks.location("trophy"), "inventory"));
 	}
 
-	private interface BlockConsumer {
-		public void nom(OpenBlock block);
+	private static abstract class BlockConsumer {
+		public final void nom(OpenBlock block) {
+			if (block != null) nomNom(block);
+		}
+
+		protected abstract void nomNom(OpenBlock block);
 	}
 
 	private static void visitTesrBlocks(BlockConsumer consumer) {
@@ -392,7 +396,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 	private static void registerTesrItemRenderers() {
 		visitTesrBlocks(new BlockConsumer() {
 			@Override
-			public void nom(OpenBlock block) {
+			public void nomNom(OpenBlock block) {
 				Item item = Item.getItemFromBlock(block);
 				ForgeHooksClient.registerTESRItemStack(item, 0, block.getTileClass());
 			}
@@ -402,7 +406,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 	private static void registerTesrStateMappers() {
 		visitTesrBlocks(new BlockConsumer() {
 			@Override
-			public void nom(OpenBlock block) {
+			public void nomNom(OpenBlock block) {
 				ImmutableMap.Builder<IBlockState, ModelResourceLocation> statesBuilder = ImmutableMap.builder();
 				final ModelResourceLocation location = new ModelResourceLocation(block.getRegistryName(), "dummy");
 				for (IBlockState state : block.getBlockState().getValidStates())
