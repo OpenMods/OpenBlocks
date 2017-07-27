@@ -35,11 +35,11 @@ public class MetaPointer extends MetaGeneric {
 			Vec3d targetVec = posVec.addVector(lookVec.xCoord * 10f, lookVec.yCoord * 10f, lookVec.zCoord * 10f);
 
 			RayTraceResult movingObject = world.rayTraceBlocks(posVec, targetVec);
-			NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
 
-			if (movingObject != null && movingObject.typeOfHit.equals(RayTraceResult.Type.BLOCK)) {
+			if (!world.isRemote && movingObject != null && movingObject.typeOfHit.equals(RayTraceResult.Type.BLOCK)) {
 				final BlockPos targetPos = movingObject.getBlockPos();
 				final TileEntity pointedTileEntity = world.getTileEntity(targetPos);
+				NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
 				if (pointedTileEntity instanceof IPointable) {
 					NBTTagCompound linkTag = new NBTTagCompound();
 					NbtUtils.store(linkTag, targetPos);
