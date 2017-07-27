@@ -25,6 +25,7 @@ import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.MetasGeneric;
 import openblocks.common.item.MetasGenericUnstackable;
 import openblocks.common.recipe.CrayonGlassesRecipe;
+import openblocks.common.recipe.CrayonMergeRecipe;
 import openblocks.common.recipe.CrayonMixingRecipe;
 import openblocks.common.recipe.EpicEraserRecipe;
 import openblocks.common.recipe.GoldenEyeRechargeRecipe;
@@ -465,6 +466,9 @@ public class Config {
 
 			recipeList.add(new CrayonMixingRecipe());
 			RecipeSorter.register("openblocks:crayon_mix", CrayonMixingRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+
+			recipeList.add(new CrayonMergeRecipe());
+			RecipeSorter.register("openblocks:crayon_merge", CrayonMergeRecipe.class, RecipeSorter.Category.SHAPELESS, "before:openblocks:crayon_mix");
 		}
 
 		if (OpenBlocks.Blocks.fan != null) {

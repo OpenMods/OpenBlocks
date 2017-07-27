@@ -7,7 +7,6 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginary.PlacementMode;
@@ -41,10 +40,10 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 
 			final NBTTagCompound tag = stack.getTagCompound();
 			if (tag != null) {
-				if (!tag.hasKey(ItemImaginary.TAG_COLOR, Constants.NBT.TAG_INT)) return null;
+				final Integer color = ItemImaginary.getColor(tag);
+				if (color == null) return null;
 
 				count++;
-				final int color = tag.getInteger(ItemImaginary.TAG_COLOR);
 
 				r += ((color >> 16) & 0xFF);
 				g += ((color >> 8) & 0xFF);

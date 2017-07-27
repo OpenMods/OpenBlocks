@@ -27,6 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
@@ -127,6 +128,16 @@ public class ItemImaginary extends ItemOpenBlock {
 	public static PlacementMode getMode(ItemStack stack) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		return getMode(tag);
+	}
+
+	public static Integer getColor(NBTTagCompound tag) {
+		if (!tag.hasKey(TAG_COLOR, Constants.NBT.TAG_ANY_NUMERIC)) return null;
+		return tag.getInteger(TAG_COLOR);
+	}
+
+	public static Integer getColor(ItemStack stack) {
+		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		return getColor(tag);
 	}
 
 	public static boolean isCrayon(ItemStack stack) {
