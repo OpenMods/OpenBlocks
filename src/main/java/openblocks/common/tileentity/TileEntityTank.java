@@ -22,11 +22,13 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import openblocks.Config;
 import openblocks.OpenBlocks;
@@ -278,9 +280,14 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 		if (hand == EnumHand.MAIN_HAND) {
 			final ItemStack heldItem = player.getHeldItemMainhand();
-			if (!heldItem.isEmpty())
-				return tryEmptyItem(player, heldItem);
-			else
+			if (!heldItem.isEmpty()) {
+				final FluidActionResult result = tryEmptyItem(player, heldItem.copy());
+				if (result.success) {
+					if (!player.isCreative())
+						player.setHeldItem(EnumHand.MAIN_HAND, result.result);
+					return true;
+				}
+			} else
 				return tryDrainXp(player);
 		}
 
@@ -308,20 +315,19 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return false;
 	}
 
-	protected boolean tryEmptyItem(EntityPlayer player, @Nonnull ItemStack container) {
-		final IFluidHandler containerFluidHandler = FluidUtil.getFluidHandler(container);
+	protected FluidActionResult tryEmptyItem(EntityPlayer player, @Nonnull ItemStack container) {
+		// not using FluidUtils.tryEmptyContainer, since it limits stack size to 1
+		final IFluidHandlerItem containerFluidHandler = FluidUtil.getFluidHandler(container);
 		if (containerFluidHandler != null) {
-			FluidStack simulatedTransfer = FluidUtil.tryFluidTransfer(tankCapabilityWrapper, containerFluidHandler, Fluid.BUCKET_VOLUME, true);
-			if (simulatedTransfer != null) {
-				if (player != null) {
-					SoundEvent soundevent = simulatedTransfer.getFluid().getEmptySound(simulatedTransfer);
-					player.playSound(soundevent, 1f, 1f);
-				}
-				return true;
+			FluidStack transfer = FluidUtil.tryFluidTransfer(tankCapabilityWrapper, containerFluidHandler, Fluid.BUCKET_VOLUME, true);
+			if (transfer != null) {
+				SoundEvent soundevent = transfer.getFluid().getEmptySound(transfer);
+				player.playSound(soundevent, 1f, 1f);
+				return new FluidActionResult(containerFluidHandler.getContainer());
 			}
 		}
 
-		return false;
+		return FluidActionResult.FAILURE;
 	}
 
 	@Override
