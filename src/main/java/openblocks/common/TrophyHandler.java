@@ -127,7 +127,7 @@ public class TrophyHandler {
 		},
 		Sheep(mc("sheep")),
 		Blaze(mc("blaze"), new BlazeBehavior()),
-		Silverfish(mc("sliverfish")),
+		Silverfish(mc("silverfish")),
 		Spider(mc("spider")),
 		CaveSpider(mc("cave_spider"), new CaveSpiderBehavior()),
 		Slime(mc("slime"), 0.6) {
