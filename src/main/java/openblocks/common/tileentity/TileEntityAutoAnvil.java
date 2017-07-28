@@ -91,7 +91,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			// TODO 1.11 verify - tool stuff
-			if (i == 0 && (!itemstack.getItem().getToolClasses(itemstack).isEmpty() && itemstack.getItem() != Items.ENCHANTED_BOOK)) { return false; }
+			if (i == 0 && (itemstack.getItem().getToolClasses(itemstack).isEmpty() && itemstack.getItem() != Items.ENCHANTED_BOOK)) { return false; }
 			if (i == 2) { return false; }
 			return super.isItemValidForSlot(i, itemstack);
 		}
@@ -225,7 +225,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	private boolean hasTool() {
-		return inventory.getStackInSlot(0) != null;
+		return !inventory.getStackInSlot(0).isEmpty();
 	}
 
 	private boolean shouldAutoInputTool() {
@@ -233,7 +233,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	private boolean hasOutput() {
-		return inventory.getStackInSlot(2) != null;
+		return !inventory.getStackInSlot(2).isEmpty();
 	}
 
 	@Override
