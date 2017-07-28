@@ -223,7 +223,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	public boolean hasSpaceInOutput() {
 		ItemStack outputStack = inventory.getStackInSlot(Slots.output.ordinal());
-		return outputStack.isItemEqual(XP_BOTTLE) && outputStack.getCount() < outputStack.getMaxStackSize();
+		return outputStack.isEmpty() || (outputStack.isItemEqual(XP_BOTTLE) && outputStack.getCount() < outputStack.getMaxStackSize());
 	}
 
 	public boolean isTankFull() {
