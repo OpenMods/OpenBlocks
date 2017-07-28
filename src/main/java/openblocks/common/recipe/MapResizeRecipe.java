@@ -21,12 +21,6 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting inventory, World world) {
-		if (inventory.getStackInRowAndColumn(0, 0) != null ||
-				inventory.getStackInRowAndColumn(0, 2) != null ||
-				inventory.getStackInRowAndColumn(2, 0) != null ||
-				inventory.getStackInRowAndColumn(2, 2) != null)
-			return false;
-
 		for (int i = 0; i < 3; i++) {
 			ItemStack left = inventory.getStackInRowAndColumn(0, i);
 

@@ -30,6 +30,7 @@ public class ItemFlagBlock extends ItemOpenBlock {
 
 	public ItemFlagBlock(Block block) {
 		super(block);
+		setHasSubtypes(true);
 	}
 
 	@Override

@@ -37,11 +37,9 @@ public class MapCloneRecipe extends CustomRecipeBase {
 				if (data.isValid()) normalMapScale = data.scale;
 				else return false;
 			} else return false;
-
-			if (emptyMapScale >= 0 && normalMapScale >= 0) return emptyMapScale == normalMapScale;
 		}
 
-		return false;
+		return normalMapScale >= 0 && emptyMapScale == normalMapScale;
 	}
 
 	@Override

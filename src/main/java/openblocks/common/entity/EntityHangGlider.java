@@ -8,12 +8,15 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
@@ -54,9 +57,13 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	private IVarioController varioControl = IVarioController.NULL;
 
-	public static boolean isEntityWearingGlider(Entity player) {
+	public static boolean isHeldStackDeployedGlider(EntityLivingBase player, @Nonnull ItemStack heldStack) {
+		if (player == null) return false;
+
 		EntityHangGlider glider = gliderMap.get(player);
-		return glider != null;
+		if (glider == null || glider.handHeld == null) return false;
+		// identity check, since we require exact instance
+		return player.getHeldItem(glider.handHeld) == heldStack;
 	}
 
 	public static boolean isGliderDeployed(Entity player) {
@@ -71,7 +78,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	private static boolean isGliderValid(EntityPlayer player, EntityHangGlider glider) {
 		if (player == null || player.isDead || glider == null || glider.isDead) return false;
 
-		if (!isItemHangglider(player.getHeldItemMainhand()) && !isItemHangglider(player.getHeldItemOffhand())) return false;
+		if (glider.handHeld == null || !isItemHangglider(player.getHeldItem(glider.handHeld))) return false;
 		if (player.world.provider.getDimension() != glider.world.provider.getDimension()) return false;
 		if (player.isElytraFlying() || player.isSpectator()) return false;
 		return true;
@@ -92,15 +99,17 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	private int ticksSinceLastVarioUpdate = 0;
 	private double verticalMotionSinceLastVarioUpdate = 0;
 	private double lastMotionY = 0;
+	private EnumHand handHeld = EnumHand.MAIN_HAND;
 
 	public EntityHangGlider(World world) {
 		super(world);
 		this.noiseGen = new NoiseGeneratorPerlin(new Random(world.getCurrentDate().get(Calendar.DAY_OF_YEAR)), 2);
 	}
 
-	public EntityHangGlider(World world, EntityPlayer player) {
+	public EntityHangGlider(World world, EntityPlayer player, EnumHand spawnedHand) {
 		this(world);
 		this.player = player;
+		this.handHeld = spawnedHand;
 	}
 
 	@Override
@@ -119,6 +128,9 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		} else {
 			setDead();
 		}
+
+		final PacketBuffer buf = new PacketBuffer(data);
+		this.handHeld = buf.readEnumValue(EnumHand.class);
 	}
 
 	@Override
@@ -129,6 +141,9 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		} else {
 			data.writeInt(player.getEntityId());
 		}
+
+		final PacketBuffer buf = new PacketBuffer(data);
+		buf.writeEnumValue(handHeld);
 	}
 
 	@Override
@@ -222,6 +237,10 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	public EntityPlayer getPlayer() {
 		return player;
+	}
+
+	public EnumHand getHandHeld() {
+		return handHeld;
 	}
 
 	public double getNoise() {
