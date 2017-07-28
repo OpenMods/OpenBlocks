@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
@@ -48,7 +48,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 		});
 	}
 
-	private static class FluidHandler implements IFluidHandler {
+	private static class FluidHandler implements IFluidHandlerItem {
 		private final ItemStack container;
 
 		public FluidHandler(ItemStack container) {
@@ -129,6 +129,11 @@ public class ItemTankBlock extends ItemOpenBlock {
 			return drained;
 		}
 
+		@Override
+		public ItemStack getContainer() {
+			return container;
+		}
+
 	}
 
 	private static class ItemTexture implements IItemTexture {
@@ -152,24 +157,24 @@ public class ItemTankBlock extends ItemOpenBlock {
 	}
 
 	private static class CapabilityProvider implements ICapabilityProvider {
-		private final IFluidHandler fluidHandler;
+		private final IFluidHandlerItem fluidHandler;
 		private final IItemTexture itemTexture;
 
-		public CapabilityProvider(IFluidHandler fluidHandler, IItemTexture itemTexture) {
+		public CapabilityProvider(IFluidHandlerItem fluidHandler, IItemTexture itemTexture) {
 			this.fluidHandler = fluidHandler;
 			this.itemTexture = itemTexture;
 		}
 
 		@Override
 		public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-			return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
+			return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY ||
 					capability == ItemTextureCapability.CAPABILITY;
 		}
 
 		@Override
 		@SuppressWarnings("unchecked")
 		public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-			if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			if (capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
 				return (T)fluidHandler;
 
 			if (capability == ItemTextureCapability.CAPABILITY)
