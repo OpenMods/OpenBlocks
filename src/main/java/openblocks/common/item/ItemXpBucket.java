@@ -21,7 +21,7 @@ public class ItemXpBucket extends Item {
 		private final IFluidHandler fluidHandler;
 
 		public CapabilityProvider(ItemStack container) {
-			this.fluidHandler = new SingleFluidBucketHandler(container, OpenBlocks.Fluids.xpJuice.getName(), Fluid.BUCKET_VOLUME, new ItemStack(Items.BUCKET));
+			this.fluidHandler = new SingleFluidBucketHandler(container, new ItemStack(Items.BUCKET), OpenBlocks.Fluids.xpJuice, Fluid.BUCKET_VOLUME);
 		}
 
 		@Override
