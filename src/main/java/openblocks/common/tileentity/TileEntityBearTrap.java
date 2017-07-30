@@ -166,7 +166,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	@Override
-	public void onNeighbourChanged(BlockPos pos, Block block) {
+	public void onNeighbourChanged(BlockPos neighbourPos, Block neighbourBlock) {
 		updateRedstone();
 	}
 

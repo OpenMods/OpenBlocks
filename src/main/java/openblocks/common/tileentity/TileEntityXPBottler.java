@@ -294,7 +294,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	}
 
 	@Override
-	public void onNeighbourChanged(BlockPos pos, Block block) {
+	public void onNeighbourChanged(BlockPos neighbourPos, Block neighbourBlock) {
 		this.needsTankUpdate = true;
 	}
 

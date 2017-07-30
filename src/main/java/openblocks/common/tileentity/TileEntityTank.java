@@ -246,7 +246,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	@Override
-	public void onNeighbourChanged(BlockPos pos, Block block) {
+	public void onNeighbourChanged(BlockPos neighbourPos, Block neighbourBlock) {
 		forceUpdate = true;
 		needsTankUpdate = true;
 	}

@@ -298,7 +298,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public void onNeighbourChanged(BlockPos pos, Block block) {
+	public void onNeighbourChanged(BlockPos neighbourPos, Block neighbourBlock) {
 		this.needsTankUpdate = true;
 	}
 

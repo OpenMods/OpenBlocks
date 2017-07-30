@@ -572,7 +572,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	@Override
-	public void onNeighbourChanged(BlockPos pos, Block block) {
+	public void onNeighbourChanged(BlockPos neighbourPos, Block neighbourBlock) {
 		updateRedstone();
 	}
 
