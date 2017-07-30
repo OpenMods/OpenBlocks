@@ -19,6 +19,7 @@ import openmods.gui.Icon;
 import openmods.gui.component.BaseComponent;
 import openmods.gui.component.BaseComposite;
 import openmods.gui.component.GuiComponentLabel;
+import openmods.gui.component.GuiComponentPanel;
 import openmods.gui.component.GuiComponentSlider;
 import openmods.gui.component.GuiComponentTab;
 import openmods.gui.component.GuiComponentTankLevel;
@@ -49,11 +50,15 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 			VanillaEnchantLogic.Level.L2, Icon.createSheetIcon(VANILLA_TEXTURE, 16 * 1, 223, 16, 16),
 			VanillaEnchantLogic.Level.L3, Icon.createSheetIcon(VANILLA_TEXTURE, 16 * 2, 223, 16, 16));
 
+	private static final Icon LAPIS_SLOT = Icon.createSheetIcon(VANILLA_TEXTURE, 34, 46, 18, 18);
+
 	@Override
 	protected void addCustomizations(BaseComposite root) {
 		final TileEntityAutoEnchantmentTable te = getContainer().getOwner();
 
 		final ILevelChanger rpc = te.createClientRpcProxy(ILevelChanger.class);
+
+		((GuiComponentPanel)root).setSlotRenderer(1, GuiComponentPanel.customIconSlot(LAPIS_SLOT, -1, -1));
 
 		final GuiComponentSlider slider = new GuiComponentSlider(44, 39, 45, 1, 30, 1, true, TranslationUtils.translateToLocal("openblocks.gui.limit"));
 		slider.setListener(new IValueChangedListener<Double>() {
