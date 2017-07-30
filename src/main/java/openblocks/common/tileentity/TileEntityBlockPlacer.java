@@ -16,6 +16,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.container.ContainerBlockPlacer;
 import openmods.api.IHasGui;
+import openmods.api.IInventoryCallback;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.UseItemAction;
 import openmods.include.IncludeInterface;
@@ -27,7 +28,14 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 
 	static final int BUFFER_SIZE = 9;
 
-	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "blockPlacer", false, BUFFER_SIZE));
+	private final GenericInventory inventory = new TileEntityInventory(this, "blockPlacer", false, BUFFER_SIZE)
+			.addCallback(new IInventoryCallback() {
+				@Override
+				public void onInventoryChanged(IInventory inventory, int slotNumber) {
+					markUpdated();
+					triggerBlockAction();
+				}
+			});
 
 	@Override
 	protected boolean canWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
