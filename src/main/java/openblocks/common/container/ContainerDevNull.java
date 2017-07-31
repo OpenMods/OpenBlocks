@@ -53,7 +53,7 @@ public class ContainerDevNull extends ContainerBase<Void> {
 						offsetY + row * 18));
 
 		for (int slot = 0; slot < 9; slot++) {
-			addSlotToContainer(new Slot(playerInventory, slot, offsetX + slot * 18, offsetY + 58) {
+			addSlotToContainer(new RestrictedSlot(playerInventory, slot, offsetX + slot * 18, offsetY + 58) {
 				@Override
 				public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
 					return slotNumber != protectedSlotNumber;

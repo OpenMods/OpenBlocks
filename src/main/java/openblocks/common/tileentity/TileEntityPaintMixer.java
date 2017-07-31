@@ -43,6 +43,7 @@ import openmods.sync.SyncableInt;
 import openmods.sync.drops.DroppableTileEntity;
 import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.MiscUtils;
+import openmods.utils.OptionalInt;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class TileEntityPaintMixer extends DroppableTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IColorChanger, ITickable {
@@ -320,9 +321,8 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	}
 
 	@Override
-	public void onInventoryChanged(IInventory invent, int slotNumber) {
+	public void onInventoryChanged(IInventory invent, OptionalInt slotNumber) {
 		if (!world.isRemote) {
-
 			boolean hasPaint = false;
 			ItemStack can = inventory.getStackInSlot(Slots.paint);
 			if (!can.isEmpty()) {
