@@ -23,6 +23,7 @@ import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
+import openmods.utils.OptionalInt;
 
 public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements IHasGui, IInventoryProvider {
 
@@ -31,7 +32,7 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 	private final GenericInventory inventory = new TileEntityInventory(this, "blockPlacer", false, BUFFER_SIZE)
 			.addCallback(new IInventoryCallback() {
 				@Override
-				public void onInventoryChanged(IInventory inventory, int slotNumber) {
+				public void onInventoryChanged(IInventory inventory, OptionalInt slotNumber) {
 					markUpdated();
 					triggerBlockAction();
 				}

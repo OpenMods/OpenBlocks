@@ -1,6 +1,5 @@
 package openblocks.common.recipe;
 
-import info.openmods.calc.utils.OptionalInt;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -9,6 +8,7 @@ import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginary.PlacementMode;
+import openmods.utils.OptionalInt;
 
 public class CrayonMergeRecipe implements IRecipe {
 
@@ -79,11 +79,7 @@ public class CrayonMergeRecipe implements IRecipe {
 		}
 
 		if (!meta.isPresent() || uses == 0) return null;
-		return ItemImaginary.setupValues(new ItemStack(OpenBlocks.Blocks.imaginary, 1, meta.get()), asNullable(color), PlacementMode.BLOCK, uses);
-	}
-
-	private static Integer asNullable(OptionalInt color) {
-		return color.isPresent()? color.get() : null;
+		return ItemImaginary.setupValues(new ItemStack(OpenBlocks.Blocks.imaginary, 1, meta.get()), color.asNullable(), PlacementMode.BLOCK, uses);
 	}
 
 	@Override

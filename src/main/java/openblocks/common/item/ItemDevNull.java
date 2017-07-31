@@ -138,8 +138,10 @@ public class ItemDevNull extends Item {
 				EnumActionResult response = item.onItemUse(containedStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
 				if (containedStack.stackSize == 0) {
 					inventory.setInventorySlotContents(0, null);
+				} else {
+					inventory.setInventorySlotContents(0, containedStack);
 				}
-				inventory.markDirty();
+
 				return response;
 			}
 		}
