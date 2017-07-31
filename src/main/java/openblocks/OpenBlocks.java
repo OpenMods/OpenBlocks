@@ -196,8 +196,6 @@ import openblocks.enchantments.flimflams.UselessToolFlimFlam;
 import openblocks.events.ElevatorActionEvent;
 import openblocks.events.GuideActionEvent;
 import openblocks.events.PlayerActionEvent;
-import openblocks.integration.ModuleAdapters;
-import openblocks.integration.ModuleTurtles;
 import openblocks.rpc.IColorChanger;
 import openblocks.rpc.IGuideAnimationTrigger;
 import openblocks.rpc.IItemDropper;
@@ -217,7 +215,6 @@ import openmods.config.game.ModStartupHelper;
 import openmods.config.game.RegisterBlock;
 import openmods.config.game.RegisterItem;
 import openmods.config.properties.ConfigProcessing;
-import openmods.integration.Integration;
 import openmods.liquids.BucketFillHandler;
 import openmods.network.event.NetworkEventEntry;
 import openmods.network.event.NetworkEventManager;
@@ -737,8 +734,8 @@ public class OpenBlocks {
 
 		MinecraftForge.EVENT_BUS.register(MapDataManager.instance);
 
-		Integration.addModule(new ModuleAdapters());
-		Integration.addModule(new ModuleTurtles());
+		// Integration.addModule(new ModuleAdapters());
+		// Integration.addModule(new ModuleTurtles());
 
 		if (!Config.soSerious) {
 			BrickManager.registerCapability();

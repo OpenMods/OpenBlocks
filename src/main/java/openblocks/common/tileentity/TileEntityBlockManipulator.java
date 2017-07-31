@@ -31,18 +31,24 @@ public abstract class TileEntityBlockManipulator extends OpenTileEntity implemen
 				}
 
 				if (isPowered)
-					triggerBreakBlock(newState);
+					triggerBlockAction(newState);
 			}
 		}
 	}
 
-	private void triggerBreakBlock(IBlockState newState) {
-		final EnumFacing direction = getFront(newState);
+	protected void triggerBlockAction() {
+		final IBlockState state = world.getBlockState(getPos());
+		triggerBlockAction(state);
+	}
+
+	private void triggerBlockAction(IBlockState state) {
+		final EnumFacing direction = getFront(state);
 		final BlockPos target = pos.offset(direction);
 
 		if (world.isBlockLoaded(target)) {
 			final IBlockState targetState = world.getBlockState(target);
-			if (canWork(targetState, target, direction)) sendBlockEvent(EVENT_ACTIVATE, 0);
+			if (canWork(targetState, target, direction))
+				sendBlockEvent(EVENT_ACTIVATE, 0);
 		}
 	}
 
