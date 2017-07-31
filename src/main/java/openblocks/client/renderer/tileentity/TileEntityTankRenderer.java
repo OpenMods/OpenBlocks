@@ -2,16 +2,16 @@ package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.animation.FastTESR;
 import openblocks.Config;
 import openblocks.client.renderer.tileentity.tank.ITankRenderFluidData;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.utils.Diagonal;
 import openmods.utils.TextureUtils;
 
-public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntityTank> {
+public class TileEntityTankRenderer extends FastTESR<TileEntityTank> {
 
 	@Override
 	public void renderTileEntityFast(TileEntityTank tankTile, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer buffer) {
