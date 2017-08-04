@@ -8,11 +8,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import openblocks.Config;
+import openmods.api.IActivateAwareTile;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
@@ -21,7 +24,7 @@ import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
-public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, INeighbourAwareTile, IAddAwareTile, ITickable {
+public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, INeighbourAwareTile, IAddAwareTile, ITickable, IActivateAwareTile {
 
 	private static final double CONE_HALF_APERTURE = 1.2 / 2.0;
 	private SyncableFloat angle;
@@ -131,4 +134,14 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 		}
 	}
 
+	@Override
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
+			angle.set(angle.get() + (player.isSneaking()? -10f : +10f));
+			sync();
+			return true;
+		}
+
+		return false;
+	}
 }
