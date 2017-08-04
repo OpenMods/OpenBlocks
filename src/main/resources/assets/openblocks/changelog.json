@@ -1,5 +1,38 @@
 [
     {
+        "version" : "1.7.1",
+        "sections" :
+        [
+            {
+                "title": "openblocks.gui.features",
+                "lines":
+                [
+                    "Right clicking on fan will rotate it (same as flag)",
+                    "Added horse trophy"
+                ]
+            },
+            {
+                "title": "openblocks.gui.bugfixes",
+                "lines":
+                [
+                    "Fixed Sky Block rendering behind glass",
+                    "Fix couple of custom recipes",
+                    "Fix off-hand glider behaviour",
+                    "Fix flag placing and dropping",
+                    "Grave can now be safely disabled"
+                ]
+            },
+            {
+                "title" : "openblocks.gui.tweaks",
+                "lines" :
+                [
+                    "Item placer now tries to place item on inventory change",
+                    "Flags with different colors no longer stack"
+                ]
+            }
+        ]
+    },
+    {
         "version" : "1.7",
         "sections" :
         [
