@@ -194,6 +194,8 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 				modifierStack.shrink(modifierCost);
 				inventory.setInventorySlotContents(Slots.modifier.ordinal(), modifierStack);
 			}
+		} else {
+			inventory.setInventorySlotContents(Slots.modifier.ordinal(), ItemStack.EMPTY);
 		}
 	}
 
