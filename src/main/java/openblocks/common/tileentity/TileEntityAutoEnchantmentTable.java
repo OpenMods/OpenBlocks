@@ -344,7 +344,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	private boolean hasStack(Slots slot) {
-		return getStack(slot) != null;
+		return !getStack(slot).isEmpty();
 	}
 
 	private boolean hasSpace(Slots slot) {
