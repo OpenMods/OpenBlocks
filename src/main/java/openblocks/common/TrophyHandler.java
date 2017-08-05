@@ -295,6 +295,10 @@ public class TrophyHandler {
 			return null;
 		}
 
+		public String translationKey() {
+			return "entity." + EntityList.getTranslationName(id) + ".name";
+		}
+
 		static {
 
 			ImmutableMap.Builder<ResourceLocation, Trophy> byId = ImmutableMap.builder();

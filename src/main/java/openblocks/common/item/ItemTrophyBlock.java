@@ -58,7 +58,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 	public String getItemStackDisplayName(@Nonnull ItemStack stack) {
 		Trophy trophyType = getTrophy(stack);
 		if (trophyType != null) {
-			final String name = TranslationUtils.translateToLocal("entity." + trophyType.name() + ".name");
+			final String name = TranslationUtils.translateToLocal(trophyType.translationKey());
 			return TranslationUtils.translateToLocalFormatted(super.getUnlocalizedName() + ".entity.name", name);
 		}
 
