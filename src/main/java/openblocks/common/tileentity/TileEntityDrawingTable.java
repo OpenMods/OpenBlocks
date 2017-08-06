@@ -46,12 +46,16 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 				if (MetasGeneric.unpreparedStencil.isA(input)) {
 					final ItemStack output = new ItemStack(OpenBlocks.Items.stencil, input.getCount(), selectedPattern.get().ordinal());
 					inventoryContents.set(SLOT_OUTPUT, output);
+				} else {
+					inventoryContents.set(SLOT_OUTPUT, ItemStack.EMPTY);
 				}
 			} else if (slotNumber == SLOT_OUTPUT) {
 				final ItemStack output = inventoryContents.get(SLOT_OUTPUT);
 				if (output.getItem() instanceof ItemStencil) {
 					final ItemStack input = MetasGeneric.unpreparedStencil.newItemStack(output.getCount());
 					inventoryContents.set(SLOT_INPUT, input);
+				} else {
+					inventoryContents.set(SLOT_INPUT, ItemStack.EMPTY);
 				}
 			}
 
