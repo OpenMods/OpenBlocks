@@ -33,6 +33,9 @@ public class ItemGoldenEye extends Item {
 
 	public static final int MAX_DAMAGE = 100;
 	private static final String TAG_STRUCTURE = "Structure";
+	private static final String TAG_X = "X";
+	private static final String TAG_Y = "Y";
+	private static final String TAG_Z = "Z";
 
 	public ItemGoldenEye() {
 		setMaxDamage(MAX_DAMAGE);
@@ -58,6 +61,7 @@ public class ItemGoldenEye extends Item {
 		Map<String, BlockPos> nearbyStructures = StructureRegistry.instance.getNearestStructures(world, player.getPosition());
 
 		String newStructureName = "";
+		BlockPos newStructurePos = null;
 		double max = Double.MAX_VALUE;
 
 		for (Map.Entry<String, BlockPos> e : nearbyStructures.entrySet()) {
@@ -70,44 +74,50 @@ public class ItemGoldenEye extends Item {
 			if (distSq < max) {
 				max = distSq;
 				newStructureName = e.getKey();
+				newStructurePos = pos;
 			}
 		}
 
-		if (!Strings.isNullOrEmpty(newStructureName)) {
-			player.sendMessage(new TextComponentTranslation("openblocks.misc.locked_on_structure", new TextComponentTranslation(StructureRegistry.structureNameLocalizationKey(newStructureName))));
+		if (!Strings.isNullOrEmpty(newStructureName) && newStructurePos != null) {
+			player.sendMessage(new TextComponentTranslation("openblocks.misc.locked_on_nearest_structure", new TextComponentTranslation(StructureRegistry.structureNameLocalizationKey(newStructureName))));
 			NBTTagCompound tag = ItemUtils.getItemTag(stack);
 			tag.setString(TAG_STRUCTURE, newStructureName);
+			tag.setInteger(TAG_X, newStructurePos.getX());
+			tag.setInteger(TAG_Y, newStructurePos.getY());
+			tag.setInteger(TAG_Z, newStructurePos.getZ());
+
+			if (Config.eyeDebug) player.sendMessage(new TextComponentTranslation(
+					"openblocks.misc.structure_pos", newStructureName, newStructurePos.getX(), newStructurePos.getY(), newStructurePos.getZ()));
+
 		} else {
 			player.sendMessage(new TextComponentTranslation("openblocks.misc.no_nearby_structures"));
 		}
 	}
 
 	private static boolean trySpawnEntity(@Nonnull ItemStack stack, WorldServer world, EntityPlayerMP player) {
-		int damage = stack.getItemDamage();
+		final int damage = stack.getItemDamage();
 		if (damage >= stack.getMaxDamage()) return false;
 
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
-		String structureName = tag.getString(TAG_STRUCTURE);
+		final NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
-		if (Strings.isNullOrEmpty(structureName)) {
+		if (!tag.hasKey(TAG_X, Constants.NBT.TAG_ANY_NUMERIC) ||
+				!tag.hasKey(TAG_Y, Constants.NBT.TAG_ANY_NUMERIC) ||
+				!tag.hasKey(TAG_Z, Constants.NBT.TAG_ANY_NUMERIC)) {
 			player.sendMessage(new TextComponentTranslation("openblocks.misc.structure_not_locked"));
 			return false;
 		}
 
-		Map<String, BlockPos> nearbyStructures = StructureRegistry.instance.getNearestStructures(world, player.getPosition());
+		final int x = tag.getInteger(TAG_X);
+		final int y = tag.getInteger(TAG_Y);
+		final int z = tag.getInteger(TAG_Z);
 
-		BlockPos structurePos = nearbyStructures.get(structureName);
-		if (structurePos != null) {
-			if (Config.eyeDebug) player.sendMessage(new TextComponentTranslation(
-					"openblocks.misc.structure_pos", structureName, structurePos.getX(), structurePos.getY(), structurePos.getZ()));
+		final BlockPos structurePos = new BlockPos(x, y, z);
 
-			stack.setItemDamage(damage + 1);
-			EntityGoldenEye eye = new EntityGoldenEye(world, stack, player, structurePos);
-			world.spawnEntity(eye);
-			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDEREYE_LAUNCH, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-			return true;
-		}
-		return false;
+		stack.setItemDamage(damage + 1);
+		EntityGoldenEye eye = new EntityGoldenEye(world, stack, player, structurePos);
+		world.spawnEntity(eye);
+		world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDEREYE_LAUNCH, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		return true;
 	}
 
 	@Override

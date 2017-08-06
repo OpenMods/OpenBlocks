@@ -98,7 +98,8 @@ openblocks.misc.oh_no_ground=Vuoi dormire su QUEL COSO!?
 openblocks.misc.sleeping_bag_broken=Oggetto disattivato in quanto l'inizializzazione è fallita
 #openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
 #openblocks.misc.structure_not_locked=Not locked on any structure! ## NEEDS TRANSLATION ##
-#openblocks.misc.locked_on_structure=Locked on nearest %s ## NEEDS TRANSLATION ##
+#openblocks.misc.locked_on_nearest_structure=Locked on nearest %s ## NEEDS TRANSLATION ##
+#openblocks.misc.locked_on_structure=Locked on %s ## NEEDS TRANSLATION ##
 #openblocks.misc.no_nearby_structures=Can't find any nearby structures ## NEEDS TRANSLATION ##
 
 openblocks.misc.grave_msg=%s (Giorno: %.1f)
