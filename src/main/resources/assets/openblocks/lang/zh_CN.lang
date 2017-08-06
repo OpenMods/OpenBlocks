@@ -98,6 +98,7 @@ openblocks.misc.oh_no_ground=你居然还想要睡在那上面!?
 openblocks.misc.sleeping_bag_broken=由于初始化错误,该物品无法生效
 openblocks.misc.inverted=反相
 openblocks.misc.structure_not_locked=没有锁定任何结构！
+#openblocks.misc.locked_on_nearest_structure=Locked on nearest %s ## NEEDS TRANSLATION ##
 openblocks.misc.locked_on_structure=锁定最近的 %s
 openblocks.misc.no_nearby_structures=无法找到最近的结构
 
