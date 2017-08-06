@@ -98,7 +98,8 @@ openblocks.misc.oh_no_ground=You want to sleep on THAT!?
 openblocks.misc.sleeping_bag_broken=Item inactive due to failed initialization
 openblocks.misc.inverted=Inverted
 openblocks.misc.structure_not_locked=Not locked on any structure!
-openblocks.misc.locked_on_structure=Locked on nearest %s
+openblocks.misc.locked_on_nearest_structure=Locked on nearest %s
+openblocks.misc.locked_on_structure=Locked on %s
 openblocks.misc.no_nearby_structures=Can't find any nearby structures
 
 openblocks.misc.grave_msg=%s (day: %.1f)
