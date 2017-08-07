@@ -37,7 +37,6 @@ import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelBearTrap;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.model.ModelPiggy;
-import openblocks.client.model.ModelSprinkler;
 import openblocks.client.renderer.SkyBlockRenderer;
 import openblocks.client.renderer.TextureUploader;
 import openblocks.client.renderer.block.PathModel;
@@ -62,6 +61,7 @@ import openblocks.client.renderer.tileentity.TileEntityImaginaryRenderer;
 import openblocks.client.renderer.tileentity.TileEntityPaintMixerRenderer;
 import openblocks.client.renderer.tileentity.TileEntityProjectorRenderer;
 import openblocks.client.renderer.tileentity.TileEntitySkyRenderer;
+import openblocks.client.renderer.tileentity.TileEntitySprinklerRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
 import openblocks.client.renderer.tileentity.TileEntityVillageHighlighterRenderer;
@@ -268,7 +268,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, SimpleModelTileEntityRenderer.create(new ModelBearTrap(), OpenBlocks.location("textures/models/bear_trap.png")));
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, SimpleModelTileEntityRenderer.create(new ModelSprinkler(), OpenBlocks.location("textures/models/sprinkler.png")));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, new TileEntitySprinklerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class, new TileEntityCannonRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class, new TileEntityImaginaryRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class, new TileEntityFanRenderer());
@@ -389,7 +389,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		consumer.nom(OpenBlocks.Blocks.bearTrap);
 		consumer.nom(OpenBlocks.Blocks.cannon);
 		consumer.nom(OpenBlocks.Blocks.fan);
-		consumer.nom(OpenBlocks.Blocks.sprinkler);
 	}
 
 	@SuppressWarnings("deprecation")

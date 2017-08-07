@@ -2,18 +2,22 @@ package openblocks.common.block;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.property.Properties;
 import openmods.block.OpenBlock;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
+import openmods.model.eval.EvalModelState;
 
 @BookDocumentation
 public class BlockSprinkler extends OpenBlock.TwoDirections {
@@ -22,19 +26,15 @@ public class BlockSprinkler extends OpenBlock.TwoDirections {
 
 	public BlockSprinkler() {
 		super(Material.WATER);
-		setDefaultState(getDefaultState().withProperty(BlockLiquid.LEVEL, 1));
+		setDefaultState(getDefaultState().withProperty(BlockLiquid.LEVEL, 1).withProperty(Properties.StaticProperty, true));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
 		// 1.8.9 Hack, crashes otherwise
-		return new BlockStateContainer(this, getPropertyOrientation(), BlockLiquid.LEVEL);
-	}
-
-	// TODO 1.8.9 room for improvments?
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+		return new ExtendedBlockState(this,
+				new IProperty[] { getPropertyOrientation(), BlockLiquid.LEVEL, Properties.StaticProperty },
+				new IUnlistedProperty[] { EvalModelState.PROPERTY });
 	}
 
 	@Override

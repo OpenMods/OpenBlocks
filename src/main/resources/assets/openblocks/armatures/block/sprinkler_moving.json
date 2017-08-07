@@ -1,0 +1,36 @@
+{
+    "joints": {
+        "sprayer": { "0": [ 1.0 ] }
+    },
+    "clips": {
+        "rotate": {
+            "loop": false,
+            "joint_clips": {
+                "sprayer": [
+                    {
+                        "variable": "axis_z",
+                        "type": "uniform",
+                        "interpolation": "nearest",
+                        "samples": [ 1 ]
+                    },
+                    {
+                        "variable": "offset_y",
+                        "type": "uniform",
+                        "interpolation": "nearest",
+                        "samples": [ -0.3125 ]
+                    },
+                    {
+                        "variable": "angle",
+                        "type": "uniform",
+                        "interpolation": "linear",
+                        "samples": [
+                            25, 0, -25
+                        ]
+                    }
+                ]
+            },
+            "events": {}
+        }
+    }
+}
+
