@@ -1,11 +1,41 @@
 {
     "forge_marker" : 1,
     "defaults" : {
-        "textures": {
-            "particle": "openblocks:blocks/fan"
-        }
+        "model": "openblocks:fan_frame",
+        "transform": "forge:default-block"
     },
-    "variants": {
-        "dummy": { "model": "openblocks:tesr_empty" }
+    "variants" : {
+        "inventory" : [{
+            "submodel": {
+                "spinner": {
+                     "model": "openblocks:fan_blades",
+                     "transform": {"translation": [0, 0.171875, 0]}
+                }
+            }
+        }],
+        "orientation" : {
+            "xp_yp" : {}
+        },
+        "static": {
+            "true": {
+                "model": "openmods:eval",
+                "custom": {
+                    "base": "openblocks:block/fan_frame",
+                    "transforms": [
+                        "base_rotate(base_rotation)"
+                    ]
+                }
+            },
+            "false": {
+                "model": "openmods:eval",
+                "custom": {
+                    "base": "openblocks:block/fan_blades",
+                    "transforms": [
+                        "base_rotate(base_rotation)",
+                        "blade_spin(blade_rotation)"
+                    ]
+                }
+            }
+        }
     }
 }

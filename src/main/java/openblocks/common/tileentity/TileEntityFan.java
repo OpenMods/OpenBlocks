@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -11,12 +12,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import openblocks.Config;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
+import openmods.model.eval.EvalModelState;
+import openmods.sync.ISyncListener;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableByte;
 import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;
@@ -24,11 +30,15 @@ import openmods.utils.BlockUtils;
 
 public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, INeighbourAwareTile, IAddAwareTile, ITickable, IActivateAwareTile {
 
+	private static final int ANGLE_SPEED_PER_REDSTONE_POWER = 45;
 	private static final double CONE_HALF_APERTURE = 1.2 / 2.0;
+
 	private SyncableFloat angle;
 	private SyncableByte power;
 	private float bladeRotation;
 	private float bladeSpeed;
+
+	private EvalModelState baseClipState = EvalModelState.EMPTY;
 
 	public TileEntityFan() {}
 
@@ -39,11 +49,24 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 	}
 
 	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
+		syncMap.addUpdateListener(new ISyncListener() {
+			@Override
+			public void onSync(Set<ISyncableObject> changes) {
+				if (changes.contains(angle)) {
+					setStateAngle(angle.get());
+					markBlockForRenderUpdate(getPos());
+				}
+			}
+		});
+	}
+
+	@Override
 	public void update() {
 		float redstonePower = power.get() / 15.0f;
 
-		bladeSpeed = redstonePower;
-		bladeRotation += redstonePower;
+		bladeSpeed = ANGLE_SPEED_PER_REDSTONE_POWER * redstonePower;
+		bladeRotation += bladeSpeed;
 
 		final double maxForce = Config.fanForce * redstonePower;
 		if (maxForce <= 0) return;
@@ -103,7 +126,9 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 
 	@Override
 	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		angle.set(placer.rotationYawHead);
+		final float placeAngle = placer.rotationYawHead;
+		angle.set(placeAngle);
+		setStateAngle(placeAngle);
 	}
 
 	public float getAngle() {
@@ -111,7 +136,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 	}
 
 	public float getBladeRotation(float partialTickTime) {
-		return bladeRotation + bladeSpeed * partialTickTime;
+		return (bladeRotation + bladeSpeed * partialTickTime) % 360;
 	}
 
 	@Override
@@ -141,5 +166,23 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 		}
 
 		return false;
+	}
+
+	@Override
+	public boolean hasFastRenderer() {
+		return true;
+	}
+
+	private void setStateAngle(float angle) {
+		final float arg = 1 - MathHelper.wrapDegrees(angle) / 360.0f; // TODO move to blockstate once model is POWERFUL
+		baseClipState = baseClipState.withArg("base_rotation", arg);
+	}
+
+	public EvalModelState getStaticRenderState() {
+		return baseClipState;
+	}
+
+	public EvalModelState getTesrRenderState(float partialTickTime) {
+		return baseClipState.withArg("blade_rotation", getBladeRotation(partialTickTime) / 360.0f, true);
 	}
 }

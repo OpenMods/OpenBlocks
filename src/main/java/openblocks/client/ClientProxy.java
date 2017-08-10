@@ -388,7 +388,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		// TODO migrate static parts to block models
 		consumer.nom(OpenBlocks.Blocks.bearTrap);
 		consumer.nom(OpenBlocks.Blocks.cannon);
-		consumer.nom(OpenBlocks.Blocks.fan);
 	}
 
 	@SuppressWarnings("deprecation")
