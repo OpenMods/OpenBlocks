@@ -1,11 +1,32 @@
 {
     "forge_marker" : 1,
     "defaults" : {
+        "model": "openmods:eval",
+        "custom": {
+            "base": "openblocks:block/beartrap",
+            "transforms": [
+                "jaws(progress)"
+            ]
+        },
         "textures": {
             "particle": "openblocks:blocks/beartrap"
-        }
+        },
+        "transform": "forge:default-block"
     },
     "variants": {
-        "dummy": { "model": "openblocks:tesr_empty" }
+        "inventory": [{
+            "model": "openmods:eval-expand",
+            "custom": {
+                "default_state": "openblocks:beartrap",
+                "base": "openblocks:beartrap#orientation=xp_yp",
+                "transforms": [
+                    "progress := 0.25"
+                ]
+            }
+        }],
+        "orientation" : {
+            "xp_yp": {},
+            "zn_yp": {"y": 270}
+        }
     }
 }

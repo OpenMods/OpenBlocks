@@ -16,6 +16,7 @@ import openmods.api.IActivateAwareTile;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
+import openmods.model.eval.EvalModelState;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
@@ -26,6 +27,7 @@ import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, INeighbourAwareTile, IAddAwareTile, ITickable {
 
+	private static final float FULLY_OPEN = 1 - 0.001f; // epsilon required in 1.10, check later versions
 	public static final int OPENING_ANIMATION_TIME = 15;
 
 	public enum Flags {
@@ -180,6 +182,19 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 			boolean isLocked = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
 			this.isLocked.set(isLocked);
 			if (isLocked) open();
+		}
+	}
+
+	public EvalModelState getRenderState(float partialTick) {
+		if (isShut()) {
+			return EvalModelState.create().withArg("progress", FULLY_OPEN, false);
+		} else {
+			final float openingProgress = (ticksSinceOpened() + partialTick) / TileEntityBearTrap.OPENING_ANIMATION_TIME;
+			if (openingProgress < FULLY_OPEN) {
+				return EvalModelState.create().withArg("progress", FULLY_OPEN - openingProgress, true);
+			} else {
+				return EvalModelState.create().withArg("progress", 0, false);
+			}
 		}
 	}
 }

@@ -34,7 +34,6 @@ import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
 import openblocks.client.bindings.KeyInputHandler;
 import openblocks.client.fx.FXLiquidSpray;
-import openblocks.client.model.ModelBearTrap;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.model.ModelPiggy;
 import openblocks.client.renderer.SkyBlockRenderer;
@@ -53,6 +52,7 @@ import openblocks.client.renderer.item.stencil.ModelStencil;
 import openblocks.client.renderer.item.stencil.StencilItemOverride;
 import openblocks.client.renderer.item.stencil.StencilTextureManager;
 import openblocks.client.renderer.tileentity.TileEntityAutoEnchantmentTableRenderer;
+import openblocks.client.renderer.tileentity.TileEntityBearTrapRenderer;
 import openblocks.client.renderer.tileentity.TileEntityCannonRenderer;
 import openblocks.client.renderer.tileentity.TileEntityFanRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGoldenEggRenderer;
@@ -267,7 +267,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, SimpleModelTileEntityRenderer.create(new ModelBearTrap(), OpenBlocks.location("textures/models/bear_trap.png")));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, new TileEntityBearTrapRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, new TileEntitySprinklerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class, new TileEntityCannonRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class, new TileEntityImaginaryRenderer());
@@ -386,7 +386,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		consumer.nom(OpenBlocks.Blocks.donationStation);
 
 		// TODO migrate static parts to block models
-		consumer.nom(OpenBlocks.Blocks.bearTrap);
+		// consumer.nom(OpenBlocks.Blocks.bearTrap);
 		consumer.nom(OpenBlocks.Blocks.cannon);
 	}
 
