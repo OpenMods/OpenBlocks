@@ -5,6 +5,9 @@
             "particle": "openblocks:blocks/donation_station"
         },
         "model": "openblocks:piggy.obj",
+        "custom": {
+            "flip-v": true
+        },
         "transform": "forge:default-block"
     },
     "variants": {
