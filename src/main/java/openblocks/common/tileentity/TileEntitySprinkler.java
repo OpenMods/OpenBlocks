@@ -284,7 +284,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 	}
 
 	public EvalModelState getRenderState() {
-		return EvalModelState.create().withArg("rotation", getSprayDirection() / 2.0f + 0.5f);
+		return EvalModelState.create().withArg("direction", getSprayDirection());
 	}
 
 	@Override

@@ -12,7 +12,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import openblocks.Config;
 import openmods.api.IActivateAwareTile;
@@ -174,8 +173,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 	}
 
 	private void setStateAngle(float angle) {
-		final float arg = 1 - MathHelper.wrapDegrees(angle) / 360.0f; // TODO move to blockstate once model is POWERFUL
-		baseClipState = baseClipState.withArg("base_rotation", arg);
+		baseClipState = baseClipState.withArg("base_rotation", angle);
 	}
 
 	public EvalModelState getStaticRenderState() {
@@ -183,6 +181,6 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 	}
 
 	public EvalModelState getTesrRenderState(float partialTickTime) {
-		return baseClipState.withArg("blade_rotation", getBladeRotation(partialTickTime) / 360.0f, true);
+		return baseClipState.withArg("blade_rotation", getBladeRotation(partialTickTime), true);
 	}
 }

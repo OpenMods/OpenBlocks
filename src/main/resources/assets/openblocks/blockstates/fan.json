@@ -22,7 +22,7 @@
                 "custom": {
                     "base": "openblocks:block/fan_frame",
                     "transforms": [
-                        "base_rotate(base_rotation)"
+                        "base_rotate(1 - wrap_deg(base_rotation) / 360)"
                     ]
                 }
             },
@@ -31,8 +31,8 @@
                 "custom": {
                     "base": "openblocks:block/fan_blades",
                     "transforms": [
-                        "base_rotate(base_rotation)",
-                        "blade_spin(blade_rotation)"
+                        "base_rotate(1 - wrap_deg(base_rotation) / 360)",
+                        "blade_spin(blade_rotation / 360)"
                     ]
                 }
             }

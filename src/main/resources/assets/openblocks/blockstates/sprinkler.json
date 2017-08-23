@@ -27,7 +27,7 @@
                 "custom": {
                     "base": "openblocks:block/sprinkler_moving",
                     "transforms": [
-                        "rotate(rotation)"
+                        "rotate(direction / 2 + 0.5)"
                     ]
                 }
             }

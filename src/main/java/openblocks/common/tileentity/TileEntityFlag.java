@@ -92,8 +92,7 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 	}
 
 	private void setStateAngle(float angle) {
-		final float arg = 1 - (MathHelper.wrapDegrees(angle) + 180.0f) / 360.0f; // TODO move to blockstate once model is POWERFULL
-		clipsState = clipsState.withArg("rotation", arg);
+		clipsState = clipsState.withArg("rotation", angle);
 	}
 
 	@Override
