@@ -1,5 +1,27 @@
 [
     {
+        "version" : "1.7.2",
+        "sections" :
+        [
+            {
+                "title": "openblocks.gui.bugfixes",
+                "lines":
+                [
+                    "Fix startup crash due to interaction with certain mod",
+                    "Fix building guide texture orientation"
+                ]
+            },
+            {
+                "title" : "openblocks.gui.tweaks",
+                "lines" :
+                [
+                    "Re-implement rendering of few blocks with block models",
+                    "Golden eye now stores last selected target"
+                ]
+            }
+        ]
+    },
+    {
         "version" : "1.7.1",
         "sections" :
         [
