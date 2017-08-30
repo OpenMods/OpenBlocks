@@ -10,30 +10,25 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.animation.FastTESR;
 import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.Properties;
-import openblocks.common.tileentity.TileEntityFan;
+import openblocks.common.tileentity.TileEntityBearTrap;
 import openmods.model.eval.EvalModelState;
 
-public class TileEntityFanRenderer extends FastTESR<TileEntityFan> {
+public class TileEntityBearTrapRenderer extends FastTESR<TileEntityBearTrap> {
 
 	protected static BlockRendererDispatcher blockRenderer;
 
 	@Override
-	public void renderTileEntityFast(TileEntityFan te, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer renderer) {
+	public void renderTileEntityFast(TileEntityBearTrap te, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer renderer) {
 		if (blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
 
 		final BlockPos pos = te.getPos();
 		final IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
 		IBlockState state = world.getBlockState(pos);
 
-		if (state.getPropertyKeys().contains(Properties.StaticProperty)) {
-			state = state.withProperty(Properties.StaticProperty, false);
-		}
-
 		if (state instanceof IExtendedBlockState) {
 			state = state.getBlock().getExtendedState(state, world, pos);
 
-			IExtendedBlockState exState = ((IExtendedBlockState)state).withProperty(EvalModelState.PROPERTY, te.getTesrRenderState(partialTicks));
+			IExtendedBlockState exState = ((IExtendedBlockState)state).withProperty(EvalModelState.PROPERTY, te.getRenderState(partialTicks));
 			final IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(exState.getClean());
 			renderer.setTranslation(x - pos.getX(), y - pos.getY(), z - pos.getZ());
 			blockRenderer.getBlockModelRenderer().renderModel(world, model, exState, pos, renderer, false);

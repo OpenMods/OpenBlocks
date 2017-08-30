@@ -32,7 +32,7 @@
                 "custom": {
                     "base": "openblocks:block/flag_ground",
                     "transforms": [
-                        "rotate(rotation)"
+                        "rotate(1 - (wrap_deg(rotation) + 180) / 360)"
                     ]
                 }
             },

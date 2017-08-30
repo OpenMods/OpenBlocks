@@ -3,9 +3,20 @@
     "defaults" : {
         "textures": {
             "particle": "openblocks:blocks/donation_station"
-        }
+        },
+        "model": "openblocks:piggy.obj",
+        "custom": {
+            "flip-v": true
+        },
+        "transform": "forge:default-block"
     },
     "variants": {
-        "dummy": { "model": "openblocks:tesr_empty" }
+        "inventory": [{}],
+        "orientation" : {
+            "xp_yp" : { "y" :   0 },
+            "zp_yp" : { "y" :  90 },
+            "xn_yp" : { "y" : 180 },
+            "zn_yp" : { "y" : 270 }
+        }
     }
 }

@@ -36,6 +36,7 @@ import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
 import openmods.liquids.GenericFluidCapabilityWrapper;
+import openmods.model.eval.EvalModelState;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
@@ -280,5 +281,14 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 			return (T)inventory.getHandler();
 
 		return super.getCapability(capability, facing);
+	}
+
+	public EvalModelState getRenderState() {
+		return EvalModelState.create().withArg("direction", getSprayDirection());
+	}
+
+	@Override
+	public boolean hasFastRenderer() {
+		return true;
 	}
 }

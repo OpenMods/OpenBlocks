@@ -2,10 +2,53 @@
     "forge_marker" : 1,
     "defaults" : {
         "textures": {
-            "particle": "openblocks:blocks/sprinkler"
-        }
+            "particle": "openblocks:blocks/sprinkler_particles"
+        },
+        "model": "openblocks:sprinkler_static",
+        "transform": "forge:default-block"
     },
     "variants": {
-        "dummy": { "model": "openblocks:tesr_empty" }
+        "inventory": [{
+            "submodel": {
+                "spinner": {
+                     "model": "openblocks:sprinkler_moving",
+                     "transform": {"translation": [0, -0.3125, 0]}
+                } 
+            }
+        }],
+        "orientation" : {
+            "xp_yp": {},
+            "zn_yp": {"y": 270}
+        },
+        "static": {
+            "true" : {},
+            "false": {
+                "model": "openmods:eval",
+                "custom": {
+                    "base": "openblocks:block/sprinkler_moving",
+                    "transforms": [
+                        "rotate(direction / 2 + 0.5)"
+                    ]
+                }
+            }
+        },
+        "level": {
+            "0": {},
+            "1": {},
+            "2": {},
+            "3": {},
+            "4": {},
+            "5": {},
+            "6": {},
+            "7": {},
+            "8": {},
+            "9": {},
+            "10": {},
+            "11": {},
+            "12": {},
+            "13": {},
+            "14": {},
+            "15": {}
+        }
     }
 }

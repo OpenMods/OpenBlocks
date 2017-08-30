@@ -1,0 +1,20 @@
+{
+    "textures": {
+        "0": "openblocks:blocks/sprinkler"
+    },
+    "elements": [
+        {
+            "name": "sprayer",
+            "from": [7.5, 7.5, 2],
+            "to": [8.5, 8.5, 14],
+            "faces": {
+                "north": {"uv": [14, 12, 15, 13], "texture": "#0"},
+                "east": {"uv": [2, 9, 14, 10], "texture": "#0"},
+                "south": {"uv": [15, 12, 16, 13], "texture": "#0"},
+                "west": {"uv": [2, 8, 14, 9], "texture": "#0"},
+                "up": {"uv": [14, 0, 15, 12], "texture": "#0"},
+                "down": {"uv": [15, 0, 16, 12], "texture": "#0"}
+            }
+        }
+    ]
+}

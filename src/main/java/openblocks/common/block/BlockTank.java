@@ -51,6 +51,7 @@ public class BlockTank extends OpenBlock {
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		final IExtendedBlockState oldState = (IExtendedBlockState)state;
 		final TileEntityTank te = getTileEntity(world, pos, TileEntityTank.class);
+		if (te == null) return state;
 		final VariantModelState selectors = te.getModelState();
 		return oldState.withProperty(VariantModelState.PROPERTY, selectors);
 	}

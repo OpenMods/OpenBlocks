@@ -34,8 +34,6 @@ public class StencilTextureManager {
 
 		private boolean isLoaded;
 
-		private boolean isMipmapped;
-
 		private final ResourceLocation selfLocation;
 
 		private StencilableBitmap bitmap;
@@ -92,13 +90,19 @@ public class StencilTextureManager {
 			}
 		}
 
+		private boolean isMipmapped() {
+			for (int[][] frame : framesTextureData)
+				for (int[] mipmap : frame)
+					if (mipmap == null) return false;
+
+			return true;
+		}
+
 		@Override
 		public void generateMipmaps(int level) {
 			Preconditions.checkArgument(level == this.mipmapLevels, "Mismatched mipmap levels: %s -> %s", level, this.mipmapLevels);
-			if (!isMipmapped) {
+			if (!isMipmapped())
 				super.generateMipmaps(level);
-				isMipmapped = true;
-			}
 		}
 
 	}
@@ -146,9 +150,7 @@ public class StencilTextureManager {
 		@Override
 		public void generateMipmaps(int level) {
 			Preconditions.checkArgument(level == this.mipmapLevels, "Mismatched mipmap levels: %s -> %s", level, this.mipmapLevels);
-			if (!primer.isMipmapped)
-				primer.generateMipmaps(level);
-
+			primer.generateMipmaps(level);
 			copyTextureDataFromPrimer();
 		}
 
