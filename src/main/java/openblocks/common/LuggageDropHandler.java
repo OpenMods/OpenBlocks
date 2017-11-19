@@ -7,7 +7,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.common.item.ItemLuggage;
-import openmods.utils.EntityUtils;
 
 public class LuggageDropHandler {
 
@@ -22,7 +21,7 @@ public class LuggageDropHandler {
 	public void onItemDrop(EntityJoinWorldEvent evt) {
 		final Entity entity = evt.getEntity();
 		if (entity instanceof EntityItem && shouldPreventDespawn((EntityItem)entity)) {
-			EntityUtils.setEntityInvulnerable(entity, true);
+			entity.setEntityInvulnerable(true);
 		}
 	}
 
