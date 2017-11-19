@@ -41,7 +41,7 @@ public abstract class TileEntityBlockManipulator extends OpenTileEntity implemen
 		triggerBlockAction(state);
 	}
 
-	private void triggerBlockAction(IBlockState state) {
+	protected void triggerBlockAction(IBlockState state) {
 		final EnumFacing direction = getFront(state);
 		final BlockPos target = pos.offset(direction);
 

@@ -14,6 +14,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.client.gui.GuiBlockPlacer;
+import openblocks.common.block.BlockBlockManpulatorBase;
+import openblocks.common.block.BlockBlockPlacer;
 import openblocks.common.container.ContainerBlockPlacer;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
@@ -29,12 +31,25 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 
 	static final int BUFFER_SIZE = 9;
 
+	private boolean skipActionOnInventoryUpdate = false;
+
 	private final GenericInventory inventory = new TileEntityInventory(this, "blockPlacer", false, BUFFER_SIZE)
 			.addCallback(new IInventoryCallback() {
 				@Override
 				public void onInventoryChanged(IInventory inventory, OptionalInt slotNumber) {
 					markUpdated();
-					triggerBlockAction();
+					if (!skipActionOnInventoryUpdate && !world.isRemote && isUpdateTriggering(inventory, slotNumber)) {
+						final IBlockState blockState = world.getBlockState(getPos());
+						if (blockState.getBlock() instanceof BlockBlockPlacer &&
+								blockState.getValue(BlockBlockManpulatorBase.POWERED))
+							triggerBlockAction(blockState);
+					}
+				}
+
+				private boolean isUpdateTriggering(IInventory inventory, OptionalInt maybeSlotNumber) {
+					if (!maybeSlotNumber.isPresent()) return true; // full update, trigger everything
+					final int slotNumber = maybeSlotNumber.get();
+					return inventory.getStackInSlot(slotNumber) != null;
 				}
 			});
 
@@ -71,7 +86,14 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 				direction.getOpposite(),
 				EnumHand.MAIN_HAND));
 
-		inventory.setInventorySlotContents(slotId, result);
+		if (!ItemStack.areItemStacksEqual(result, stack)) {
+			skipActionOnInventoryUpdate = true;
+			try {
+				inventory.setInventorySlotContents(slotId, result);
+			} finally {
+				skipActionOnInventoryUpdate = false;
+			}
+		}
 	}
 
 	@Override
