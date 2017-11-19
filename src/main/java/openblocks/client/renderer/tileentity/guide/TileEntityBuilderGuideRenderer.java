@@ -43,14 +43,14 @@ public class TileEntityBuilderGuideRenderer extends TileEntityGuideRenderer<Tile
 	};
 
 	@Override
-	public void renderTileEntityAt(TileEntityBuilderGuide te, double x, double y, double z, float partialTickTime, int destroyProgress) {
+	public void render(TileEntityBuilderGuide te, double x, double y, double z, float partialTickTime, int destroyProgress, float alpha) {
 		if (MinecraftForgeClient.getRenderPass() == 0) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
 			renderCubes(te.getTicks() + partialTickTime);
 			GL11.glPopMatrix();
 		} else {
-			super.renderTileEntityAt(te, x, y, z, partialTickTime, destroyProgress);
+			super.render(te, x, y, z, partialTickTime, destroyProgress, alpha);
 		}
 	}
 

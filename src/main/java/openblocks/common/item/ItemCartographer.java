@@ -45,7 +45,7 @@ public class ItemCartographer extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
 		for (AssistantType type : AssistantType.VALUES)
 			result.add(new ItemStack(this, 1, type.ordinal()));
 	}

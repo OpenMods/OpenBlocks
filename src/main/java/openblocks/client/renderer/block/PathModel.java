@@ -1,7 +1,5 @@
 package openblocks.client.renderer.block;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
@@ -11,7 +9,9 @@ import com.google.common.collect.Maps;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+import java.util.function.Function;
 import javax.vecmath.Matrix4f;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -27,9 +27,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelCustomData;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.model.IModelState;
@@ -41,13 +38,13 @@ import openmods.utils.render.RenderUtils;
 import openmods.utils.render.RenderUtils.IQuadSink;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class PathModel implements IModelCustomData, IRetexturableModel {
+public class PathModel implements IModel {
 
 	private static final int DEFAULT_MAX_BLOCK_COUNT = 10;
 
 	private static final long NOT_MAGIC_NUMBER = 0;
 
-	public static final PathModel INSTANCE = new PathModel(new ModelTextureMap(), DEFAULT_MAX_BLOCK_COUNT, NOT_MAGIC_NUMBER, Optional.<ResourceLocation> absent());
+	public static final PathModel INSTANCE = new PathModel(new ModelTextureMap(), DEFAULT_MAX_BLOCK_COUNT, NOT_MAGIC_NUMBER, Optional.empty());
 
 	private final ModelTextureMap textures;
 
@@ -66,7 +63,7 @@ public class PathModel implements IModelCustomData, IRetexturableModel {
 
 	@Override
 	public Collection<ResourceLocation> getDependencies() {
-		return inventoryTransformProvider.asSet();
+		return CollectionUtils.asSet(inventoryTransformProvider);
 	}
 
 	@Override
@@ -90,7 +87,7 @@ public class PathModel implements IModelCustomData, IRetexturableModel {
 		}
 	};
 
-	private class Baked implements IPerspectiveAwareModel {
+	private class Baked implements IBakedModel {
 
 		private final TextureAtlasSprite particle;
 
@@ -126,7 +123,7 @@ public class PathModel implements IModelCustomData, IRetexturableModel {
 				AxisAlignedBB bb = new AxisAlignedBB(pX, 0, pZ, pX + width, 1.0 / 16.0, pZ + length);
 
 				for (AxisAlignedBB box : boundingBoxes)
-					if (box.intersectsWith(bb))
+					if (box.intersects(bb))
 						break LOOP;
 
 				boundingBoxes.add(bb);
@@ -284,7 +281,7 @@ public class PathModel implements IModelCustomData, IRetexturableModel {
 		final Map<TransformType, Matrix4f> transforms = extractInventoryTransforms(state, format, bakedTextureGetter);
 
 		List<TextureAtlasSprite> textures = Lists.newArrayList();
-		Optional<TextureAtlasSprite> maybeParticle = Optional.absent();
+		Optional<TextureAtlasSprite> maybeParticle = Optional.empty();
 
 		for (Map.Entry<String, TextureAtlasSprite> e : this.textures.bakeWithKeys(bakedTextureGetter).entrySet()) {
 			if (e.getKey().equals("particle")) {
@@ -295,7 +292,7 @@ public class PathModel implements IModelCustomData, IRetexturableModel {
 		}
 
 		final TextureAtlasSprite missing = bakedTextureGetter.apply(TextureMap.LOCATION_MISSING_TEXTURE);
-		final TextureAtlasSprite particle = maybeParticle.or(missing);
+		final TextureAtlasSprite particle = maybeParticle.orElse(missing);
 
 		if (textures.isEmpty()) textures.add(missing);
 
@@ -306,14 +303,13 @@ public class PathModel implements IModelCustomData, IRetexturableModel {
 		if (inventoryTransformProvider.isPresent()) {
 			final IModel model = ModelLoaderRegistry.getModelOrLogError(inventoryTransformProvider.get(), "Couldn't load MultiLayerModel dependency: " + inventoryTransformProvider.get());
 			final IBakedModel bakedModel = model.bake(model.getDefaultState(), format, bakedTextureGetter);
-			if (bakedModel instanceof IPerspectiveAwareModel)
-				return extractInventoryTransformsFromModel((IPerspectiveAwareModel)bakedModel);
+			return extractInventoryTransformsFromModel(bakedModel);
 		}
 		// fallback: get transforms from our own model
 		return extractInventoryTransformsFromState(state);
 	}
 
-	private static Map<TransformType, Matrix4f> extractInventoryTransformsFromModel(IPerspectiveAwareModel model) {
+	private static Map<TransformType, Matrix4f> extractInventoryTransformsFromModel(IBakedModel model) {
 		final Map<TransformType, Matrix4f> output = Maps.newHashMap();
 		for (TransformType type : TransformType.values()) {
 			final Pair<? extends IBakedModel, Matrix4f> transform = model.handlePerspective(type);

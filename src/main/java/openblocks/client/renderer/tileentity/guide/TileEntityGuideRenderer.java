@@ -4,8 +4,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import java.util.List;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -53,13 +53,13 @@ public class TileEntityGuideRenderer<T extends TileEntityGuide> extends TileEnti
 					}
 				});
 
-		renderer.onModelBake(new Supplier<VertexBuffer>() {
+		renderer.onModelBake(new Supplier<BufferBuilder>() {
 
 			@Override
-			public VertexBuffer get() {
+			public BufferBuilder get() {
 				final Tessellator tessellator = Tessellator.getInstance();
 
-				VertexBuffer vertexBuffer = tessellator.getBuffer();
+				BufferBuilder vertexBuffer = tessellator.getBuffer();
 				vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
 
 				for (EnumFacing enumfacing : EnumFacing.values())
@@ -74,13 +74,13 @@ public class TileEntityGuideRenderer<T extends TileEntityGuide> extends TileEnti
 		});
 	}
 
-	private static void renderQuads(VertexBuffer vb, List<BakedQuad> quads) {
+	private static void renderQuads(BufferBuilder vb, List<BakedQuad> quads) {
 		for (BakedQuad quad : quads)
 			vb.addVertexData(quad.getVertexData());
 	}
 
 	@Override
-	public void renderTileEntityAt(T tileentity, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(T tileentity, double x, double y, double z, float partialTicks, int destroyStage, float partial) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		renderer.renderShape(tileentity);

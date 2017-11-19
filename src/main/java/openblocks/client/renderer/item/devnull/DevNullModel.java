@@ -1,7 +1,5 @@
 package openblocks.client.renderer.item.devnull;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -10,7 +8,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import javax.vecmath.Matrix4f;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -21,15 +21,13 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelCustomData;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import openblocks.client.renderer.item.devnull.DevNullItemOverride.BakedModelParams;
+import openmods.utils.CollectionUtils;
 
-public class DevNullModel implements IRetexturableModel, IModelCustomData {
+public class DevNullModel implements IModel {
 
 	private static class ModelParams {
 		public final Optional<ResourceLocation> normal;
@@ -37,7 +35,7 @@ public class DevNullModel implements IRetexturableModel, IModelCustomData {
 		public final float scaleFactor;
 
 		public ModelParams() {
-			this(Optional.<ResourceLocation> absent(), Optional.<ResourceLocation> absent(), 0.875f);
+			this(Optional.empty(), Optional.empty(), 0.875f);
 		}
 
 		public ModelParams(Optional<ResourceLocation> normal, Optional<ResourceLocation> overflow, float scale) {
@@ -47,7 +45,7 @@ public class DevNullModel implements IRetexturableModel, IModelCustomData {
 		}
 
 		public Set<ResourceLocation> getDependencies() {
-			return Sets.union(normal.asSet(), overflow.asSet());
+			return Sets.union(CollectionUtils.asSet(normal), CollectionUtils.asSet(overflow));
 		}
 
 		public ModelParams merge(JsonObject obj) {
@@ -83,11 +81,9 @@ public class DevNullModel implements IRetexturableModel, IModelCustomData {
 			final IModel modelOveflow = getModel(overflow);
 			final IBakedModel bakedOverflow = modelOveflow.bake(modelOveflow.getDefaultState(), format, bakedTextureGetter);
 
-			final IPerspectiveAwareModel transformModel = (IPerspectiveAwareModel)bakedNormal;
-
 			final Map<TransformType, Matrix4f> transforms = Maps.newHashMap();
 			for (TransformType tt : TransformType.values())
-				transforms.put(tt, transformModel.handlePerspective(tt).getRight());
+				transforms.put(tt, bakedNormal.handlePerspective(tt).getRight());
 
 			return new BakedModelParams(transforms, bakedNormal, bakedOverflow, scaleFactor);
 		}
@@ -109,7 +105,7 @@ public class DevNullModel implements IRetexturableModel, IModelCustomData {
 	private final Optional<ResourceLocation> particle;
 
 	public DevNullModel() {
-		this(new ModelParams(), new ModelParams(), Optional.<ResourceLocation> absent());
+		this(new ModelParams(), new ModelParams(), Optional.empty());
 	}
 
 	public DevNullModel(ModelParams gui, ModelParams world, Optional<ResourceLocation> particle) {
@@ -125,12 +121,12 @@ public class DevNullModel implements IRetexturableModel, IModelCustomData {
 
 	@Override
 	public Collection<ResourceLocation> getTextures() {
-		return particle.asSet();
+		return CollectionUtils.asSet(particle);
 	}
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		final TextureAtlasSprite particle = bakedTextureGetter.apply(this.particle.or(TextureMap.LOCATION_MISSING_TEXTURE));
+		final TextureAtlasSprite particle = bakedTextureGetter.apply(this.particle.orElse(TextureMap.LOCATION_MISSING_TEXTURE));
 
 		final BakedModelParams bakedGui = this.gui.bake(state, format, bakedTextureGetter);
 		final BakedModelParams bakedWorld = this.world.bake(state, format, bakedTextureGetter);
@@ -155,7 +151,7 @@ public class DevNullModel implements IRetexturableModel, IModelCustomData {
 			return currentTexture;
 
 		if (newTexture.isEmpty())
-			return Optional.absent();
+			return Optional.empty();
 
 		return Optional.of(new ResourceLocation(newTexture));
 	}

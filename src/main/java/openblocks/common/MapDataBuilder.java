@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -39,20 +40,20 @@ public class MapDataBuilder {
 		public byte liquidColor;
 		public int liquidHeight;
 
-		private static IBlockState getValidBlock(World world, Chunk chunk, BlockPos pos) {
+		private static IBlockState getValidBlock(IBlockAccess world, Chunk chunk, BlockPos pos) {
 			final IBlockState blockState = chunk.getBlockState(pos);
 			final Block block = blockState.getBlock();
 
 			if (block.isAir(blockState, world, pos)) return null;
 
-			if (blockState.getMapColor() == MapColor.AIR) return null;
+			if (blockState.getMapColor(world, pos) == MapColor.AIR) return null;
 
 			if (MapDataManager.instance.isBlockTransparent(block)) return null;
 
 			return blockState;
 		}
 
-		public void average(World world, Chunk chunk, int startX, int startZ, int size) {
+		public void average(IBlockAccess world, Chunk chunk, int startX, int startZ, int size) {
 			double groundHeightSum = 0;
 			int[] groundColors = new int[MapColor.COLORS.length];
 
@@ -88,13 +89,13 @@ public class MapDataBuilder {
 
 					if (blockSolid != null && heightSolid != null) {
 						groundHeightSum += heightSolid.getY();
-						MapColor color = blockSolid.getMapColor();
+						MapColor color = blockSolid.getMapColor(world, heightSolid);
 						groundColors[color.colorIndex]++;
 					}
 
 					if (blockLiquid != null && heightLiquid != null) {
 						liquidHeightSum += heightLiquid.getY();
-						MapColor color = blockLiquid.getMapColor();
+						MapColor color = blockLiquid.getMapColor(world, heightLiquid);
 						liquidColors[color.colorIndex]++;
 						liquidCount++;
 					}
@@ -259,7 +260,7 @@ public class MapDataBuilder {
 			ChunkPos chunkCoord = job.chunk;
 
 			// TODO verify, if does not load
-			Chunk chunk = provider.getLoadedChunk(chunkCoord.chunkXPos, chunkCoord.chunkZPos);
+			Chunk chunk = provider.getLoadedChunk(chunkCoord.x, chunkCoord.z);
 			if (chunk != null && !chunk.isEmpty()) {
 				job.mapChunk(world, chunk);
 				return job;

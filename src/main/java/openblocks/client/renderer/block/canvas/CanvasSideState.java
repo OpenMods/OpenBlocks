@@ -1,12 +1,12 @@
 package openblocks.client.renderer.block.canvas;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -114,7 +114,7 @@ public class CanvasSideState {
 				final ResourceLocation textureLocation = StencilTextureManager.INSTANCE.getStencilTextureLocation(StencilItemOverride.BACKGROUND_TEXTURE, coverPattern);
 				coverTexture = Optional.of(new OrientedTexture(textureLocation, coverOrientation));
 			} else {
-				coverTexture = Optional.absent();
+				coverTexture = Optional.empty();
 			}
 		}
 
@@ -187,7 +187,7 @@ public class CanvasSideState {
 
 		public CanvasSideState withoutCover() {
 			final Pair<TextureOrientation, List<CanvasLayer>> layers = reorientLayers(this.layers);
-			return getCanonic(new CanvasSideState(background, layers.getRight(), layers.getLeft(), Optional.<IStencilPattern> absent(), TextureOrientation.R0));
+			return getCanonic(new CanvasSideState(background, layers.getRight(), layers.getLeft(), Optional.empty(), TextureOrientation.R0));
 		}
 
 		private static Pair<TextureOrientation, List<CanvasLayer>> reorientLayers(List<CanvasLayer> layers) {

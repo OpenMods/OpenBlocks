@@ -19,7 +19,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEnti
 	private static final ResourceLocation texture = OpenBlocks.location("textures/models/cannon.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntityCannon cannon, double x, double y, double z, float partialTick, int destroyProgress) {
+	public void render(TileEntityCannon cannon, double x, double y, double z, float partialTick, int destroyProgress, float alpha) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glTranslatef(0.5f, 1.0f, 0.5f);
@@ -40,9 +40,9 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEnti
 				GL11.glBegin(GL11.GL_LINE_STRIP);
 
 				final Vec3d motion = cannon.getMotion();
-				double motionX = motion.xCoord;
-				double motionY = motion.yCoord;
-				double motionZ = motion.zCoord;
+				double motionX = motion.x;
+				double motionY = motion.y;
+				double motionZ = motion.z;
 				float posX = 0f;
 				float posY = 0f;
 				float posZ = 0f;

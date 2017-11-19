@@ -2,11 +2,8 @@ package openblocks.common.item;
 
 import com.google.common.collect.ImmutableList;
 import javax.annotation.Nonnull;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.infobook.ICustomBookEntryProvider;
@@ -18,46 +15,31 @@ public enum MetasGeneric implements IMetaItemFactory {
 	gliderWing {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack();
-			return new MetaGeneric("glider_wing",
-					new ShapedOreRecipe(result, " sl", "sll", "lll", 's', "stickWood", 'l', Items.LEATHER),
-					new ShapedOreRecipe(result, "ls ", "lls", "lll", 's', "stickWood", 'l', Items.LEATHER));
+			return new MetaGeneric("glider_wing");
 		}
 	},
 	beam {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack(2);
-			return new MetaGeneric("beam",
-					new ShapedOreRecipe(result, "iii", "b y", "iii", 'i', "ingotIron", 'b', "dyeBlack", 'y', "dyeYellow"),
-					new ShapedOreRecipe(result, "iii", "y b", "iii", 'i', "ingotIron", 'b', "dyeBlack", 'y', "dyeYellow"));
+			return new MetaGeneric("beam");
 		}
 	},
 	craneEngine {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack();
-			return new MetaGeneric("crane_engine",
-					new ShapedOreRecipe(result, "iii", "isi", "iri", 'i', "ingotIron", 's', "stickWood", 'r', "dustRedstone"));
+			return new MetaGeneric("crane_engine");
 		}
 	},
 	craneMagnet {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack();
-			return new MetaGeneric("crane_magnet",
-					new ShapedOreRecipe(result, "biy", "iri", 'i', "ingotIron", 'r', "dustRedstone", 'b', "dyeBlack", 'y', "dyeYellow"),
-					new ShapedOreRecipe(result, "yib", "iri", 'i', "ingotIron", 'r', "dustRedstone", 'b', "dyeBlack", 'y', "dyeYellow"));
+			return new MetaGeneric("crane_magnet");
 		}
 	},
 	miracleMagnet {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack();
-			ItemStack magnet = craneMagnet.newItemStack();
-			return new MetaMiracleMagnet("miracle_magnet",
-					new ShapedOreRecipe(result, "rer", "eme", "rer", 'r', "dustRedstone", 'e', Items.ENDER_PEARL, 'm', magnet),
-					new ShapedOreRecipe(result, "ere", "rmr", "ere", 'r', "dustRedstone", 'e', Items.ENDER_PEARL, 'm', magnet));
+			return new MetaMiracleMagnet("miracle_magnet");
 		}
 
 		@Override
@@ -68,25 +50,19 @@ public enum MetasGeneric implements IMetaItemFactory {
 	line {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack(2);
-			return new MetaGeneric("line",
-					new ShapedOreRecipe(result, "sss", "bbb", "sss", 's', Items.STRING, 'b', "slimeball"));
+			return new MetaGeneric("line");
 		}
 	},
 	mapController {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack(1);
-			return new MetaGeneric("map_controller",
-					new ShapedOreRecipe(result, " r ", "rgr", " r ", 'r', "dustRedstone", 'g', "ingotGold"));
+			return new MetaGeneric("map_controller");
 		}
 	},
 	mapMemory {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack(1);
-			return new MetaGeneric("map_memory",
-					new ShapedOreRecipe(result, "rg", "rg", "rg", 'g', "nuggetGold", 'r', "dustRedstone"));
+			return new MetaGeneric("map_memory");
 		}
 	},
 	/**
@@ -108,25 +84,19 @@ public enum MetasGeneric implements IMetaItemFactory {
 	assistantBase {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack();
-			return new MetaGeneric("assistant_base",
-					new ShapedOreRecipe(result, "iei", "iri", 'i', "ingotIron", 'e', Items.ENDER_PEARL, 'r', "dustRedstone"));
+			return new MetaGeneric("assistant_base");
 		}
 	},
 	unpreparedStencil {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack();
-			return new MetaGeneric("unprepared_stencil",
-					new ShapedOreRecipe(result, " p ", "pip", " p ", 'p', Items.PAPER, 'i', "ingotIron"));
+			return new MetaGeneric("unprepared_stencil");
 		}
 	},
 	sketchingPencil {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack();
-			return new MetaGeneric("sketching_pencil",
-					new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', new ItemStack(Items.COAL, 1, OreDictionary.WILDCARD_VALUE), 's', "stickWood"));
+			return new MetaGeneric("sketching_pencil");
 		}
 	};
 	@Nonnull

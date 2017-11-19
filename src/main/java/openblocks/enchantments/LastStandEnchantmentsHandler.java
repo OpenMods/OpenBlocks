@@ -7,14 +7,15 @@ import info.openmods.calc.SingleExprEvaluator;
 import info.openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
 import info.openmods.calc.types.fp.DoubleCalculatorFactory;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
 import openmods.Log;
 import openmods.config.properties.ConfigurationChange;
-import openmods.entity.PlayerDamageEvent;
 import openmods.utils.EnchantmentUtils;
 
 public class LastStandEnchantmentsHandler {
@@ -44,15 +45,18 @@ public class LastStandEnchantmentsHandler {
 	}
 
 	@SubscribeEvent
-	public void onHurt(final PlayerDamageEvent e) {
-		final int enchantmentLevels = countLastStandEnchantmentLevels(e.player);
+	public void onHurt(final LivingHurtEvent e) {
+		if (!(e.getEntityLiving() instanceof EntityPlayer)) return;
+		EntityPlayer player = (EntityPlayer)e.getEntityLiving();
+
+		final int enchantmentLevels = countLastStandEnchantmentLevels(player);
 
 		if (enchantmentLevels > 0) {
-			final float playerHealth = e.player.getHealth();
-			final float healthAvailable = playerHealth - e.amount;
+			final float playerHealth = player.getHealth();
+			final float healthAvailable = playerHealth - e.getAmount();
 
 			if (healthAvailable < 1f) {
-				final int xpAvailable = EnchantmentUtils.getPlayerXP(e.player);
+				final int xpAvailable = EnchantmentUtils.getPlayerXP(player);
 
 				float xpRequired = reductionCalculator.evaluate(
 						new EnvironmentConfigurator<Double>() {
@@ -61,7 +65,7 @@ public class LastStandEnchantmentsHandler {
 								env.setGlobalSymbol(VAR_ENCH_LEVEL, Double.valueOf(enchantmentLevels));
 								env.setGlobalSymbol(VAR_PLAYER_XP, Double.valueOf(xpAvailable));
 								env.setGlobalSymbol(VAR_PLAYER_HP, Double.valueOf(playerHealth));
-								env.setGlobalSymbol(VAR_DAMAGE, Double.valueOf(e.amount));
+								env.setGlobalSymbol(VAR_DAMAGE, Double.valueOf(e.getAmount()));
 							}
 						},
 						new Supplier<Double>() {
@@ -76,19 +80,19 @@ public class LastStandEnchantmentsHandler {
 						}).floatValue();
 
 				if (xpAvailable >= xpRequired) {
-					e.player.setHealth(1f);
-					EnchantmentUtils.addPlayerXP(e.player, -(int)xpRequired);
-					e.amount = 0;
+					player.setHealth(1f);
+					EnchantmentUtils.addPlayerXP(player, -(int)xpRequired);
+					e.setAmount(0);
 					e.setCanceled(true);
 				}
 			}
 		}
 	}
 
-	public static int countLastStandEnchantmentLevels(EntityPlayer player) {
-		if (player != null) {
+	public static int countLastStandEnchantmentLevels(EntityLivingBase living) {
+		if (living != null) {
 			int count = 0;
-			for (ItemStack stack : player.inventory.armorInventory)
+			for (ItemStack stack : living.getArmorInventoryList())
 				count += EnchantmentHelper.getEnchantmentLevel(Enchantments.lastStand, stack);
 			return count;
 		}

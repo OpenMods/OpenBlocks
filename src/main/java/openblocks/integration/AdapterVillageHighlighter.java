@@ -27,7 +27,7 @@ public class AdapterVillageHighlighter implements IPeripheralAdapter {
 	public Map<?, ?> getVillages(TileEntityVillageHighlighter vh) {
 		Map<Integer, Object> map = Maps.newHashMap();
 		int i = 1;
-		for (Village village : vh.getWorld().villageCollectionObj.getVillageList()) {
+		for (Village village : vh.getWorld().villageCollection.getVillageList()) {
 			if (village.isBlockPosWithinSqVillageRadius(vh.getPos())) {
 				Map<String, Object> villageMap = Maps.newHashMap();
 				Vec3i d = village.getCenter().subtract(vh.getPos());

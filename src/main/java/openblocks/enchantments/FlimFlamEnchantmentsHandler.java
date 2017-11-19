@@ -119,7 +119,7 @@ public class FlimFlamEnchantmentsHandler {
 		final EntityPlayer targetPlayer = (EntityPlayer)entityLiving;
 
 		if (e.getSource() == null) return;
-		final Entity damageSource = e.getSource().getEntity();
+		final Entity damageSource = e.getSource().getTrueSource();
 
 		if (!(damageSource instanceof EntityPlayer)) return;
 		final EntityPlayer sourcePlayer = (EntityPlayer)damageSource;

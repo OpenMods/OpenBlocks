@@ -96,7 +96,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			if (chunk == null || chunk.isEmpty()) return _default;
 
 			final IBlockState state = getBlockState(pos);
-			return state.getBlock().isSideSolid(state, this, pos, side);
+			return state.isSideSolid(this, pos, side);
 		}
 
 	}

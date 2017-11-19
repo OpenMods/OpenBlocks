@@ -23,7 +23,7 @@ public class ItemFlagBlock extends ItemOpenBlock {
 		private static final int COLOR_WHITE = 0xFFFFFFFF;
 
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+		public int colorMultiplier(ItemStack stack, int tintIndex) {
 			return tintIndex == 0? ColorMeta.fromBlockMeta(stack.getMetadata()).rgb : COLOR_WHITE;
 		}
 	}

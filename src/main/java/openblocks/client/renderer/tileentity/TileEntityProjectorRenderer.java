@@ -3,10 +3,10 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -45,7 +45,7 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer<TileE
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntityProjector projector, double x, double y, double z, float partialTickTime, int destroyProgess) {
+	public void render(TileEntityProjector projector, double x, double y, double z, float partialTickTime, int destroyProgess, float alpha) {
 		int pass = MinecraftForgeClient.getRenderPass();
 
 		GlStateManager.color(1, 1, 1);
@@ -100,7 +100,7 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer<TileE
 			IExtendedBlockState exState = (IExtendedBlockState)state;
 			if (exState.getUnlistedNames().contains(Properties.AnimationProperty)) {
 				Tessellator tessellator = Tessellator.getInstance();
-				VertexBuffer vb = tessellator.getBuffer();
+				BufferBuilder vb = tessellator.getBuffer();
 				bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				RenderHelper.disableStandardItemLighting();
 				GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

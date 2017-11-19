@@ -68,7 +68,7 @@ public class ItemPedometer extends Item {
 		PedometerData result = state.getData();
 		if (result == null) return;
 		player.sendMessage(new TextComponentString(""));
-		send(player, "openblocks.misc.pedometer.start_point", String.format("%.1f %.1f %.1f", result.startingPoint.xCoord, result.startingPoint.yCoord, result.startingPoint.zCoord));
+		send(player, "openblocks.misc.pedometer.start_point", String.format("%.1f %.1f %.1f", result.startingPoint.x, result.startingPoint.y, result.startingPoint.z));
 
 		send(player, "openblocks.misc.pedometer.speed", speedUnit.format(result.currentSpeed));
 		send(player, "openblocks.misc.pedometer.avg_speed", speedUnit.format(result.averageSpeed()));

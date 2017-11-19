@@ -1,7 +1,5 @@
 package openblocks.client.renderer.block.canvas;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -14,8 +12,10 @@ import com.google.common.primitives.Ints;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;

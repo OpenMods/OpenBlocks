@@ -130,9 +130,9 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 		// Now that we generate vectors instead of eular angles, this should be revised.
 		Vec3d motion = getMotion();
-		item.motionX = motion.xCoord;
-		item.motionY = motion.yCoord;
-		item.motionZ = motion.zCoord;
+		item.motionX = motion.x;
+		item.motionY = motion.y;
+		item.motionZ = motion.z;
 		world.spawnEntity(item);
 		playSoundAtBlock(OpenBlocks.Sounds.BLOCK_CANNON_ACTIVATE, 0.2f, 1.0f);
 	}
@@ -198,11 +198,11 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 		// Horizontal distance between the origin and target
 		final double distHorizontal = KNOB_LOB_HORIZONTAL_MUL * Math.sqrt(
-				Math.pow(target.xCoord - projectileOrigin.xCoord, 2)
-						+ Math.pow(target.zCoord - projectileOrigin.zCoord, 2));
+				Math.pow(target.x - projectileOrigin.x, 2)
+						+ Math.pow(target.z - projectileOrigin.z, 2));
 
 		// No vertical multiplier is applied for decline slopes.
-		final double distVertical = Math.max((target.yCoord - projectileOrigin.yCoord) * KNOB_LOB_VERTICAL_MUL, 0);
+		final double distVertical = Math.max((target.y - projectileOrigin.y) * KNOB_LOB_VERTICAL_MUL, 0);
 
 		// Calculate the arc of the trajectory
 		final float lobScale = (float)Math.min(KNOB_LOB_MAXIMUM_VALUE,
@@ -218,8 +218,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 		// reverse the vector to angles for cannon model
 		final Vec3d direction = velocity.normalize();
-		final double pitch = Math.asin(direction.yCoord);
-		final double yaw = Math.atan2(direction.zCoord, direction.xCoord);
+		final double pitch = Math.asin(direction.y);
+		final double yaw = Math.atan2(direction.z, direction.x);
 
 		// Set yaw and pitch
 		targetYaw.set(Math.toDegrees(yaw) + YAW_OFFSET_DEGREES);
@@ -319,17 +319,17 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 			final double accelerationMultiplier = 0.5 * n * n + n; // (n^2+n)/2
 
 			final Vec3d scaledAcceleration = new Vec3d(
-					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.xCoord * accelerationMultiplier,
-					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.yCoord * accelerationMultiplier,
-					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.zCoord * accelerationMultiplier);
+					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.x * accelerationMultiplier,
+					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.y * accelerationMultiplier,
+					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.z * accelerationMultiplier);
 
 			// -1 /n * Phys = -Phys / n
 			final double velocityMultiplier = -PHYS_STEPS_PER_SECOND / n;
 
 			final Vec3d velocity = new Vec3d(
-					(start.xCoord + scaledAcceleration.xCoord - target.xCoord) * velocityMultiplier,
-					(start.yCoord + scaledAcceleration.yCoord - target.yCoord) * velocityMultiplier,
-					(start.zCoord + scaledAcceleration.zCoord - target.zCoord) * velocityMultiplier);
+					(start.x + scaledAcceleration.x - target.x) * velocityMultiplier,
+					(start.y + scaledAcceleration.y - target.y) * velocityMultiplier,
+					(start.z + scaledAcceleration.z - target.z) * velocityMultiplier);
 
 			return velocity;
 		}

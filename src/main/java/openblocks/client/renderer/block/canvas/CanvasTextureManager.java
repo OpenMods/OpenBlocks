@@ -10,6 +10,7 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -91,7 +92,7 @@ public class CanvasTextureManager {
 		}
 
 		@Override
-		public boolean load(IResourceManager manager, ResourceLocation location) {
+		public boolean load(IResourceManager manager, ResourceLocation location, Function<ResourceLocation, TextureAtlasSprite> textureGetter) {
 			return false;
 		}
 

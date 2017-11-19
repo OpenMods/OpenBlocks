@@ -2,8 +2,9 @@ package openblocks.common.item;
 
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,7 +12,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.common.MapDataManager;
 import openmods.utils.ItemUtils;
@@ -25,8 +25,8 @@ public class ItemEmptyMap extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(@Nonnull ItemStack item, EntityPlayer player, List<String> result, boolean extended) {
-		NBTTagCompound tag = ItemUtils.getItemTag(item);
+	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
+		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		result.add(String.format("Scale: 1:%d", 1 << tag.getByte(TAG_SCALE)));
 	}
 
@@ -40,9 +40,9 @@ public class ItemEmptyMap extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
 		for (int scale = 0; scale < ItemEmptyMap.MAX_SCALE; scale++)
-			result.add(OpenBlocks.Items.emptyMap.createMap(scale));
+			result.add(createMap(scale));
 	}
 
 	@Nonnull

@@ -11,7 +11,7 @@ import openblocks.common.item.ItemLuggage;
 public class LuggageDropHandler {
 
 	private static boolean shouldPreventDespawn(EntityItem entity) {
-		ItemStack stack = entity.getEntityItem();
+		ItemStack stack = entity.getItem();
 		return !stack.isEmpty() && stack.getItem() instanceof ItemLuggage && stack.hasTagCompound();
 	}
 

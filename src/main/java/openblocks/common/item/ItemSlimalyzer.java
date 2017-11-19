@@ -68,9 +68,9 @@ public class ItemSlimalyzer extends Item {
 		final World world = entityItem.world;
 
 		if (!world.isRemote) {
-			final ItemStack stack = entityItem.getEntityItem();
+			final ItemStack stack = entityItem.getItem();
 			if (update(stack, world, entityItem))
-				entityItem.setEntityItemStack(stack);
+				entityItem.setItem(stack);
 		}
 
 		return false;

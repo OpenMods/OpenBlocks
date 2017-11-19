@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import java.nio.ByteBuffer;
 import java.util.List;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.ResourceLocation;
@@ -31,7 +31,7 @@ public class MarkerRenderer {
 	private boolean initialized;
 
 	private boolean shouldRefresh;
-	private Supplier<VertexBuffer> modelSupplier;
+	private Supplier<BufferBuilder> modelSupplier;
 
 	private int vertexCount;
 
@@ -45,7 +45,7 @@ public class MarkerRenderer {
 		this.shader = shaderProgramBuilder.build();
 	}
 
-	public void setModel(Supplier<VertexBuffer> modelSupplier) {
+	public void setModel(Supplier<BufferBuilder> modelSupplier) {
 		this.modelSupplier = modelSupplier;
 		this.shouldRefresh = true;
 	}
@@ -93,7 +93,7 @@ public class MarkerRenderer {
 		if (initialized) {
 			Preconditions.checkNotNull(modelSupplier, "Marker model not loaded");
 
-			final VertexBuffer vertexBuffer = modelSupplier.get();
+			final BufferBuilder vertexBuffer = modelSupplier.get();
 
 			final ByteBuffer modelByteBuffer = vertexBuffer.getByteBuffer();
 			if (modelByteBuffer.limit() > nativeBufferSize) throw new UnsupportedOperationException("Big buffers not supported!");

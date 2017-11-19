@@ -2,10 +2,12 @@ package openblocks.common.item;
 
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import openblocks.shapes.GuideShape;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.TranslationUtils;
@@ -38,7 +40,7 @@ public class ItemGuide extends ItemOpenBlock {
 	}
 
 	@Override
-	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
+	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null) {
 			if (tag.hasKey(TAG_NEG_X) && tag.hasKey(TAG_NEG_Y) || tag.hasKey(TAG_NEG_Z) ||

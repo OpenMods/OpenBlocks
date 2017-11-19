@@ -78,22 +78,22 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 		double angle = Math.toRadians(getAngle() - 90);
 		final Vec3d blockPos = getConeApex(angle);
 		final Vec3d basePos = getConeBaseCenter(angle);
-		final Vec3d coneAxis = new Vec3d(basePos.xCoord - blockPos.xCoord, basePos.yCoord - blockPos.yCoord, basePos.zCoord - blockPos.zCoord);
+		final Vec3d coneAxis = new Vec3d(basePos.x - blockPos.x, basePos.y - blockPos.y, basePos.z - blockPos.z);
 
 		for (Entity entity : entities) {
 			if (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode) continue;
 			Vec3d directionVec = new Vec3d(
-					entity.posX - blockPos.xCoord,
-					entity.posY - blockPos.yCoord,
-					entity.posZ - blockPos.zCoord);
+					entity.posX - blockPos.x,
+					entity.posY - blockPos.y,
+					entity.posZ - blockPos.z);
 
 			if (isLyingInSphericalCone(coneAxis, directionVec, CONE_HALF_APERTURE)) {
 				final double distToOrigin = directionVec.lengthVector();
 				final double force = (1.0 - distToOrigin / Config.fanRange) * maxForce;
 				if (force <= 0) continue;
 				Vec3d normal = directionVec.normalize();
-				entity.motionX += force * normal.xCoord;
-				entity.motionZ += force * normal.zCoord;
+				entity.motionX += force * normal.x;
+				entity.motionZ += force * normal.z;
 			}
 		}
 	}

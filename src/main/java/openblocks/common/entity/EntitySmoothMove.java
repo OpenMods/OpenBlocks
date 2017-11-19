@@ -38,7 +38,7 @@ public abstract class EntitySmoothMove extends Entity {
 		}
 
 		public void setTarget(Vec3d position) {
-			setTarget(position.xCoord, position.yCoord, position.zCoord);
+			setTarget(position.x, position.y, position.z);
 		}
 
 		public void setTarget(double targetX, double targetY, double targetZ) {

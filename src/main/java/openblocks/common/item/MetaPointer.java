@@ -23,8 +23,8 @@ import openmods.utils.NbtUtils;
  */
 public class MetaPointer extends MetaGeneric {
 
-	public MetaPointer(String name, Object... recipes) {
-		super(name, recipes);
+	public MetaPointer(String name) {
+		super(name);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class MetaPointer extends MetaGeneric {
 		if (player.isSneaking()) {
 			Vec3d posVec = new Vec3d(player.posX, player.posY + 1.62F, player.posZ);
 			Vec3d lookVec = player.getLook(1.0f);
-			Vec3d targetVec = posVec.addVector(lookVec.xCoord * 10f, lookVec.yCoord * 10f, lookVec.zCoord * 10f);
+			Vec3d targetVec = posVec.addVector(lookVec.x * 10f, lookVec.y * 10f, lookVec.z * 10f);
 
 			RayTraceResult movingObject = world.rayTraceBlocks(posVec, targetVec);
 

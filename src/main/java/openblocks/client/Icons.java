@@ -1,9 +1,9 @@
 package openblocks.client;
 
 import com.google.common.base.Preconditions;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Icons {
 
-	private static void addVertexWithUV(VertexBuffer wr, double x, double y, double u, double v) {
+	private static void addVertexWithUV(BufferBuilder wr, double x, double y, double u, double v) {
 		wr.pos(x, y, 0).tex(u, v).endVertex();
 	}
 
@@ -47,7 +47,7 @@ public class Icons {
 			Preconditions.checkNotNull(icon);
 			GlStateManager.color(r, g, b, MathHelper.floor(255 * alpha));
 			final Tessellator tes = Tessellator.getInstance();
-			final VertexBuffer wr = tes.getBuffer();
+			final BufferBuilder wr = tes.getBuffer();
 			wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			addVertexWithUV(wr, scale, scale, icon.getMinU(), icon.getMinV());
 			addVertexWithUV(wr, scale, -scale, icon.getMinU(), icon.getMaxV());

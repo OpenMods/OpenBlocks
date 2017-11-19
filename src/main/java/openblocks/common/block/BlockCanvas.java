@@ -123,7 +123,7 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
-	public boolean isFullyOpaque(IBlockState state) {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 

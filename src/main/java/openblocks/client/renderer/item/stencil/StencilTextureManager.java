@@ -6,6 +6,7 @@ import com.google.common.collect.Queues;
 import java.io.InputStream;
 import java.util.Deque;
 import java.util.Map;
+import java.util.function.Function;
 import net.minecraft.client.renderer.texture.PngSizeInfo;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -24,6 +25,7 @@ import openmods.utils.io.BufferedResourceWrapper;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.input.CloseShieldInputStream;
 
+// TODO 1.12 rework with dependencies
 public class StencilTextureManager {
 
 	private static class PoolPrimerTexture extends TextureAtlasSprite {
@@ -51,7 +53,7 @@ public class StencilTextureManager {
 		}
 
 		@Override
-		public boolean load(IResourceManager manager, ResourceLocation location) {
+		public boolean load(IResourceManager manager, ResourceLocation location, Function<ResourceLocation, TextureAtlasSprite> textureGetter) {
 			load(manager);
 			return false;
 		}
@@ -135,7 +137,7 @@ public class StencilTextureManager {
 		}
 
 		@Override
-		public boolean load(IResourceManager manager, ResourceLocation location) {
+		public boolean load(IResourceManager manager, ResourceLocation location, Function<ResourceLocation, TextureAtlasSprite> textureGetter) {
 			if (!primer.isLoaded)
 				primer.load(manager);
 

@@ -3,8 +3,8 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -22,7 +22,7 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 	private static BlockRendererDispatcher blockRenderer;
 
 	@Override
-	public void renderTileEntityAt(TileEntitySky te, double x, double y, double z, float partialTickTime, int destroyStage) {
+	public void render(TileEntitySky te, double x, double y, double z, float partialTickTime, int destroyStage, float alpha) {
 		BlockPos pos = te.getPos();
 		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
 		IBlockState state = world.getBlockState(pos).getActualState(world, pos);
@@ -65,7 +65,7 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 		final IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(state);
 
 		final Tessellator tessellator = Tessellator.getInstance();
-		final VertexBuffer renderer = tessellator.getBuffer();
+		final BufferBuilder renderer = tessellator.getBuffer();
 		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 		renderer.setTranslation(x - pos.getX(), y - pos.getY(), z - pos.getZ());
 		blockRenderer.getBlockModelRenderer().renderModel(world, model, state, pos, renderer, false);

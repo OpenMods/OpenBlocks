@@ -1,12 +1,13 @@
 package openblocks.common.item;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -148,10 +149,10 @@ public class ItemTankBlock extends ItemOpenBlock {
 		public Optional<ResourceLocation> getTexture() {
 			FluidTank tank = readTank(container);
 			final FluidStack stack = tank.getFluid();
-			if (stack == null) return Optional.absent();
+			if (stack == null) return Optional.empty();
 
 			final Fluid fluid = stack.getFluid();
-			return Optional.fromNullable(fluid.getStill());
+			return Optional.ofNullable(fluid.getStill());
 		}
 
 	}
@@ -190,12 +191,12 @@ public class ItemTankBlock extends ItemOpenBlock {
 	}
 
 	@Override
-	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> list, boolean extended) {
+	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
 		FluidTank fakeTank = readTank(stack);
 		FluidStack fluidStack = fakeTank.getFluid();
 		if (fluidStack != null && fluidStack.amount > 0) {
 			float percent = Math.max(100.0f / fakeTank.getCapacity() * fluidStack.amount, 1);
-			list.add(String.format("%d mB (%.0f%%)", fluidStack.amount, percent));
+			result.add(String.format("%d mB (%.0f%%)", fluidStack.amount, percent));
 		}
 	}
 

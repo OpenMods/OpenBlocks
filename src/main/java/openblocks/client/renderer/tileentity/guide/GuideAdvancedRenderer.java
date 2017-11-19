@@ -1,8 +1,8 @@
 package openblocks.client.renderer.tileentity.guide;
 
 import com.google.common.base.Supplier;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.shapes.CoordShape;
@@ -43,7 +43,7 @@ public class GuideAdvancedRenderer implements IGuideRenderer {
 	}
 
 	@Override
-	public void onModelBake(Supplier<VertexBuffer> modelSupplier) {
+	public void onModelBake(Supplier<BufferBuilder> modelSupplier) {
 		mr.setModel(modelSupplier);
 	}
 }

@@ -34,7 +34,7 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return false;
 	}
 

@@ -36,9 +36,9 @@ public class EntityAICollectItem extends EntityAIBase {
 			double closestDistance = Double.MAX_VALUE;
 			for (EntityItem item : items) {
 				if (!item.isDead && item.onGround) {
-					double dist = item.getDistanceToEntity(luggage);
+					double dist = item.getDistance(luggage);
 					if (dist < closestDistance
-							&& luggage.canConsumeStackPartially(item.getEntityItem())
+							&& luggage.canConsumeStackPartially(item.getItem())
 							&& !item.isInWater()) {
 						closest = item;
 						closestDistance = dist;
@@ -55,12 +55,12 @@ public class EntityAICollectItem extends EntityAIBase {
 
 	@Override
 	public void resetTask() {
-		pathFinder.clearPathEntity();
+		pathFinder.clearPath();
 		targetItem = null;
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return luggage.isEntityAlive() && !pathFinder.noPath()
 				&& !targetItem.isDead;
 	}
@@ -76,8 +76,8 @@ public class EntityAICollectItem extends EntityAIBase {
 	public void updateTask() {
 		super.updateTask();
 		if (!luggage.world.isRemote) {
-			if (targetItem != null && luggage.getDistanceToEntity(targetItem) < 1.0) {
-				final ItemStack toConsume = targetItem.getEntityItem();
+			if (targetItem != null && luggage.getDistance(targetItem) < 1.0) {
+				final ItemStack toConsume = targetItem.getItem();
 				final ItemStack leftovers = ItemHandlerHelper.insertItem(luggage.getChestInventory().getHandler(), toConsume, false);
 				if (leftovers.getCount() < toConsume.getCount()) {
 					if (luggage.lastSound > 15) {

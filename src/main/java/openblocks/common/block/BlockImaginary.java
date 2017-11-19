@@ -109,7 +109,7 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 		}
 
 		private static void addBox(AxisAlignedBB aabb, AxisAlignedBB region, List<AxisAlignedBB> result) {
-			if (aabb.intersectsWith(region)) result.add(aabb);
+			if (aabb.intersects(region)) result.add(aabb);
 		}
 
 	}

@@ -130,7 +130,8 @@ public class BrickManager {
 				EntityItem drop = createBrick(player);
 				drop.setDefaultPickupDelay();
 				player.world.spawnEntity(drop);
-				player.addStat(OpenBlocks.brickAchievement);
+				// TODO 1.12 achievement
+				// player.addStat(OpenBlocks.brickAchievement);
 				player.addStat(OpenBlocks.brickStat, 1);
 			}
 		}

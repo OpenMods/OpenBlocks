@@ -1,7 +1,6 @@
 package openblocks;
 
 import codechicken.nei.api.IConfigureNEI;
-import com.google.common.base.Throwables;
 import java.lang.reflect.Method;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -41,8 +40,8 @@ public class NEIOpenBlocksConfig implements IConfigureNEI {
 		try {
 			if (this.hideItem == null) this.hideItem = Class.forName(API).getMethod(HIDE_ITEM, ItemStack.class);
 			this.hideItem.invoke(null, stack);
-		} catch (final Throwable thr) {
-			Throwables.propagate(thr);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

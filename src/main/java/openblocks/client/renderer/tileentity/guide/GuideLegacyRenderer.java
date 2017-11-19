@@ -2,10 +2,10 @@ package openblocks.client.renderer.tileentity.guide;
 
 import com.google.common.base.Supplier;
 import java.nio.FloatBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.math.BlockPos;
@@ -21,12 +21,12 @@ public class GuideLegacyRenderer implements IGuideRenderer {
 	private OptionalInt markerDisplayList = OptionalInt.absent();
 
 	@Override
-	public void onModelBake(Supplier<VertexBuffer> model) {
+	public void onModelBake(Supplier<BufferBuilder> model) {
 		if (markerDisplayList.isPresent()) {
 			GL11.glDeleteLists(markerDisplayList.get(), 1);
 		}
 
-		final VertexBuffer vb = model.get();
+		final BufferBuilder vb = model.get();
 
 		final int newList = GL11.glGenLists(1);
 

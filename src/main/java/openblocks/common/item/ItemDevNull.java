@@ -6,8 +6,10 @@ import com.google.common.cache.LoadingCache;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -66,7 +68,7 @@ public class ItemDevNull extends Item {
 		}
 
 		@Override
-		public int getColorFromItemstack(@Nonnull ItemStack stack, int tintIndex) {
+		public int colorMultiplier(@Nonnull ItemStack stack, int tintIndex) {
 			if (tintIndex < NESTED_ITEM_TINT_DELTA)
 				return NO_COLOR;
 
@@ -75,7 +77,7 @@ public class ItemDevNull extends Item {
 
 			final ItemStack nestedItem = contents.getLeft();
 			if (nestedItem.isEmpty()) return NO_COLOR;
-			return itemColors.getColorFromItemstack(nestedItem, tintIndex - NESTED_ITEM_TINT_DELTA);
+			return itemColors.colorMultiplier(nestedItem, tintIndex - NESTED_ITEM_TINT_DELTA);
 		}
 
 	}
@@ -107,8 +109,10 @@ public class ItemDevNull extends Item {
 		}
 
 		private void checkStack(@Nonnull ItemStack stack) {
-			if (getContents(stack).getRight() >= STACK_LIMIT)
-				player.addStat(OpenBlocks.stackAchievement);
+			if (getContents(stack).getRight() >= STACK_LIMIT) {
+				// TODO 1.12 achievement
+				// player.addStat(OpenBlocks.stackAchievement);
+			}
 		}
 	}
 
@@ -151,7 +155,7 @@ public class ItemDevNull extends Item {
 	public void onItemPickUp(EntityItemPickupEvent evt) {
 
 		final EntityPlayer player = evt.getEntityPlayer();
-		final ItemStack pickedStack = evt.getItem().getEntityItem();
+		final ItemStack pickedStack = evt.getItem().getItem();
 
 		if (pickedStack.isEmpty() || player == null) return;
 
@@ -182,11 +186,11 @@ public class ItemDevNull extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		final Pair<ItemStack, Integer> contents = getContents(stack);
 		final ItemStack containedStack = contents.getLeft();
 		if (!containedStack.isEmpty()) {
-			final List<String> innerTooltip = containedStack.getTooltip(playerIn, advanced);
+			final List<String> innerTooltip = containedStack.getTooltip(null, flagIn);
 			if (innerTooltip.isEmpty()) {
 				tooltip.add(containedStack.getCount() + " * " + containedStack.getDisplayName());
 			} else {

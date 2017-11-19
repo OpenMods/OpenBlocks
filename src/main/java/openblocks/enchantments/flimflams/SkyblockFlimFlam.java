@@ -13,7 +13,7 @@ public class SkyblockFlimFlam implements IFlimFlamAction {
 	@Override
 	public boolean execute(EntityPlayerMP target) {
 		final World world = target.world;
-		if (world.provider.hasNoSky() || world.provider.doesWaterVaporize()) return false;
+		if (world.provider.isNether() || world.provider.doesWaterVaporize()) return false;
 
 		BlockPos trapCenter = new BlockPos(target.posX, Math.min(target.posY + 150, 250), target.posZ);
 

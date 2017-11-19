@@ -154,7 +154,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		this.owner = owner;
 		this.isMagic = isMagic;
 		Vec3d initialTarget = owner.getTarget();
-		setPosition(initialTarget.xCoord, initialTarget.yCoord, initialTarget.zCoord);
+		setPosition(initialTarget.x, initialTarget.y, initialTarget.z);
 	}
 
 	@Override
@@ -278,8 +278,8 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	protected List<Entity> detectEntityTargets() {
-		// TODO 1.8.9 verify addCoord usage
-		AxisAlignedBB aabb = getEntityBoundingBox().expand(0.25, 0, 0.25).addCoord(0, -1, 0);
+		// TODO 1.12 verify offset usage
+		AxisAlignedBB aabb = getEntityBoundingBox().expand(0.25, 0, 0.25).offset(0, -1, 0);
 		return world.getEntitiesInAABBexcluding(this, aabb, createPickTargetPredicate());
 	}
 

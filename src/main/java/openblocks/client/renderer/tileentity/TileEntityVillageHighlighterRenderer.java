@@ -1,9 +1,9 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -23,13 +23,13 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 	private static float N = 1500;
 
 	@Override
-	public void renderTileEntityAt(TileEntityVillageHighlighter vh, double x, double y, double z, float partialTick, int destroyProcess) {
+	public void render(TileEntityVillageHighlighter vh, double x, double y, double z, float partialTick, int destroyProcess, float alpha) {
 
 		if (canRender(vh)) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 			Tessellator t = Tessellator.getInstance();
-			VertexBuffer wr = t.getBuffer();
+			BufferBuilder wr = t.getBuffer();
 
 			SyncableIntArray villages = vh.getVillageData();
 			int[] data = villages.getValue();
@@ -92,11 +92,11 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 		return state.getBlock() instanceof BlockVillageHighlighter && state.getValue(BlockVillageHighlighter.POWERED);
 	}
 
-	private static void addVertex(VertexBuffer wr, double x, double y, double z) {
+	private static void addVertex(BufferBuilder wr, double x, double y, double z) {
 		wr.pos(x, y, z).endVertex();
 	}
 
-	public void drawBox(VertexBuffer wr, AxisAlignedBB bb) {
+	public void drawBox(BufferBuilder wr, AxisAlignedBB bb) {
 		// bottom
 		addVertex(wr, bb.minX, bb.minY, bb.minZ);
 		addVertex(wr, bb.maxX, bb.minY, bb.minZ);

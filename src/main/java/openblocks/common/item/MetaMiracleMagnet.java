@@ -8,8 +8,8 @@ import openblocks.integration.TurtleIds;
 import openblocks.integration.TurtleUtils;
 
 public class MetaMiracleMagnet extends MetaGeneric {
-	public MetaMiracleMagnet(String name, Object... recipes) {
-		super(name, recipes);
+	public MetaMiracleMagnet(String name) {
+		super(name);
 	}
 
 	@Override

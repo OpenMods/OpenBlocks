@@ -80,8 +80,8 @@ public class BlockElevator extends OpenBlock implements IElevatorBlock {
 	}
 
 	@Override
-	public MapColor getMapColor(IBlockState state) {
-		return state.getValue(COLOR).vanillaEnum.getMapColor();
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		return MapColor.getBlockColor(state.getValue(COLOR).vanillaEnum);
 	}
 
 	@Override

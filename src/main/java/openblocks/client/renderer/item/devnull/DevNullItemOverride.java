@@ -28,13 +28,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import openblocks.common.item.ItemDevNull;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class DevNullItemOverride extends ItemOverrideList {
 
-	private class BakedDevNull implements IPerspectiveAwareModel {
+	private class BakedDevNull implements IBakedModel {
 
 		private final ModelKey key;
 
@@ -127,14 +126,10 @@ public class DevNullItemOverride extends ItemOverrideList {
 			final float scale = (float)Math.pow(isGui? scaleFactor2d : scaleFactor3d, depth + 1);
 
 			final Matrix4f quadTransformMatrix = isGui? scale2d(scale) : scale3d(scale);
-			Matrix4f modelTransformMatrix = null;
 
-			if (innerModel instanceof IPerspectiveAwareModel) {
-				final Pair<? extends IBakedModel, Matrix4f> tmp = ((IPerspectiveAwareModel)innerModel).handlePerspective(key.transform);
-				innerModel = tmp.getLeft();
-				modelTransformMatrix = tmp.getRight();
-			}
-			// TODO maybe; legacy models?
+			final Pair<? extends IBakedModel, Matrix4f> tmp = innerModel.handlePerspective(key.transform);
+			innerModel = tmp.getLeft();
+			final Matrix4f modelTransformMatrix = tmp.getRight();
 
 			final Matrix4f perspectiveMatrix;
 			if (isGui) {

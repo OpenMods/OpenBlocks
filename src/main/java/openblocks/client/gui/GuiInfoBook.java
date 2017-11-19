@@ -84,7 +84,7 @@ public class GuiInfoBook extends ComponentGui {
 		book.addPage(new IntroPage());
 		book.addPage(new TitledPage("openblocks.gui.credits.title", "openblocks.gui.credits.content"));
 
-		final TocPage contentsPage = new TocPage(book, Minecraft.getMinecraft().fontRendererObj);
+		final TocPage contentsPage = new TocPage(book, Minecraft.getMinecraft().fontRenderer);
 		book.addPage(contentsPage);
 
 		{
@@ -149,7 +149,7 @@ public class GuiInfoBook extends ComponentGui {
 			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
 			if (server != null) {
-				World world = server.worldServerForDimension(0);
+				World world = server.getWorld(0);
 				File saveFolder = PlayerInventoryStore.getSaveFolder(world);
 				return saveFolder;
 			}

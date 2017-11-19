@@ -14,10 +14,12 @@ import net.minecraftforge.oredict.OreDictionary;
 public class RadioVillagerTrades {
 
 	public static void registerUselessVillager() {
-		final VillagerProfession prof = GameRegistry.register(new VillagerProfession(
+		final VillagerProfession prof = new VillagerProfession(
 				"openblocks:radio",
 				"openblocks:textures/models/king-ish.png",
-				"minecraft:textures/entity/zombie_villager/zombie_villager.png")); // TODO: zombie texture?
+				"minecraft:textures/entity/zombie_villager/zombie_villager.png"); // TODO: zombie texture?
+
+		GameRegistry.findRegistry(VillagerProfession.class).register(prof);
 
 		final VillagerCareer career = new VillagerCareer(prof, "audiophile")
 				.addTrade(1, new EmeraldForItems(Item.getItemFromBlock(Blocks.NOTEBLOCK), new PriceInfo(5, 7)))

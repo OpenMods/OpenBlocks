@@ -5,10 +5,10 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -30,28 +30,28 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 
 	private static void renderEgg(IBakedModel model, IBlockState state) {
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		BufferBuilder vertexBuffer = tessellator.getBuffer();
 
-		vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+		vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
 		for (EnumFacing enumfacing : EnumFacing.values())
-			renderQuads(vertexbuffer, model.getQuads(state, enumfacing, 0L));
+			renderQuads(vertexBuffer, model.getQuads(state, enumfacing, 0L));
 
-		renderQuads(vertexbuffer, model.getQuads(state, (EnumFacing)null, 0L));
+		renderQuads(vertexBuffer, model.getQuads(state, (EnumFacing)null, 0L));
 		GL11.glPushMatrix();
 		GL11.glTranslated(-0.5, 0, -0.5);
 		tessellator.draw();
 		GL11.glPopMatrix();
 	}
 
-	private static void renderQuads(VertexBuffer vertexbuffer, List<BakedQuad> quads) {
+	private static void renderQuads(BufferBuilder vertexBuffer, List<BakedQuad> quads) {
 		for (BakedQuad quad : quads)
-			vertexbuffer.addVertexData(quad.getVertexData());
+			vertexBuffer.addVertexData(quad.getVertexData());
 	}
 
 	protected static BlockRendererDispatcher blockRenderer;
 
 	@Override
-	public void renderTileEntityAt(TileEntityGoldenEgg egg, double x, double y, double z, float partialTickTime, int destroyProgress) {
+	public void render(TileEntityGoldenEgg egg, double x, double y, double z, float partialTickTime, int destroyProgress, float alpha) {
 		if (egg == null) return;
 
 		GL11.glPushMatrix();
@@ -128,7 +128,7 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 
 		RANDOM.setSeed(432L);
 
-		VertexBuffer wr = tes.getBuffer();
+		BufferBuilder wr = tes.getBuffer();
 
 		final int alpha = (int)(MAX_OPACITY * (1.0F - f2));
 

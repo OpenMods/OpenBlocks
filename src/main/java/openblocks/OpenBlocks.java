@@ -5,7 +5,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
 import net.minecraft.util.NonNullList;
@@ -26,7 +25,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -34,10 +32,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistry;
 import openblocks.common.CanvasReplaceBlacklist;
 import openblocks.common.CommandInventory;
 import openblocks.common.DonationUrlManager;
@@ -374,7 +372,7 @@ public class OpenBlocks {
 		@RegisterBlock(id = "golden_egg", tileEntity = TileEntityGoldenEgg.class, legacyIds = "goldenegg")
 		public static BlockGoldenEgg goldenEgg;
 
-		@RegisterBlock(id = "scaffolding")
+		@RegisterBlock(id = "scaffolding", itemBlock = BlockScaffolding.Item.class)
 		public static BlockScaffolding scaffolding;
 	}
 
@@ -612,10 +610,6 @@ public class OpenBlocks {
 
 	};
 
-	public static final Achievement brickAchievement = new Achievement("openblocks.oops", "openblocks.droppedBrick", 13, 13, net.minecraft.init.Items.BRICK, null).registerStat();
-
-	public static final Achievement stackAchievement = new Achievement("openblocks.tma2", "openblocks.stackOverflow", -13, 13, net.minecraft.init.Items.NETHER_STAR, null).registerStat();
-
 	public static final StatBase brickStat = new StatBasic("openblocks.dropped",
 			new TextComponentTranslation("stat.openblocks.bricksDropped"),
 			StatBase.simpleStatType).registerStat();
@@ -843,11 +837,6 @@ public class OpenBlocks {
 				DonationUrlManager.instance().addUrl(m.getSender(), m.getStringValue());
 			}
 		}
-	}
-
-	@EventHandler
-	public void handleRenames(FMLMissingMappingsEvent event) {
-		startupHelper.handleRenames(event);
 	}
 
 	@EventHandler

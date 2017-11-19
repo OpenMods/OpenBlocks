@@ -3,7 +3,7 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -18,7 +18,7 @@ public class TileEntityBearTrapRenderer extends FastTESR<TileEntityBearTrap> {
 	protected static BlockRendererDispatcher blockRenderer;
 
 	@Override
-	public void renderTileEntityFast(TileEntityBearTrap te, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer renderer) {
+	public void renderTileEntityFast(TileEntityBearTrap te, double x, double y, double z, float partialTicks, int destroyStage, float alpha, BufferBuilder renderer) {
 		if (blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
 
 		final BlockPos pos = te.getPos();

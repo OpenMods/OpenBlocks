@@ -1,8 +1,8 @@
 package openblocks.client.renderer.item.stencil;
 
-import com.google.common.base.Function;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Function;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;

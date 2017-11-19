@@ -1,11 +1,11 @@
 package openblocks.client.renderer.block.canvas;
 
-import com.google.common.base.Function;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -42,11 +42,11 @@ public class BakedModelCanvas extends BakedModelAdapter {
 
 			if (maybeCanvasState.isPresent()) maybeCanvasState.get().onRender();
 		} else {
-			maybeInnerBlock = Optional.absent();
-			maybeCanvasState = Optional.absent();
+			maybeInnerBlock = Optional.empty();
+			maybeCanvasState = Optional.empty();
 		}
 
-		final BlockRenderLayer renderLayer = Objects.firstNonNull(MinecraftForgeClient.getRenderLayer(), BlockRenderLayer.CUTOUT);
+		final BlockRenderLayer renderLayer = MoreObjects.firstNonNull(MinecraftForgeClient.getRenderLayer(), BlockRenderLayer.CUTOUT);
 
 		return modelTransformer.getQuads(maybeInnerBlock, maybeCanvasState, renderLayer).get(side);
 

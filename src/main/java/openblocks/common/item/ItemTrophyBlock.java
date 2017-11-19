@@ -3,7 +3,6 @@ package openblocks.common.item;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -66,7 +65,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
 		for (Trophy trophy : Trophy.VALUES) {
 			result.add(putMetadata(new ItemStack(this), trophy));
 		}

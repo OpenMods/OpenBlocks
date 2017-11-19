@@ -1,6 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -14,7 +14,7 @@ import openmods.utils.TextureUtils;
 public class TileEntityTankRenderer extends FastTESR<TileEntityTank> {
 
 	@Override
-	public void renderTileEntityFast(TileEntityTank tankTile, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer buffer) {
+	public void renderTileEntityFast(TileEntityTank tankTile, double x, double y, double z, float partialTicks, int destroyStage, float alpha, BufferBuilder buffer) {
 		if (tankTile.isInvalid()) return;
 
 		final ITankRenderFluidData data = tankTile.getRenderFluidData();
@@ -30,11 +30,11 @@ public class TileEntityTankRenderer extends FastTESR<TileEntityTank> {
 		}
 	}
 
-	private static void addVertexWithUV(VertexBuffer wr, double x, double y, double z, double u, double v, int skyLight, int blockLight) {
+	private static void addVertexWithUV(BufferBuilder wr, double x, double y, double z, double u, double v, int skyLight, int blockLight) {
 		wr.pos(x, y, z).color(0xFF, 0xFF, 0xFF, 0xFF).tex(u, v).lightmap(skyLight, blockLight).endVertex();
 	}
 
-	private static void renderFluid(final VertexBuffer wr, final ITankRenderFluidData data, float time, int combinedLights) {
+	private static void renderFluid(final BufferBuilder wr, final ITankRenderFluidData data, float time, int combinedLights) {
 		final int skyLight = (combinedLights >> 16) & 0xFFFF;
 		final int blockLight = (combinedLights >> 0) & 0xFFFF;
 

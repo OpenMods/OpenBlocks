@@ -2,16 +2,17 @@ package openblocks.common.item;
 
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
@@ -33,7 +34,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 	@SideOnly(Side.CLIENT)
 	public static class CrayonColorHandler implements IItemColor {
 		@Override
-		public int getColorFromItemstack(@Nonnull ItemStack stack, int tintIndex) {
+		public int colorMultiplier(@Nonnull ItemStack stack, int tintIndex) {
 			return getGlassesColor(stack);
 		}
 	}
@@ -47,7 +48,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 		}
 
 		@Override
-		public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
+		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
 			for (ColorMeta color : ColorMeta.getAllColors())
 				result.add(createCrayonGlasses(color.rgb));
 		}
@@ -69,7 +70,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
+		public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
 			result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.color", getColor(stack)));
 		}
 
@@ -137,7 +138,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
 		result.add(new ItemStack(this));
 	}
 }

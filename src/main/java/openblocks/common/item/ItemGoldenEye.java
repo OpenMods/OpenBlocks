@@ -4,6 +4,8 @@ import com.google.common.base.Strings;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -122,14 +124,14 @@ public class ItemGoldenEye extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
-		result.add(new ItemStack(item, 1, 0));
-		result.add(new ItemStack(item, 1, MAX_DAMAGE));
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
+		result.add(new ItemStack(this, 1, 0));
+		result.add(new ItemStack(this, 1, MAX_DAMAGE));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> result, boolean expanded) {
+	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		if (tag.hasKey(TAG_STRUCTURE, Constants.NBT.TAG_STRING)) {
 			final String structure = tag.getString(TAG_STRUCTURE);

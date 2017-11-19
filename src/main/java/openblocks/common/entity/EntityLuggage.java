@@ -54,7 +54,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		return new GenericInventory("luggage", false, size) {
 			@Override
 			public boolean isUsableByPlayer(EntityPlayer player) {
-				return !isDead && player.getDistanceSqToEntity(EntityLuggage.this) < 64;
+				return !isDead && player.getDistanceSq(EntityLuggage.this) < 64;
 			}
 		};
 	}

@@ -19,16 +19,16 @@ public class FXLiquidSpray extends Particle {
 	}
 
 	public FXLiquidSpray(World world, TextureAtlasSprite icon, double x, double y, double z, float scale, float gravity, Vec3d velocity) {
-		super(world, x, y, z, velocity.xCoord, velocity.yCoord, velocity.zCoord);
+		super(world, x, y, z, velocity.x, velocity.y, velocity.z);
 
 		particleGravity = gravity;
 		this.particleMaxAge = 50;
 		setSize(0.2f, 0.2f);
 		this.particleScale = scale;
 		this.canCollide = true;
-		motionX = velocity.xCoord;
-		motionY = velocity.yCoord;
-		motionZ = velocity.zCoord;
+		motionX = velocity.x;
+		motionY = velocity.y;
+		motionZ = velocity.z;
 
 		setParticleTexture(icon);
 	}

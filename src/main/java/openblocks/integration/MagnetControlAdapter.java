@@ -47,27 +47,27 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		}
 
 		public synchronized Vec3d getTarget(Vec3d pos, EnumFacing side) {
-			double x = pos.xCoord + 0.5;
-			double y = pos.yCoord + 0.5;
-			double z = pos.zCoord + 0.5;
+			double x = pos.x + 0.5;
+			double y = pos.y + 0.5;
+			double z = pos.z + 0.5;
 
-			y += target.xCoord;
+			y += target.x;
 			switch (side) {
 				case NORTH:
-					x += target.zCoord;
-					z -= target.xCoord;
+					x += target.z;
+					z -= target.x;
 					break;
 				case SOUTH:
-					x -= target.zCoord;
-					z += target.xCoord;
+					x -= target.z;
+					z += target.x;
 					break;
 				case WEST:
-					x -= target.xCoord;
-					z -= target.zCoord;
+					x -= target.x;
+					z -= target.z;
 					break;
 				case EAST:
-					x += target.xCoord;
-					z += target.zCoord;
+					x += target.x;
+					z += target.z;
 					break;
 				default:
 					break;
@@ -162,7 +162,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 	public IMultiReturn getPosition() {
 		EntityMagnet magnet = getMagnet();
 		Vec3d rotated = getRelativeDistance(magnet);
-		return MultiReturn.wrap(rotated.xCoord, rotated.yCoord, rotated.zCoord);
+		return MultiReturn.wrap(rotated.x, rotated.y, rotated.z);
 	}
 
 	@ScriptCallable(returnTypes = ReturnType.BOOLEAN, description = "Is magnet above grabbable entity")
@@ -187,9 +187,9 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		EntityMagnet magnet = getMagnet();
 		Vec3d current = getRelativeDistance(magnet);
 		Vec3d target = magnetOwner.target;
-		return MultiReturn.wrap(current.xCoord - target.xCoord,
-				current.yCoord - target.yCoord,
-				current.zCoord - target.zCoord);
+		return MultiReturn.wrap(current.x - target.x,
+				current.y - target.y,
+				current.z - target.z);
 	}
 
 	@Override
@@ -221,13 +221,13 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 
 		switch (side) {
 			case NORTH:
-				return new Vec3d(-dist.zCoord, dist.yCoord, dist.xCoord);
+				return new Vec3d(-dist.z, dist.y, dist.x);
 			case SOUTH:
-				return new Vec3d(dist.zCoord, dist.yCoord, -dist.xCoord);
+				return new Vec3d(dist.z, dist.y, -dist.x);
 			case EAST:
-				return new Vec3d(dist.xCoord, dist.yCoord, dist.zCoord);
+				return new Vec3d(dist.x, dist.y, dist.z);
 			case WEST:
-				return new Vec3d(-dist.xCoord, dist.yCoord, -dist.zCoord);
+				return new Vec3d(-dist.x, dist.y, -dist.z);
 			default:
 				return dist;
 		}

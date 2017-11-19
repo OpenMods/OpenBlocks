@@ -2,14 +2,15 @@ package openblocks.common.item;
 
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
@@ -29,7 +30,7 @@ public class ItemPaintCan extends ItemOpenBlock {
 	public static class ItemColorHandler implements IItemColor {
 
 		@Override
-		public int getColorFromItemstack(@Nonnull ItemStack stack, int tintIndex) {
+		public int colorMultiplier(@Nonnull ItemStack stack, int tintIndex) {
 			return tintIndex == 1? getColorFromStack(stack) : COLOR_WHITE;
 		}
 	}
@@ -51,7 +52,7 @@ public class ItemPaintCan extends ItemOpenBlock {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
 		for (ColorMeta meta : ColorMeta.getAllColors())
 			result.add(createStack(meta.rgb, FULL_CAN_SIZE));
 	}
@@ -70,8 +71,8 @@ public class ItemPaintCan extends ItemOpenBlock {
 	}
 
 	@Override
-	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> list, boolean extended) {
-		list.add(String.format("#%06X", getColorFromStack(stack)));
+	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
+		result.add(String.format("#%06X", getColorFromStack(stack)));
 	}
 
 	@Override

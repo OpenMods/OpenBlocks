@@ -1,6 +1,7 @@
 package openblocks.common.entity;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.init.SoundEvents;
@@ -66,8 +67,9 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 		final float f;
 
 		if (this.onGround) {
-			final BlockPos posUnder = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
-			f = this.world.getBlockState(posUnder).getBlock().slipperiness * 0.98F;
+			BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
+			IBlockState underState = this.world.getBlockState(underPos);
+			f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.98F;
 		} else {
 			f = 0.98F;
 		}

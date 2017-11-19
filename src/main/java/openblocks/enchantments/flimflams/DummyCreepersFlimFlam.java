@@ -1,6 +1,5 @@
 package openblocks.enchantments.flimflams;
 
-import com.google.common.base.Throwables;
 import java.util.Random;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,13 +20,9 @@ public class DummyCreepersFlimFlam implements IFlimFlamAction {
 
 		for (int i = 0; i < 15; i++) {
 			EntityCreeper creeper = new EntityCreeper(target.world);
-			try {
-				EXPLOSION_RADIUS.set(creeper, 0);
-				EntityDataManager watcher = creeper.getDataManager();
-				watcher.set(POWERED_DATA_PARAMETER.get(null), true);
-			} catch (Throwable t) {
-				throw Throwables.propagate(t);
-			}
+			EXPLOSION_RADIUS.set(creeper, 0);
+			EntityDataManager watcher = creeper.getDataManager();
+			watcher.set(POWERED_DATA_PARAMETER.get(null), true);
 
 			creeper.setPosition(target.posX + 20 * (random.nextFloat() - 0.5),
 					target.posY + 5 * (1 + random.nextFloat()),

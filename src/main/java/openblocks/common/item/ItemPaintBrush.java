@@ -2,11 +2,14 @@ package openblocks.common.item;
 
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,7 +40,7 @@ public class ItemPaintBrush extends Item {
 	@SideOnly(Side.CLIENT)
 	public static class ColorHandler implements IItemColor {
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+		public int colorMultiplier(ItemStack stack, int tintIndex) {
 			if (tintIndex == 1) {
 				Integer color = getColorFromStack(stack);
 				if (color != null) return color;
@@ -60,13 +63,13 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
-	public void addInformation(@Nonnull ItemStack itemStack, EntityPlayer player, List<String> list, boolean extended) {
-		Integer color = getColorFromStack(itemStack);
-		if (color != null) list.add(String.format("#%06X", color));
+	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
+		Integer color = getColorFromStack(stack);
+		if (color != null) result.add(String.format("#%06X", color));
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(this));
 		for (ColorMeta color : ColorMeta.getAllColors()) {
 			list.add(createStackWithColor(color.rgb));
@@ -103,7 +106,7 @@ public class ItemPaintBrush extends Item {
 			world.playSound(null, player.getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.PLAYERS, 0.1F, 0.8F);
 
 			if (!player.capabilities.isCreativeMode) {
-				if (stack.attemptDamageItem(1, player.getRNG())) {
+				if (stack.attemptDamageItem(1, player.getRNG(), player instanceof EntityPlayerMP? (EntityPlayerMP)player : null)) {
 					final NBTTagCompound tag = ItemUtils.getItemTag(stack);
 					tag.removeTag(TAG_COLOR);
 					stack.setItemDamage(0);

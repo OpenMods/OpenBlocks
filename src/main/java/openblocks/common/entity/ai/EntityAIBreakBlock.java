@@ -55,12 +55,12 @@ public class EntityAIBreakBlock extends EntityAIBase {
 
 	@Override
 	public void resetTask() {
-		pathFinder.clearPathEntity();
+		pathFinder.clearPath();
 		blockCoord = null;
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return entity.isEntityAlive() &&
 				!pathFinder.noPath() &&
 				blockCoord != null &&

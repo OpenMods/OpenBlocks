@@ -59,8 +59,9 @@ public class ContainerDevNull extends ContainerBase<Void> {
 					return slotNumber != protectedSlotNumber;
 				}
 
+				// TODO 1.12 verify
 				@Override
-				public boolean canBeHovered() {
+				public boolean isEnabled() {
 					return slotNumber != protectedSlotNumber;
 				}
 			});

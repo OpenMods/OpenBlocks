@@ -1,6 +1,6 @@
 package openblocks.common.item;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 import java.util.List;
@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,7 +48,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	@SideOnly(Side.CLIENT)
 	public static class CrayonColorHandler implements IItemColor {
 		@Override
-		public int getColorFromItemstack(@Nonnull ItemStack stack, int tintIndex) {
+		public int colorMultiplier(@Nonnull ItemStack stack, int tintIndex) {
 			if (tintIndex == 1) {
 				if (isCrayon(stack)) { return ItemUtils.getItemTag(stack).getInteger(TAG_COLOR); }
 			}
@@ -168,7 +169,7 @@ public class ItemImaginary extends ItemOpenBlock {
 
 	@Nonnull
 	public static ItemStack setupValues(@Nonnull ItemStack result, Integer color, BlockImaginary.Shape shape, boolean isInverted, float uses) {
-		return setupValues(result, color, Objects.firstNonNull(shapeToMode.get(shape, isInverted), PlacementMode.BLOCK), uses);
+		return setupValues(result, color, MoreObjects.firstNonNull(shapeToMode.get(shape, isInverted), PlacementMode.BLOCK), uses);
 	}
 
 	@Nonnull
@@ -239,7 +240,7 @@ public class ItemImaginary extends ItemOpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(@Nonnull ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
+	public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, List<String> result, ITooltipFlag flagIn) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
 		result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.uses", getUses(tag)));
@@ -253,7 +254,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
 		result.add(setupValues(new ItemStack(this, 1, DAMAGE_PENCIL), null, PlacementMode.BLOCK));
 		for (ColorMeta color : ColorMeta.getAllColors())
 			result.add(setupValues(new ItemStack(this, 1, DAMAGE_CRAYON), color.rgb, PlacementMode.BLOCK));

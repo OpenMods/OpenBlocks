@@ -6,8 +6,8 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -119,7 +119,7 @@ public class ModelCartographer extends ModelBase {
 
 				final Tessellator tessellator = Tessellator.getInstance();
 
-				VertexBuffer vertexBuffer = tessellator.getBuffer();
+				BufferBuilder vertexBuffer = tessellator.getBuffer();
 				vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
 
 				for (BakedQuad quad : quads)

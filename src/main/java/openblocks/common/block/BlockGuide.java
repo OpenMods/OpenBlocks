@@ -72,7 +72,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	private Hitbox findClickBox(Vec3d pos) {
 		for (Hitbox h : buttonsHitbox.asList())
-			if (h.aabb().isVecInside(pos))
+			if (h.aabb().contains(pos))
 				return h;
 
 		return null;
@@ -92,7 +92,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 			final Vec3d hitVec = evt.getTarget().hitVec;
 
 			final Orientation orientation = getOrientation(world, pos);
-			final Vec3d localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.xCoord - pos.getX(), hitVec.yCoord - pos.getY(), hitVec.zCoord - pos.getZ());
+			final Vec3d localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.x - pos.getX(), hitVec.y - pos.getY(), hitVec.z - pos.getZ());
 			final Hitbox clickBox = findClickBox(localHit);
 			selection = clickBox != null? BlockSpaceTransform.instance.mapBlockToWorld(orientation, clickBox.aabb()).offset(pos.getX(), pos.getY(), pos.getZ()) : null;
 		} else selection = null;

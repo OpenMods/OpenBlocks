@@ -1,8 +1,11 @@
 package openblocks.common.block;
 
 import java.util.Random;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -16,6 +19,18 @@ import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
 public class BlockScaffolding extends OpenBlock {
+
+	public static class Item extends ItemBlock {
+		public Item(Block block) {
+			super(block);
+		}
+
+		@Override
+		public int getItemBurnTime(ItemStack itemStack) {
+			return 100;
+		}
+	}
+
 	public BlockScaffolding() {
 		super(Material.CLOTH);
 		setTickRandomly(true);

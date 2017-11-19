@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import openblocks.common.HeightMapData;
@@ -112,7 +112,7 @@ public class HeightMapRenderer {
 			GL11.glNewList(displayList, GL11.GL_COMPILE);
 
 			final Tessellator tes = new Tessellator(4 * (3 + 2) * 4 * 2);
-			VertexBuffer wr = tes.getBuffer();
+			BufferBuilder wr = tes.getBuffer();
 
 			wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			for (PlaneData plane : planes) {

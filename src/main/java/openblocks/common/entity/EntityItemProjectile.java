@@ -2,6 +2,7 @@ package openblocks.common.entity;
 
 import javax.annotation.Nonnull;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
@@ -75,11 +76,9 @@ public class EntityItemProjectile extends EntityItem {
 
 		// Keep ground friction
 		if (this.onGround) {
-			f = this.world.getBlockState(
-					new BlockPos(MathHelper.floor(this.posX),
-							MathHelper.floor(getEntityBoundingBox().minY) - 1,
-							MathHelper.floor(this.posZ)))
-					.getBlock().slipperiness * 0.98F;
+			BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
+			IBlockState underState = this.world.getBlockState(underPos);
+			f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.98F;
 		}
 
 		this.motionX *= f;

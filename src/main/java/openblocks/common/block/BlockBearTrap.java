@@ -45,7 +45,7 @@ public class BlockBearTrap extends OpenBlock.TwoDirections {
 	}
 
 	@Override
-	public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return false;
 	}
 

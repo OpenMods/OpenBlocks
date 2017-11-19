@@ -7,7 +7,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -103,8 +102,8 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
-		result.add(new ItemStack(item));
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> result) {
+		result.add(new ItemStack(this));
 
 		if (tab == null && Config.displayAllFilledTanks) {
 			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values())

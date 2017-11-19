@@ -39,12 +39,12 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 
 	@Override
 	public void resetTask() {
-		pathFinder.clearPathEntity();
+		pathFinder.clearPath();
 		targetPlayer = null;
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return minime.isEntityAlive() &&
 				!pathFinder.noPath() &&
 				canRidePlayer(targetPlayer);
@@ -62,7 +62,7 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 		super.updateTask();
 		World world = minime.world;
 		if (!world.isRemote && canRidePlayer(targetPlayer)) {
-			if (minime.getDistanceToEntity(targetPlayer) < 1.0) {
+			if (minime.getDistance(targetPlayer) < 1.0) {
 				targetPlayer.startRiding(minime);
 			}
 		}

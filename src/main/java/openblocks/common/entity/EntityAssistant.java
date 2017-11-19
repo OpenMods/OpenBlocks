@@ -94,7 +94,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistanceToEntity(player) < 3) { return true; }
+		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistance(player) < 3) { return true; }
 		return false;
 	}
 

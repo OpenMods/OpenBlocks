@@ -161,7 +161,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 			if (entity instanceof EntityItemProjectile) return entity.motionY < 0.01;
 
 			if (entity instanceof EntityItem) {
-				ItemStack stack = ((EntityItem)entity).getEntityItem();
+				ItemStack stack = ((EntityItem)entity).getItem();
 				return InventoryUtils.canInsertStack(inventory.getHandler(), stack);
 			}
 
@@ -267,7 +267,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		if (!world.isRemote) {
 			if (entity instanceof EntityItem && !entity.isDead) {
 				final EntityItem item = (EntityItem)entity;
-				final ItemStack toConsume = item.getEntityItem().copy();
+				final ItemStack toConsume = item.getItem().copy();
 				final ItemStack leftover = ItemHandlerHelper.insertItem(inventory.getHandler(), toConsume, false);
 				ItemUtils.setEntityItemStack(item, leftover);
 				return true;

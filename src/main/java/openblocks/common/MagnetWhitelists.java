@@ -66,6 +66,7 @@ public class MagnetWhitelists {
 			tester.addTester(new ClassTester<T>(cls));
 		}
 
+		@SuppressWarnings("unchecked")
 		public void addClassNames(Class<? extends T>... cls) {
 			tester.addTester(new ClassNameTester<T>().addClasses(cls));
 		}

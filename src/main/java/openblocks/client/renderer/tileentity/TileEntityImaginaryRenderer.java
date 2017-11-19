@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -71,7 +71,7 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 			this.writers = writers;
 		}
 
-		public void write(VertexBuffer buffer, RenderInfo info) {
+		public void write(BufferBuilder buffer, RenderInfo info) {
 			final ByteBuffer outputBuffer = buffer.getByteBuffer();
 			for (IVertexElementWriter writer : writers)
 				writer.write(outputBuffer, info);
@@ -240,7 +240,7 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 	}
 
 	@Override
-	public void renderTileEntityFast(TileEntityImaginary te, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer buffer) {
+	public void renderTileEntityFast(TileEntityImaginary te, double x, double y, double z, float partialTicks, int destroyStage, float alpha, BufferBuilder buffer) {
 		if (te == null) return;
 
 		boolean isVisible = te.is(Property.VISIBLE);

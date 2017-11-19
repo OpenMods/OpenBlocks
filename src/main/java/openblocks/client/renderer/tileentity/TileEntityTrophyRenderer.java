@@ -4,10 +4,10 @@ import java.util.List;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.Render;
@@ -40,7 +40,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntityTrophy trophy, double x, double y, double z, float partialTick, int destroyProgress) {
+	public void render(TileEntityTrophy trophy, double x, double y, double z, float partialTick, int destroyProgress, float alpha) {
 		Trophy type = trophy != null? trophy.getTrophy() : trophyType;
 		if (type != null) {
 			float angle = trophy != null? BlockUtils.getRotationFromOrientation(trophy.getOrientation()) : INVENTORY_ROTATION;
@@ -57,7 +57,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 		IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(state);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		final VertexBuffer wr = tessellator.getBuffer();
+		final BufferBuilder wr = tessellator.getBuffer();
 		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		wr.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
@@ -72,7 +72,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 		wr.setTranslation(0, 0, 0);
 	}
 
-	private static void renderQuads(VertexBuffer wr, List<BakedQuad> quads) {
+	private static void renderQuads(BufferBuilder wr, List<BakedQuad> quads) {
 		for (BakedQuad quad : quads)
 			LightUtil.renderQuadColor(wr, quad, 0xFFFFFFFF);
 	}

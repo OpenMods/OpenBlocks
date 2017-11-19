@@ -1,12 +1,12 @@
 package openblocks.client.renderer.block.canvas;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -14,16 +14,16 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelCustomData;
-import net.minecraftforge.client.model.IPerspectiveAwareModel.MapWrapper;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import openmods.model.ModelUpdater;
+import openmods.utils.CollectionUtils;
 
-public class ModelCanvas implements IModelCustomData {
+public class ModelCanvas implements IModel {
 
-	public static final IModel INSTANCE = new ModelCanvas(Optional.<ResourceLocation> absent(), ImmutableSet.<BlockRenderLayer> of());
+	public static final IModel INSTANCE = new ModelCanvas(Optional.empty(), ImmutableSet.of());
 
 	private final Optional<ResourceLocation> baseModel;
 
@@ -36,7 +36,7 @@ public class ModelCanvas implements IModelCustomData {
 
 	@Override
 	public Collection<ResourceLocation> getDependencies() {
-		return baseModel.asSet();
+		return CollectionUtils.asSet(baseModel);
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class ModelCanvas implements IModelCustomData {
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		final ImmutableMap<TransformType, TRSRTransformation> transforms = MapWrapper.getTransforms(state);
+		final ImmutableMap<TransformType, TRSRTransformation> transforms = PerspectiveMapWrapper.getTransforms(state);
 
 		final IModel base;
 		if (baseModel.isPresent()) {

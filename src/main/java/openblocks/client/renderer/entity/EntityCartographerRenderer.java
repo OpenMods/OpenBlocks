@@ -145,7 +145,7 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 
 		private static void renderText(EntityCartographer e, RenderGlobal context) {
 			GL11.glScaled(2 * BASE_SIZE / 16.0, 2 * BASE_SIZE / 16.0, 1);
-			FontRenderer fonts = Minecraft.getMinecraft().fontRendererObj;
+			FontRenderer fonts = Minecraft.getMinecraft().fontRenderer;
 			String coords = String.format("%d,%d", e.getNewMapCenterX(), e.getNewMapCenterZ());
 			int len = fonts.getStringWidth(coords);
 			double scaleV = 4.0 / 8.0;

@@ -1,6 +1,6 @@
 package openblocks.common.item;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +28,7 @@ public class ItemStencil extends Item {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, NonNullList<ItemStack> list) {
+	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> list) {
 		for (StencilPattern stencil : StencilPattern.values())
 			list.add(createItemStack(stencil));
 	}
@@ -42,7 +42,7 @@ public class ItemStencil extends Item {
 		try {
 			return Optional.<IStencilPattern> of(StencilPattern.values()[patternId]);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			return Optional.absent();
+			return Optional.empty();
 		}
 	}
 

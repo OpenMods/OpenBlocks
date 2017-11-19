@@ -252,7 +252,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		if (hand != EnumHand.MAIN_HAND) return true;
 
 		final ItemStack holding = player.getHeldItemMainhand();
-		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistanceToEntity(player) < 3) {
+		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistance(player) < 3) {
 			if (holding.isEmpty() && !mapItem.isEmpty()) {
 				player.setHeldItem(hand, mapItem);
 				mapItem = ItemStack.EMPTY;

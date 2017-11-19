@@ -78,7 +78,7 @@ public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStatio
 	public void postRender(int mouseX, int mouseY) {
 		super.postRender(mouseX, mouseY);
 		if (lblAuthors.isOverflowing()) {
-			lblAuthors.setTooltip(lblAuthors.getFormattedText(fontRendererObj));
+			lblAuthors.setTooltip(lblAuthors.getFormattedText(fontRenderer));
 		} else {
 			lblAuthors.clearTooltip();
 		}

@@ -36,7 +36,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 		if (!world.isRemote) {
 			if (OpenMods.proxy.getTicks(world) % 10 == 0 && isEnabled()) {
 				List<Integer> tmpDataList = Lists.newArrayList();
-				for (Village village : world.villageCollectionObj.getVillageList()) {
+				for (Village village : world.villageCollection.getVillageList()) {
 					if (village.isBlockPosWithinSqVillageRadius(pos)) {
 						tmpDataList.add(village.getVillageRadius());
 						BlockPos d = village.getCenter().subtract(pos);
@@ -83,7 +83,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	public boolean canVillagersBreed() {
 		if (world.isRemote) return false;
 
-		for (Village village : world.villageCollectionObj.getVillageList()) {
+		for (Village village : world.villageCollection.getVillageList()) {
 			if (village.isBlockPosWithinSqVillageRadius(pos)) {
 				int i = (int)(village.getNumVillageDoors() * 0.35D);
 				if (village.getNumVillagers() < i) { return true; }

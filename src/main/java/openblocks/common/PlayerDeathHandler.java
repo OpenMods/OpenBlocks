@@ -212,7 +212,7 @@ public class PlayerDeathHandler {
 			final GenericInventory loot = new GenericInventory("tmpplayer", false, this.loot.size());
 			final IItemHandler handler = loot.getHandler();
 			for (EntityItem entityItem : this.loot) {
-				ItemStack stack = entityItem.getEntityItem();
+				ItemStack stack = entityItem.getItem();
 				if (!stack.isEmpty()) ItemHandlerHelper.insertItemStacked(handler, stack, false);
 			}
 			return loot;
@@ -411,13 +411,13 @@ public class PlayerDeathHandler {
 		final Iterator<EntityItem> lootIter = graveLoot.iterator();
 		while (lootIter.hasNext()) {
 			final EntityItem drop = lootIter.next();
-			final ItemStack itemStack = drop.getEntityItem();
+			final ItemStack itemStack = drop.getItem();
 			if (itemStack.getItem() == graveItem && !itemStack.isEmpty()) {
 				itemStack.shrink(1);
 				if (itemStack.isEmpty()) {
 					lootIter.remove();
 				} else {
-					drop.setEntityItemStack(itemStack);
+					drop.setItem(itemStack);
 				}
 
 				return true;
@@ -432,7 +432,7 @@ public class PlayerDeathHandler {
 
 		int i = 0;
 		for (EntityItem e : event.getDrops())
-			Log.info("\tGrave drop %d: %s -> %s", i++, e.getClass(), e.getEntityItem());
+			Log.info("\tGrave drop %d: %s -> %s", i++, e.getClass(), e.getItem());
 
 		final ListenerList listeners = event.getListenerList();
 		try {

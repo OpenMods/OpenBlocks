@@ -1,11 +1,11 @@
 package openblocks.client.renderer.item.stencil;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverride;

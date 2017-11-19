@@ -26,7 +26,7 @@ public class LlamaBehavior implements ITrophyBehavior {
 		double dy = player.getEntityBoundingBox().minY + player.height / 3.0F - entityllamaspit.posY;
 		double dZ = player.posZ - pZ;
 		float f = MathHelper.sqrt(dX * dX + dZ * dZ) * 0.2F;
-		entityllamaspit.setThrowableHeading(dX, dy + f, dZ, 1.5F, 10.0F);
+		entityllamaspit.shoot(dX, dy + f, dZ, 1.5F, 10.0F);
 		world.playSound((EntityPlayer)null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_LLAMA_SPIT, SoundCategory.NEUTRAL, 1.0F, 1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F);
 		world.spawnEntity(entityllamaspit);
 

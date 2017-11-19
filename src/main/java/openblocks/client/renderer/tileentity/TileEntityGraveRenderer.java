@@ -21,7 +21,7 @@ public class TileEntityGraveRenderer extends TileEntitySpecialRenderer<TileEntit
 	private final IHitboxSupplier textBoxes = OpenMods.proxy.getHitboxes(OpenBlocks.location("grave_text"));
 
 	@Override
-	public void renderTileEntityAt(TileEntityGrave target, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityGrave target, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		final FontRenderer renderer = getFontRenderer();
 		if (renderer != null) {
 
@@ -39,15 +39,15 @@ public class TileEntityGraveRenderer extends TileEntitySpecialRenderer<TileEntit
 
 					final String username = target.getUsername();
 
-					float boxWidth = (float)(box.to.xCoord - box.from.xCoord);
+					float boxWidth = (float)(box.to.x - box.from.x);
 
 					int stringWidth = renderer.getStringWidth(username);
 					float textScale = boxWidth / stringWidth;
 					textScale = Math.min(textScale, 0.02f);
 
-					float textX = (float)((box.to.xCoord + box.from.xCoord) / 2 - stringWidth * textScale / 2);
-					float textY = (float)((box.to.yCoord + box.from.yCoord) / 2 + renderer.FONT_HEIGHT * textScale / 2);
-					float textZ = 1 - (float)((box.to.zCoord + box.from.zCoord) / 2) + 0.001f;
+					float textX = (float)((box.to.x + box.from.x) / 2 - stringWidth * textScale / 2);
+					float textY = (float)((box.to.y + box.from.y) / 2 + renderer.FONT_HEIGHT * textScale / 2);
+					float textZ = 1 - (float)((box.to.z + box.from.z) / 2) + 0.001f;
 
 					GL11.glTranslatef(textX, textY, textZ);
 					GL11.glScalef(textScale, textScale, textScale);

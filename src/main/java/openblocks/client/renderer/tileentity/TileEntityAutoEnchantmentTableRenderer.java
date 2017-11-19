@@ -15,7 +15,7 @@ public class TileEntityAutoEnchantmentTableRenderer extends TileEntitySpecialRen
 	private final ModelBook modelBook = new ModelBook();
 
 	@Override
-	public void renderTileEntityAt(TileEntityAutoEnchantmentTable table, double x, double y, double z, float partialTicks, int destroyProgress) {
+	public void render(TileEntityAutoEnchantmentTable table, double x, double y, double z, float partialTicks, int destroyProgress, float alpha) {
 		TileEntityAutoEnchantmentTable.BookState te = table.bookState;
 
 		GlStateManager.pushMatrix();

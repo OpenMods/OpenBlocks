@@ -52,7 +52,7 @@ public class TileEntityBlockBreaker extends TileEntityBlockManipulator {
 		if (targetInventory == null) return;
 
 		for (EntityItem drop : drops) {
-			ItemStack stack = drop.getEntityItem();
+			ItemStack stack = drop.getItem();
 			final ItemStack leftovers = ItemHandlerHelper.insertItem(targetInventory, stack, false);
 			ItemUtils.setEntityItemStack(drop, leftovers);
 		}

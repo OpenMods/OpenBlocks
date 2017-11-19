@@ -21,7 +21,7 @@ public class SkeletonBehavior implements ITrophyBehavior {
 
 		EntityArrow entityarrow = new EntityTippedArrow(world, pX, pZ, pY);
 		entityarrow.setDamage(0.1);
-		entityarrow.setThrowableHeading(world.rand.nextInt(10) - 5, 40, world.rand.nextInt(10) - 5, 1.0f, 6.0f);
+		entityarrow.shoot(world.rand.nextInt(10) - 5, 40, world.rand.nextInt(10) - 5, 1.0f, 6.0f);
 		world.playSound((EntityPlayer)null, player.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + 0.5F);
 		world.spawnEntity(entityarrow);
 

@@ -71,7 +71,7 @@ public class BlockBigButton extends OpenBlock.SixDirections {
 	}
 
 	@Override
-	public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return false;
 	}
 
