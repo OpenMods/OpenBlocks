@@ -33,7 +33,7 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 
 	@Override
 	protected void createSyncedFields() {
-		this.color = new SyncableEnum<ColorMeta>(ColorMeta.BLACK);
+		this.color = new SyncableEnum<>(ColorMeta.BLACK);
 	}
 
 	public ColorMeta getColor() {

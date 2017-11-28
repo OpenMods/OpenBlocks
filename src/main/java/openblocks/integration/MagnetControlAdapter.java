@@ -106,7 +106,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 
 	private boolean isAttached;
 
-	private WeakReference<EntityMagnet> magnet = new WeakReference<EntityMagnet>(null);
+	private WeakReference<EntityMagnet> magnet = new WeakReference<>(null);
 	private Owner magnetOwner;
 
 	public MagnetControlAdapter(ITurtleAccess turtle, TurtleSide side) {
@@ -140,7 +140,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		world.spawnEntity(magnet);
 
 		magnet.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1, 1);
-		this.magnet = new WeakReference<EntityMagnet>(magnet);
+		this.magnet = new WeakReference<>(magnet);
 	}
 
 	@ScriptCallable(description = "Deactive magnet")

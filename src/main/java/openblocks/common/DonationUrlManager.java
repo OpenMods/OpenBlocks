@@ -1,6 +1,7 @@
 package openblocks.common;
 
 import java.util.HashMap;
+import java.util.Map;
 import openmods.Mods;
 
 public class DonationUrlManager {
@@ -14,7 +15,7 @@ public class DonationUrlManager {
 		return instance;
 	}
 
-	private HashMap<String, String> donationUrls = new HashMap<String, String>();
+	private Map<String, String> donationUrls = new HashMap<>();
 
 	public DonationUrlManager() {
 		addUrl(Mods.OPENBLOCKS, "https://www.patreon.com/openmods");

@@ -246,7 +246,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		lapisSides = new SyncableSides();
 		powerLimit = new SyncableInt(1);
 		availablePower = new SyncableInt();
-		selectedLevel = new SyncableEnum<VanillaEnchantLogic.Level>(VanillaEnchantLogic.Level.L1);
+		selectedLevel = new SyncableEnum<>(VanillaEnchantLogic.Level.L1);
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 	}
 

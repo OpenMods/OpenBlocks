@@ -58,7 +58,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		private WeakReference<EntityLivingBase> owner;
 
 		public EntityPlayerTarget(EntityLivingBase owner) {
-			this.owner = new WeakReference<EntityLivingBase>(owner);
+			this.owner = new WeakReference<>(owner);
 		}
 
 		@Override
@@ -97,12 +97,12 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		public PlayerBound(World world) {
 			super(world);
-			owner = new WeakReference<Entity>(null);
+			owner = new WeakReference<>(null);
 		}
 
 		public PlayerBound(World world, EntityLivingBase owner) {
 			super(world, new EntityPlayerTarget(owner), false);
-			this.owner = new WeakReference<Entity>(owner);
+			this.owner = new WeakReference<>(owner);
 			CraneRegistry.instance.bindMagnetToPlayer(owner, this);
 		}
 
@@ -123,7 +123,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		@Override
 		public void onEntityLoaded(Entity entity) {
 			if (entity instanceof EntityPlayer) {
-				owner = new WeakReference<Entity>(entity);
+				owner = new WeakReference<>(entity);
 				CraneRegistry.instance.bindMagnetToPlayer(entity, this);
 			}
 		}

@@ -18,7 +18,7 @@ public class ApiSetup {
 		}
 	}
 
-	private final ApiProviderRegistry<IApiInterface> registry = new ApiProviderRegistry<IApiInterface>(IApiInterface.class);
+	private final ApiProviderRegistry<IApiInterface> registry = new ApiProviderRegistry<>(IApiInterface.class);
 
 	ApiSetup() {}
 

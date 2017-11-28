@@ -152,9 +152,9 @@ public class PlayerDeathHandler {
 		public GraveCallable(World world, EntityPlayer exPlayer, List<EntityItem> loot) {
 			this.playerPos = exPlayer.getPosition();
 
-			this.world = new WeakReference<World>(world);
+			this.world = new WeakReference<>(world);
 
-			this.exPlayer = new WeakReference<EntityPlayer>(exPlayer);
+			this.exPlayer = new WeakReference<>(exPlayer);
 			this.stiffId = exPlayer.getGameProfile();
 
 			final ITextComponent day = formatDate(world);

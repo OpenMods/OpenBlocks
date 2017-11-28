@@ -25,7 +25,7 @@ public class EntitySelectionHandler {
 	}
 
 	public static <I extends Entity & ISelectAware> void registerRenderer(Class<I> cls, ISelectionRenderer<I> renderer) {
-		RegisterSelectionRendererEvent<I> evt = new RegisterSelectionRendererEvent<I>();
+		RegisterSelectionRendererEvent<I> evt = new RegisterSelectionRendererEvent<>();
 		evt.cls = cls;
 		evt.renderer = renderer;
 		MinecraftForge.EVENT_BUS.post(evt);

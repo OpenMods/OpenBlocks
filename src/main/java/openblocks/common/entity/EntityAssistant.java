@@ -31,7 +31,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	public EntityAssistant(World world, EntityPlayer owner) {
 		super(world);
-		this.cachedOwner = new WeakReference<EntityPlayer>(owner);
+		this.cachedOwner = new WeakReference<>(owner);
 
 		if (owner != null) this.ownerId = owner.getGameProfile().getId();
 	}
@@ -41,7 +41,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 		EntityPlayer result = world.getPlayerEntityByUUID(ownerId);
 
-		if (result != null) cachedOwner = new WeakReference<EntityPlayer>(result);
+		if (result != null) cachedOwner = new WeakReference<>(result);
 
 		return result;
 	}

@@ -92,7 +92,7 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver(), LiquidXpUtils.FLUID_TO_LEVELS));
 		root.addComponent(tankLevel);
 
-		final GuiComponentToggleButton<VanillaEnchantLogic.Level> levelSelect = new GuiComponentToggleButton<VanillaEnchantLogic.Level>(16, 60, 0xFFFFFF, icons);
+		final GuiComponentToggleButton<VanillaEnchantLogic.Level> levelSelect = new GuiComponentToggleButton<>(16, 60, 0xFFFFFF, icons);
 		levelSelect.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {

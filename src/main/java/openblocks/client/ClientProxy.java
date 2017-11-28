@@ -195,7 +195,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new IRenderFactory<EntityGoldenEye>() {
 				@Override
 				public Render<? super EntityGoldenEye> createRenderFor(RenderManager manager) {
-					return new RenderSnowball<EntityGoldenEye>(manager, OpenBlocks.Items.goldenEye, Minecraft.getMinecraft().getRenderItem());
+					return new RenderSnowball<>(manager, OpenBlocks.Items.goldenEye, Minecraft.getMinecraft().getRenderItem());
 				}
 			});
 		}
@@ -261,7 +261,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	@Override
 	public void registerRenderInformation() {
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer<TileEntityGuide>());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer<>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBuilderGuide.class, new TileEntityBuilderGuideRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());

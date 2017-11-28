@@ -31,7 +31,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 
 	@Override
 	protected void createSyncedFields() {
-		trophyIndex = new SyncableEnum<Trophy>(Trophy.PigZombie);
+		trophyIndex = new SyncableEnum<>(Trophy.PigZombie);
 	}
 
 	public Trophy getTrophy() {
