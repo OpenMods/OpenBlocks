@@ -47,7 +47,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 			renderTrophy(type, x + 0.5, y, z + 0.5, angle);
 		}
 
-		if (trophy == null) renderStaticPart(x + 0.5, y + 0.5, z + 0.5);
+		if (trophy == null) renderStaticPart(x, y, z);
 	}
 
 	private void renderStaticPart(double x, double y, double z) {
