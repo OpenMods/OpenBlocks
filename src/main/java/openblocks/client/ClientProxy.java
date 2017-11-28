@@ -234,6 +234,12 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Blocks.flag != null) {
 			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Blocks.flag);
 		}
+
+		if (OpenBlocks.Blocks.tank != null) {
+			MinecraftForge.EVENT_BUS.register(new FluidTextureRegisterListener());
+		}
+
+		SoundEventsManager.instance.init();
 	}
 
 	@Override
@@ -244,9 +250,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 	}
 
 	@Override
-	public void postInit() {
-		SoundEventsManager.instance.init();
-	}
+	public void postInit() {}
 
 	private static class FluidTextureRegisterListener {
 		@SubscribeEvent
@@ -285,10 +289,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 
 		registerTesrItemRenderers();
-
-		if (OpenBlocks.Blocks.tank != null) {
-			MinecraftForge.EVENT_BUS.register(new FluidTextureRegisterListener());
-		}
 
 		if (OpenBlocks.Items.hangGlider != null) {
 			MinecraftForge.EVENT_BUS.register(new GliderPlayerRenderHandler());
