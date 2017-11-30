@@ -6,12 +6,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import openblocks.OpenBlocks;
 import openblocks.common.item.ItemEpicEraser;
 import openblocks.enchantments.flimflams.LoreFlimFlam;
 import openmods.utils.CustomRecipeBase;
 import openmods.utils.InventoryUtils;
 
 public class EpicEraserRecipe extends CustomRecipeBase {
+
+	public EpicEraserRecipe() {
+		super(OpenBlocks.location("eraser").toString());
+	}
 
 	private static boolean hasLore(ItemStack itemStack) {
 		final NBTTagCompound itemTag = itemStack.getTagCompound();
@@ -76,8 +81,8 @@ public class EpicEraserRecipe extends CustomRecipeBase {
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 2;
+	public boolean canFit(int width, int height) {
+		return width * height > 1;
 	}
 
 }

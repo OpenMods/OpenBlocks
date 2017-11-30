@@ -6,12 +6,18 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginary.PlacementMode;
 import openmods.utils.OptionalInt;
 
-public class CrayonMergeRecipe implements IRecipe {
+public class CrayonMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+
+	@Override
+	public String getGroup() {
+		return OpenBlocks.location("crayons").toString();
+	}
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn) {
@@ -84,8 +90,13 @@ public class CrayonMergeRecipe implements IRecipe {
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 9;
+	public boolean canFit(int width, int height) {
+		return width * height > 1;
+	}
+
+	@Override
+	public boolean isDynamic() {
+		return true;
 	}
 
 	@Override

@@ -6,17 +6,32 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemEnderPearl;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemGoldenEye;
 
-public class GoldenEyeRechargeRecipe extends ShapelessOreRecipe {
+public class GoldenEyeRechargeRecipe extends ShapelessRecipes {
 
 	private static final int PEARL_RECHARGE = 10;
 
+	private static ItemStack createDummyOutput() {
+		return new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE - PEARL_RECHARGE);
+	}
+
+	private static Ingredient createDummyInput() {
+		return Ingredient.fromStacks(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE));
+	}
+
 	public GoldenEyeRechargeRecipe() {
-		super(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE - PEARL_RECHARGE), new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), Items.ENDER_PEARL);
+		super(OpenBlocks.location("golden_eye").toString(), createDummyOutput(), NonNullList.from(createDummyInput(), Ingredient.fromItem(Items.ENDER_PEARL)));
+	}
+
+	@Override
+	public boolean isDynamic() {
+		return true;
 	}
 
 	@Override

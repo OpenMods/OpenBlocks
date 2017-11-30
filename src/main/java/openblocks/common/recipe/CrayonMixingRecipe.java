@@ -8,12 +8,17 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginary.PlacementMode;
 import openmods.utils.CustomRecipeBase;
 
 public class CrayonMixingRecipe extends CustomRecipeBase {
+
+	public CrayonMixingRecipe() {
+		super(OpenBlocks.location("crayons"));
+	}
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World world) {
@@ -71,7 +76,7 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 9;
+	public boolean canFit(int width, int height) {
+		return width * height > 1;
 	}
 }

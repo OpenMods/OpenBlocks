@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.item.ItemEmptyMap;
@@ -14,6 +15,10 @@ import openmods.utils.CustomRecipeBase;
 import openmods.utils.ItemUtils;
 
 public class MapCloneRecipe extends CustomRecipeBase {
+
+	public MapCloneRecipe() {
+		super(OpenBlocks.location("maps"));
+	}
 
 	@Override
 	public boolean matches(InventoryCrafting inventory, World world) {
@@ -58,8 +63,13 @@ public class MapCloneRecipe extends CustomRecipeBase {
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 2;
+	public boolean canFit(int width, int height) {
+		return width * height > 2;
+	}
+
+	@Override
+	public boolean isDynamic() {
+		return true;
 	}
 
 }

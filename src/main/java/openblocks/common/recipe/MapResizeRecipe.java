@@ -3,9 +3,13 @@ package openblocks.common.recipe;
 import javax.annotation.Nonnull;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.MetasGeneric;
@@ -13,10 +17,23 @@ import openmods.utils.ItemUtils;
 
 public class MapResizeRecipe extends ShapedOreRecipe {
 
+	private static final ShapedPrimer EXAMPLE = new ShapedPrimer();
+
+	static {
+		EXAMPLE.width = 3;
+		EXAMPLE.height = 3;
+
+		Ingredient e = Ingredient.fromStacks(MetasGeneric.mapMemory.newItemStack());
+		Ingredient m = Ingredient.fromStacks(Items.emptyMap.createMap(0));
+
+		EXAMPLE.input = NonNullList.from(
+				Ingredient.EMPTY, e, Ingredient.EMPTY,
+				e, m, e,
+				Ingredient.EMPTY, e, Ingredient.EMPTY);
+	}
+
 	public MapResizeRecipe() {
-		super(Items.emptyMap.createMap(1), " e ", "eme", " e ",
-				'e', MetasGeneric.mapMemory.newItemStack(),
-				'm', Items.emptyMap.createMap(0));
+		super(OpenBlocks.location("crayons"), Items.emptyMap.createMap(1), EXAMPLE);
 	}
 
 	@Override
@@ -58,6 +75,11 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 		}
 
 		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public boolean isDynamic() {
+		return true;
 	}
 
 }

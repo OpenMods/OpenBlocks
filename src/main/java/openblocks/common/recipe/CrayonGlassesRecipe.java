@@ -1,13 +1,13 @@
 package openblocks.common.recipe;
 
-import com.google.common.collect.Lists;
-import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
@@ -15,10 +15,10 @@ import openmods.utils.ItemUtils;
 
 public class CrayonGlassesRecipe extends ShapelessRecipes {
 
-	private static List<ItemStack> createFakeIngredientsList() {
+	private static NonNullList<Ingredient> createFakeIngredientsList() {
 		ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON);
 		ItemImaginary.setupValues(block, 0x00FFFF);
-		return Lists.newArrayList(new ItemStack(Items.PAPER), block);
+		return NonNullList.from(Ingredient.fromItem(Items.PAPER), Ingredient.fromStacks(block));
 	}
 
 	@Nonnull
@@ -27,7 +27,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 	}
 
 	public CrayonGlassesRecipe() {
-		super(createFakeResult(), createFakeIngredientsList()); // just for NEI
+		super(OpenBlocks.location("crayons").toString(), createFakeResult(), createFakeIngredientsList()); // just for NEI
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 2;
+	public boolean isDynamic() {
+		return true;
 	}
 }
