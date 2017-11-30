@@ -183,10 +183,11 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 
 		if (OpenBlocks.Items.cartographer != null) {
+			EntityCartographerRenderer.registerListener();
 			RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, new IRenderFactory<EntityCartographer>() {
 				@Override
 				public Render<? super EntityCartographer> createRenderFor(RenderManager manager) {
-					return new EntityCartographerRenderer(manager).registerListener();
+					return new EntityCartographerRenderer(manager);
 				}
 			});
 		}
@@ -240,6 +241,29 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 
 		SoundEventsManager.instance.init();
+
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer<>());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBuilderGuide.class, new TileEntityBuilderGuideRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, new TileEntityBearTrapRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, new TileEntitySprinklerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class, new TileEntityCannonRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class, new TileEntityImaginaryRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class, new TileEntityFanRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVillageHighlighter.class, new TileEntityVillageHighlighterRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoEnchantmentTable.class, new TileEntityAutoEnchantmentTableRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySky.class, new TileEntitySkyRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
+
+		if (OpenBlocks.Blocks.projector != null) {
+			final ModelResourceLocation spinnerModel = new ModelResourceLocation(OpenBlocks.Blocks.projector.getRegistryName(), "spinner");
+			final TileEntityProjectorRenderer renderer = new TileEntityProjectorRenderer(spinnerModel);
+			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, renderer);
+			MinecraftForge.EVENT_BUS.register(renderer);
+		}
 	}
 
 	@Override
@@ -265,29 +289,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	@Override
 	public void registerRenderInformation() {
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer<>());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBuilderGuide.class, new TileEntityBuilderGuideRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, new TileEntityBearTrapRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, new TileEntitySprinklerRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class, new TileEntityCannonRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class, new TileEntityImaginaryRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class, new TileEntityFanRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVillageHighlighter.class, new TileEntityVillageHighlighterRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoEnchantmentTable.class, new TileEntityAutoEnchantmentTableRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySky.class, new TileEntitySkyRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
-
-		if (OpenBlocks.Blocks.projector != null) {
-			final ModelResourceLocation spinnerModel = new ModelResourceLocation(OpenBlocks.Blocks.projector.getRegistryName(), "spinner");
-			final TileEntityProjectorRenderer renderer = new TileEntityProjectorRenderer(spinnerModel);
-			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, renderer);
-			MinecraftForge.EVENT_BUS.register(renderer);
-		}
-
 		registerTesrItemRenderers();
 
 		if (OpenBlocks.Items.hangGlider != null) {

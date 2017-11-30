@@ -221,8 +221,7 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 		return TEXTURE;
 	}
 
-	public EntityCartographerRenderer registerListener() {
+	public static void registerListener() {
 		MinecraftForge.EVENT_BUS.register(MODEL);
-		return this;
 	}
 }
