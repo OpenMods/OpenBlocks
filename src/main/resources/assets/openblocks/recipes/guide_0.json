@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:guide",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:guide"
+    }
+  ],
+  "pattern": [
+    "grg",
+    "gtg",
+    "grg"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "t": {
+      "type": "minecraft:item",
+      "item": "minecraft:torch"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    }
+  },
+  "result": {
+    "item": "openblocks:guide"
+  }
+}

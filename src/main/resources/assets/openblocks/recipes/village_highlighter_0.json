@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:village_highlighter",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:village_highlighter"
+    }
+  ],
+  "pattern": [
+    "www",
+    "wew",
+    "ccc"
+  ],
+  "key": {
+    "c": {
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
+    },
+    "e": {
+      "type": "forge:ore_dict",
+      "ore": "gemEmerald"
+    },
+    "w": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    }
+  },
+  "result": {
+    "item": "openblocks:village_highlighter"
+  }
+}

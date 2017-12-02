@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:beartrap",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:beartrap"
+    }
+  ],
+  "pattern": [
+    "fif",
+    "fif",
+    "fif"
+  ],
+  "key": {
+    "f": {
+      "type": "minecraft:item",
+      "item": "minecraft:iron_bars"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "openblocks:beartrap"
+  }
+}

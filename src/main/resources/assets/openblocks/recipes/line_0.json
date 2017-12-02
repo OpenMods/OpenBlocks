@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:line",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "pattern": [
+    "sss",
+    "bbb",
+    "sss"
+  ],
+  "key": {
+    "b": {
+      "type": "forge:ore_dict",
+      "ore": "slimeball"
+    },
+    "s": {
+      "type": "minecraft:item",
+      "item": "minecraft:string"
+    }
+  },
+  "result": {
+    "item": "openblocks:generic",
+    "count": 2,
+    "data": 5
+  }
+}

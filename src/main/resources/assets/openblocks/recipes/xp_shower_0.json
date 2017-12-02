@@ -1,0 +1,27 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:xp_shower",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:xp_shower"
+    }
+  ],
+  "pattern": [
+    "iii",
+    "  o"
+  ],
+  "key": {
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "o": {
+      "type": "minecraft:item",
+      "item": "minecraft:obsidian"
+    }
+  },
+  "result": {
+    "item": "openblocks:xp_shower"
+  }
+}

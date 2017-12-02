@@ -1,0 +1,44 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:drawing_table",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:drawing_table"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "pattern": [
+    "sks",
+    "pcp",
+    "ppp"
+  ],
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "c": {
+      "type": "forge:ore_dict",
+      "ore": "craftingTableWood"
+    },
+    "s": {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 10,
+      "_hint": "unprepared_stencil"
+    },
+    "k": {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 11,
+      "_hint": "sketching_pencil"
+    }
+  },
+  "result": {
+    "item": "openblocks:drawing_table"
+  }
+}

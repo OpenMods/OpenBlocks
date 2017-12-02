@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:unprepared_stencil",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "pattern": [
+    " p ",
+    "pip",
+    " p "
+  ],
+  "key": {
+    "p": {
+      "type": "minecraft:item",
+      "item": "minecraft:paper"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "openblocks:generic",
+    "data": 10
+  }
+}

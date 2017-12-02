@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:path",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:path"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
+    }
+  ],
+  "result": {
+    "item": "openblocks:path",
+    "count": 2
+  }
+}

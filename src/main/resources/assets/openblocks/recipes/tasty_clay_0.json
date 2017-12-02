@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:tasty_clay",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:tasty_clay"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:clay_ball"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:milk_bucket"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:dye",
+      "data": 3
+    }
+  ],
+  "result": {
+    "item": "openblocks:tasty_clay",
+    "count": 2
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:crane_engine",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "pattern": [
+    "iii",
+    "isi",
+    "iri"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "openblocks:generic",
+    "data": 2
+  }
+}

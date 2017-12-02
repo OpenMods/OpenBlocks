@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:target",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:target"
+    }
+  ],
+  "pattern": [
+    "www",
+    "www",
+    "s s"
+  ],
+  "key": {
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "w": {
+      "type": "minecraft:item",
+      "item": "minecraft:wool",
+      "data": 0,
+      "_hint": "white wool"
+    }
+  },
+  "result": {
+    "item": "openblocks:target"
+  }
+}

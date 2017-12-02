@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:paint_mixer",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:paint_mixer"
+    }
+  ],
+  "pattern": [
+    "ooo",
+    "i i",
+    "iii"
+  ],
+  "key": {
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "o": {
+      "type": "minecraft:item",
+      "item": "minecraft:obsidian"
+    }
+  },
+  "result": {
+    "item": "openblocks:paint_mixer"
+  }
+}

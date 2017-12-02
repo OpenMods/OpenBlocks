@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:flag",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:flag"
+    }
+  ],
+  "pattern": [
+    "scc",
+    "sc ",
+    "s  "
+  ],
+  "key": {
+    "c": {
+      "type": "minecraft:item",
+      "item": "minecraft:carpet",
+      "data": 13
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    }
+  },
+  "result": {
+    "item": "openblocks:flag",
+    "data": 13
+  }
+}

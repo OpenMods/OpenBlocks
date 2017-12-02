@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:auto_enchantment_table",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:auto_enchantment_table"
+    }
+  ],
+  "pattern": [
+    "iii",
+    "iei",
+    "rrr"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "e": {
+      "type": "minecraft:item",
+      "item": "minecraft:enchanting_table"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "openblocks:auto_enchantment_table"
+  }
+}

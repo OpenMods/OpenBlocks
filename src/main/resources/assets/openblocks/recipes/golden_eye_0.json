@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:golden_eye",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:golden_eye"
+    }
+  ],
+  "pattern": [
+    "ggg",
+    "geg",
+    "ggg"
+  ],
+  "key": {
+    "e": {
+      "type": "minecraft:item",
+      "item": "minecraft:ender_eye"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    }
+  },
+  "result": {
+    "item": "openblocks:golden_eye",
+    "data": 100
+  }
+}

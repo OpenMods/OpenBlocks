@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:info_book",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:info_book"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:clay_ball"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:book"
+    }
+  ],
+  "result": {
+    "item": "openblocks:info_book"
+  }
+}

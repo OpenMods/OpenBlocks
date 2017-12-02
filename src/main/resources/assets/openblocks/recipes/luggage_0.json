@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:luggage",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:luggage"
+    }
+  ],
+  "pattern": [
+    "sds",
+    "scs",
+    "sss"
+  ],
+  "key": {
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "c": {
+      "type": "forge:ore_dict",
+      "ore": "chestWood"
+    },
+    "d": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    }
+  },
+  "result": {
+    "item": "openblocks:luggage"
+  }
+}

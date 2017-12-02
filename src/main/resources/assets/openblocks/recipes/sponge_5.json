@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:sponge",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:sponge"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:wool",
+      "data": 5
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "slimeball"
+    }
+  ],
+  "result": {
+    "item": "openblocks:sponge"
+  }
+}

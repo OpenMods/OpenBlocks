@@ -1,0 +1,65 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:crane_backpack",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:crane_backpack"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 2,
+      "_hint": "crane_engine"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 3,
+      "_hint": "crane_magnet"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 1,
+      "_hint": "beam"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 1,
+      "_hint": "beam"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 5,
+      "_hint": "line"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 5,
+      "_hint": "line"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 5,
+      "_hint": "line"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:leather"
+    }
+  ],
+  "result": {
+    "item": "openblocks:crane_backpack"
+  }
+}

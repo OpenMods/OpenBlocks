@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:wrench",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:wrench"
+    }
+  ],
+  "pattern": [
+    "iii",
+    "iii"
+  ],
+  "key": {
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "openblocks:wrench"
+  }
+}

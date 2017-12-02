@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:xp_bottler",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:xp_bottler"
+    }
+  ],
+  "pattern": [
+    "iii",
+    "ibi",
+    "iii"
+  ],
+  "key": {
+    "b": {
+      "type": "minecraft:item",
+      "item": "minecraft:glass_bottle"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "openblocks:xp_bottler"
+  }
+}

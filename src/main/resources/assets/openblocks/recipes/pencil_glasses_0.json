@@ -1,0 +1,33 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:pencil_glasses",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:imaginary"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:pencil_glasses"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "minecraft:item_nbt",
+      "item": "openblocks:imaginary",
+      "data": 0,
+      "nbt": {
+        "Uses": 10.0,
+        "Mode": 0
+      }
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:paper"
+    }
+  ],
+  "result": {
+    "item": "openblocks:pencil_glasses",
+    "data": 0
+  }
+}

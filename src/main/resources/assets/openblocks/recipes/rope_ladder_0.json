@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:rope_ladder",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:rope_ladder"
+    }
+  ],
+  "pattern": [
+    "sts",
+    "sts",
+    "sts"
+  ],
+  "key": {
+    "s": {
+      "type": "minecraft:item",
+      "item": "minecraft:string"
+    },
+    "t": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    }
+  },
+  "result": {
+    "item": "openblocks:rope_ladder",
+    "count": 8
+  }
+}

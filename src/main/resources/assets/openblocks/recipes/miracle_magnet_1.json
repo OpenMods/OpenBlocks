@@ -1,0 +1,35 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:miracle_magnet",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "pattern": [
+    "ere",
+    "rmr",
+    "ere"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "e": {
+      "type": "minecraft:item",
+      "item": "minecraft:ender_pearl"
+    },
+    "m": {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 3,
+      "_hint": "crane_magnet"
+    }
+  },
+  "result": {
+    "item": "openblocks:generic",
+    "data": 4
+  }
+}

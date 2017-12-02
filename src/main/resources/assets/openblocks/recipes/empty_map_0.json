@@ -1,0 +1,39 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:empty_map",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:empty_map"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "pattern": [
+    " m ",
+    "mcm",
+    " m "
+  ],
+  "key": {
+    "c": {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 6,
+      "_hint": "map_controller"
+    },
+    "m": {
+      "type": "minecraft:item",
+      "item": "openblocks:generic",
+      "data": 7,
+      "_hint": "map_memory"
+    }
+  },
+  "result": {
+    "item": "openblocks:empty_map",
+    "nbt": {
+      "Scale": 0
+    }
+  }
+}

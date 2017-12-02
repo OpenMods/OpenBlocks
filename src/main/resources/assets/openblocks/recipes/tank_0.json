@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:tank",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:tank"
+    }
+  ],
+  "pattern": [
+    "ogo",
+    "ggg",
+    "ogo"
+  ],
+  "key": {
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "paneGlass"
+    },
+    "o": {
+      "type": "minecraft:item",
+      "item": "minecraft:obsidian"
+    }
+  },
+  "result": {
+    "item": "openblocks:tank",
+    "count": 2
+  }
+}

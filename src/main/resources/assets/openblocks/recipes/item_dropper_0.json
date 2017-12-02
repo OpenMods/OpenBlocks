@@ -1,0 +1,36 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:item_dropper",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:item_dropper"
+    }
+  ],
+  "pattern": [
+    "icc",
+    "src",
+    "icc"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "c": {
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
+    },
+    "s": {
+      "type": "minecraft:item",
+      "item": "minecraft:hopper"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "openblocks:item_dropper"
+  }
+}

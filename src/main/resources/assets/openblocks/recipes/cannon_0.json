@@ -1,0 +1,36 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:cannon",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:cannon"
+    }
+  ],
+  "pattern": [
+    " d ",
+    " f ",
+    "iri"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "blockRedstone"
+    },
+    "d": {
+      "type": "minecraft:item",
+      "item": "minecraft:dispenser"
+    },
+    "f": {
+      "type": "minecraft:item",
+      "item": "minecraft:iron_bars"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "openblocks:cannon"
+  }
+}

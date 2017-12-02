@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:epic_eraser",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:epic_eraser"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "gemLapis"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "slimeball"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:wool",
+      "data": 6,
+      "_hint": "pink wool"
+    }
+  ],
+  "result": {
+    "item": "openblocks:epic_eraser"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:sprinkler",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:sprinkler"
+    }
+  ],
+  "pattern": [
+    "ifi",
+    "iri",
+    "ifi"
+  ],
+  "key": {
+    "r": {
+      "type": "minecraft:item",
+      "item": "minecraft:redstone_torch"
+    },
+    "f": {
+      "type": "minecraft:item",
+      "item": "minecraft:iron_bars"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "openblocks:sprinkler"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:crane_magnet",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "pattern": [
+    "biy",
+    "iri"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "b": {
+      "type": "forge:ore_dict",
+      "ore": "dyeBlack"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "y": {
+      "type": "forge:ore_dict",
+      "ore": "dyeYellow"
+    }
+  },
+  "result": {
+    "item": "openblocks:generic",
+    "data": 3
+  }
+}

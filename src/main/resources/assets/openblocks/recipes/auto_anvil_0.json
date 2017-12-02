@@ -1,0 +1,33 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:auto_anvil",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:auto_anvil"
+    }
+  ],
+  "pattern": [
+    "iii",
+    "iai",
+    "rrr"
+  ],
+  "key": {
+    "a": {
+      "type": "minecraft:item",
+      "item": "minecraft:anvil",
+      "data": 0
+    },
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "openblocks:auto_anvil"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:dev_null",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:dev_null"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:apple"
+    }
+  ],
+  "result": {
+    "item": "openblocks:dev_null"
+  }
+}

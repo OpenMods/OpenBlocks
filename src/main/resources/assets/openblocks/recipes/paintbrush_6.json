@@ -1,0 +1,27 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:paintbrush",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:paintbrush"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "minecraft:item",
+      "item": "openblocks:paintbrush",
+      "data": 32767
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "dyePurple"
+    }
+  ],
+  "result": {
+    "item": "openblocks:paintbrush",
+    "nbt": {
+      "color": 8073150
+    }
+  }
+}

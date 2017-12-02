@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:sketching_pencil",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "pattern": [
+    "c  ",
+    " s ",
+    "  s"
+  ],
+  "key": {
+    "c": {
+      "type": "minecraft:item",
+      "item": "minecraft:coal",
+      "data": 32767
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    }
+  },
+  "result": {
+    "item": "openblocks:generic",
+    "data": 11
+  }
+}

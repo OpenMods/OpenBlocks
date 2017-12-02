@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:cursor",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:cursor"
+    }
+  ],
+  "pattern": [
+    "w  ",
+    "www",
+    "www"
+  ],
+  "key": {
+    "w": {
+      "type": "minecraft:item",
+      "item": "minecraft:wool",
+      "data": 0,
+      "_hint": "white wool"
+    }
+  },
+  "result": {
+    "item": "openblocks:cursor"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:donation_station",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:donation_station"
+    }
+  ],
+  "pattern": [
+    "ppp",
+    "pcp",
+    "ppp"
+  ],
+  "key": {
+    "p": {
+      "type": "minecraft:item",
+      "item": "minecraft:porkchop"
+    },
+    "c": {
+      "type": "forge:ore_dict",
+      "ore": "chestWood"
+    }
+  },
+  "result": {
+    "item": "openblocks:donation_station"
+  }
+}

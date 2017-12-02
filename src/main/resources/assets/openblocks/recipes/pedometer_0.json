@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:pedometer",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:pedometer"
+    }
+  ],
+  "pattern": [
+    "www",
+    "rcr",
+    "www"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "c": {
+      "type": "minecraft:item",
+      "item": "minecraft:clock"
+    },
+    "w": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    }
+  },
+  "result": {
+    "item": "openblocks:pedometer"
+  }
+}

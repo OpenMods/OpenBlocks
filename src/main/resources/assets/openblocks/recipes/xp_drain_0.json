@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:xp_drain",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:xp_drain"
+    }
+  ],
+  "pattern": [
+    "iii",
+    "iii",
+    "iii"
+  ],
+  "key": {
+    "i": {
+      "type": "minecraft:item",
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "result": {
+    "item": "openblocks:xp_drain"
+  }
+}

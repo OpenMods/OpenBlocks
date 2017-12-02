@@ -1,0 +1,36 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:builder_guide",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:builder_guide"
+    }
+  ],
+  "pattern": [
+    "grg",
+    "ete",
+    "grg"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "t": {
+      "type": "minecraft:item",
+      "item": "minecraft:torch"
+    },
+    "e": {
+      "type": "minecraft:item",
+      "item": "minecraft:ender_pearl"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    }
+  },
+  "result": {
+    "item": "openblocks:builder_guide"
+  }
+}

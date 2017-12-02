@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:sleeping_bag",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:sleeping_bag"
+    }
+  ],
+  "pattern": [
+    "cc ",
+    "www",
+    "ccw"
+  ],
+  "key": {
+    "c": {
+      "type": "minecraft:item",
+      "item": "minecraft:carpet",
+      "data": 11,
+      "_hint": "blue carpet"
+    },
+    "w": {
+      "type": "minecraft:item",
+      "item": "minecraft:wool",
+      "data": 0,
+      "_hint": "white wool"
+    }
+  },
+  "result": {
+    "item": "openblocks:sleeping_bag"
+  }
+}

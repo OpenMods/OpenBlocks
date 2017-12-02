@@ -1,0 +1,32 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:squeegee",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:sponge"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:squeegee"
+    }
+  ],
+  "pattern": [
+    "sss",
+    " w ",
+    " w "
+  ],
+  "key": {
+    "s": {
+      "type": "minecraft:item",
+      "item": "openblocks:sponge"
+    },
+    "w": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    }
+  },
+  "result": {
+    "item": "openblocks:squeegee"
+  }
+}

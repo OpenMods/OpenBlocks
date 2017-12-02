@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:ladder",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:ladder"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:ladder"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:trapdoor"
+    }
+  ],
+  "result": {
+    "item": "openblocks:ladder"
+  }
+}

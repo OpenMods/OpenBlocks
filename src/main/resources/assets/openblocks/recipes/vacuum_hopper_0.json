@@ -1,0 +1,27 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:vacuum_hopper",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:vacuum_hopper"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:hopper"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:obsidian"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:ender_eye"
+    }
+  ],
+  "result": {
+    "item": "openblocks:vacuum_hopper"
+  }
+}

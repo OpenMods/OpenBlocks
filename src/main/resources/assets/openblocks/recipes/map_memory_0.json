@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:map_memory",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "pattern": [
+    "rg",
+    "rg",
+    "rg"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    }
+  },
+  "result": {
+    "item": "openblocks:generic",
+    "data": 7
+  }
+}

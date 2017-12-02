@@ -1,0 +1,34 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:sky",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:sky"
+    }
+  ],
+  "pattern": [
+    "geg",
+    "gsg",
+    "geg"
+  ],
+  "key": {
+    "s": {
+      "type": "minecraft:item",
+      "item": "minecraft:end_stone"
+    },
+    "e": {
+      "type": "minecraft:item",
+      "item": "minecraft:ender_eye"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlassColorless"
+    }
+  },
+  "result": {
+    "item": "openblocks:sky",
+    "count": 6,
+    "data": 0
+  }
+}

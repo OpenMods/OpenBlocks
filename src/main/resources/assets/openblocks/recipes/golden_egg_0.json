@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:golden_egg",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:golden_egg"
+    }
+  ],
+  "pattern": [
+    "ggg",
+    "geg",
+    "ggg"
+  ],
+  "key": {
+    "e": {
+      "type": "minecraft:item",
+      "item": "minecraft:egg"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    }
+  },
+  "result": {
+    "item": "openblocks:golden_egg"
+  }
+}

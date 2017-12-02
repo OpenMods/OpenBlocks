@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:scaffolding",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:scaffolding"
+    }
+  ],
+  "pattern": [
+    "sss",
+    "s s",
+    "sss"
+  ],
+  "key": {
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    }
+  },
+  "result": {
+    "item": "openblocks:scaffolding",
+    "count": 8
+  }
+}

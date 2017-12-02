@@ -17,7 +17,6 @@ import openmods.infobook.BookDocumentation;
 public class ItemSqueegee extends Item {
 
 	public ItemSqueegee() {
-		setHasSubtypes(true);
 		setMaxStackSize(1);
 	}
 

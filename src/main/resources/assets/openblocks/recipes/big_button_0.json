@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:big_button",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:big_button"
+    }
+  ],
+  "pattern": [
+    "bb",
+    "bb"
+  ],
+  "key": {
+    "b": {
+      "type": "minecraft:item",
+      "item": "minecraft:stone_button"
+    }
+  },
+  "result": {
+    "item": "openblocks:big_button"
+  }
+}

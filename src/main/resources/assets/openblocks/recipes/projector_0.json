@@ -1,0 +1,41 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:projector",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:projector"
+    }
+  ],
+  "pattern": [
+    "grl",
+    "iri",
+    "srs"
+  ],
+  "key": {
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "s": {
+      "type": "minecraft:item",
+      "item": "minecraft:stone_slab",
+      "data": 0
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "dustGlowstone"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "l": {
+      "type": "forge:ore_dict",
+      "ore": "gemLapis"
+    }
+  },
+  "result": {
+    "item": "openblocks:projector"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:glider_wing",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:generic"
+    }
+  ],
+  "pattern": [
+    "ls ",
+    "lls",
+    "lll"
+  ],
+  "key": {
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "l": {
+      "type": "minecraft:item",
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "item": "openblocks:generic",
+    "data": 0
+  }
+}

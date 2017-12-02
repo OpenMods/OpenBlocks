@@ -1,0 +1,37 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:imaginary",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:imaginary"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "dyeOrange"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:paper"
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:ender_eye"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "slimeball"
+    }
+  ],
+  "result": {
+    "item": "openblocks:imaginary",
+    "data": 1,
+    "nbt": {
+      "Uses": 10.0,
+      "Color": 15435844,
+      "Mode": 0
+    }
+  }
+}

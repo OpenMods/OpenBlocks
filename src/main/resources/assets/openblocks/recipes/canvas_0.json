@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:canvas",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:canvas"
+    }
+  ],
+  "pattern": [
+    "ppp",
+    "pfp",
+    "ppp"
+  ],
+  "key": {
+    "p": {
+      "type": "minecraft:item",
+      "item": "minecraft:paper"
+    },
+    "f": {
+      "type": "minecraft:item",
+      "item": "minecraft:fence"
+    }
+  },
+  "result": {
+    "item": "openblocks:canvas",
+    "count": 9
+  }
+}

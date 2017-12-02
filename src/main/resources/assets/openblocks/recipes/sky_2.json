@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:sky",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:sky"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "minecraft:item",
+      "item": "openblocks:sky",
+      "data": 0
+    },
+    {
+      "type": "minecraft:item",
+      "item": "minecraft:redstone_torch"
+    }
+  ],
+  "result": {
+    "item": "openblocks:sky",
+    "data": 1
+  }
+}
