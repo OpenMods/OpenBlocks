@@ -75,7 +75,7 @@ public enum MetasGeneric implements IMetaItemFactory {
 	mapController {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack(1);
+			ItemStack result = newItemStack();
 			return new MetaGeneric("map_controller",
 					new ShapedOreRecipe(result, " r ", "rgr", " r ", 'r', "dustRedstone", 'g', "ingotGold"));
 		}
@@ -83,7 +83,7 @@ public enum MetasGeneric implements IMetaItemFactory {
 	mapMemory {
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack(1);
+			ItemStack result = newItemStack();
 			return new MetaGeneric("map_memory",
 					new ShapedOreRecipe(result, "rg", "rg", "rg", 'g', "nuggetGold", 'r', "dustRedstone"));
 		}
@@ -134,7 +134,7 @@ public enum MetasGeneric implements IMetaItemFactory {
 	}
 
 	public ItemStack newItemStack() {
-		return new ItemStack(OpenBlocks.Items.generic, 1, ordinal());
+		return newItemStack(1);
 	}
 
 	public boolean isA(ItemStack stack) {
