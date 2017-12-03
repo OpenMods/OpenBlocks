@@ -9,11 +9,15 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityAssistant;
 import openblocks.common.entity.EntityCartographer;
+import openmods.fixers.NestedItemStackWalker;
 
 public class ItemCartographer extends Item {
 
@@ -76,5 +80,9 @@ public class ItemCartographer extends Item {
 	@Nonnull
 	public ItemStack createStack(AssistantType type) {
 		return new ItemStack(this, 1, type.ordinal());
+	}
+
+	public static void registerFixes(DataFixer dataFixer) {
+		dataFixer.registerWalker(FixTypes.ITEM_INSTANCE, new NestedItemStackWalker(OpenBlocks.Items.cartographer, EntityCartographer.TAG_MAP_ITEM));
 	}
 }

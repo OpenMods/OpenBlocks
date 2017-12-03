@@ -2,6 +2,7 @@ package openblocks;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,6 +12,7 @@ import net.minecraft.stats.StatBasic;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -18,6 +20,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -216,6 +219,7 @@ import openmods.config.game.ModStartupHelper;
 import openmods.config.game.RegisterBlock;
 import openmods.config.game.RegisterItem;
 import openmods.config.properties.ConfigProcessing;
+import openmods.entity.EntityBlock;
 import openmods.liquids.BucketFillHandler;
 import openmods.network.event.NetworkEventEntry;
 import openmods.network.event.NetworkEventManager;
@@ -725,6 +729,7 @@ public class OpenBlocks {
 		}
 
 		EntityRegistry.registerModEntity(OpenBlocks.location("luggage"), EntityLuggage.class, "luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
+
 		EntityRegistry.registerModEntity(OpenBlocks.location("xp_orb_no_fly"), EntityXPOrbNoFly.class, "xp_orb_no_fly", ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(OpenBlocks.location("hang_glider"), EntityHangGlider.class, "hang_glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(OpenBlocks.location("magnet"), EntityMagnet.class, "magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
@@ -734,6 +739,17 @@ public class OpenBlocks {
 		EntityRegistry.registerModEntity(OpenBlocks.location("item_projectile"), EntityItemProjectile.class, "item_projectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(OpenBlocks.location("golden_eye"), EntityGoldenEye.class, "golden_eye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
 		EntityRegistry.registerModEntity(OpenBlocks.location("mini_me"), EntityMiniMe.class, "mini_me", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
+
+		final DataFixer dataFixer = FMLCommonHandler.instance().getDataFixer();
+		EntityLiving.registerFixesMob(dataFixer, EntityMiniMe.class);
+		EntityLuggage.registerFixes(dataFixer);
+		ItemLuggage.registerFixes(dataFixer);
+		EntityBlock.registerFixes(dataFixer, EntityMountedBlock.class);
+		EntityCartographer.registerFixes(dataFixer);
+		ItemCartographer.registerFixes(dataFixer);
+		EntityItemProjectile.registerFixes(dataFixer);
+		EntityGoldenEye.registerFixes(dataFixer);
+		ItemDevNull.registerFixes(dataFixer);
 
 		MagnetWhitelists.instance.initTesters();
 

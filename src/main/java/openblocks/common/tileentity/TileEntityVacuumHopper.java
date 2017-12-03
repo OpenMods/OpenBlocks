@@ -35,6 +35,8 @@ import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IValueProvider;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -58,6 +60,7 @@ import openmods.utils.bitmap.IReadableBitMap;
 import openmods.utils.bitmap.IRpcDirectionBitMap;
 import openmods.utils.bitmap.IWriteableBitMap;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, INeighbourAwareTile, ITickable {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));

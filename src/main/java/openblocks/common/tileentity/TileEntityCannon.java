@@ -20,11 +20,14 @@ import openblocks.common.entity.EntityItemProjectile;
 import openblocks.rpc.ITriggerable;
 import openmods.Log;
 import openmods.api.ISurfaceAttachment;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.sync.SyncableDouble;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.InventoryUtils;
 import openmods.utils.render.GeometryUtils;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityCannon extends SyncedTileEntity implements IPointable, ISurfaceAttachment, ITriggerable, ITickable {
 
 	/*

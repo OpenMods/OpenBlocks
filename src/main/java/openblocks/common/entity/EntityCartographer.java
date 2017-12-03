@@ -11,6 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.datafix.FixTypes;
+import net.minecraft.util.datafix.walkers.ItemStackData;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,6 +41,7 @@ import openmods.utils.ItemUtils;
 @VisibleForDocumentation
 public class EntityCartographer extends EntityAssistant implements ISelectAware, ISyncMapProvider {
 
+	public static final String TAG_MAP_ITEM = "MapItem";
 	private static final int MAP_JOB_DELAY = 5;
 	private static final int MOVE_DELAY = 35;
 
@@ -166,6 +170,10 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		readOwnDataFromNBT(tag);
 	}
 
+	public static void registerFixes(DataFixer fixer) {
+		fixer.registerWalker(FixTypes.ENTITY, new ItemStackData(EntityCartographer.class, TAG_MAP_ITEM));
+	}
+
 	@Override
 	protected void entityInit() {}
 
@@ -209,8 +217,8 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	private void readOwnDataFromNBT(NBTTagCompound tag) {
 		syncMap.read(tag);
 
-		if (tag.hasKey("MapItem")) {
-			NBTTagCompound mapItem = tag.getCompoundTag("MapItem");
+		if (tag.hasKey(TAG_MAP_ITEM)) {
+			NBTTagCompound mapItem = tag.getCompoundTag(TAG_MAP_ITEM);
 			this.mapItem = new ItemStack(mapItem);
 
 			if (!this.mapItem.isEmpty() && isMapping.get()) {
@@ -233,7 +241,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 
 		if (mapItem != null) {
 			NBTTagCompound mapItem = this.mapItem.writeToNBT(new NBTTagCompound());
-			tag.setTag("MapItem", mapItem);
+			tag.setTag(TAG_MAP_ITEM, mapItem);
 			tag.setInteger("Dimension", mappingDimension);
 		}
 	}

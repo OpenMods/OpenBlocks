@@ -32,6 +32,8 @@ import openblocks.common.item.ItemHeightMap;
 import openblocks.rpc.IRotatable;
 import openmods.OpenMods;
 import openmods.api.IHasGui;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -45,6 +47,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, ISyncListener, IRotatable {
 
 	private final GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {

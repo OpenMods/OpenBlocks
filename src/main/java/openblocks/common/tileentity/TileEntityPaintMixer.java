@@ -29,6 +29,8 @@ import openmods.api.IInventoryCallback;
 import openmods.api.IValueProvider;
 import openmods.colors.CYMK;
 import openmods.colors.RGB;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.gamelogic.WorkerLogic;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
@@ -46,6 +48,7 @@ import openmods.utils.MiscUtils;
 import openmods.utils.OptionalInt;
 import org.apache.commons.lang3.ArrayUtils;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityPaintMixer extends DroppableTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IColorChanger, ITickable {
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack MILK_BUCKET = new ItemStack(Items.MILK_BUCKET);

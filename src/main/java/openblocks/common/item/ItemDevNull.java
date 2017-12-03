@@ -16,6 +16,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -24,6 +26,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
+import openmods.fixers.ItemInventoryWalker;
 import openmods.infobook.BookDocumentation;
 import openmods.inventory.ItemInventory;
 import openmods.inventory.PlayerItemInventory;
@@ -205,5 +208,9 @@ public class ItemDevNull extends Item {
 		for (String s : input)
 			output.add(BOX_MIDDLE + s);
 		output.add(BOX_END);
+	}
+
+	public static void registerFixes(DataFixer dataFixer) {
+		dataFixer.registerWalker(FixTypes.ITEM_INSTANCE, new ItemInventoryWalker(OpenBlocks.Items.devNull));
 	}
 }

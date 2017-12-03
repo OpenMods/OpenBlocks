@@ -23,6 +23,9 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.datafix.FixTypes;
+import net.minecraft.util.datafix.walkers.ItemStackDataLists;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -49,6 +52,11 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	private static final String TAG_SHINY = "shiny";
 
 	protected GenericInventory inventory = createInventory(SIZE_NORMAL);
+
+	public static void registerFixes(DataFixer fixer) {
+		registerFixesMob(fixer, EntityLuggage.class);
+		fixer.registerWalker(FixTypes.ENTITY, new ItemStackDataLists(EntityLuggage.class, GenericInventory.TAG_ITEMS));
+	}
 
 	private GenericInventory createInventory(int size) {
 		return new GenericInventory("luggage", false, size) {

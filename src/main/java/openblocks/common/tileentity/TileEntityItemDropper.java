@@ -21,6 +21,8 @@ import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.DropItemAction;
 import openmods.fakeplayer.FakePlayerPool;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.geometry.Orientation;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
@@ -30,6 +32,7 @@ import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableDouble;
 import openmods.tileentity.SyncedTileEntity;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityItemDropper extends SyncedTileEntity implements INeighbourAwareTile, IInventoryProvider, IHasGui, IItemDropper {
 	static final int BUFFER_SIZE = 9;
 
