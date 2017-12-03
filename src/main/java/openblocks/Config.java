@@ -635,8 +635,8 @@ public class Config {
 			recipeList.add(new MapResizeRecipe());
 			RecipeSorter.register("openblocks:map_resize", MapResizeRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 
-			ItemStack memory = MetasGeneric.mapMemory.newItemStack(2);
-			ItemStack cpu = MetasGeneric.mapController.newItemStack(1);
+			ItemStack memory = MetasGeneric.mapMemory.newItemStack();
+			ItemStack cpu = MetasGeneric.mapController.newItemStack();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.emptyMap.createMap(0),
 					" m ", "mcm", " m ", 'm', memory, 'c', cpu));
 		}
@@ -687,7 +687,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.wrench != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.wrench, "iii", "iii", 'i', "ingotIron"));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.wrench, " ii", "iii", "ii ", 'i', "ingotIron"));
 		}
 
 		if (explosiveEnchantmentEnabled) {
