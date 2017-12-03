@@ -1,0 +1,19 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:brick"
+        },
+        "title": {
+            "translate": "achievement.openblocks.droppedBrick"
+        },
+        "description": {
+            "translate": "achievement.openblocks.droppedBrick.desc"
+        }
+    },
+    "parent": "adventure/root",
+    "criteria": {
+        "literally": {
+            "trigger": "openblocks:brick_dropped"
+        }
+    }
+}

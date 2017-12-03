@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -28,6 +29,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
+import openblocks.advancements.Criterions;
 import openmods.fixers.ItemInventoryWalker;
 import openmods.infobook.BookDocumentation;
 import openmods.inventory.ItemInventory;
@@ -112,9 +114,9 @@ public class ItemDevNull extends Item {
 		}
 
 		private void checkStack(@Nonnull ItemStack stack) {
-			if (getContents(stack).getRight() >= STACK_LIMIT) {
-				// TODO 1.12 achievement
-				// player.addStat(OpenBlocks.stackAchievement);
+			if (player instanceof EntityPlayerMP) {
+				final int depth = getContents(stack).getRight();
+				Criterions.devNullStack.trigger((EntityPlayerMP)player, depth);
 			}
 		}
 	}

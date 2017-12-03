@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -21,6 +22,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.OpenBlocks;
+import openblocks.advancements.Criterions;
 import openblocks.events.PlayerActionEvent;
 import openblocks.events.PlayerActionEvent.Type;
 import openmods.utils.ItemUtils;
@@ -122,16 +124,15 @@ public class BrickManager {
 
 	@SubscribeEvent
 	public void onPlayerScared(PlayerActionEvent evt) {
-		if (evt.type == Type.BOO && evt.sender != null) {
-			final EntityPlayer player = evt.sender;
+		if (evt.type == Type.BOO && evt.sender instanceof EntityPlayerMP) {
+			final EntityPlayerMP player = (EntityPlayerMP)evt.sender;
 			player.world.playSound(null, player.getPosition(), OpenBlocks.Sounds.PLAYER_WHOOPS, SoundCategory.PLAYERS, 1, 1);
 
 			if (tryDecrementBrick(player)) {
 				EntityItem drop = createBrick(player);
 				drop.setDefaultPickupDelay();
 				player.world.spawnEntity(drop);
-				// TODO 1.12 achievement
-				// player.addStat(OpenBlocks.brickAchievement);
+				Criterions.brickDropped.trigger(player);
 				player.addStat(OpenBlocks.brickStat, 1);
 			}
 		}

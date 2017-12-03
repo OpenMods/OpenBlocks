@@ -39,6 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
+import openblocks.advancements.Criterions;
 import openblocks.common.CanvasReplaceBlacklist;
 import openblocks.common.CommandInventory;
 import openblocks.common.DonationUrlManager;
@@ -702,6 +703,8 @@ public class OpenBlocks {
 	public void preInit(FMLPreInitializationEvent evt) {
 		// needed first, to properly initialize delegates
 		FluidRegistry.registerFluid(Fluids.xpJuice);
+
+		Criterions.init();
 
 		startupHelper.registerBlocksHolder(OpenBlocks.Blocks.class);
 		startupHelper.registerItemsHolder(OpenBlocks.Items.class);
