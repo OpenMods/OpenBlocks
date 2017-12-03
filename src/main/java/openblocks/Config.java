@@ -687,7 +687,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.wrench != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.wrench, "iii", "iii", 'i', "ingotIron"));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.wrench, " ii", "iii", "ii ", 'i', "ingotIron"));
 		}
 
 		if (explosiveEnchantmentEnabled) {
