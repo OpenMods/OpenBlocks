@@ -16,6 +16,8 @@ import openblocks.common.item.MetasGeneric;
 import openblocks.rpc.IStencilCrafter;
 import openmods.api.ICustomBreakDrops;
 import openmods.api.IHasGui;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
@@ -25,6 +27,7 @@ import openmods.sync.SyncMap;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui, IInventoryProvider, IStencilCrafter, ICustomBreakDrops {
 
 	public static final int SLOT_INPUT = 0;

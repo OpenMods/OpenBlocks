@@ -6,6 +6,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.datafix.FixTypes;
+import net.minecraft.util.datafix.walkers.ItemStackData;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -13,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityGoldenEye extends EntitySmoothMove {
 
+	private static final String TAG_SPAWNING_ITEM = "SpawningItem";
 	private static final int TTL = 60;
 	private int timeToLive;
 	@Nonnull
@@ -31,13 +35,17 @@ public class EntityGoldenEye extends EntitySmoothMove {
 		setSize(0.02f, 0.02f);
 	}
 
+	public static void registerFixes(DataFixer fixer) {
+		fixer.registerWalker(FixTypes.ENTITY, new ItemStackData(EntityGoldenEye.class, TAG_SPAWNING_ITEM));
+	}
+
 	@Override
 	protected void entityInit() {}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tag) {
-		if (tag.hasKey("SpawningItem")) {
-			NBTTagCompound item = tag.getCompoundTag("SpawningItem");
+		if (tag.hasKey(TAG_SPAWNING_ITEM)) {
+			NBTTagCompound item = tag.getCompoundTag(TAG_SPAWNING_ITEM);
 			spawningStack = new ItemStack(item);
 		}
 	}
@@ -46,7 +54,7 @@ public class EntityGoldenEye extends EntitySmoothMove {
 	protected void writeEntityToNBT(NBTTagCompound tag) {
 		if (spawningStack != null) {
 			NBTTagCompound item = spawningStack.writeToNBT(new NBTTagCompound());
-			tag.setTag("SpawningItem", item);
+			tag.setTag(TAG_SPAWNING_ITEM, item);
 		}
 	}
 

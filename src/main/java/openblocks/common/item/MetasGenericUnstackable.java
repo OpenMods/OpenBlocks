@@ -17,7 +17,7 @@ public enum MetasGenericUnstackable implements IMetaItemFactory {
 	}
 
 	public ItemStack newItemStack() {
-		return new ItemStack(OpenBlocks.Items.genericUnstackable, 1, ordinal());
+		return newItemStack(1);
 	}
 
 	public boolean isA(ItemStack stack) {

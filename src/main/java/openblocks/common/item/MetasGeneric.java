@@ -106,7 +106,7 @@ public enum MetasGeneric implements IMetaItemFactory {
 
 	@Nonnull
 	public ItemStack newItemStack() {
-		return new ItemStack(OpenBlocks.Items.generic, 1, ordinal());
+		return newItemStack(1);
 	}
 
 	public boolean isA(@Nonnull ItemStack stack) {

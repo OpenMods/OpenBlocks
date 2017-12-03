@@ -11,9 +11,13 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityLuggage;
+import openmods.fixers.NestedItemInventoryWalker;
 import openmods.infobook.BookDocumentation;
 import openmods.inventory.GenericInventory;
 import openmods.utils.ItemUtils;
@@ -59,5 +63,9 @@ public class ItemLuggage extends Item {
 
 	private static int getInventorySize(@Nonnull ItemStack stack) {
 		return ItemUtils.getItemTag(stack).getInteger(GenericInventory.TAG_SIZE);
+	}
+
+	public static void registerFixes(DataFixer dataFixer) {
+		dataFixer.registerWalker(FixTypes.ITEM_INSTANCE, new NestedItemInventoryWalker(OpenBlocks.Items.luggage, GenericInventory.TAG_ITEMS));
 	}
 }

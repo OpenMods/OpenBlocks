@@ -13,6 +13,8 @@ import openblocks.client.gui.GuiDonationStation;
 import openblocks.common.DonationUrlManager;
 import openblocks.common.container.ContainerDonationStation;
 import openmods.api.IHasGui;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -20,6 +22,7 @@ import openmods.inventory.TileEntityInventory;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ModIdentifier;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityDonationStation extends OpenTileEntity implements IHasGui, IInventoryProvider {
 
 	public enum Slots {

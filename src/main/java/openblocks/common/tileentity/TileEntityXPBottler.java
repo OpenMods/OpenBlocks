@@ -26,6 +26,8 @@ import openmods.api.INeighbourAwareTile;
 import openmods.api.INeighbourTeAwareTile;
 import openmods.api.IValueProvider;
 import openmods.api.IValueReceiver;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.gamelogic.WorkerLogic;
 import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IncludeInterface;
@@ -48,6 +50,7 @@ import openmods.utils.bitmap.IRpcDirectionBitMap;
 import openmods.utils.bitmap.IRpcIntBitMap;
 import openmods.utils.bitmap.IWriteableBitMap;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile, INeighbourTeAwareTile, ITickable {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(LiquidXpUtils.XP_PER_BOTTLE);

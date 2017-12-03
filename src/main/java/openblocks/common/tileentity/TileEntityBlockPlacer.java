@@ -21,12 +21,15 @@ import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.UseItemAction;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
 import openmods.utils.OptionalInt;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements IHasGui, IInventoryProvider {
 
 	static final int BUFFER_SIZE = 9;

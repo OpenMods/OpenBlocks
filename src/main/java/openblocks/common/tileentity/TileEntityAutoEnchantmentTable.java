@@ -29,6 +29,8 @@ import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IValueProvider;
 import openmods.api.IValueReceiver;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
@@ -54,6 +56,7 @@ import openmods.utils.bitmap.IRpcDirectionBitMap;
 import openmods.utils.bitmap.IRpcIntBitMap;
 import openmods.utils.bitmap.IWriteableBitMap;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, INeighbourAwareTile, ITickable {
 
 	private static final String TAG_SEED = "Seed";

@@ -32,12 +32,15 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IPlaceAwareTile;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, IActivateAwareTile, ITickable {
 
 	private static final Predicate<EntityLiving> IS_MOB = new Predicate<EntityLiving>() {

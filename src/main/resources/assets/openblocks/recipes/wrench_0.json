@@ -8,8 +8,9 @@
     }
   ],
   "pattern": [
+    " ii",
     "iii",
-    "iii"
+    "ii "
   ],
   "key": {
     "i": {

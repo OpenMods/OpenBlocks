@@ -7,6 +7,9 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.datafix.FixTypes;
+import net.minecraft.util.datafix.walkers.ItemStackData;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -28,6 +31,10 @@ public class EntityItemProjectile extends EntityItem {
 
 	public EntityItemProjectile(World world) {
 		super(world);
+	}
+
+	public static void registerFixes(DataFixer fixer) {
+		fixer.registerWalker(FixTypes.ENTITY, new ItemStackData(EntityItemProjectile.class, "Item"));
 	}
 
 	@Override

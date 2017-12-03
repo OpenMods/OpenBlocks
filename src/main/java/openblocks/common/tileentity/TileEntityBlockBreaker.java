@@ -17,11 +17,14 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import openmods.fakeplayer.BreakBlockAction;
 import openmods.fakeplayer.FakePlayerPool;
+import openmods.fixers.GenericInventoryTeFixerWalker;
+import openmods.fixers.RegisterFixer;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.utils.InventoryUtils;
 import openmods.utils.ItemUtils;
 
+@RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityBlockBreaker extends TileEntityBlockManipulator {
 
 	// DON'T remove this object, even though it seems unused. Without it Builcraft pipes won't connect. -B
