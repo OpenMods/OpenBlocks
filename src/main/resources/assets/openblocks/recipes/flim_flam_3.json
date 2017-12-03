@@ -1,0 +1,41 @@
+{
+  "type": "openmods:enchanting",
+  "conditions": [
+    {
+      "type": "openmods:enchantment_exists",
+      "id": "openblocks:flim_flam"
+    }
+  ],
+  "source": {
+    "type": "forge:ore_shapeless",
+    "group": "openblocks:flim_flam",
+    "ingredients": [
+      {
+        "type": "minecraft:item",
+        "item": "minecraft:book"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "gemEmerald"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "gemEmerald"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "gemEmerald"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "gemEmerald"
+      }
+    ],
+    "result": {
+      "item": "minecraft:book"
+    }
+  },
+  "enchantments": {
+    "openblocks:flim_flam" : 4
+  }
+}
