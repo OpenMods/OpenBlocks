@@ -57,7 +57,6 @@ import openblocks.common.PlayerDeathHandler;
 import openblocks.common.PlayerInventoryStore;
 import openblocks.common.RadioVillagerTrades;
 import openblocks.common.ServerTickHandler;
-import openblocks.common.SleepingBagFixer;
 import openblocks.common.block.BlockAutoAnvil;
 import openblocks.common.block.BlockAutoEnchantmentTable;
 import openblocks.common.block.BlockBearTrap;
@@ -694,8 +693,7 @@ public class OpenBlocks {
 					.register(ElevatorActionEvent.class)
 					.register(PlayerActionEvent.class)
 					.register(GuideActionEvent.class)
-					.register(EntityMiniMe.OwnerChangeEvent.class)
-					.register(SleepingBagFixer.SleepingBagEvent.class);
+					.register(EntityMiniMe.OwnerChangeEvent.class);
 		}
 	}
 

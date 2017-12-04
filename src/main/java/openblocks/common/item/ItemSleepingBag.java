@@ -28,7 +28,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSleepingBag;
-import openblocks.common.SleepingBagFixer;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.BlockUtils;
 import openmods.utils.ItemUtils;
@@ -108,7 +107,7 @@ public class ItemSleepingBag extends ItemArmor {
 			return false;
 		}
 
-		final EntityPlayer.SleepResult sleepResult = SleepingBagFixer.trySleep(player, pos); // player.trySleep(pos);
+		final EntityPlayer.SleepResult sleepResult = player.trySleep(pos);
 
 		if (sleepResult == SleepResult.OK) return true;
 
