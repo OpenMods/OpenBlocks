@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
+import net.minecraft.client.renderer.vertex.VertexFormatElement.EnumUsage;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -85,7 +86,8 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 
 		for (int i = 0; i < format.getElementCount(); i++) {
 			VertexFormatElement vfe = format.getElement(i);
-			builder.put(vfe, format.getOffset(i));
+			if (vfe.getUsage() != EnumUsage.PADDING)
+				builder.put(vfe, format.getOffset(i));
 		}
 
 		return builder.build();
