@@ -255,9 +255,11 @@ public class ItemImaginary extends ItemOpenBlock {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
-		result.add(setupValues(new ItemStack(this, 1, DAMAGE_PENCIL), null, PlacementMode.BLOCK));
-		for (ColorMeta color : ColorMeta.getAllColors())
-			result.add(setupValues(new ItemStack(this, 1, DAMAGE_CRAYON), color.rgb, PlacementMode.BLOCK));
+		if (isInCreativeTab(tab)) {
+			result.add(setupValues(new ItemStack(this, 1, DAMAGE_PENCIL), null, PlacementMode.BLOCK));
+			for (ColorMeta color : ColorMeta.getAllColors())
+				result.add(setupValues(new ItemStack(this, 1, DAMAGE_CRAYON), color.rgb, PlacementMode.BLOCK));
+		}
 	}
 
 	@Override

@@ -53,8 +53,10 @@ public class ItemPaintCan extends ItemOpenBlock {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
-		for (ColorMeta meta : ColorMeta.getAllColors())
-			result.add(createStack(meta.rgb, FULL_CAN_SIZE));
+		if (isInCreativeTab(tab)) {
+			for (ColorMeta meta : ColorMeta.getAllColors())
+				result.add(createStack(meta.rgb, FULL_CAN_SIZE));
+		}
 	}
 
 	@Nonnull

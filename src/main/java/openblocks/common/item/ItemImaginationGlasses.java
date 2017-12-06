@@ -49,8 +49,10 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 		@Override
 		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
-			for (ColorMeta color : ColorMeta.getAllColors())
-				result.add(createCrayonGlasses(color.rgb));
+			if (isInCreativeTab(tab)) {
+				for (ColorMeta color : ColorMeta.getAllColors())
+					result.add(createCrayonGlasses(color.rgb));
+			}
 		}
 
 		@Override
@@ -139,6 +141,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
-		result.add(new ItemStack(this));
+		if (isInCreativeTab(tab))
+			result.add(new ItemStack(this));
 	}
 }

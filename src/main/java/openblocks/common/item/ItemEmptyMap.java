@@ -41,8 +41,10 @@ public class ItemEmptyMap extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
-		for (int scale = 0; scale < ItemEmptyMap.MAX_SCALE; scale++)
-			result.add(createMap(scale));
+		if (isInCreativeTab(tab)) {
+			for (int scale = 0; scale < ItemEmptyMap.MAX_SCALE; scale++)
+				result.add(createMap(scale));
+		}
 	}
 
 	@Nonnull

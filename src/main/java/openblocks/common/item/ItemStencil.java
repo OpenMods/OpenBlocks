@@ -28,9 +28,11 @@ public class ItemStencil extends Item {
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> list) {
-		for (StencilPattern stencil : StencilPattern.values())
-			list.add(createItemStack(stencil));
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+		if (isInCreativeTab(tab)) {
+			for (StencilPattern stencil : StencilPattern.values())
+				list.add(createItemStack(stencil));
+		}
 	}
 
 	public ItemStack createItemStack(StencilPattern stencil) {

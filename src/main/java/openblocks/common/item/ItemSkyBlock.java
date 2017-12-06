@@ -30,8 +30,10 @@ public class ItemSkyBlock extends ItemBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
-		result.add(new ItemStack(this, 1, 0));
-		result.add(new ItemStack(this, 1, 1));
+		if (isInCreativeTab(tab)) {
+			result.add(new ItemStack(this, 1, 0));
+			result.add(new ItemStack(this, 1, 1));
+		}
 	}
 
 	@Override

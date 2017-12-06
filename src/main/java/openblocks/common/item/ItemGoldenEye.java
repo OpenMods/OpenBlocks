@@ -125,8 +125,10 @@ public class ItemGoldenEye extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
-		result.add(new ItemStack(this, 1, 0));
-		result.add(new ItemStack(this, 1, MAX_DAMAGE));
+		if (isInCreativeTab(tab)) {
+			result.add(new ItemStack(this, 1, 0));
+			result.add(new ItemStack(this, 1, MAX_DAMAGE));
+		}
 	}
 
 	@Override

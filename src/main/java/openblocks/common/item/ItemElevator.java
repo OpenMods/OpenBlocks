@@ -32,8 +32,10 @@ public class ItemElevator extends ItemOpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
-		for (int i = 0; i < 16; i++)
-			result.add(new ItemStack(this, 1, i));
+		if (isInCreativeTab(tab)) {
+			for (int i = 0; i < 16; i++)
+				result.add(new ItemStack(this, 1, i));
+		}
 	}
 
 	@Override

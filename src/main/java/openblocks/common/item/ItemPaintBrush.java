@@ -71,9 +71,11 @@ public class ItemPaintBrush extends Item {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this));
-		for (ColorMeta color : ColorMeta.getAllColors()) {
-			list.add(createStackWithColor(color.rgb));
+		if (isInCreativeTab(tab)) {
+			list.add(new ItemStack(this));
+			for (ColorMeta color : ColorMeta.getAllColors()) {
+				list.add(createStackWithColor(color.rgb));
+			}
 		}
 	}
 

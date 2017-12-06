@@ -66,8 +66,10 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
-		for (Trophy trophy : Trophy.VALUES) {
-			result.add(putMetadata(new ItemStack(this), trophy));
+		if (isInCreativeTab(tab)) {
+			for (Trophy trophy : Trophy.VALUES) {
+				result.add(putMetadata(new ItemStack(this), trophy));
+			}
 		}
 	}
 }
