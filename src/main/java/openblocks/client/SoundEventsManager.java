@@ -82,7 +82,7 @@ public class SoundEventsManager {
 
 	public static boolean isEntityWearingGlasses(Entity e) {
 		if (e instanceof EntityPlayer) {
-			ItemStack helmet = ((EntityPlayer)e).inventory.armorItemInSlot(3);
+			ItemStack helmet = ((EntityPlayer)e).inventory.armorInventory.get(3);
 			return !helmet.isEmpty() && helmet.getItem() instanceof ItemSonicGlasses;
 		}
 

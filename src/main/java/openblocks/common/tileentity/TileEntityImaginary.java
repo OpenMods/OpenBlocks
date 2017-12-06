@@ -145,7 +145,7 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 		if (what == Property.VISIBLE && player.isSpectator()) return true;
 		if (what == Property.SOLID && isPencil()) return true;
 
-		ItemStack helmet = player.inventory.armorItemInSlot(3);
+		ItemStack helmet = player.inventory.armorInventory.get(3);
 
 		if (helmet == null) return isInverted();
 
