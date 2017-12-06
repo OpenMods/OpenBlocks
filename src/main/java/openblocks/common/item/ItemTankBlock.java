@@ -24,6 +24,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.item.ItemOpenBlock;
@@ -191,6 +193,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
 		FluidTank fakeTank = readTank(stack);
 		FluidStack fluidStack = fakeTank.getFluid();

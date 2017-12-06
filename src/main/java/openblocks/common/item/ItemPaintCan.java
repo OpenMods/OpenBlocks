@@ -71,6 +71,7 @@ public class ItemPaintCan extends ItemOpenBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
 		result.add(String.format("#%06X", getColorFromStack(stack)));
 	}

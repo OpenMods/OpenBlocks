@@ -35,6 +35,7 @@ public class ItemSkyBlock extends ItemBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
 		super.addInformation(stack, world, result, flag);
 		if (BlockSky.isInverted(stack.getItemDamage())) result.add(TranslationUtils.translateToLocal("openblocks.misc.inverted"));

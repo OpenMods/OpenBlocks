@@ -63,6 +63,7 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
 		Integer color = getColorFromStack(stack);
 		if (color != null) result.add(String.format("#%06X", color));

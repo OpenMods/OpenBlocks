@@ -8,6 +8,8 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.shapes.GuideShape;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.TranslationUtils;
@@ -40,6 +42,7 @@ public class ItemGuide extends ItemOpenBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null) {
