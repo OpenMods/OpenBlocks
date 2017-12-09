@@ -47,6 +47,8 @@ public class TankRenderUtils {
 	}
 
 	public static float calculateRenderHeight(float time, float phase, float level) {
+		// prevent seams when tank in in the middle of column
+		if (level >= 1.0f) return 1.0f;
 		level = clampLevel(level) + calculateWaveAmplitude(time, phase);
 
 		if (level <= 0.0f) return 0.0f;
