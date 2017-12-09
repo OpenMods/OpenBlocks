@@ -19,12 +19,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.utils.NbtUtils;
 
-// TODO 1.8.9 verify ownership
 public abstract class EntityAssistant extends EntitySmoothMove implements IEntityAdditionalSpawnData {
 
 	private static final String OWNER_ID_TAG = "OwnerId";
 	private UUID ownerId;
-	private WeakReference<EntityPlayer> cachedOwner;
+	private WeakReference<EntityPlayer> cachedOwner = new WeakReference<EntityPlayer>(null);
 	protected double ownerOffsetX;
 	protected double ownerOffsetY;
 	protected double ownerOffsetZ;
@@ -37,13 +36,13 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 	}
 
 	public EntityPlayer findOwner() {
-		if (ownerId == null) return null;
+		EntityPlayer owner = cachedOwner.get();
+		if (owner == null && ownerId != null) {
+			owner = world.getPlayerEntityByUUID(ownerId);
+			if (owner != null) cachedOwner = new WeakReference<EntityPlayer>(owner);
+		}
 
-		EntityPlayer result = world.getPlayerEntityByUUID(ownerId);
-
-		if (result != null) cachedOwner = new WeakReference<EntityPlayer>(result);
-
-		return result;
+		return owner;
 	}
 
 	@Override
@@ -64,9 +63,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 	@Override
 	public void onUpdate() {
 		if (!world.isRemote) {
-			EntityPlayer owner = cachedOwner.get();
-
-			if (owner == null) owner = findOwner();
+			EntityPlayer owner = findOwner();
 
 			if (owner != null) smoother.setTarget(
 					owner.posX + ownerOffsetX,

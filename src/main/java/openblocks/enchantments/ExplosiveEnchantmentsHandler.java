@@ -122,7 +122,7 @@ public class ExplosiveEnchantmentsHandler {
 		if (explosiveLevel <= 0 || explosiveLevel > LEVELS.length) return null;
 		EnchantmentLevel level = LEVELS[explosiveLevel - 1];
 
-		for (ItemStack stack : inventory.mainInventory) { // TODO 1.11 verify
+		for (ItemStack stack : inventory.mainInventory) {
 			if (gunpowder.isItemEqual(stack) && stack.getCount() >= level.gunpowderNeeded) {
 				useItems(player, stack, slot, level.gunpowderNeeded);
 				return level;
@@ -157,7 +157,6 @@ public class ExplosiveEnchantmentsHandler {
 				// Loved By Everyone...
 				// Possibly Buggy
 				// TEEERRRRRIIIIBLE HAAAAAACK!
-				// TODO 1.10 maybe now stuff is better?
 				KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), true);
 				// no, seriously, can't find better way to make jump
 				jumpBoosts.put(player, boost);

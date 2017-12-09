@@ -75,7 +75,7 @@ public class CommandFlimFlam implements ICommand {
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] params, BlockPos pos) {
 		if (params.length == 1) {
 			String playerPrefix = params[0];
-			return fiterPlayerNames(playerPrefix);
+			return fiterPlayerNames(server, playerPrefix);
 		}
 
 		if (params.length == 2) {

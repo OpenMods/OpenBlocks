@@ -353,7 +353,6 @@ public class SoundIconRegistry {
 				addMob(entity, "endermite", mc("endermite"), true);
 				addMob(entity, "ghast", mc("ghast"), true);
 				addMob(entity, "guardian", mc("guardian"), true);
-				addMob(entity, "hostile", mc("dummy"), true); // TODO 1.11 review
 				addMob(entity, "husk", mc("husk"), true);
 				addMob(entity, "evocation_illager", mc("evocation_illager"), true);
 				addMob(entity, "magmacube", mc("magma_cube"), true);

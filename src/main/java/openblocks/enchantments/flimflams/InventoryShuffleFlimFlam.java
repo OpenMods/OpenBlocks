@@ -10,7 +10,7 @@ public class InventoryShuffleFlimFlam implements IFlimFlamAction {
 	@Override
 	public boolean execute(EntityPlayerMP target) {
 		if (target.openContainer != null && !(target.openContainer instanceof ContainerPlayer)) return false;
-		Collections.shuffle(target.inventory.mainInventory); // TODO 1.11 verifyF
+		Collections.shuffle(target.inventory.mainInventory);
 
 		return true;
 	}

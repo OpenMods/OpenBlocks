@@ -58,7 +58,6 @@ public class ItemCraneBackpack extends ItemArmor {
 		if (!world.isRemote) CraneRegistry.instance.ensureMagnetExists(player);
 
 		if (Config.doCraneCollisionCheck) {
-			// TODO 1.10 verify if this still works
 			boolean isColliding = isPointInBlock(world, player, CraneRegistry.ARM_RADIUS)
 					|| isPointInBlock(world, player, 2 * CraneRegistry.ARM_RADIUS / 3)
 					|| isPointInBlock(world, player, CraneRegistry.ARM_RADIUS / 3);
