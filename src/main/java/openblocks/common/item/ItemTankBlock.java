@@ -26,7 +26,6 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.item.ItemOpenBlock;
 import openmods.model.textureditem.IItemTexture;
@@ -219,17 +218,17 @@ public class ItemTankBlock extends ItemOpenBlock {
 	}
 
 	@Nonnull
-	public static ItemStack createFilledTank(Fluid fluid) {
+	public static boolean fillTankItem(ItemStack result, Fluid fluid) {
+		if (result.isEmpty() || !(result.getItem() instanceof ItemTankBlock)) return false;
 		final int tankCapacity = TileEntityTank.getTankCapacity();
 		FluidStack stack = FluidRegistry.getFluidStack(fluid.getName(), tankCapacity);
-		if (stack == null) return ItemStack.EMPTY;
+		if (stack == null) return false;
 
 		FluidTank tank = new FluidTank(tankCapacity);
 		tank.setFluid(stack);
 
-		ItemStack item = new ItemStack(OpenBlocks.Blocks.tank);
-		saveTank(item, tank);
-		return item;
+		saveTank(result, tank);
+		return true;
 	}
 
 	private static FluidTank readTank(@Nonnull ItemStack stack) {

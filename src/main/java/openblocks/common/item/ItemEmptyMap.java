@@ -49,6 +49,8 @@ public class ItemEmptyMap extends Item {
 
 	@Nonnull
 	public static ItemStack upgradeToMap(World world, ItemStack emptyMap) {
+		if (Items.heightMap == null) return emptyMap;
+
 		NBTTagCompound tag = ItemUtils.getItemTag(emptyMap);
 		byte scale = tag.getByte(TAG_SCALE);
 		int newMapId = MapDataManager.createNewMap(world, scale);

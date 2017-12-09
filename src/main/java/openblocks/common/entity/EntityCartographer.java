@@ -249,6 +249,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	@Override
 	@Nonnull
 	public ItemStack toItemStack() {
+		if (Items.cartographer == null) return ItemStack.EMPTY;
 		ItemStack result = Items.cartographer.createStack(ItemCartographer.AssistantType.CARTOGRAPHER);
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
 		writeOwnDataToNBT(tag);
@@ -273,8 +274,10 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 					mappingDimension = world.provider.getDimension();
 					isMapping.toggle();
 					mapItem = MapDataBuilder.upgradeToMap(world, mapItem);
-					int mapId = mapItem.getItemDamage();
-					jobs.startMapping(world, mapId, getNewMapCenterX(), getNewMapCenterZ());
+					if (mapItem.getItem() instanceof ItemHeightMap) {
+						int mapId = mapItem.getItemDamage();
+						jobs.startMapping(world, mapId, getNewMapCenterX(), getNewMapCenterZ());
+					}
 				}
 			}
 

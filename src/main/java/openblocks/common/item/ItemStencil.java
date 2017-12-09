@@ -13,7 +13,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks;
 import openblocks.common.CanvasReplaceBlacklist;
 import openblocks.common.IStencilPattern;
 import openblocks.common.StencilPattern;
@@ -23,7 +22,6 @@ import openblocks.common.tileentity.TileEntityCanvas;
 public class ItemStencil extends Item {
 
 	public ItemStencil() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
 	}
 

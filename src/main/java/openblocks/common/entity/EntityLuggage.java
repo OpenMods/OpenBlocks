@@ -148,9 +148,10 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 			} else {
 				if (player.isSneaking()) {
 					ItemStack luggageItem = convertToItem();
-					if (player.inventory.addItemStackToInventory(luggageItem)) setDead();
-					playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.5f, world.rand.nextFloat() * 0.1f + 0.9f);
-
+					if (player.inventory.addItemStackToInventory(luggageItem)) {
+						setDead();
+						playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.5f, world.rand.nextFloat() * 0.1f + 0.9f);
+					}
 				} else {
 					playSound(SoundEvents.BLOCK_CHEST_OPEN, 0.5f, world.rand.nextFloat() * 0.1f + 0.9f);
 					player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.luggage.ordinal(), player.world, getEntityId(), 0, 0);
@@ -158,6 +159,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 			}
 		}
 		return true;
+
 	}
 
 	@Override
@@ -178,7 +180,9 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 
 	@Nonnull
 	protected ItemStack convertToItem() {
-		ItemStack luggageItem = new ItemStack(OpenBlocks.Items.luggage);
+		if (OpenBlocks.Items.luggage == null) return ItemStack.EMPTY;
+
+		final ItemStack luggageItem = new ItemStack(OpenBlocks.Items.luggage);
 		NBTTagCompound tag = itemTag != null? (NBTTagCompound)itemTag.copy() : new NBTTagCompound();
 
 		inventory.writeToNBT(tag);

@@ -5,6 +5,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+import openblocks.common.item.MetasGeneric;
 import openblocks.common.recipe.CrayonGlassesRecipe;
 import openblocks.common.recipe.CrayonMergeRecipe;
 import openblocks.common.recipe.CrayonMixingRecipe;
@@ -33,7 +34,7 @@ public class CustomRecipesSetup {
 				registry.register(new MapCloneRecipe().setRegistryName(OpenBlocks.location("map_clone")));
 			}
 
-			if (OpenBlocks.Items.generic != null) {
+			if (MetasGeneric.mapMemory.isAvailable()) {
 				registry.register(new MapResizeRecipe().setRegistryName(OpenBlocks.location("map_resize")));
 			}
 		}

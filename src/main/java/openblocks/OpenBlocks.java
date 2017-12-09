@@ -385,7 +385,7 @@ public class OpenBlocks {
 		@RegisterItem(id = "hang_glider", legacyIds = "hangglider")
 		public static ItemHangGlider hangGlider;
 
-		@RegisterItem(id = "generic", isConfigurable = false, registerDefaultModel = false)
+		@RegisterItem(id = "generic", registerDefaultModel = false)
 		public static ItemOBGeneric generic;
 
 		@RegisterItem(id = "luggage")
@@ -445,7 +445,7 @@ public class OpenBlocks {
 		@RegisterItem(id = "golden_eye", legacyIds = "goldenEye")
 		public static ItemGoldenEye goldenEye;
 
-		@RegisterItem(id = "generic_unstackable", isConfigurable = false, registerDefaultModel = false, legacyIds = "genericUnstackable")
+		@RegisterItem(id = "generic_unstackable", registerDefaultModel = false, legacyIds = "genericUnstackable")
 		public static ItemOBGenericUnstackable genericUnstackable;
 
 		@RegisterItem(id = "cursor")
@@ -593,26 +593,27 @@ public class OpenBlocks {
 		public static final Enchantment flimFlam = null;
 	}
 
-	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
-		@Override
-		public ItemStack getTabIconItem() {
-			if (OpenBlocks.Blocks.flag != null) {
-				return new ItemStack(OpenBlocks.Blocks.flag, 1, BlockFlag.DEFAULT_COLOR.vanillaBlockId);
-			} else {
-				return new ItemStack(net.minecraft.init.Blocks.SPONGE, 0);
+	private static CreativeTabs createTabOpenBlocks() {
+		return new CreativeTabs("tabOpenBlocks") {
+			@Override
+			public ItemStack getTabIconItem() {
+				if (OpenBlocks.Blocks.flag != null) {
+					return new ItemStack(OpenBlocks.Blocks.flag, 1, BlockFlag.DEFAULT_COLOR.vanillaBlockId);
+				} else {
+					return new ItemStack(net.minecraft.init.Blocks.SPONGE);
+				}
 			}
-		}
 
-		@Override
-		@SideOnly(Side.CLIENT)
-		public void displayAllRelevantItems(NonNullList<ItemStack> result) {
-			super.displayAllRelevantItems(result);
-			if (Enchantments.explosive != null) EnchantmentUtils.addAllBooks(Enchantments.explosive, result);
-			if (Enchantments.lastStand != null) EnchantmentUtils.addAllBooks(Enchantments.lastStand, result);
-			if (Enchantments.flimFlam != null) EnchantmentUtils.addAllBooks(Enchantments.flimFlam, result);
-		}
-
-	};
+			@Override
+			@SideOnly(Side.CLIENT)
+			public void displayAllRelevantItems(NonNullList<ItemStack> result) {
+				super.displayAllRelevantItems(result);
+				if (Enchantments.explosive != null) EnchantmentUtils.addAllBooks(Enchantments.explosive, result);
+				if (Enchantments.lastStand != null) EnchantmentUtils.addAllBooks(Enchantments.lastStand, result);
+				if (Enchantments.flimFlam != null) EnchantmentUtils.addAllBooks(Enchantments.flimFlam, result);
+			}
+		};
+	}
 
 	public static final StatBase brickStat = new StatBasic("openblocks.dropped",
 			new TextComponentTranslation("stat.openblocks.bricksDropped"),
@@ -627,7 +628,7 @@ public class OpenBlocks {
 
 		@Override
 		protected void setupConfigPre(GameRegistryObjectsProvider gameConfig) {
-			gameConfig.setCreativeTab(tabOpenBlocks);
+			gameConfig.setCreativeTab(OpenBlocks::createTabOpenBlocks);
 			gameConfig.addModIdToRemap("OpenBlocks");
 		}
 

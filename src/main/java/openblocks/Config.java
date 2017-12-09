@@ -357,12 +357,13 @@ public class Config {
 	public static boolean renderSkyBlocks = true;
 
 	public static void register() {
-		// There is no fail checking here because if the Generic item fails,
-		// then I doubt anyone wants this to be silent.
-		// Too many items would suffer from this. - NC
-		OpenBlocks.Items.generic.registerItems(MetasGeneric.values());
+		if (OpenBlocks.Items.generic != null) {
+			OpenBlocks.Items.generic.registerItems(MetasGeneric.values());
+		}
 
-		OpenBlocks.Items.genericUnstackable.registerItems(MetasGenericUnstackable.values());
+		if (OpenBlocks.Items.genericUnstackable != null) {
+			OpenBlocks.Items.genericUnstackable.registerItems(MetasGenericUnstackable.values());
+		}
 
 		if (OpenBlocks.Blocks.trophy != null) {
 			MinecraftForge.EVENT_BUS.register(new TrophyHandler());

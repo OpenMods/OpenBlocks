@@ -69,14 +69,18 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 		super(material);
 	}
 
-	public static void replaceBlock(World world, BlockPos pos) {
+	public static boolean replaceBlock(World world, BlockPos pos) {
 		final IBlockState state = world.getBlockState(pos);
 
 		final Block toReplace = (state.getMaterial() == Material.GLASS)? OpenBlocks.Blocks.canvasGlass : OpenBlocks.Blocks.canvas;
+		if (toReplace == null) return false;
+		if (state.getBlock() == toReplace) return true;
+
 		world.setBlockState(pos, toReplace.getDefaultState());
 
 		final TileEntityCanvas tile = getTileEntity(world, pos, TileEntityCanvas.class);
 		if (tile != null) tile.setPaintedBlock(state);
+		return true;
 	}
 
 	@Override

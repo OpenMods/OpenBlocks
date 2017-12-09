@@ -10,8 +10,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -27,7 +25,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
@@ -139,66 +136,18 @@ public class ClientProxy implements IOpenBlocksProxy {
 				.put("magic-canvas", ModelCanvas.INSTANCE)
 				.build(OpenBlocks.MODID));
 
-		if (OpenBlocks.Items.hangGlider != null) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new IRenderFactory<EntityHangGlider>() {
-				@Override
-				public Render<EntityHangGlider> createRenderFor(RenderManager manager) {
-					return new EntityHangGliderRenderer(manager);
-				}
-			});
-		}
+		RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, EntityHangGliderRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, EntityLuggageRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMagnet.class, EntityMagnetRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBlock.class, EntityBlockRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMiniMe.class, EntityMiniMeRenderer::new);
 
-		if (OpenBlocks.Items.luggage != null) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new IRenderFactory<EntityLuggage>() {
-				@Override
-				public Render<EntityLuggage> createRenderFor(RenderManager manager) {
-					return new EntityLuggageRenderer(manager);
-				}
-			});
-		}
-
-		if (OpenBlocks.Items.craneBackpack != null) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityMagnet.class, new IRenderFactory<EntityMagnet>() {
-				@Override
-				public Render<? super EntityMagnet> createRenderFor(RenderManager manager) {
-					return new EntityMagnetRenderer(manager);
-				}
-			});
-
-			RenderingRegistry.registerEntityRenderingHandler(EntityBlock.class, new IRenderFactory<EntityBlock>() {
-				@Override
-				public Render<? super EntityBlock> createRenderFor(RenderManager manager) {
-					return new EntityBlockRenderer(manager);
-				}
-			});
-		}
-
-		if (OpenBlocks.Blocks.goldenEgg != null) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityMiniMe.class, new IRenderFactory<EntityMiniMe>() {
-				@Override
-				public Render<? super EntityMiniMe> createRenderFor(RenderManager manager) {
-					return new EntityMiniMeRenderer(manager);
-				}
-			});
-		}
-
-		if (OpenBlocks.Items.cartographer != null) {
-			EntityCartographerRenderer.registerListener();
-			RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, new IRenderFactory<EntityCartographer>() {
-				@Override
-				public Render<? super EntityCartographer> createRenderFor(RenderManager manager) {
-					return new EntityCartographerRenderer(manager);
-				}
-			});
-		}
+		EntityCartographerRenderer.registerListener();
+		RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, EntityCartographerRenderer::new);
 
 		if (OpenBlocks.Items.goldenEye != null) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new IRenderFactory<EntityGoldenEye>() {
-				@Override
-				public Render<? super EntityGoldenEye> createRenderFor(RenderManager manager) {
-					return new RenderSnowball<>(manager, OpenBlocks.Items.goldenEye, Minecraft.getMinecraft().getRenderItem());
-				}
-			});
+			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class,
+					(manager) -> new RenderSnowball<>(manager, OpenBlocks.Items.goldenEye, Minecraft.getMinecraft().getRenderItem()));
 		}
 
 		if (OpenBlocks.Items.stencil != null) {

@@ -5,6 +5,7 @@ import static openmods.integration.IntegrationConditions.classExists;
 import static openmods.integration.IntegrationConditions.modLoaded;
 
 import dan200.computercraft.api.ComputerCraftAPI;
+import openblocks.common.item.MetasGeneric;
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
 
@@ -29,7 +30,8 @@ public class ModuleTurtles extends IntegrationModule {
 
 	private static class LoadHack {
 		private static void load() {
-			ComputerCraftAPI.registerTurtleUpgrade(new MagnetTurtleUpgrade());
+			if (MetasGeneric.miracleMagnet.isAvailable())
+				ComputerCraftAPI.registerTurtleUpgrade(new MagnetTurtleUpgrade());
 		}
 	}
 

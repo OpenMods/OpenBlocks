@@ -248,6 +248,7 @@ public class TrophyHandler {
 		}
 
 		public ItemStack getItemStack() {
+			if (OpenBlocks.Blocks.trophy == null) return ItemStack.EMPTY;
 			return ItemTrophyBlock.putMetadata(new ItemStack(OpenBlocks.Blocks.trophy), this);
 		}
 
@@ -345,9 +346,12 @@ public class TrophyHandler {
 				if (entityName != null) {
 					Trophy mobTrophy = Trophy.TYPES_BY_ID.get(entityName);
 					if (mobTrophy != null) {
-						EntityItem drop = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
-						drop.setDefaultPickupDelay();
-						event.getDrops().add(drop);
+						final ItemStack dropStack = mobTrophy.getItemStack();
+						if (!dropStack.isEmpty()) {
+							final EntityItem drop = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, dropStack);
+							drop.setDefaultPickupDelay();
+							event.getDrops().add(drop);
+						}
 					}
 				}
 			}

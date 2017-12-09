@@ -106,10 +106,11 @@ public class BlockTank extends OpenBlock {
 		result.add(new ItemStack(this));
 
 		if (tab == CreativeTabs.SEARCH && Config.displayAllFilledTanks) {
+			final ItemStack emptyTank = new ItemStack(this);
 			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values())
 				try {
-					final ItemStack tankStack = ItemTankBlock.createFilledTank(fluid);
-					if (!tankStack.isEmpty()) result.add(tankStack);
+					final ItemStack tankStack = emptyTank.copy();
+					if (ItemTankBlock.fillTankItem(tankStack, fluid)) result.add(tankStack);
 					else Log.debug("Failed to create filled tank stack for fluid '%s'. Not registered?", fluid.getName());
 				} catch (Throwable t) {
 					throw new RuntimeException(String.format("Failed to create item for fluid '%s'" +

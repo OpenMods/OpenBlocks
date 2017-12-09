@@ -17,23 +17,24 @@ import openmods.utils.ItemUtils;
 
 public class MapResizeRecipe extends ShapedOreRecipe {
 
-	private static final ShapedPrimer EXAMPLE = new ShapedPrimer();
-
-	static {
-		EXAMPLE.width = 3;
-		EXAMPLE.height = 3;
+	private static ShapedPrimer createExample() {
+		final ShapedPrimer example = new ShapedPrimer();
+		example.width = 3;
+		example.height = 3;
 
 		Ingredient e = Ingredient.fromStacks(MetasGeneric.mapMemory.newItemStack());
 		Ingredient m = Ingredient.fromStacks(Items.emptyMap.createMap(0));
 
-		EXAMPLE.input = NonNullList.from(
+		example.input = NonNullList.from(
 				Ingredient.EMPTY, e, Ingredient.EMPTY,
 				e, m, e,
 				Ingredient.EMPTY, e, Ingredient.EMPTY);
+
+		return example;
 	}
 
 	public MapResizeRecipe() {
-		super(OpenBlocks.location("crayons"), Items.emptyMap.createMap(1), EXAMPLE);
+		super(OpenBlocks.location("crayons"), Items.emptyMap.createMap(1), createExample());
 	}
 
 	@Override

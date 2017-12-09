@@ -219,6 +219,7 @@ public class ItemDevNull extends Item {
 	}
 
 	public static void registerFixes(DataFixer dataFixer) {
-		dataFixer.registerWalker(FixTypes.ITEM_INSTANCE, new ItemInventoryWalker(OpenBlocks.Items.devNull));
+		if (OpenBlocks.Items.devNull != null)
+			dataFixer.registerWalker(FixTypes.ITEM_INSTANCE, new ItemInventoryWalker(OpenBlocks.Items.devNull));
 	}
 }

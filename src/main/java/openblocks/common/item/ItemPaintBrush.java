@@ -96,7 +96,8 @@ public class ItemPaintBrush extends Item {
 		if (stack.getItemDamage() > MAX_USES || color == null) return EnumActionResult.FAIL;
 
 		if (Config.paintbrushReplacesBlocks && CanvasReplaceBlacklist.instance.isAllowedToReplace(world, pos)) {
-			BlockCanvas.replaceBlock(world, pos);
+			if (!BlockCanvas.replaceBlock(world, pos))
+				return EnumActionResult.FAIL;
 		}
 
 		final boolean changed;

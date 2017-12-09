@@ -29,6 +29,10 @@ public enum MetasGenericUnstackable implements IMetaItemFactory {
 		return true;
 	}
 
+	public boolean isAvailable() {
+		return OpenBlocks.Items.genericUnstackable != null && isEnabled();
+	}
+
 	@Override
 	public int getMeta() {
 		return ordinal();

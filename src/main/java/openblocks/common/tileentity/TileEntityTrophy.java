@@ -93,9 +93,11 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 		final Trophy trophy = getTrophy();
 		if (trophy != null) {
 			ItemStack stack = trophy.getItemStack();
-			NBTTagCompound tag = ItemUtils.getItemTag(stack);
-			tag.setInteger(TAG_COOLDOWN, cooldown);
-			return stack;
+			if (!stack.isEmpty()) {
+				NBTTagCompound tag = ItemUtils.getItemTag(stack);
+				tag.setInteger(TAG_COOLDOWN, cooldown);
+				return stack;
+			}
 		}
 
 		return ItemStack.EMPTY;

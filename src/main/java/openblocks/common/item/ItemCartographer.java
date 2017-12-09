@@ -85,6 +85,7 @@ public class ItemCartographer extends Item {
 	}
 
 	public static void registerFixes(DataFixer dataFixer) {
-		dataFixer.registerWalker(FixTypes.ITEM_INSTANCE, new NestedItemStackWalker(OpenBlocks.Items.cartographer, EntityCartographer.TAG_MAP_ITEM));
+		if (OpenBlocks.Items.cartographer != null)
+			dataFixer.registerWalker(FixTypes.ITEM_INSTANCE, new NestedItemStackWalker(OpenBlocks.Items.cartographer, EntityCartographer.TAG_MAP_ITEM));
 	}
 }

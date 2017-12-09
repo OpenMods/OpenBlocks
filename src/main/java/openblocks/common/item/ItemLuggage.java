@@ -66,6 +66,7 @@ public class ItemLuggage extends Item {
 	}
 
 	public static void registerFixes(DataFixer dataFixer) {
-		dataFixer.registerWalker(FixTypes.ITEM_INSTANCE, new NestedItemInventoryWalker(OpenBlocks.Items.luggage, GenericInventory.TAG_ITEMS));
+		if (OpenBlocks.Items.luggage != null)
+			dataFixer.registerWalker(FixTypes.ITEM_INSTANCE, new NestedItemInventoryWalker(OpenBlocks.Items.luggage, GenericInventory.TAG_ITEMS));
 	}
 }
