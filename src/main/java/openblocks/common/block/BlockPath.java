@@ -57,7 +57,7 @@ public class BlockPath extends OpenBlock {
 
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour, BlockPos neighbourPos) {
-		if (!world.isRemote && neighbourPos.equals(pos.down()) && !isNeighborBlockSolid(world, pos, EnumFacing.DOWN)) { // TODO 1.11 verify
+		if (!world.isRemote && neighbourPos.equals(pos.down()) && !isNeighborBlockSolid(world, pos, EnumFacing.DOWN)) {
 			world.destroyBlock(pos, true);
 		}
 	}

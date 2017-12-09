@@ -767,11 +767,6 @@ public class OpenBlocks {
 			RadioVillagerTrades.registerUselessVillager();
 		}
 
-		{
-			// TODO 1.11 MFR blocking
-			// FMLInterModComms.sendMessage(Mods.MFR, "registerAutoSpawnerBlacklist", "");
-		}
-
 		if (Items.luggage != null) {
 			MinecraftForge.EVENT_BUS.register(new LuggageDropHandler());
 		}

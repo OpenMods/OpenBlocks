@@ -68,7 +68,7 @@ public abstract class EntitySmoothMove extends Entity {
 					dy *= scale;
 					dz *= scale;
 				}
-				// TODO 1.11 validate. again
+
 				move(MoverType.SELF, motionX + dx * damp, motionY + dy * damp, motionZ + dz * damp);
 			}
 		}

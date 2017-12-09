@@ -141,7 +141,6 @@ public class ItemDevNull extends Item {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (hand == EnumHand.OFF_HAND) return EnumActionResult.PASS;
-		// TODO 1.11 verify
 		final ItemStack containerStack = player.getHeldItem(hand);
 		final ItemInventory inventory = new ItemInventory(containerStack, 1);
 		ItemStack containedStack = inventory.getStackInSlot(0);

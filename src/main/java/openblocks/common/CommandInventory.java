@@ -185,7 +185,7 @@ public class CommandInventory implements ICommand {
 				}
 			}
 		} else {
-			if (args.length == 2) return fiterPlayerNames(args[1]);
+			if (args.length == 2) return fiterPlayerNames(server, args[1]);
 
 			if (args.length == 3) {
 				String prefix = args[2];

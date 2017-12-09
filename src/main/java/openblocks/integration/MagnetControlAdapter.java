@@ -236,7 +236,6 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 	private boolean canSpawn(World world) {
 		EnumFacing facing = turtle.getDirection();
 
-		// TODO 1.8.9 verify rotation
 		EnumFacing spawnSide = (side == TurtleSide.Left)? facing.rotateYCCW() : facing.rotateY();
 		BlockPos spawnPos = turtle.getPosition().offset(spawnSide);
 

@@ -93,7 +93,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "autoanvil", true, 3) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			// TODO 1.11 verify - tool stuff
 			if (i == 0 && (itemstack.getItem().getToolClasses(itemstack).isEmpty() && itemstack.getItem() != Items.ENCHANTED_BOOK)) { return false; }
 			if (i == 2) { return false; }
 			return super.isItemValidForSlot(i, itemstack);
