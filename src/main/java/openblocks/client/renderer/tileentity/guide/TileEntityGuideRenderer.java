@@ -36,7 +36,7 @@ public class TileEntityGuideRenderer<T extends TileEntityGuide> extends TileEnti
 
 	@Override
 	public boolean isGlobalRenderer(T te) {
-		return te.shouldRender(); // TODO 1.11 verify if it's still needed. In 1.10 beacon may dissapear when not looking at guide directly
+		return te.shouldRender();
 		/// using that option causes glitches due to MC-112730
 	}
 

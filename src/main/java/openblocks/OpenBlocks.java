@@ -761,7 +761,6 @@ public class OpenBlocks {
 
 		{
 			String luggageName = EntityList.getEntityStringFromClass(EntityLuggage.class);
-			// TODO 1.10 verify if it still works
 			FMLInterModComms.sendMessage(Mods.MFR, "registerAutoSpawnerBlacklist", luggageName);
 		}
 
