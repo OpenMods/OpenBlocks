@@ -21,8 +21,8 @@ public class CustomRecipesSetup {
 	public static void registerRecipes(RegistryEvent.Register<IRecipe> evt) {
 		final IForgeRegistry<IRecipe> registry = evt.getRegistry();
 		if (OpenBlocks.Blocks.imaginary != null) {
-			registry.register(new CrayonMixingRecipe().setRegistryName(OpenBlocks.location("crayon_mix")));
 			registry.register(new CrayonMergeRecipe().setRegistryName(OpenBlocks.location("crayon_merge")));
+			registry.register(new CrayonMixingRecipe().setRegistryName(OpenBlocks.location("crayon_mix")));
 
 			if (OpenBlocks.Items.crayonGlasses != null) {
 				registry.register(new CrayonGlassesRecipe().setRegistryName(OpenBlocks.location("crayon_glasses")));
