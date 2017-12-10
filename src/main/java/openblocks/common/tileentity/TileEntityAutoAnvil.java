@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -93,9 +92,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "autoanvil", true, 3) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			if (i == 0 && (itemstack.getItem().getToolClasses(itemstack).isEmpty() && itemstack.getItem() != Items.ENCHANTED_BOOK)) { return false; }
-			if (i == 2) { return false; }
-			return super.isItemValidForSlot(i, itemstack);
+			return i != 2 && super.isItemValidForSlot(i, itemstack);
 		}
 	});
 
