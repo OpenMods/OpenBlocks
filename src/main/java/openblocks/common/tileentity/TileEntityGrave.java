@@ -152,7 +152,8 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (player.world.isRemote || hand != EnumHand.MAIN_HAND) return false;
+		if (player.world.isRemote) return true;
+		if (hand != EnumHand.MAIN_HAND) return false;
 
 		final ItemStack held = player.getHeldItemMainhand();
 		if (!held.isEmpty() && held.getItem().getToolClasses(held).contains("shovel")) {
