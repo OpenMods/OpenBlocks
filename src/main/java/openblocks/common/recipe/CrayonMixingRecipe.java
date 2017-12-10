@@ -26,7 +26,7 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack.isEmpty()) continue;
-			if (!(stack.getItem() instanceof ItemImaginary) || !ItemImaginary.isCrayon(stack))
+			if (!ItemImaginary.isCrayon(stack))
 				return false;
 			if (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) continue;
 			count++;

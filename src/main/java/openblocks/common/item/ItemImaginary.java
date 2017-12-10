@@ -144,7 +144,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	public static boolean isCrayon(@Nonnull ItemStack stack) {
-		return stack.getItemDamage() == DAMAGE_CRAYON;
+		return stack.getItem() instanceof ItemImaginary && stack.getItemDamage() == DAMAGE_CRAYON;
 	}
 
 	public ItemImaginary(Block block) {
