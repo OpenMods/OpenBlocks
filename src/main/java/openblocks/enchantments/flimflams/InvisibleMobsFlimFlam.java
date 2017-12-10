@@ -20,7 +20,7 @@ public class InvisibleMobsFlimFlam implements IFlimFlamAction {
 	public boolean execute(EntityPlayerMP target) {
 		final World world = target.world;
 
-		AxisAlignedBB around = target.getEntityBoundingBox().expand(20, 20, 20);
+		AxisAlignedBB around = target.getEntityBoundingBox().grow(20);
 		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, around, WorldUtils.NON_PLAYER);
 
 		if (mobs.isEmpty()) return false;

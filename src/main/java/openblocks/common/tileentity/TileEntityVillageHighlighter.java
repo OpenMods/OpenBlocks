@@ -71,7 +71,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return super.getRenderBoundingBox().expand(200, 200, 200);
+		return super.getRenderBoundingBox().grow(200);
 	}
 
 	@Override

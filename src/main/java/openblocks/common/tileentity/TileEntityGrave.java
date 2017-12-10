@@ -69,7 +69,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		if (!world.isRemote) {
 			if (Config.spawnSkeletons && world.getDifficulty() != EnumDifficulty.PEACEFUL && world.rand.nextDouble() < Config.skeletonSpawnRate) {
 
-				List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, getBB().expand(7, 7, 7), IS_MOB);
+				List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, getBB().grow(7), IS_MOB);
 
 				if (mobs.size() < 5) {
 					double chance = world.rand.nextDouble();

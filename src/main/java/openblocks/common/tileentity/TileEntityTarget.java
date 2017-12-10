@@ -58,7 +58,7 @@ public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachme
 	}
 
 	private void predictOtherProjectiles() {
-		final List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, getBB().expand(10, 10, 10), PROJECTILE_SELECTOR);
+		final List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, getBB().grow(10), PROJECTILE_SELECTOR);
 
 		IBlockState state = null;
 

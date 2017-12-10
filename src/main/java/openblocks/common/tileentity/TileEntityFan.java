@@ -117,7 +117,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 
 	private AxisAlignedBB getEntitySearchBoundingBox() {
 		AxisAlignedBB boundingBox = BlockUtils.aabbOffset(pos, 0, -2, 0, +1, +3, 1);
-		return boundingBox.expand(Config.fanRange, Config.fanRange, Config.fanRange);
+		return boundingBox.grow(Config.fanRange);
 	}
 
 	private static boolean isLyingInSphericalCone(Vec3d coneAxis, Vec3d originToTarget, double halfAperture) {

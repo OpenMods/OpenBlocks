@@ -176,7 +176,7 @@ public class StencilModelTransformer {
 					}
 
 					if (layersToRender.renderCovers)
-						builder.addGeneralQuads(addStencilCovers(innerModel.bounds.expand(COVER_DELTA, COVER_DELTA, COVER_DELTA), canvasState.sideStates));
+						builder.addGeneralQuads(addStencilCovers(innerModel.bounds.grow(COVER_DELTA), canvasState.sideStates));
 
 					return builder.build();
 				}

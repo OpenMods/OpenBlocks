@@ -183,7 +183,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 			spawnParticle(EnumParticleTypes.PORTAL, world.rand.nextDouble() - 0.5, world.rand.nextDouble() - 1.0, world.rand.nextDouble() - 0.5);
 		}
 
-		List<Entity> interestingItems = world.getEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3), entitySelector);
+		List<Entity> interestingItems = world.getEntitiesWithinAABB(Entity.class, getBB().grow(3), entitySelector);
 
 		boolean needsSync = false;
 

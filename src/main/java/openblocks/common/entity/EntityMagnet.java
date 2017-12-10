@@ -277,7 +277,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	protected List<Entity> detectEntityTargets() {
-		AxisAlignedBB aabb = getEntityBoundingBox().expand(0.25, 0, 0.25).offset(0, -1, 0);
+		AxisAlignedBB aabb = getEntityBoundingBox().grow(0.25, 0, 0.25).offset(0, -1, 0);
 		return world.getEntitiesInAABBexcluding(this, aabb, createPickTargetPredicate());
 	}
 

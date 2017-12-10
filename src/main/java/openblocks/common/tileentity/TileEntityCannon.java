@@ -162,8 +162,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		AxisAlignedBB box = super.getRenderBoundingBox();
-		return box.expand(32.0, 32.0, 32.0);
+		return super.getRenderBoundingBox().grow(32);
 	}
 
 	private Vec3d calcMotionFromAngles() {

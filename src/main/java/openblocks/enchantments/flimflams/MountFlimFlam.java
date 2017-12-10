@@ -24,7 +24,7 @@ public class MountFlimFlam implements IFlimFlamAction {
 	public boolean execute(EntityPlayerMP target) {
 		final World world = target.world;
 
-		AxisAlignedBB around = target.getEntityBoundingBox().expand(40, 40, 40);
+		AxisAlignedBB around = target.getEntityBoundingBox().grow(40);
 		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, around, SAFE_SELECTOR);
 		if (mobs.isEmpty()) return false;
 		EntityLiving selected = CollectionUtils.getRandom(mobs);
