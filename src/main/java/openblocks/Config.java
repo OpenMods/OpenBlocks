@@ -68,6 +68,10 @@ public class Config {
 	public static String[] elevatorRules = new String[0];
 
 	@OnLineModifiable
+	@ConfigProperty(category = "dropblock", name = "overrides", comment = "Use to configure blocks as elevators. Examples: 'minecraft:wool' - configure any wool as white elevator, 'minecraft:wool#color=light_blue;yellow' - configure lightblue wool as yellow elevator")
+	public static String[] elevatorOverrides = new String[0];
+
+	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "elevatorXpDrainRatio", comment = "XP consumed by elevator (total amount = ratio * distance)")
 	public static float elevatorXpDrainRatio = 0;
 
