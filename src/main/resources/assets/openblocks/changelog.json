@@ -1,5 +1,34 @@
 [
     {
+        "version" : "1.7.3",
+        "sections" :
+        [
+            {
+                "title": "openblocks.gui.features",
+                "lines":
+                [
+                    "Any block can be configured as elevator (see 'dropblock.overrides' in config)"
+                ]
+            },
+            {
+                "title": "openblocks.gui.bugfixes",
+                "lines":
+                [
+                    "Fix server slowdown when using block placer",
+                    "Change big metal bar recipe to prevent conflicts",
+                    "Fix random glitches and crashes"
+                ]
+            },
+            {
+                "title" : "openblocks.gui.tweaks",
+                "lines" :
+                [
+                    "Auto-anvil now accepts any items in both input slots"
+                ]
+            }
+        ]
+    },
+    {
         "version" : "1.7.2",
         "sections" :
         [
