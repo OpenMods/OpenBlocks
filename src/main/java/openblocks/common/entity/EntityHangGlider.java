@@ -148,7 +148,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	@Override
 	protected void entityInit() {
-		this.dataManager.register(PROPERTY_DEPLOYED, true);
+		this.dataManager.register(PROPERTY_DEPLOYED, false);
 	}
 
 	public boolean isDeployed() {

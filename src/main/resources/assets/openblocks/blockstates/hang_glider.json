@@ -1,0 +1,32 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item",
+        "textures": {
+            "layer0": "openblocks:items/hang_glider"
+        }
+    },
+    "variants": {
+        "inventory": {
+            "model": "openmods:stateitem",
+            "custom": {
+                "item": "openblocks:hang_glider"
+            }
+        },
+        "normal": [{}],
+        "deployed" : {
+            "true": {
+                "model": "openmods:perspective-aware",
+                "custom": {
+                    "base": "openblocks:hang_glider#normal",
+                    "THIRD_PERSON_LEFT_HAND": "openblocks:item/hang_glider_hidden",
+                    "THIRD_PERSON_RIGHT_HAND": "openblocks:item/hang_glider_hidden",
+                    "FIRST_PERSON_LEFT_HAND": "openblocks:item/hang_glider_hidden",
+                    "FIRST_PERSON_RIGHT_HAND": "openblocks:item/hang_glider_hidden"
+                }
+            },
+            "false": {}
+        }
+    }
+}

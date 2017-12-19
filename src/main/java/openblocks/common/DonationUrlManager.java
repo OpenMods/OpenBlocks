@@ -18,8 +18,6 @@ public class DonationUrlManager {
 	private Map<String, String> donationUrls = new HashMap<>();
 
 	public DonationUrlManager() {
-		addUrl(Mods.OPENBLOCKS, "https://www.patreon.com/openmods");
-		addUrl(Mods.OPENPERIPHERAL, "https://flattr.com/profile/openblocks");
 		addUrl(Mods.COMPUTERCRAFT, "http://www.computercraft.info/donate/");
 		addUrl(Mods.COMPUTERCRAFT_TURTLE, "http://www.computercraft.info/donate/");
 		addUrl(Mods.TINKERSCONSTRUCT, "http://www.minecraftforum.net/topic/1659892-");
