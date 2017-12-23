@@ -131,7 +131,7 @@ public class Config {
 
 	@OnLineModifiable
 	@ConfigProperty(category = "glasses", name = "opacity", comment = "0.0 - no visible change to world, 1.0 - world fully obscured")
-	public static double sonicGlassesOpacity = 0.95;
+	public static double sonicGlassesOpacity = 0.7;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "glasses", name = "useTexture", comment = "Use texture for obscuring world")
