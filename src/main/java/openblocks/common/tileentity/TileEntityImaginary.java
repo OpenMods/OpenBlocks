@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import com.google.common.base.Preconditions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -144,7 +145,7 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 		if (what == Property.VISIBLE && player.isSpectator()) return true;
 		if (what == Property.SOLID && isPencil()) return true;
 
-		ItemStack helmet = player.inventory.armorInventory[3];
+		final ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 
 		if (helmet == null) return isInverted();
 
