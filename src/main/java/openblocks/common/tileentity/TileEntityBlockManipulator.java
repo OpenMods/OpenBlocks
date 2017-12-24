@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import openblocks.common.block.BlockBlockManpulatorBase;
@@ -11,14 +12,33 @@ import openmods.api.INeighbourAwareTile;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.BlockNotifyFlags;
 
-public abstract class TileEntityBlockManipulator extends OpenTileEntity implements INeighbourAwareTile {
+public abstract class TileEntityBlockManipulator extends OpenTileEntity implements INeighbourAwareTile, ITickable {
 
 	private static final int EVENT_ACTIVATE = 3;
 
+	private int actionCount = 0;
+
 	public TileEntityBlockManipulator() {}
+
+	protected abstract int getActionLimit();
+
+	@Override
+	public void update() {
+		final boolean checkForWork = actionCount > 0;
+		actionCount = 0;
+		if (checkForWork) {
+			final IBlockState blockState = worldObj.getBlockState(getPos());
+			if (blockState.getBlock() == getBlockType() &&
+					blockState.getValue(BlockBlockManpulatorBase.POWERED))
+				triggerBlockAction(blockState);
+		}
+	}
 
 	@Override
 	public void onNeighbourChanged(Block block) {
+		if (actionCount > getActionLimit())
+			return;
+
 		if (!worldObj.isRemote) {
 			final IBlockState state = worldObj.getBlockState(getPos());
 			if (state.getBlock() == getBlockType()) {
@@ -47,7 +67,10 @@ public abstract class TileEntityBlockManipulator extends OpenTileEntity implemen
 
 		if (worldObj.isBlockLoaded(target)) {
 			final IBlockState targetState = worldObj.getBlockState(target);
-			if (canWork(targetState, target, direction)) sendBlockEvent(EVENT_ACTIVATE, 0);
+			if (canWork(targetState, target, direction)) {
+				sendBlockEvent(EVENT_ACTIVATE, 0);
+				actionCount++;
+			}
 		}
 	}
 

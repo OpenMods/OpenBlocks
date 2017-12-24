@@ -385,6 +385,14 @@ public class Config {
 	@ConfigProperty(category = "canvas", name = "skyblock", comment = "Enables skyblock rendering. Disable when there are graphic glitches or performance problems")
 	public static boolean renderSkyBlocks = true;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "breaker", name = "actionLimit", comment = "Maximum number of actions that can be performed by block breaker in single tick")
+	public static int blockBreakerActionLimit = 16;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "placer", name = "actionLimit", comment = "Maximum number of actions that can be performed by block placer in single tick")
+	public static int blockPlacerActionLimit = 16;
+
 	public static void register() {
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 
