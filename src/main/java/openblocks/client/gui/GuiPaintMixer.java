@@ -21,7 +21,6 @@ import openmods.gui.component.GuiComponentSlider;
 import openmods.gui.component.GuiComponentTextButton;
 import openmods.gui.component.GuiComponentTextbox;
 import openmods.gui.listener.IMouseDownListener;
-import openmods.gui.listener.IValueChangedListener;
 import openmods.gui.logic.IValueUpdateAction;
 import openmods.gui.logic.ValueCopyAction;
 import openmods.utils.TranslationUtils;
@@ -113,52 +112,40 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 				palettePicker.setPalette(vanillaPalette);
 			}
 
-			palettePicker.setListener(new IValueChangedListener<PaletteEntry>() {
-				@Override
-				public void valueChanged(PaletteEntry value) {
-					final int rgb = value.rgb;
-					selectedColor = rgb;
+			palettePicker.setListener(value -> {
+				final int rgb = value.rgb;
+				selectedColor = rgb;
 
-					textbox.setValue(String.format("%06X", rgb));
-					colorBox.setValue(rgb);
-					colorPicker.setValue(rgb);
+				textbox.setValue(String.format("%06X", rgb));
+				colorBox.setValue(rgb);
+				colorPicker.setValue(rgb);
+				slider.setValue(Double.valueOf(colorPicker.tone));
+			});
+
+			textbox.setListener(value -> {
+				try {
+					int parsed = Integer.parseInt(value, 16);
+
+					selectedColor = parsed;
+					colorPicker.setValue(parsed);
 					slider.setValue(Double.valueOf(colorPicker.tone));
+					colorBox.setValue(parsed);
+				} catch (NumberFormatException e) {
+					// NO-OP, user derp
 				}
 			});
 
-			textbox.setListener(new IValueChangedListener<String>() {
-				@Override
-				public void valueChanged(String value) {
-					try {
-						int parsed = Integer.parseInt(value, 16);
-
-						selectedColor = parsed;
-						colorPicker.setValue(parsed);
-						slider.setValue(Double.valueOf(colorPicker.tone));
-						colorBox.setValue(parsed);
-					} catch (NumberFormatException e) {
-						// NO-OP, user derp
-					}
-				}
+			colorPicker.setListener(value -> {
+				selectedColor = value;
+				textbox.setValue(String.format("%06X", value));
+				colorBox.setValue(value);
 			});
 
-			colorPicker.setListener(new IValueChangedListener<Integer>() {
-				@Override
-				public void valueChanged(Integer value) {
-					selectedColor = value;
-					textbox.setValue(String.format("%06X", value));
-					colorBox.setValue(value);
-				}
-			});
-
-			slider.setListener(new IValueChangedListener<Double>() {
-				@Override
-				public void valueChanged(Double value) {
-					colorPicker.tone = value.intValue();
-					int color = colorPicker.getColor();
-					textbox.setValue(String.format("%06X", color));
-					colorBox.setValue(color);
-				}
+			slider.setListener(value -> {
+				colorPicker.tone = value.intValue();
+				int color = colorPicker.getColor();
+				textbox.setValue(String.format("%06X", color));
+				colorBox.setValue(color);
 			});
 
 			final IValueProvider<Integer> color = mixer.getColor();

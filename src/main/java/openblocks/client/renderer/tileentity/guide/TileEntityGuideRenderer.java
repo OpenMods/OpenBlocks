@@ -1,7 +1,5 @@
 package openblocks.client.renderer.tileentity.guide;
 
-import com.google.common.base.Function;
-import com.google.common.base.Supplier;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -9,12 +7,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -46,31 +42,22 @@ public class TileEntityGuideRenderer<T extends TileEntityGuide> extends TileEnti
 
 		final TextureMap textureMapBlocks = Minecraft.getMinecraft().getTextureMapBlocks();
 		final IBakedModel bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM,
-				new Function<ResourceLocation, TextureAtlasSprite>() {
-					@Override
-					public TextureAtlasSprite apply(ResourceLocation input) {
-						return textureMapBlocks.getAtlasSprite(input.toString());
-					}
-				});
+				input -> textureMapBlocks.getAtlasSprite(input.toString()));
 
-		renderer.onModelBake(new Supplier<BufferBuilder>() {
+		renderer.onModelBake(() -> {
+			final Tessellator tessellator = Tessellator.getInstance();
 
-			@Override
-			public BufferBuilder get() {
-				final Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder vertexBuffer = tessellator.getBuffer();
+			vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
 
-				BufferBuilder vertexBuffer = tessellator.getBuffer();
-				vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+			for (EnumFacing enumfacing : EnumFacing.values())
+				renderQuads(vertexBuffer, bakedModel.getQuads(null, enumfacing, 0L));
 
-				for (EnumFacing enumfacing : EnumFacing.values())
-					renderQuads(vertexBuffer, bakedModel.getQuads(null, enumfacing, 0L));
+			renderQuads(vertexBuffer, bakedModel.getQuads(null, null, 0L));
 
-				renderQuads(vertexBuffer, bakedModel.getQuads(null, null, 0L));
+			vertexBuffer.finishDrawing();
 
-				vertexBuffer.finishDrawing();
-
-				return vertexBuffer;
-			}
+			return vertexBuffer;
 		});
 	}
 

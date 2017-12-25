@@ -1,10 +1,8 @@
 package openblocks.common.tileentity;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import java.util.List;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -43,13 +41,6 @@ import openmods.utils.BlockUtils;
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, IActivateAwareTile, ITickable {
 
-	private static final Predicate<EntityLiving> IS_MOB = new Predicate<EntityLiving>() {
-		@Override
-		public boolean apply(@Nullable EntityLiving input) {
-			return input instanceof IMob;
-		}
-	};
-
 	private static final String TAG_MESSAGE = "Message";
 	private SyncableString perishedUsername;
 
@@ -69,7 +60,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		if (!world.isRemote) {
 			if (Config.spawnSkeletons && world.getDifficulty() != EnumDifficulty.PEACEFUL && world.rand.nextDouble() < Config.skeletonSpawnRate) {
 
-				List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, getBB().grow(7), IS_MOB);
+				List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, getBB().grow(7), input -> input instanceof IMob);
 
 				if (mobs.size() < 5) {
 					double chance = world.rand.nextDouble();

@@ -1,10 +1,7 @@
 package openblocks.enchantments;
 
-import com.google.common.base.Supplier;
-import info.openmods.calc.Environment;
 import info.openmods.calc.ExprType;
 import info.openmods.calc.SingleExprEvaluator;
-import info.openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
 import info.openmods.calc.types.fp.DoubleCalculatorFactory;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -59,24 +56,18 @@ public class LastStandEnchantmentsHandler {
 				final int xpAvailable = EnchantmentUtils.getPlayerXP(player);
 
 				float xpRequired = reductionCalculator.evaluate(
-						new EnvironmentConfigurator<Double>() {
-							@Override
-							public void accept(Environment<Double> env) {
-								env.setGlobalSymbol(VAR_ENCH_LEVEL, Double.valueOf(enchantmentLevels));
-								env.setGlobalSymbol(VAR_PLAYER_XP, Double.valueOf(xpAvailable));
-								env.setGlobalSymbol(VAR_PLAYER_HP, Double.valueOf(playerHealth));
-								env.setGlobalSymbol(VAR_DAMAGE, Double.valueOf(e.getAmount()));
-							}
+						env -> {
+							env.setGlobalSymbol(VAR_ENCH_LEVEL, Double.valueOf(enchantmentLevels));
+							env.setGlobalSymbol(VAR_PLAYER_XP, Double.valueOf(xpAvailable));
+							env.setGlobalSymbol(VAR_PLAYER_HP, Double.valueOf(playerHealth));
+							env.setGlobalSymbol(VAR_DAMAGE, Double.valueOf(e.getAmount()));
 						},
-						new Supplier<Double>() {
-							@Override
-							public Double get() {
-								float xpRequired = 1f - healthAvailable;
-								xpRequired *= 50;
-								xpRequired /= enchantmentLevels;
-								xpRequired = Math.max(1, xpRequired);
-								return Double.valueOf(xpRequired);
-							}
+						() -> {
+							float xp = 1f - healthAvailable;
+							xp *= 50;
+							xp /= enchantmentLevels;
+							xp = Math.max(1, xp);
+							return Double.valueOf(xp);
 						}).floatValue();
 
 				if (xpAvailable >= xpRequired) {

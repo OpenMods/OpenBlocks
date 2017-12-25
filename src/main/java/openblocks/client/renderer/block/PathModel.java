@@ -73,19 +73,9 @@ public class PathModel implements IModel {
 
 	private static final Predicate<EnumFacing> ALL_SIDES = Predicates.alwaysTrue();
 
-	private static final Predicate<EnumFacing> GENERAL = new Predicate<EnumFacing>() {
-		@Override
-		public boolean apply(EnumFacing input) {
-			return input != EnumFacing.DOWN;
-		}
-	};
+	private static final Predicate<EnumFacing> GENERAL = input -> input != EnumFacing.DOWN;
 
-	private static final Predicate<EnumFacing> ONLY_BOTTOM = new Predicate<EnumFacing>() {
-		@Override
-		public boolean apply(EnumFacing input) {
-			return input == EnumFacing.DOWN;
-		}
-	};
+	private static final Predicate<EnumFacing> ONLY_BOTTOM = input -> input == EnumFacing.DOWN;
 
 	private class Baked implements IBakedModel {
 

@@ -10,7 +10,6 @@ import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
@@ -38,12 +37,7 @@ public class RenderLayerCache {
 			final IBlockState state = key.getLeft();
 			final Block block = state.getBlock();
 
-			return getLayerRenderInfo(key.getRight(), new Predicate<BlockRenderLayer>() {
-				@Override
-				public boolean apply(@Nullable BlockRenderLayer input) {
-					return block.canRenderInLayer(state, input);
-				}
-			});
+			return getLayerRenderInfo(key.getRight(), input -> block.canRenderInLayer(state, input));
 		}
 	});
 

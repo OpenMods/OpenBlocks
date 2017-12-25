@@ -1,6 +1,5 @@
 package openblocks.common.sync;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -228,13 +227,6 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		return false;
 	}
 
-	private static final Function<Cover, StencilPattern> EXTRACT_PATTERN = new Function<Cover, StencilPattern>() {
-		@Override
-		public StencilPattern apply(Cover input) {
-			return input.stencil;
-		}
-	};
-
 	public Optional<StencilPattern> clearAll() {
 		layers.clear();
 		backgroundColor = 0;
@@ -242,7 +234,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 
 		final Optional<Cover> cover = this.cover;
 		this.cover = Optional.absent();
-		return cover.transform(EXTRACT_PATTERN);
+		return cover.transform(input -> input.stencil);
 	}
 
 	public boolean putStencil(StencilPattern stencil) {
@@ -261,11 +253,11 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		final Optional<Cover> cover = this.cover;
 		this.cover = Optional.absent();
 		markDirty();
-		return cover.transform(EXTRACT_PATTERN);
+		return cover.transform(input -> input.stencil);
 	}
 
 	public Optional<StencilPattern> peekStencil() {
-		return cover.transform(EXTRACT_PATTERN);
+		return cover.transform(input -> input.stencil);
 	}
 
 	public boolean isEmpty() {

@@ -1,10 +1,8 @@
 package openblocks.client.renderer.block.canvas;
 
-import com.google.common.base.Predicate;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -16,7 +14,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import javax.annotation.Nullable;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import net.minecraft.block.Block;
@@ -99,16 +96,8 @@ public class StencilModelTransformer {
 	private final RenderLayerCache renderLayerCache;
 
 	public StencilModelTransformer(IBakedModel baseModel, final Set<BlockRenderLayer> baseModelLayers, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, VertexFormat vertexFormat) {
-		final Predicate<BlockRenderLayer> baseModelLayersPredicate = new Predicate<BlockRenderLayer>() {
-			@Override
-			public boolean apply(@Nullable BlockRenderLayer input) {
-				return baseModelLayers.contains(input);
-			}
-		};
-
-		this.renderLayerCache = new RenderLayerCache(baseModelLayersPredicate);
-
-		this.baseModel = InnerModelInfo.create(null, baseModel, baseModelLayersPredicate);
+		this.renderLayerCache = new RenderLayerCache(baseModelLayers::contains);
+		this.baseModel = InnerModelInfo.create(null, baseModel, baseModelLayers::contains);
 		this.bakedTextureGetter = bakedTextureGetter;
 		this.vertexFormat = vertexFormat;
 	}
@@ -123,23 +112,15 @@ public class StencilModelTransformer {
 
 			final Block block = blockState.getBlock();
 
-			return InnerModelInfo.create(blockState, innerModel, new Predicate<BlockRenderLayer>() {
-				@Override
-				public boolean apply(BlockRenderLayer input) {
-					return block.canRenderInLayer(blockState, input);
-				}
-			});
+			return InnerModelInfo.create(blockState, innerModel, input -> block.canRenderInLayer(blockState, input));
 		}
 	});
 
 	private final LoadingCache<Key, ModelQuads> cache = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES)
-			.removalListener(new RemovalListener<Key, ModelQuads>() {
-				@Override
-				public void onRemoval(RemovalNotification<Key, ModelQuads> notification) {
-					final Optional<CanvasState> canvasState = notification.getKey().canvasState;
-					if (canvasState.isPresent())
-						canvasState.get().release();
-				}
+			.removalListener((RemovalNotification<Key, ModelQuads> notification) -> {
+				final Optional<CanvasState> canvasState = notification.getKey().canvasState;
+				if (canvasState.isPresent())
+					canvasState.get().release();
 			})
 			.build(new CacheLoader<Key, ModelQuads>() {
 				@Override

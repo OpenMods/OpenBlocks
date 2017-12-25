@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -156,22 +155,19 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		return tank;
 	}
 
-	private final Predicate<Entity> entitySelector = new Predicate<Entity>() {
-		@Override
-		public boolean apply(@Nullable Entity entity) {
-			if (entity.isDead) return false;
+	private final Predicate<Entity> entitySelector = entity -> {
+		if (entity.isDead) return false;
 
-			if (entity instanceof EntityItemProjectile) return entity.motionY < 0.01;
+		if (entity instanceof EntityItemProjectile) return entity.motionY < 0.01;
 
-			if (entity instanceof EntityItem) {
-				ItemStack stack = ((EntityItem)entity).getItem();
-				return InventoryUtils.canInsertStack(inventory.getHandler(), stack);
-			}
-
-			if (entity instanceof EntityXPOrb) return tank.getSpace() > 0;
-
-			return false;
+		if (entity instanceof EntityItem) {
+			ItemStack stack = ((EntityItem)entity).getItem();
+			return InventoryUtils.canInsertStack(inventory.getHandler(), stack);
 		}
+
+		if (entity instanceof EntityXPOrb) return tank.getSpace() > 0;
+
+		return false;
 	};
 
 	@Override

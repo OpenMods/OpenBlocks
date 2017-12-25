@@ -1,12 +1,9 @@
 package openblocks.common;
 
-import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import info.openmods.calc.Environment;
 import info.openmods.calc.ExprType;
 import info.openmods.calc.SingleExprEvaluator;
-import info.openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
 import info.openmods.calc.types.fp.DoubleCalculatorFactory;
 import java.util.Map;
 import java.util.Random;
@@ -326,19 +323,13 @@ public class TrophyHandler {
 		final Entity entity = event.getEntity();
 		if (event.isRecentlyHit() && canDrop(entity)) {
 			final Double result = dropChanceCalculator.evaluate(
-					new EnvironmentConfigurator<Double>() {
-						@Override
-						public void accept(Environment<Double> env) {
-							env.setGlobalSymbol("looting", Double.valueOf(event.getLootingLevel()));
-							env.setGlobalSymbol("chance", Config.trophyDropChance);
-						}
-					}, new Supplier<Double>() {
-						@Override
-						public Double get() {
-							final double bias = fallbackDropChance.nextDouble() / 4;
-							final double selection = fallbackDropChance.nextDouble();
-							return (event.getLootingLevel() + bias) * Config.trophyDropChance - selection;
-						}
+					env -> {
+						env.setGlobalSymbol("looting", Double.valueOf(event.getLootingLevel()));
+						env.setGlobalSymbol("chance", Config.trophyDropChance);
+					}, () -> {
+						final double bias = fallbackDropChance.nextDouble() / 4;
+						final double selection = fallbackDropChance.nextDouble();
+						return (event.getLootingLevel() + bias) * Config.trophyDropChance - selection;
 					});
 
 			if (result > 0) {

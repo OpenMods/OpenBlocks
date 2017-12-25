@@ -31,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import openmods.utils.ITester;
+import openmods.utils.ITester.Result;
 import openmods.utils.ObjectTester;
 import openmods.utils.ObjectTester.ClassNameTester;
 import openmods.utils.ObjectTester.ClassTester;
@@ -97,21 +98,11 @@ public class MagnetWhitelists {
 	}
 
 	public static ITester<BlockCoords> createBlockIdentityTester(final Block template) {
-		return new ITester<BlockCoords>() {
-			@Override
-			public ITester.Result test(BlockCoords o) {
-				return (o.blockState.getBlock() == template)? Result.ACCEPT : Result.CONTINUE;
-			}
-		};
+		return o -> (o.blockState.getBlock() == template)? Result.ACCEPT : Result.CONTINUE;
 	}
 
 	public static ITester<BlockCoords> createBlockClassTester(final Class<? extends Block> cls) {
-		return new ITester<BlockCoords>() {
-			@Override
-			public ITester.Result test(BlockCoords o) {
-				return (cls.isInstance(o.blockState.getBlock()))? Result.ACCEPT : Result.CONTINUE;
-			}
-		};
+		return o -> (cls.isInstance(o.blockState.getBlock()))? Result.ACCEPT : Result.CONTINUE;
 	}
 
 	public void initTesters() {
@@ -120,20 +111,12 @@ public class MagnetWhitelists {
 		entityWhitelist.addTester(new ClassTester<Entity>(EntityMinecart.class));
 		MinecraftForge.EVENT_BUS.post(new EntityRegisterEvent(entityWhitelist));
 
-		blockWhitelist.addTester(new ITester<BlockCoords>() {
-			@Override
-			public Result test(BlockCoords o) {
-				float hardness = o.blockState.getBlockHardness(o.world, o);
-				return (hardness < 0)? Result.REJECT : Result.CONTINUE;
-			}
+		blockWhitelist.addTester(o -> {
+			float hardness = o.blockState.getBlockHardness(o.world, o);
+			return (hardness < 0)? Result.REJECT : Result.CONTINUE;
 		});
 
-		blockWhitelist.addTester(new ITester<BlockCoords>() {
-			@Override
-			public openmods.utils.ITester.Result test(BlockCoords o) {
-				return o.blockState.getRenderType() == EnumBlockRenderType.MODEL? Result.ACCEPT : Result.CONTINUE;
-			}
-		});
+		blockWhitelist.addTester(o -> o.blockState.getRenderType() == EnumBlockRenderType.MODEL? Result.ACCEPT : Result.CONTINUE);
 
 		blockWhitelist.addTester(createBlockClassTester(BlockSand.class));
 		blockWhitelist.addTester(createBlockClassTester(BlockStairs.class));

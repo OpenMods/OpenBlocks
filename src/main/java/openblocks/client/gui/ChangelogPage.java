@@ -1,6 +1,5 @@
 package openblocks.client.gui;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import java.util.List;
@@ -14,13 +13,6 @@ import openmods.gui.component.page.PageBase;
 import openmods.utils.TranslationUtils;
 
 public class ChangelogPage extends PageBase {
-
-	private static final Function<String, String> BULLET_TRANSFORMER = new Function<String, String>() {
-		@Override
-		public String apply(String value) {
-			return "\u00B7" + value;
-		}
-	};
 
 	final GuiComponentLabel prevVersionLabel;
 
@@ -64,7 +56,7 @@ public class ChangelogPage extends PageBase {
 			addComponent(new GuiComponentHCenter(0, 12, getWidth()).addComponent(titleLine));
 		}
 
-		String contents = Joiner.on('\n').join(Iterables.transform(lines, BULLET_TRANSFORMER));
+		String contents = Joiner.on('\n').join(Iterables.transform(lines, value -> "\u00B7" + value));
 
 		final GuiComponentLabel lblContent = new GuiComponentLabel(15, 40, getWidth() - 10, getHeight(), contents);
 		lblContent.setScale(scaleContent);

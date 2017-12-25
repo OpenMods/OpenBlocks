@@ -11,7 +11,6 @@ import openmods.gui.SyncedGuiContainer;
 import openmods.gui.component.BaseComposite;
 import openmods.gui.component.GuiComponentLabel;
 import openmods.gui.component.GuiComponentSideSelector;
-import openmods.gui.component.GuiComponentSideSelector.ISideSelectedListener;
 import openmods.gui.component.GuiComponentTab;
 import openmods.gui.component.GuiComponentTabWrapper;
 import openmods.gui.component.GuiComponentTankLevel;
@@ -60,11 +59,6 @@ public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
 	}
 
 	private static void wireSideSelector(final GuiComponentSideSelector sideSelector, final IReadableBitMap<EnumFacing> readableSides, final IWriteableBitMap<EnumFacing> writeableSides) {
-		sideSelector.setListener(new ISideSelectedListener() {
-			@Override
-			public void onSideToggled(EnumFacing side, boolean currentState) {
-				writeableSides.toggle(side);
-			}
-		});
+		sideSelector.setListener((side, currentState) -> writeableSides.toggle(side));
 	}
 }

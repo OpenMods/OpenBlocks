@@ -1,11 +1,8 @@
 package openblocks.common;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Sets;
 import java.util.Arrays;
 import java.util.Set;
-import javax.annotation.Nullable;
+import java.util.stream.Collectors;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockDoor;
@@ -21,13 +18,7 @@ public class CanvasReplaceBlacklist {
 	private Set<ResourceLocation> idBlacklist = createBlacklist();
 
 	private static Set<ResourceLocation> createBlacklist() {
-		return Sets.newHashSet(Collections2.transform(Arrays.asList(Config.canvasBlacklist), new Function<String, ResourceLocation>() {
-			@Override
-			@Nullable
-			public ResourceLocation apply(@Nullable String input) {
-				return new ResourceLocation(input);
-			}
-		}));
+		return Arrays.asList(Config.canvasBlacklist).stream().map(ResourceLocation::new).collect(Collectors.toSet());
 	}
 
 	public static final CanvasReplaceBlacklist instance = new CanvasReplaceBlacklist();

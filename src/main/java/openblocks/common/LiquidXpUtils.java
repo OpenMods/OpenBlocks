@@ -22,15 +22,12 @@ public class LiquidXpUtils {
 		return xpToLiquidRatio(xp);
 	}
 
-	public static final Function<FluidStack, FluidStack> FLUID_TO_LEVELS = new Function<FluidStack, FluidStack>() {
-		@Override
-		public FluidStack apply(FluidStack input) {
-			if (input == null) return null;
-			// display levels instead of actual xp fluid level
-			final FluidStack result = input.copy();
-			result.amount = EnchantmentUtils.getLevelForExperience(liquidToXpRatio(input.amount));
-			return result;
-		}
+	public static final Function<FluidStack, FluidStack> FLUID_TO_LEVELS = input -> {
+		if (input == null) return null;
+		// display levels instead of actual xp fluid level
+		final FluidStack result = input.copy();
+		result.amount = EnchantmentUtils.getLevelForExperience(liquidToXpRatio(input.amount));
+		return result;
 	};
 
 }

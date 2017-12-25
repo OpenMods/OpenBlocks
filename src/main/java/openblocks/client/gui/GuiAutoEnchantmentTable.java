@@ -1,6 +1,5 @@
 package openblocks.client.gui;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -13,7 +12,6 @@ import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openblocks.rpc.ILevelChanger;
-import openmods.api.IValueReceiver;
 import openmods.gui.GuiConfigurableSlots;
 import openmods.gui.Icon;
 import openmods.gui.component.BaseComponent;
@@ -25,7 +23,6 @@ import openmods.gui.component.GuiComponentTab;
 import openmods.gui.component.GuiComponentTankLevel;
 import openmods.gui.component.GuiComponentToggleButton;
 import openmods.gui.listener.IMouseDownListener;
-import openmods.gui.listener.IValueChangedListener;
 import openmods.gui.logic.ValueCopyAction;
 import openmods.utils.MiscUtils;
 import openmods.utils.TranslationUtils;
@@ -61,30 +58,15 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 		((GuiComponentPanel)root).setSlotRenderer(1, GuiComponentPanel.customIconSlot(LAPIS_SLOT, -1, -1));
 
 		final GuiComponentSlider slider = new GuiComponentSlider(44, 39, 45, 1, 30, 1, true, TranslationUtils.translateToLocal("openblocks.gui.limit"));
-		slider.setListener(new IValueChangedListener<Double>() {
-			@Override
-			public void valueChanged(Double value) {
-				rpc.changePowerLimit(value.intValue());
-			}
-		});
+		slider.setListener(value -> rpc.changePowerLimit(value.intValue()));
 
-		addSyncUpdateListener(ValueCopyAction.create(te.getLevelProvider(), slider, new Function<Integer, Double>() {
-			@Override
-			public Double apply(Integer input) {
-				return input.doubleValue();
-			}
-		}));
+		addSyncUpdateListener(ValueCopyAction.create(te.getLevelProvider(), slider, Integer::doubleValue));
 
 		root.addComponent(slider);
 
 		final GuiComponentLabel maxPower = new GuiComponentLabel(40, 25, "0");
 		maxPower.setMaxWidth(100);
-		addSyncUpdateListener(ValueCopyAction.create(te.getAvailablePowerProvider(), new IValueReceiver<Integer>() {
-			@Override
-			public void setValue(Integer value) {
-				maxPower.setText(TranslationUtils.translateToLocalFormatted("openblocks.gui.available_power", value));
-			}
-		}));
+		addSyncUpdateListener(ValueCopyAction.create(te.getAvailablePowerProvider(), value -> maxPower.setText(TranslationUtils.translateToLocalFormatted("openblocks.gui.available_power", value))));
 		root.addComponent(maxPower);
 
 		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 30, 17, 37, TileEntityAutoEnchantmentTable.MAX_STORED_LEVELS);

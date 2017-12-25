@@ -8,7 +8,6 @@ import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.GuiComponentCheckbox;
 import openmods.gui.component.GuiComponentLabel;
 import openmods.gui.component.GuiComponentSlider;
-import openmods.gui.listener.IValueChangedListener;
 import openmods.utils.TranslationUtils;
 
 public class GuiItemDropper extends BaseGuiContainer<ContainerItemDropper> {
@@ -22,22 +21,11 @@ public class GuiItemDropper extends BaseGuiContainer<ContainerItemDropper> {
 
 		final int sliderSteps = (int)Config.maxItemDropSpeed * 10;
 		final GuiComponentSlider slider = new GuiComponentSlider(70, 20, 120, 0, Config.maxItemDropSpeed, owner.getItemSpeed(), sliderSteps, true, TranslationUtils.translateToLocal("openblocks.misc.dropper.speed"));
-		slider.setListener(new IValueChangedListener<Double>() {
-			@Override
-			public void valueChanged(Double value) {
-				rpc.setItemSpeed(value);
-			}
-		});
+		slider.setListener(value -> rpc.setItemSpeed(value));
 		root.addComponent(slider);
 
 		final GuiComponentCheckbox redstoneSwitch = new GuiComponentCheckbox(70, 50, owner.getUseRedstoneStrength());
-		redstoneSwitch.setListener(new IValueChangedListener<Boolean>() {
-			@Override
-			public void valueChanged(Boolean value) {
-				rpc.setUseRedstoneStrength(value);
-			}
-		});
-
+		redstoneSwitch.setListener(value -> rpc.setUseRedstoneStrength(value));
 		root.addComponent(redstoneSwitch);
 	}
 

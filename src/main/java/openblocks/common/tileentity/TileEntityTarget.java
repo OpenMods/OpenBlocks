@@ -1,6 +1,5 @@
 package openblocks.common.tileentity;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Set;
@@ -36,13 +35,6 @@ public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachme
 		addClass(FLANS_BULLET);
 	}
 
-	private final static Predicate<Entity> PROJECTILE_SELECTOR = new Predicate<Entity>() {
-		@Override
-		public boolean apply(Entity target) {
-			return EXTRA_PROJECTILE_CLASSES.contains(target.getClass());
-		}
-	};
-
 	public TileEntityTarget() {}
 
 	@Override
@@ -58,7 +50,7 @@ public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachme
 	}
 
 	private void predictOtherProjectiles() {
-		final List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, getBB().grow(10), PROJECTILE_SELECTOR);
+		final List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, getBB().grow(10), target -> EXTRA_PROJECTILE_CLASSES.contains(target.getClass()));
 
 		IBlockState state = null;
 

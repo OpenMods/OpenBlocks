@@ -134,7 +134,6 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 				@Override
 				public boolean apply(@Nullable Entity entity) {
 					return entity != owner.get() && super.apply(entity);
-
 				}
 			};
 		}

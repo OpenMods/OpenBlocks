@@ -1,10 +1,8 @@
 package openblocks.common.item;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import java.util.Set;
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockChest;
@@ -40,12 +38,7 @@ public class ItemWrench extends Item {
 	}
 
 	private boolean requiresSneaking(final Block block) {
-		return Iterables.any(sneakOnly, new Predicate<Class<? extends Block>>() {
-			@Override
-			public boolean apply(@Nullable Class<? extends Block> input) {
-				return input.isInstance(block);
-			}
-		});
+		return Iterables.any(sneakOnly, input -> input.isInstance(block));
 	}
 
 	@Override
