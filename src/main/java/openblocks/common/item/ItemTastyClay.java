@@ -17,9 +17,11 @@ public class ItemTastyClay extends ItemFood {
 
 	@Override
 	protected void onFoodEaten(@Nonnull ItemStack stack, World world, EntityPlayer entity) {
-		BowelContents contents = BrickManager.getProperty(entity);
-		if (contents != null) {
-			contents.brickCount++;
+		if (!world.isRemote) {
+			BowelContents contents = BrickManager.getProperty(entity);
+			if (contents != null) {
+				contents.brickCount++;
+			}
 		}
 	}
 }

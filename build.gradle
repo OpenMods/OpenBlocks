@@ -134,6 +134,20 @@ processResources {
 // Generate FML Coremod manifest
 ext.fmlManifest = manifest {}
 
+if (project.hasProperty('keyStore')) {
+    task signJar(type: SignJar, dependsOn: reobfJar) {
+        keyStore = project.keyStore
+        alias = project.keyStoreAlias
+        storePass = project.keyStorePass
+        keyPass = project.keyStoreKeyPass
+
+        inputFile = jar.archivePath
+        outputFile = jar.archivePath
+    }
+
+    build.dependsOn signJar
+}
+
 // Merge Jenkins and Git manifests to form final manifest in final release jar
 jar {
     manifest {

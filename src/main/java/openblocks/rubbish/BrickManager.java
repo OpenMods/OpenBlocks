@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -40,8 +41,9 @@ public class BrickManager {
 	@CapabilityInject(BowelContents.class)
 	private static Capability<BowelContents> CAPABILITY;
 
+	@Nullable
 	public static BowelContents getProperty(Entity entity) {
-		return entity.getCapability(CAPABILITY, EnumFacing.UP);
+		return CAPABILITY != null? entity.getCapability(CAPABILITY, EnumFacing.UP) : null;
 	}
 
 	public static void registerCapability() {
@@ -62,37 +64,42 @@ public class BrickManager {
 				return new BowelContents();
 			}
 		});
+
+		MinecraftForge.EVENT_BUS.register(new CapabilityInjector());
 	}
 
-	@SubscribeEvent
-	public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
-		if (evt.getObject() instanceof EntityPlayer) {
-			evt.addCapability(CAPABILITY_KEY, new ICapabilitySerializable<NBTTagInt>() {
+	private static class CapabilityInjector {
 
-				private final BowelContents state = new BowelContents();
+		@SubscribeEvent
+		public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
+			if (evt.getObject() instanceof EntityPlayerMP) {
+				evt.addCapability(CAPABILITY_KEY, new ICapabilitySerializable<NBTTagInt>() {
 
-				@Override
-				public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-					return capability == CAPABILITY;
-				}
+					private final BowelContents state = new BowelContents();
 
-				@Override
-				@SuppressWarnings("unchecked")
-				public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-					if (capability == CAPABILITY) return (T)state;
-					return null;
-				}
+					@Override
+					public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+						return capability == CAPABILITY;
+					}
 
-				@Override
-				public NBTTagInt serializeNBT() {
-					return new NBTTagInt(state.brickCount);
-				}
+					@Override
+					@SuppressWarnings("unchecked")
+					public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+						if (capability == CAPABILITY) return (T)state;
+						return null;
+					}
 
-				@Override
-				public void deserializeNBT(NBTTagInt nbt) {
-					state.brickCount = nbt.getInt();
-				}
-			});
+					@Override
+					public NBTTagInt serializeNBT() {
+						return new NBTTagInt(state.brickCount);
+					}
+
+					@Override
+					public void deserializeNBT(NBTTagInt nbt) {
+						state.brickCount = nbt.getInt();
+					}
+				});
+			}
 		}
 	}
 

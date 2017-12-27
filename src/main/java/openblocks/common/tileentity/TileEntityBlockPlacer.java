@@ -13,6 +13,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+import openblocks.Config;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.block.BlockBlockManpulatorBase;
 import openblocks.common.block.BlockBlockPlacer;
@@ -145,5 +146,10 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 			return (T)inventory.getHandler();
 
 		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	protected int getActionLimit() {
+		return Config.blockPlacerActionLimit;
 	}
 }

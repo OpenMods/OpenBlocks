@@ -1,6 +1,8 @@
 package openblocks.common.entity;
 
 import com.google.common.collect.ImmutableSet;
+import io.netty.buffer.ByteBuf;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
 import javax.annotation.Nonnull;
@@ -31,6 +33,7 @@ import openmods.sync.ISyncMapProvider;
 import openmods.sync.SyncMap;
 import openmods.sync.SyncMapClient;
 import openmods.sync.SyncMapEntity;
+import openmods.sync.SyncMapServer.UpdateStrategy;
 import openmods.sync.SyncObjectScanner;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableInt;
@@ -155,7 +158,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	private SyncMap createSyncMap(boolean isRemote) {
-		final SyncMap syncMap = isRemote? new SyncMapClient() : new SyncMapEntity(this);
+		final SyncMap syncMap = isRemote? new SyncMapClient() : new SyncMapEntity(this, UpdateStrategy.WITH_INITIAL_PACKET);
 		SyncObjectScanner.INSTANCE.registerAllFields(syncMap, this);
 		return syncMap;
 	}
@@ -215,7 +218,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	private void readOwnDataFromNBT(NBTTagCompound tag) {
-		syncMap.read(tag);
+		syncMap.tryRead(tag); // can be called on client!
 
 		if (tag.hasKey(TAG_MAP_ITEM)) {
 			NBTTagCompound mapItem = tag.getCompoundTag(TAG_MAP_ITEM);
@@ -237,7 +240,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 
 	private void writeOwnDataToNBT(NBTTagCompound tag) {
 		// some mods may call it on client side, see #834
-		syncMap.safeWrite(tag);
+		syncMap.tryWrite(tag);
 
 		if (mapItem != null) {
 			NBTTagCompound mapItem = this.mapItem.writeToNBT(new NBTTagCompound());
@@ -323,5 +326,25 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 			eyeYaw = eyeYaw - diffYaw / 50.0f; // HERP
 			eyePitch = eyePitch - diffPitch / 50.0f; // DERP
 		}
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf data) {
+		try {
+			getSyncMap().writeInitializationData(new PacketBuffer(data));
+		} catch (IOException e) {
+			throw new IllegalStateException("Failed to write initial data for EntityCartographer", e);
+		}
+		super.writeSpawnData(data);
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf data) {
+		try {
+			getSyncMap().readIntializationData(new PacketBuffer(data));
+		} catch (IOException e) {
+			throw new IllegalStateException("Failed to read initial data for EntityCartographer", e);
+		}
+		super.readSpawnData(data);
 	}
 }

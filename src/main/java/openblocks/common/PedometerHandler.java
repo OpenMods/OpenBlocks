@@ -1,8 +1,10 @@
 package openblocks.common;
 
+import com.google.common.base.Preconditions;
 import java.util.concurrent.Callable;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -145,6 +147,7 @@ public class PedometerHandler {
 
 		@SubscribeEvent
 		public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
+			if (!(evt.getObject() instanceof EntityPlayer)) return;
 			evt.addCapability(CAPABILITY_KEY, new ICapabilityProvider() {
 
 				private PedometerState state;
@@ -191,6 +194,8 @@ public class PedometerHandler {
 	}
 
 	public static PedometerState getProperty(Entity entity) {
+		// sanity check: only call comes from ItemPedometer and capability is only registered when that item exists
+		Preconditions.checkState(PEDOMETER_CAPABILITY != null);
 		return entity.getCapability(PEDOMETER_CAPABILITY, EnumFacing.UP);
 	}
 }

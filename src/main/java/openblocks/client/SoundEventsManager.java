@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -82,7 +83,7 @@ public class SoundEventsManager {
 
 	public static boolean isEntityWearingGlasses(Entity e) {
 		if (e instanceof EntityPlayer) {
-			ItemStack helmet = ((EntityPlayer)e).inventory.armorInventory.get(3);
+			ItemStack helmet = ((EntityPlayer)e).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 			return !helmet.isEmpty() && helmet.getItem() instanceof ItemSonicGlasses;
 		}
 

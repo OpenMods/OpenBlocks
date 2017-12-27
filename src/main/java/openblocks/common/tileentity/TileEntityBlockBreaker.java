@@ -15,6 +15,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import openblocks.Config;
 import openmods.fakeplayer.BreakBlockAction;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fixers.GenericInventoryTeFixerWalker;
@@ -87,5 +88,10 @@ public class TileEntityBlockBreaker extends TileEntityBlockManipulator {
 			return (T)inventory.getHandler();
 
 		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	protected int getActionLimit() {
+		return Config.blockBreakerActionLimit;
 	}
 }
