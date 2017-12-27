@@ -156,6 +156,7 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 				public void valueChanged(Double value) {
 					colorPicker.tone = value.intValue();
 					int color = colorPicker.getColor();
+					selectedColor = color;
 					textbox.setValue(String.format("%06X", color));
 					colorBox.setValue(color);
 				}

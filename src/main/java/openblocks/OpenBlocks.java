@@ -229,7 +229,7 @@ import openmods.sync.SyncableObjectType;
 import openmods.sync.SyncableObjectTypeRegistry;
 import openmods.utils.EnchantmentUtils;
 
-@Mod(modid = OpenBlocks.MODID, name = OpenBlocks.NAME, version = OpenBlocks.VERSION, dependencies = OpenBlocks.DEPENDENCIES, guiFactory = OpenBlocks.GUI_FACTORY, updateJSON = OpenBlocks.UPDATE_JSON)
+@Mod(modid = OpenBlocks.MODID, name = OpenBlocks.NAME, version = OpenBlocks.VERSION, dependencies = OpenBlocks.DEPENDENCIES, guiFactory = OpenBlocks.GUI_FACTORY, updateJSON = OpenBlocks.UPDATE_JSON, certificateFingerprint = OpenMods.CERTIFICATE_FINGERPRINT)
 public class OpenBlocks {
 
 	public static final String MODID = "openblocks";

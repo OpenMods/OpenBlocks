@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -72,41 +73,47 @@ public class FlimFlamEnchantmentsHandler {
 				return new Luck();
 			}
 		});
+
+		MinecraftForge.EVENT_BUS.register(new CapabilityInjector());
 	}
 
+	@Nullable
 	private static Luck getProperty(Entity entity) {
-		return entity.getCapability(CAPABILITY, EnumFacing.UP);
+		return CAPABILITY != null? entity.getCapability(CAPABILITY, EnumFacing.UP) : null;
 	}
 
-	@SubscribeEvent
-	public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
-		if (evt.getObject() instanceof EntityPlayer) {
-			evt.addCapability(CAPABILITY_KEY, new ICapabilitySerializable<NBTTagInt>() {
+	private static class CapabilityInjector {
 
-				private final Luck state = new Luck();
+		@SubscribeEvent
+		public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
+			if (evt.getObject() instanceof EntityPlayerMP) {
+				evt.addCapability(CAPABILITY_KEY, new ICapabilitySerializable<NBTTagInt>() {
 
-				@Override
-				public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-					return capability == CAPABILITY;
-				}
+					private final Luck state = new Luck();
 
-				@Override
-				@SuppressWarnings("unchecked")
-				public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-					if (capability == CAPABILITY) return (T)state;
-					return null;
-				}
+					@Override
+					public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+						return capability == CAPABILITY;
+					}
 
-				@Override
-				public NBTTagInt serializeNBT() {
-					return new NBTTagInt(state.luck);
-				}
+					@Override
+					@SuppressWarnings("unchecked")
+					public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+						if (capability == CAPABILITY) return (T)state;
+						return null;
+					}
 
-				@Override
-				public void deserializeNBT(NBTTagInt nbt) {
-					state.luck = nbt.getInt();
-				}
-			});
+					@Override
+					public NBTTagInt serializeNBT() {
+						return new NBTTagInt(state.luck);
+					}
+
+					@Override
+					public void deserializeNBT(NBTTagInt nbt) {
+						state.luck = nbt.getInt();
+					}
+				});
+			}
 		}
 	}
 
