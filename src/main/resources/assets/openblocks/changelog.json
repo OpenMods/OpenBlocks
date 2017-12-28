@@ -1,5 +1,29 @@
 [
     {
+        "version" : "1.7.4",
+        "sections" :
+        [
+            {
+                "title": "openblocks.gui.bugfixes",
+                "lines":
+                [
+                    "Fix paint mixer tone slider",
+                    "Fix some crashes with client-side HUD display mods",
+                    "Limit block placer and breaker updates per tick"
+                ]
+            },
+            {
+                "title" : "openblocks.gui.tweaks",
+                "lines" :
+                [
+                    "Lower default sonic glasses opacity",
+                    "Deployed gliders are now still visible in GUI",
+                    "Block breaker now selects correct tool (allows breaking snow, webs, etc)"
+                ]
+            }
+        ]
+    },
+    {
         "version" : "1.7.3",
         "sections" :
         [
