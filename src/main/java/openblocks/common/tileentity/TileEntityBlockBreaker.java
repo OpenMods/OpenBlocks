@@ -47,7 +47,7 @@ public class TileEntityBlockBreaker extends TileEntityBlockManipulator {
 
 	@Override
 	protected void doWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
-		final List<EntityItem> drops = FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new BreakBlockAction(world, target));
+		final List<EntityItem> drops = FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new BreakBlockAction(world, target).findEffectiveTool());
 
 		if (drops.isEmpty()) return;
 
