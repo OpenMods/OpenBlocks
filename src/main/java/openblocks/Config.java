@@ -302,6 +302,14 @@ public class Config {
 	@ConfigProperty(category = "sponge", name = "spongeRange", comment = "Sponge block range (distance from center)")
 	public static int spongeStickRange = 3;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "sponge", name = "blockUpdate", comment = "Should sponge block update neighbours after liquid removal?")
+	public static boolean spongeBlockUpdate = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "sponge", name = "stickBlockUpdate", comment = "Should sponge-on-a-stick update neighbours after liquid removal?")
+	public static boolean spongeStickBlockUpdate = false;
+
 	@ConfigProperty(category = "projector", name = "lightUpWhenWorking", comment = "Projector will light up whenever it is displaying a map")
 	public static boolean litWhenDisplayingMap = true;
 
