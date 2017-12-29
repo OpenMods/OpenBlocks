@@ -3,6 +3,7 @@ package openblocks.common.item;
 import javax.annotation.Nonnull;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -13,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openmods.infobook.BookDocumentation;
+import openmods.utils.BlockNotifyFlags;
 
 @BookDocumentation
 public class ItemSpongeOnAStick extends Item {
@@ -20,6 +22,10 @@ public class ItemSpongeOnAStick extends Item {
 	public ItemSpongeOnAStick() {
 		setMaxStackSize(1);
 		setMaxDamage(Config.spongeMaxDamage);
+	}
+
+	private static int getCleanupFlags() {
+		return Config.spongeStickBlockUpdate? BlockNotifyFlags.ALL : BlockNotifyFlags.SEND_TO_CLIENTS;
 	}
 
 	@Override
@@ -41,6 +47,7 @@ public class ItemSpongeOnAStick extends Item {
 		boolean hitLava = false;
 		int damage = stack.getItemDamage();
 
+		final int cleanupFlags = getCleanupFlags();
 		for (int x = -Config.spongeStickRange; x <= Config.spongeStickRange; x++) {
 			for (int y = -Config.spongeStickRange; y <= Config.spongeStickRange; y++) {
 				for (int z = -Config.spongeStickRange; z <= Config.spongeStickRange; z++) {
@@ -50,7 +57,7 @@ public class ItemSpongeOnAStick extends Item {
 					if (material.isLiquid()) {
 						absorbedAnything = true;
 						hitLava |= material == Material.LAVA;
-						world.setBlockToAir(targetPos);
+						world.setBlockState(targetPos, Blocks.AIR.getDefaultState(), cleanupFlags);
 						if (++damage >= Config.spongeMaxDamage) break;
 					}
 

@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import openblocks.Config;
 import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
+import openmods.utils.BlockNotifyFlags;
 
 @BookDocumentation
 public class BlockSponge extends OpenBlock {
@@ -28,6 +29,10 @@ public class BlockSponge extends OpenBlock {
 		setHarvestLevel("axe", 1);
 	}
 
+	private static int getCleanupFlags() {
+		return Config.spongeBlockUpdate? BlockNotifyFlags.ALL : BlockNotifyFlags.SEND_TO_CLIENTS;
+	}
+
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour, BlockPos neigbourPos) {
 		clearupLiquid(world, pos);
@@ -36,6 +41,30 @@ public class BlockSponge extends OpenBlock {
 	@Override
 	public int tickRate(World world) {
 		return TICK_RATE;
+	}
+
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		if (!Config.spongeBlockUpdate)
+			updateNeigbouringLiquids(world, pos);
+	}
+
+	private void updateNeigbouringLiquids(World world, BlockPos pos) {
+		// unfreeze liquids on cleared area border
+		final int extendedRange = Config.spongeRange + 1;
+		for (int dx = -extendedRange; dx <= extendedRange; dx++) {
+			for (int dy = -extendedRange; dy <= extendedRange; dy++) {
+				for (int dz = -extendedRange; dz <= extendedRange; dz++) {
+					final BlockPos workPos = pos.add(dx, dy, dz);
+					if (!world.isBlockLoaded(workPos)) continue;
+					final IBlockState state = world.getBlockState(workPos);
+					Material material = state.getMaterial();
+					if (material.isLiquid()) {
+						state.neighborChanged(world, workPos, this, pos);
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -53,15 +82,17 @@ public class BlockSponge extends OpenBlock {
 	private void clearupLiquid(World world, BlockPos pos) {
 		if (world.isRemote) return;
 		boolean hitLava = false;
+		final int cleanupFlags = getCleanupFlags();
 		for (int dx = -Config.spongeRange; dx <= Config.spongeRange; dx++) {
 			for (int dy = -Config.spongeRange; dy <= Config.spongeRange; dy++) {
 				for (int dz = -Config.spongeRange; dz <= Config.spongeRange; dz++) {
 					final BlockPos workPos = pos.add(dx, dy, dz);
+					if (!world.isBlockLoaded(workPos)) continue;
 					final IBlockState state = world.getBlockState(workPos);
 					Material material = state.getMaterial();
 					if (material.isLiquid()) {
 						hitLava |= material == Material.LAVA;
-						world.setBlockToAir(pos.add(dx, dy, dz));
+						world.setBlockState(pos.add(dx, dy, dz), Blocks.AIR.getDefaultState(), cleanupFlags);
 					}
 				}
 			}
