@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -573,6 +574,21 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 			public Void get(IBlockState state, World world, BlockPos pos) {
 				BlockCanvas.super.onEntityWalk(world, pos, entityIn);
 				return null;
+			}
+		});
+	}
+
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return getPaintedBlockProperty(worldIn, state, pos, new IBlockPropertyGetter<BlockFaceShape>() {
+			@Override
+			public BlockFaceShape get(IBlockState state, IBlockAccess world, BlockPos pos) {
+				return state.getBlockFaceShape(world, pos, face);
+			}
+		}, new IBlockPropertyGetter<BlockFaceShape>() {
+			@Override
+			public BlockFaceShape get(IBlockState state, IBlockAccess world, BlockPos pos) {
+				return BlockFaceShape.SOLID;
 			}
 		});
 	}

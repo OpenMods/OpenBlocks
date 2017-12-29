@@ -1,6 +1,7 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -41,5 +42,10 @@ public class BlockCannon extends OpenBlock {
 	@Override
 	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
 		return isOnTopOfSolidBlock(world, pos, side);
+	}
+
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return face == EnumFacing.DOWN? BlockFaceShape.MIDDLE_POLE_THICK : BlockFaceShape.UNDEFINED;
 	}
 }

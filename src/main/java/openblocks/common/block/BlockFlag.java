@@ -6,6 +6,7 @@ import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -176,5 +177,10 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	@Override
 	public int damageDropped(IBlockState state) {
 		return state.getValue(COLOR).vanillaBlockId;
+	}
+
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return face == EnumFacing.DOWN? BlockFaceShape.MIDDLE_POLE_THIN : BlockFaceShape.UNDEFINED;
 	}
 }
