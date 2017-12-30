@@ -14,7 +14,6 @@ import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openblocks.rpc.ILevelChanger;
 import openmods.gui.GuiConfigurableSlots;
 import openmods.gui.Icon;
-import openmods.gui.component.BaseComponent;
 import openmods.gui.component.BaseComposite;
 import openmods.gui.component.GuiComponentLabel;
 import openmods.gui.component.GuiComponentPanel;
@@ -75,14 +74,11 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 		root.addComponent(tankLevel);
 
 		final GuiComponentToggleButton<VanillaEnchantLogic.Level> levelSelect = new GuiComponentToggleButton<>(16, 60, 0xFFFFFF, icons);
-		levelSelect.setListener(new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				final VanillaEnchantLogic.Level currentValue = te.getSelectedLevelProvider().getValue();
-				final Level[] values = VanillaEnchantLogic.Level.values();
-				final VanillaEnchantLogic.Level nextValue = values[(currentValue.ordinal() + 1) % values.length];
-				rpc.changeLevel(nextValue);
-			}
+		levelSelect.setListener((IMouseDownListener)(component, x, y, button) -> {
+			final VanillaEnchantLogic.Level currentValue = te.getSelectedLevelProvider().getValue();
+			final Level[] values = VanillaEnchantLogic.Level.values();
+			final VanillaEnchantLogic.Level nextValue = values[(currentValue.ordinal() + 1) % values.length];
+			rpc.changeLevel(nextValue);
 		});
 		addSyncUpdateListener(ValueCopyAction.create(te.getSelectedLevelProvider(), levelSelect));
 		root.addComponent(levelSelect);

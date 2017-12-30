@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import com.google.common.collect.Lists;
 import java.util.List;
-import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -21,8 +20,6 @@ import openmods.fixers.RegisterFixer;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
-import openmods.sync.ISyncListener;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
@@ -73,12 +70,9 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
-		syncMap.addSyncListener(new ISyncListener() {
-			@Override
-			public void onSync(Set<ISyncableObject> changes) {
-				if (changes.contains(selectedPattern))
-					inventory.onInventoryChanged(SLOT_INPUT);
-			}
+		syncMap.addSyncListener(changes -> {
+			if (changes.contains(selectedPattern))
+				inventory.onInventoryChanged(SLOT_INPUT);
 		});
 	}
 

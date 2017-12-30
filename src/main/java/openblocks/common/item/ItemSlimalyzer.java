@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,12 +24,7 @@ public class ItemSlimalyzer extends Item {
 	private static final String TAG_ACTIVE = "Active";
 
 	public ItemSlimalyzer() {
-		addPropertyOverride(new ResourceLocation("active"), new IItemPropertyGetter() {
-			@Override
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return isActive(stack)? 2 : 0;
-			}
-		});
+		addPropertyOverride(new ResourceLocation("active"), (ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> isActive(stack)? 2 : 0);
 	}
 
 	private static boolean isActive(ItemStack stack) {

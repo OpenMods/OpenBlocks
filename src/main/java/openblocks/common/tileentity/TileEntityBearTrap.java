@@ -1,6 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.util.Set;
 import java.util.UUID;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -17,8 +16,6 @@ import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.model.eval.EvalModelState;
-import openmods.sync.ISyncListener;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableFlags;
@@ -45,11 +42,8 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
-		syncMap.addUpdateListener(new ISyncListener() {
-			@Override
-			public void onSync(Set<ISyncableObject> changes) {
-				if (changes.contains(flags) && !isShut()) tickSinceOpened = 0;
-			}
+		syncMap.addUpdateListener(changes -> {
+			if (changes.contains(flags) && !isShut()) tickSinceOpened = 0;
 		});
 	}
 

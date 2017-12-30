@@ -2,9 +2,7 @@ package openblocks.common.item;
 
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -26,12 +24,9 @@ public class ItemPedometer extends Item {
 
 	public ItemPedometer() {
 		setMaxStackSize(1);
-		addPropertyOverride(new ResourceLocation("speed"), new IItemPropertyGetter() {
-			@Override
-			public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
-				if (entityIn == null) return 0;
-				return (float)Math.sqrt(entityIn.motionX * entityIn.motionX + entityIn.motionY * entityIn.motionY + entityIn.motionZ * entityIn.motionZ);
-			}
+		addPropertyOverride(new ResourceLocation("speed"), (stack, worldIn, entityIn) -> {
+			if (entityIn == null) return 0;
+			return (float)Math.sqrt(entityIn.motionX * entityIn.motionX + entityIn.motionY * entityIn.motionY + entityIn.motionZ * entityIn.motionZ);
 		});
 	}
 

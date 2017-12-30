@@ -2,12 +2,10 @@ package openblocks.client;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.RenderSnowball;
@@ -354,12 +352,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 					statesBuilder.put(state, location);
 
 				final Map<IBlockState, ModelResourceLocation> states = statesBuilder.build();
-				ModelLoader.setCustomStateMapper(block, new IStateMapper() {
-					@Override
-					public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block blockIn) {
-						return states;
-					}
-				});
+				ModelLoader.setCustomStateMapper(block, blockIn -> states);
 			}
 		});
 	}

@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
@@ -32,8 +31,6 @@ import openblocks.common.sync.SyncableBlockLayers;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ICustomBreakDrops;
 import openmods.api.ICustomHarvestDrops;
-import openmods.sync.ISyncListener;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
 import openmods.sync.SyncableBlockState;
 import openmods.tileentity.SyncedTileEntity;
@@ -137,27 +134,24 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
-		syncMap.addUpdateListener(new ISyncListener() {
-			@Override
-			public void onSync(Set<ISyncableObject> changes) {
-				boolean stateChanged = false;
+		syncMap.addUpdateListener(changes -> {
+			boolean stateChanged = false;
 
-				if (changes.contains(paintedBlockState)) {
-					onPaintedBlockUpdate();
+			if (changes.contains(paintedBlockState)) {
+				onPaintedBlockUpdate();
+				stateChanged = true;
+			}
+
+			for (Map.Entry<EnumFacing, SyncableBlockLayers> e : allSides.entrySet()) {
+				final SyncableBlockLayers side = e.getValue();
+				if (changes.contains(side)) {
+					canvasState = canvasState.update(e.getKey(), side.convertToState());
 					stateChanged = true;
 				}
-
-				for (Map.Entry<EnumFacing, SyncableBlockLayers> e : allSides.entrySet()) {
-					final SyncableBlockLayers side = e.getValue();
-					if (changes.contains(side)) {
-						canvasState = canvasState.update(e.getKey(), side.convertToState());
-						stateChanged = true;
-					}
-				}
-
-				if (stateChanged)
-					markBlockForRenderUpdate(getPos());
 			}
+
+			if (stateChanged)
+				markBlockForRenderUpdate(getPos());
 		});
 	}
 

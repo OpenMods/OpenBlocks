@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import java.util.Set;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,8 +20,6 @@ import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.model.eval.EvalModelState;
-import openmods.sync.ISyncListener;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
 import openmods.sync.SyncableByte;
 import openmods.sync.SyncableFloat;
@@ -51,13 +48,10 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
-		syncMap.addUpdateListener(new ISyncListener() {
-			@Override
-			public void onSync(Set<ISyncableObject> changes) {
-				if (changes.contains(angle)) {
-					setStateAngle(angle.get());
-					markBlockForRenderUpdate(getPos());
-				}
+		syncMap.addUpdateListener(changes -> {
+			if (changes.contains(angle)) {
+				setStateAngle(angle.get());
+				markBlockForRenderUpdate(getPos());
 			}
 		});
 	}

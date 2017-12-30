@@ -26,7 +26,6 @@ import openblocks.common.MagnetWhitelists;
 import openblocks.common.item.ItemCraneBackpack;
 import openmods.entity.DelayedEntityLoadManager;
 import openmods.entity.EntityBlock;
-import openmods.entity.EntityBlock.EntityFactory;
 import openmods.entity.IEntityLoadListener;
 
 public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalSpawnData {
@@ -296,17 +295,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		Entity result = null;
 
 		if (MagnetWhitelists.instance.testBlock(world, pos)) {
-			result = owner.createByPlayer(new IEntityBlockFactory() {
-				@Override
-				public EntityBlock create(EntityLivingBase player) {
-					return EntityBlock.create(player, world, pos, new EntityFactory() {
-						@Override
-						public EntityBlock create(World world) {
-							return new EntityMountedBlock(world);
-						}
-					});
-				}
-			});
+			result = owner.createByPlayer(player -> EntityBlock.create(player, world, pos, EntityMountedBlock::new));
 		}
 
 		if (result != null) {

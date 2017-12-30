@@ -30,7 +30,6 @@ import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
-import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
 import openmods.include.IncludeInterface;
@@ -89,19 +88,16 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 		if (!(world instanceof WorldServer)) return;
 		final int fertilizerChance = hasBonemeal? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance;
 		if (RANDOM.nextDouble() < 1.0 / fertilizerChance) {
-			FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new PlayerUser() {
-				@Override
-				public void usePlayer(OpenModsFakePlayer fakePlayer) {
-					final int x = selectFromRange(Config.sprinklerEffectiveRange);
-					final int z = selectFromRange(Config.sprinklerEffectiveRange);
+			FakePlayerPool.instance.executeOnPlayer((WorldServer)world, (PlayerUser)fakePlayer -> {
+				final int x = selectFromRange(Config.sprinklerEffectiveRange);
+				final int z = selectFromRange(Config.sprinklerEffectiveRange);
 
-					for (int y = -1; y <= 1; y++) {
-						BlockPos target = pos.add(x, y, z);
+				for (int y = -1; y <= 1; y++) {
+					BlockPos target = pos.add(x, y, z);
 
-						if (ItemDye.applyBonemeal(BONEMEAL.copy(), world, target, fakePlayer, EnumHand.MAIN_HAND))
-							break;
+					if (ItemDye.applyBonemeal(BONEMEAL.copy(), world, target, fakePlayer, EnumHand.MAIN_HAND))
+						break;
 
-					}
 				}
 			});
 		}

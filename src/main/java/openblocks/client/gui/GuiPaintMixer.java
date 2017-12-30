@@ -10,7 +10,6 @@ import openblocks.rpc.IColorChanger;
 import openmods.api.IValueProvider;
 import openmods.colors.ColorMeta;
 import openmods.gui.SyncedGuiContainer;
-import openmods.gui.component.BaseComponent;
 import openmods.gui.component.GuiComponentColorPicker;
 import openmods.gui.component.GuiComponentLevel;
 import openmods.gui.component.GuiComponentPalettePicker;
@@ -77,12 +76,7 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 		{
 			GuiComponentTextButton buttonMix = new GuiComponentTextButton(125, 57, 30, 13, 0xFFFFFF);
 			buttonMix.setText("Mix")
-					.setListener(new IMouseDownListener() {
-						@Override
-						public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-							rpcIntf.changeColor(selectedColor);
-						}
-					});
+					.setListener((IMouseDownListener)(component, x, y, button) -> rpcIntf.changeColor(selectedColor));
 			root.addComponent(buttonMix);
 		}
 

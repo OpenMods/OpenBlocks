@@ -12,7 +12,6 @@ import openblocks.common.container.ContainerProjector;
 import openblocks.rpc.IRotatable;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.Icon;
-import openmods.gui.component.BaseComponent;
 import openmods.gui.component.BaseComposite;
 import openmods.gui.component.EmptyComposite;
 import openmods.gui.component.GuiComponentIconButton;
@@ -31,12 +30,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 	private TrackballWrapper trackball = new TrackballWrapper(1, 150);
 
 	private static IMouseDownListener createRotationListener(final IRotatable proxy, final int direction) {
-		return new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				proxy.rotate(direction);
-			}
-		};
+		return (component, x, y, button) -> proxy.rotate(direction);
 	}
 
 	public GuiProjector(ContainerProjector container) {

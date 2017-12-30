@@ -3,7 +3,6 @@ package openblocks.common.tileentity;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import java.util.EnumMap;
-import java.util.Set;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -36,8 +35,6 @@ import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
-import openmods.sync.ISyncListener;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableFloat;
@@ -238,15 +235,11 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
-		syncMap.addUpdateListener(new ISyncListener() {
-
-			@Override
-			public void onSync(Set<ISyncableObject> changes) {
-				if (asm != null && changes.contains(progress)) {
-					final String expectedState = (progress.get() > 0)? "working" : "idle";
-					if (!asm.currentState().equals(expectedState))
-						asm.transition(expectedState);
-				}
+		syncMap.addUpdateListener(changes -> {
+			if (asm != null && changes.contains(progress)) {
+				final String expectedState = (progress.get() > 0)? "working" : "idle";
+				if (!asm.currentState().equals(expectedState))
+					asm.transition(expectedState);
 			}
 		});
 	}

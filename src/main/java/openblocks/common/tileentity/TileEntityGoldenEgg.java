@@ -30,7 +30,6 @@ import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
-import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 
@@ -195,18 +194,14 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	private void pickUpBlock(final WorldServer world, final BlockPos pos) {
-		FakePlayerPool.instance.executeOnPlayer(world, new PlayerUser() {
-
-			@Override
-			public void usePlayer(OpenModsFakePlayer fakePlayer) {
-				EntityBlock block = EntityBlock.create(fakePlayer, world, pos);
-				if (block != null) {
-					block.setHasAirResistance(false);
-					block.setHasGravity(false);
-					block.motionY = 0.1;
-					blocks.add(block);
-					world.spawnEntity(block);
-				}
+		FakePlayerPool.instance.executeOnPlayer(world, (PlayerUser)fakePlayer -> {
+			EntityBlock block = EntityBlock.create(fakePlayer, world, pos);
+			if (block != null) {
+				block.setHasAirResistance(false);
+				block.setHasGravity(false);
+				block.motionY = 0.1;
+				blocks.add(block);
+				world.spawnEntity(block);
 			}
 		});
 

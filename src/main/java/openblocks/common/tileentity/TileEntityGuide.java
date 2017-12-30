@@ -67,50 +67,32 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	private static IShapeManipulator createHalfAxisIncrementer(final HalfAxis halfAxis) {
-		return new IShapeManipulator() {
-			@Override
-			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-				return te.incrementHalfAxis(halfAxis, player);
-			}
-		};
+		return (te, player) -> te.incrementHalfAxis(halfAxis, player);
 	}
 
 	private static IShapeManipulator createHalfAxisDecrementer(final HalfAxis halfAxis) {
-		return new IShapeManipulator() {
-			@Override
-			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-				return te.decrementHalfAxis(halfAxis, player);
-			}
-		};
+		return (te, player) -> te.decrementHalfAxis(halfAxis, player);
 	}
 
 	private static IShapeManipulator createHalfAxisCopier(final HalfAxis halfAxis) {
-		return new IShapeManipulator() {
-			@Override
-			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-				return te.copyHalfAxis(halfAxis, halfAxis.negate(), player);
-			}
-		};
+		return (te, player) -> te.copyHalfAxis(halfAxis, halfAxis.negate(), player);
 	}
 
 	private static IShapeManipulator createRotationManipulator(final HalfAxis ha) {
-		return new IShapeManipulator() {
-			@Override
-			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-				final World world = te.getWorld();
-				final BlockPos pos = te.getPos();
-				final IBlockState state = world.getBlockState(pos);
-				final Block block = state.getBlock();
-				if (block instanceof OpenBlock) {
-					final IProperty<Orientation> orientationProperty = ((OpenBlock)block).propertyOrientation;
-					final Orientation orientation = state.getValue(orientationProperty);
-					final Orientation newOrientation = orientation.rotateAround(ha);
-					world.setBlockState(pos, state.withProperty(orientationProperty, newOrientation));
-					return true;
-				}
-
-				return false;
+		return (te, player) -> {
+			final World world = te.getWorld();
+			final BlockPos pos = te.getPos();
+			final IBlockState state = world.getBlockState(pos);
+			final Block block = state.getBlock();
+			if (block instanceof OpenBlock) {
+				final IProperty<Orientation> orientationProperty = ((OpenBlock)block).propertyOrientation;
+				final Orientation orientation = state.getValue(orientationProperty);
+				final Orientation newOrientation = orientation.rotateAround(ha);
+				world.setBlockState(pos, state.withProperty(orientationProperty, newOrientation));
+				return true;
 			}
+
+			return false;
 		};
 	}
 
@@ -129,62 +111,53 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		commands.put("rotate_ccw", createRotationManipulator(HalfAxis.NEG_Y));
 		commands.put("rotate_cw", createRotationManipulator(HalfAxis.POS_Y));
 
-		commands.put("inc_mode", new IShapeManipulator() {
-			@Override
-			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-				te.incrementMode(player);
-				return true;
-			}
+		commands.put("inc_mode", (te, player) -> {
+			te.incrementMode(player);
+			return true;
 		});
 
-		commands.put("dec_mode", new IShapeManipulator() {
-			@Override
-			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-				te.decrementMode(player);
-				return true;
-			}
+		commands.put("dec_mode", (te, player) -> {
+			te.decrementMode(player);
+			return true;
 		});
 
 		COMMANDS = commands.build();
 	}
 
-	private static final Comparator<BlockPos> COMPARATOR = new Comparator<BlockPos>() {
-		@Override
-		public int compare(BlockPos o1, BlockPos o2) {
-			{
-				// first, go from bottom to top
-				int result = Ints.compare(o1.getX(), o2.getX());
-				if (result != 0) return result;
-			}
+	private static final Comparator<BlockPos> COMPARATOR = (o1, o2) -> {
+		{
+			// first, go from bottom to top
+			int result1 = Ints.compare(o1.getX(), o2.getX());
+			if (result1 != 0) return result1;
+		}
 
-			{
-				// then sort by angle, to make placement more intuitive
-				final double angle1 = Math.atan2(o1.getZ(), o1.getX());
-				final double angle2 = Math.atan2(o2.getZ(), o2.getX());
+		{
+			// then sort by angle, to make placement more intuitive
+			final double angle1 = Math.atan2(o1.getZ(), o1.getX());
+			final double angle2 = Math.atan2(o2.getZ(), o2.getX());
 
-				int result = Doubles.compare(angle1, angle2);
-				if (result != 0) return result;
-			}
+			int result2 = Doubles.compare(angle1, angle2);
+			if (result2 != 0) return result2;
+		}
 
-			{
-				// then sort by distance, far ones first
-				final double length1 = MathUtils.lengthSq(o1.getX(), o1.getZ());
-				final double length2 = MathUtils.lengthSq(o2.getX(), o2.getZ());
+		{
+			// then sort by distance, far ones first
+			final double length1 = MathUtils.lengthSq(o1.getX(), o1.getZ());
+			final double length2 = MathUtils.lengthSq(o2.getX(), o2.getZ());
 
-				int result = Doubles.compare(length2, length1);
-				if (result != 0) return result;
-			}
+			int result3 = Doubles.compare(length2, length1);
+			if (result3 != 0) return result3;
+		}
 
-			// then sort by x and z to make all unique BlockPosinates are included
-			{
-				int result = Ints.compare(o1.getX(), o2.getX());
-				if (result != 0) return result;
-			}
+		// then sort by x and z to make all unique BlockPosinates are included
+		{
+			int result4 = Ints.compare(o1.getX(), o2.getX());
+			if (result4 != 0) return result4;
+		}
 
-			{
-				int result = Ints.compare(o1.getZ(), o2.getZ());
-				return result;
-			}
+		{
+			int result5 = Ints.compare(o1.getZ(), o2.getZ());
+			return result5;
 		}
 	};
 
@@ -417,11 +390,8 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		final IShapeGenerator generator = getCurrentMode().generator;
 
 		final Set<BlockPos> uniqueResults = Sets.newHashSet();
-		final IShapeable collector = new IShapeable() {
-			@Override
-			public void setBlock(int x, int y, int z) {
-				if (canAddCoord(x, y, z)) uniqueResults.add(new BlockPos(x, y, z));
-			}
+		final IShapeable collector = (x, y, z) -> {
+			if (canAddCoord(x, y, z)) uniqueResults.add(new BlockPos(x, y, z));
 		};
 		generator.generateShape(-negX.get(), -negY.get(), -negZ.get(), posX.get(), posY.get(), posZ.get(), collector);
 

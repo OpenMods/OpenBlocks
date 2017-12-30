@@ -7,8 +7,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -41,12 +39,9 @@ public class ItemTankBlock extends ItemOpenBlock {
 	public ItemTankBlock(Block block) {
 		super(block);
 
-		addPropertyOverride(new ResourceLocation("level"), new IItemPropertyGetter() {
-			@Override
-			public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
-				final FluidTank tank = readTank(stack);
-				return 16.0f * tank.getFluidAmount() / tank.getCapacity();
-			}
+		addPropertyOverride(new ResourceLocation("level"), (stack, worldIn, entityIn) -> {
+			final FluidTank tank = readTank(stack);
+			return 16.0f * tank.getFluidAmount() / tank.getCapacity();
 		});
 	}
 

@@ -8,7 +8,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -28,12 +27,7 @@ public class ItemHangGlider extends Item implements IStateItem {
 	private static Map<EntityPlayer, EntityHangGlider> spawnedGlidersMap = new MapMaker().weakKeys().weakValues().makeMap();
 
 	public ItemHangGlider() {
-		addPropertyOverride(new ResourceLocation("hidden"), new IItemPropertyGetter() {
-			@Override
-			public float apply(@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return EntityHangGlider.isHeldStackDeployedGlider(entityIn, stack)? 2 : 0;
-			}
-		});
+		addPropertyOverride(new ResourceLocation("hidden"), (@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> EntityHangGlider.isHeldStackDeployedGlider(entityIn, stack)? 2 : 0);
 	}
 
 	public static final IProperty<Boolean> deployedProperty = PropertyBool.create("deployed");

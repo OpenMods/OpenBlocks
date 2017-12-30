@@ -191,13 +191,10 @@ public class PlayerDeathHandler {
 
 			IInventory loot = getLoot();
 
-			if (Config.backupGraves) backupGrave(world, loot, new ExtrasFiller() {
-				@Override
-				public void addExtras(NBTTagCompound meta) {
-					setCommonStoreInfo(meta, true);
-					meta.setTag("GraveLocation", NbtUtils.store(gravePos));
+			if (Config.backupGraves) backupGrave(world, loot, meta -> {
+				setCommonStoreInfo(meta, true);
+				meta.setTag("GraveLocation", NbtUtils.store(gravePos));
 
-				}
 			});
 
 			Log.info("Grave for (%s,%s) was spawned at (%s) (player died at (%s))", stiffId.getId(), stiffId.getName(), gravePos, playerPos);
@@ -303,12 +300,7 @@ public class PlayerDeathHandler {
 			if (!trySpawnGrave(player, world)) {
 				if (Config.backupGraves) {
 					IInventory loot = getLoot();
-					backupGrave(world, loot, new ExtrasFiller() {
-						@Override
-						public void addExtras(NBTTagCompound meta) {
-							setCommonStoreInfo(meta, false);
-						}
-					});
+					backupGrave(world, loot, meta -> setCommonStoreInfo(meta, false));
 				}
 
 				for (EntityItem drop : loot)

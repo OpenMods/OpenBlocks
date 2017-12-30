@@ -21,20 +21,10 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 
 		final int buttonHeight = ARROW_UP.height + GuiComponentIconButton.BORDER_SIZE;
 		GuiComponentIconButton buttonTop = new GuiComponentIconButton(88 + 8 + 2 + 18, 34 + 9 - buttonHeight, 0xFFFFFF, ARROW_UP);
-		buttonTop.setListener(new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				rpcProxy.selectionUp();
-			}
-		});
+		buttonTop.setListener((IMouseDownListener)(component, x, y, button) -> rpcProxy.selectionUp());
 
 		GuiComponentIconButton buttonBottom = new GuiComponentIconButton(88 + 8 + 2 + 18, 34 + 9, 0xFFFFFF, ARROW_UP.mirrorHorizontal());
-		buttonBottom.setListener(new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				rpcProxy.selectionDown();
-			}
-		});
+		buttonBottom.setListener((IMouseDownListener)(component, x, y, button) -> rpcProxy.selectionDown());
 
 		root.addComponent(new GuiComponentSprite(88 - 8, 34, ARROW_LEFT.mirrorVertical()));
 		root.addComponent(buttonTop);

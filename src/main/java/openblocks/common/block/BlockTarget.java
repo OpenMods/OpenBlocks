@@ -28,7 +28,6 @@ import openmods.Log;
 import openmods.block.OpenBlock;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUserReturning;
-import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Orientation;
 import openmods.utils.BlockNotifyFlags;
@@ -173,36 +172,32 @@ public class BlockTarget extends OpenBlock.FourDirections {
 
 		final List<ItemStack> drops = Lists.newArrayList();
 
-		int failed = FakePlayerPool.instance.executeOnPlayer(world, new PlayerUserReturning<Integer>() {
+		int failed = FakePlayerPool.instance.executeOnPlayer(world, (PlayerUserReturning<Integer>)fakePlayer -> {
+			int failedCount = 0;
 
-			@Override
-			public Integer usePlayer(OpenModsFakePlayer fakePlayer) {
-				int failed = 0;
-
-				for (EntityArrow arrow : arrows) {
-					if (arrow.pickupStatus == EntityArrow.PickupStatus.CREATIVE_ONLY) {
-						arrow.setDead();
-					} else {
-						try {
-							arrow.onCollideWithPlayer(fakePlayer);
-						} catch (Throwable t) {
-							Log.warn(t, "Failed to collide arrow %s with fake player, returing vanilla one", arrow);
-							failed++;
-						}
+			for (EntityArrow arrow : arrows) {
+				if (arrow.pickupStatus == EntityArrow.PickupStatus.CREATIVE_ONLY) {
+					arrow.setDead();
+				} else {
+					try {
+						arrow.onCollideWithPlayer(fakePlayer);
+					} catch (Throwable t) {
+						Log.warn(t, "Failed to collide arrow %s with fake player, returing vanilla one", arrow);
+						failedCount++;
 					}
 				}
-
-				IInventory inventory = fakePlayer.inventory;
-				for (int i = 0; i < inventory.getSizeInventory(); i++) {
-					ItemStack stack = inventory.getStackInSlot(i);
-					if (!stack.isEmpty())
-						drops.add(stack);
-				}
-				inventory.clear();
-
-				return failed;
-
 			}
+
+			IInventory inventory = fakePlayer.inventory;
+			for (int i = 0; i < inventory.getSizeInventory(); i++) {
+				ItemStack stack = inventory.getStackInSlot(i);
+				if (!stack.isEmpty())
+					drops.add(stack);
+			}
+			inventory.clear();
+
+			return failedCount;
+
 		});
 
 		for (ItemStack drop : drops)

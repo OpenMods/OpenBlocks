@@ -12,7 +12,6 @@ import openblocks.common.container.ContainerDonationStation;
 import openblocks.common.tileentity.TileEntityDonationStation;
 import openmods.Log;
 import openmods.gui.BaseGuiContainer;
-import openmods.gui.component.BaseComponent;
 import openmods.gui.component.GuiComponentLabel;
 import openmods.gui.component.GuiComponentTextButton;
 import openmods.gui.listener.IMouseDownListener;
@@ -33,22 +32,19 @@ public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStatio
 		root.addComponent((lblAuthors = new GuiComponentLabel(55, 42, 200, 18, "").setScale(0.5f)));
 		root.addComponent((buttonDonate = new GuiComponentTextButton(31, 60, 115, 13, 0xFFFFFF)).setText("Donate to the author"));
 
-		buttonDonate.setListener(new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				if (!buttonDonate.isButtonEnabled()) return;
+		buttonDonate.setListener((IMouseDownListener)(component, x, y, button) -> {
+			if (!buttonDonate.isButtonEnabled()) return;
 
-				String donationUrl = getContainer().getOwner().getDonationUrl();
-				if (Strings.isNullOrEmpty(donationUrl)) return;
+			String donationUrl = getContainer().getOwner().getDonationUrl();
+			if (Strings.isNullOrEmpty(donationUrl)) return;
 
-				URI uri = URI.create(donationUrl);
+			URI uri = URI.create(donationUrl);
 
-				if (Minecraft.getMinecraft().gameSettings.chatLinksPrompt) {
-					displayedURI = uri;
-					mc.displayGuiScreen(new GuiConfirmOpenLink(GuiDonationStation.this, displayedURI.toString(), PROMPT_REPLY_ACTION, false));
-				} else {
-					openURI(uri);
-				}
+			if (Minecraft.getMinecraft().gameSettings.chatLinksPrompt) {
+				displayedURI = uri;
+				mc.displayGuiScreen(new GuiConfirmOpenLink(GuiDonationStation.this, displayedURI.toString(), PROMPT_REPLY_ACTION, false));
+			} else {
+				openURI(uri);
 			}
 		});
 	}

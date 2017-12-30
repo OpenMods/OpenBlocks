@@ -3,7 +3,6 @@ package openblocks.common;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import gnu.trove.procedure.TIntProcedure;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import java.util.List;
@@ -125,12 +124,7 @@ public class MapDataManager {
 		}
 
 		if (!missingMaps.isEmpty()) {
-			boolean lessThan16 = missingMaps.forEach(new TIntProcedure() {
-				@Override
-				public boolean execute(int value) {
-					return value < 16;
-				}
-			});
+			boolean lessThan16 = missingMaps.forEach(value -> value < 16);
 
 			// NEI asks for items with damage 0..15 and I can't block it via API
 			if (Config.alwaysReportInvalidMapRequests || !lessThan16 || !Loader.isModLoaded(Mods.NOTENOUGHITEMS)) Log.info("Player %s asked for non-existent maps %s", evt.sender, missingMaps.toString());

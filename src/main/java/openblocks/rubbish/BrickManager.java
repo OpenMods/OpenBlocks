@@ -1,6 +1,5 @@
 package openblocks.rubbish;
 
-import java.util.concurrent.Callable;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
@@ -58,12 +57,7 @@ public class BrickManager {
 				instance.brickCount = ((NBTTagInt)nbt).getInt();
 			}
 
-		}, new Callable<BowelContents>() {
-			@Override
-			public BowelContents call() throws Exception {
-				return new BowelContents();
-			}
-		});
+		}, BowelContents::new);
 
 		MinecraftForge.EVENT_BUS.register(new CapabilityInjector());
 	}

@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Callable;
 import javax.annotation.Nullable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -67,12 +66,7 @@ public class FlimFlamEnchantmentsHandler {
 				instance.luck = ((NBTTagInt)nbt).getInt();
 			}
 
-		}, new Callable<Luck>() {
-			@Override
-			public Luck call() throws Exception {
-				return new Luck();
-			}
-		});
+		}, Luck::new);
 
 		MinecraftForge.EVENT_BUS.register(new CapabilityInjector());
 	}

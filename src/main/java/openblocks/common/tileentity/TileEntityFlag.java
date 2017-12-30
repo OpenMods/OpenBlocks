@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import java.util.Set;
 import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,8 +16,6 @@ import openmods.api.ICustomHarvestDrops;
 import openmods.api.IPlaceAwareTile;
 import openmods.colors.ColorMeta;
 import openmods.model.eval.EvalModelState;
-import openmods.sync.ISyncListener;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
 import openmods.sync.SyncableEnum;
 import openmods.sync.SyncableFloat;
@@ -41,13 +38,10 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
-		syncMap.addUpdateListener(new ISyncListener() {
-			@Override
-			public void onSync(Set<ISyncableObject> changes) {
-				if (changes.contains(angle)) {
-					setStateAngle(angle.get());
-					markBlockForRenderUpdate(getPos());
-				}
+		syncMap.addUpdateListener(changes -> {
+			if (changes.contains(angle)) {
+				setStateAngle(angle.get());
+				markBlockForRenderUpdate(getPos());
 			}
 		});
 	}

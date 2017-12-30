@@ -177,12 +177,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
-		syncMap.addSyncListener(new ISyncListener() {
-			@Override
-			public void onSync(Set<ISyncableObject> changes) {
-				ticksSinceLastSync = 0;
-			}
-		});
+		syncMap.addSyncListener(changes -> ticksSinceLastSync = 0);
 
 		syncMap.addUpdateListener(new RenderUpdateListeners());
 	}

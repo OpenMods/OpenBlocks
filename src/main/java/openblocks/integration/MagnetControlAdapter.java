@@ -17,7 +17,6 @@ import openblocks.common.entity.EntityMagnet.IOwner;
 import openmods.entity.EntityBlock;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUserReturning;
-import openmods.fakeplayer.OpenModsFakePlayer;
 import openperipheral.api.adapter.IWorldProvider;
 import openperipheral.api.adapter.method.Alias;
 import openperipheral.api.adapter.method.Arg;
@@ -90,12 +89,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		public EntityBlock createByPlayer(final IEntityBlockFactory factory) {
 			World world = turtle.getWorld();
 
-			if (world instanceof WorldServer) return FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new PlayerUserReturning<EntityBlock>() {
-				@Override
-				public EntityBlock usePlayer(OpenModsFakePlayer fakePlayer) {
-					return factory.create(fakePlayer);
-				}
-			});
+			if (world instanceof WorldServer) return FakePlayerPool.instance.executeOnPlayer((WorldServer)world, (PlayerUserReturning<EntityBlock>)factory::create);
 			return null;
 		}
 	}

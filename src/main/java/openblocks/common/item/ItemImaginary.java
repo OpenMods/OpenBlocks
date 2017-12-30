@@ -13,7 +13,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -153,12 +152,9 @@ public class ItemImaginary extends ItemOpenBlock {
 		setHasSubtypes(true);
 		setMaxDamage(0);
 
-		addPropertyOverride(new ResourceLocation("mode"), new IItemPropertyGetter() {
-			@Override
-			public float apply(@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				NBTTagCompound tag = ItemUtils.getItemTag(stack);
-				return tag.getByte(TAG_MODE);
-			}
+		addPropertyOverride(new ResourceLocation("mode"), (@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> {
+			NBTTagCompound tag = ItemUtils.getItemTag(stack);
+			return tag.getByte(TAG_MODE);
 		});
 	}
 

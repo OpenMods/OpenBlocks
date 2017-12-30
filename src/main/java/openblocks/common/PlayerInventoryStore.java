@@ -108,34 +108,31 @@ public class PlayerInventoryStore {
 	}
 
 	private static ExtrasFiller createExtrasFiller(final GameProfile profile, final double x, final double y, final double z, final Map<String, SubInventory> subs) {
-		return new ExtrasFiller() {
-			@Override
-			public void addExtras(NBTTagCompound meta) {
-				meta.setString(TAG_PLAYER_NAME, profile.getName());
-				meta.setString(TAG_PLAYER_UUID, profile.getId().toString());
+		return meta -> {
+			meta.setString(TAG_PLAYER_NAME, profile.getName());
+			meta.setString(TAG_PLAYER_UUID, profile.getId().toString());
 
-				meta.setTag(TAG_LOCATION, NbtUtils.store(x, y, z));
+			meta.setTag(TAG_LOCATION, NbtUtils.store(x, y, z));
 
-				NBTTagCompound subInventories = new NBTTagCompound();
+			NBTTagCompound subInventories = new NBTTagCompound();
 
-				for (Map.Entry<String, SubInventory> e : subs.entrySet()) {
-					NBTTagList subInventory = new NBTTagList();
+			for (Map.Entry<String, SubInventory> e : subs.entrySet()) {
+				NBTTagList subInventory = new NBTTagList();
 
-					for (Map.Entry<Integer, ItemStack> ie : e.getValue().asMap().entrySet()) {
-						ItemStack stack = ie.getValue();
-						if (!stack.isEmpty()) {
-							NBTTagCompound stacktag = new NBTTagCompound();
-							stack.writeToNBT(stacktag);
-							stacktag.setInteger(TAG_SLOT, ie.getKey());
-							subInventory.appendTag(stacktag);
-						}
+				for (Map.Entry<Integer, ItemStack> ie : e.getValue().asMap().entrySet()) {
+					ItemStack stack = ie.getValue();
+					if (!stack.isEmpty()) {
+						NBTTagCompound stacktag = new NBTTagCompound();
+						stack.writeToNBT(stacktag);
+						stacktag.setInteger(TAG_SLOT, ie.getKey());
+						subInventory.appendTag(stacktag);
 					}
-
-					subInventories.setTag(e.getKey(), subInventory);
 				}
 
-				meta.setTag(TAG_SUB_INVENTORIES, subInventories);
+				subInventories.setTag(e.getKey(), subInventory);
 			}
+
+			meta.setTag(TAG_SUB_INVENTORIES, subInventories);
 		};
 	}
 
@@ -234,12 +231,7 @@ public class PlayerInventoryStore {
 	public List<String> getMatchedDumps(World world, String prefix) {
 		File saveFolder = getSaveFolder(world);
 		final String actualPrefix = StringUtils.startsWithIgnoreCase(prefix, PREFIX)? prefix : PREFIX + prefix;
-		File[] files = saveFolder.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.startsWith(actualPrefix);
-			}
-		});
+		File[] files = saveFolder.listFiles((FilenameFilter)(dir, name) -> name.startsWith(actualPrefix));
 
 		List<String> result = Lists.newArrayList();
 		int toCut = PREFIX.length();

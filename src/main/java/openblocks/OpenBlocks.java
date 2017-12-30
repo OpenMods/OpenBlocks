@@ -634,26 +634,11 @@ public class OpenBlocks {
 
 		@Override
 		protected void setupItemFactory(FactoryRegistry<Item> itemFactory) {
-			itemFactory.registerFactory("pencil_glasses", new FactoryRegistry.Factory<Item>() {
-				@Override
-				public Item construct() {
-					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL);
-				}
-			});
+			itemFactory.registerFactory("pencil_glasses", () -> new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL));
 
-			itemFactory.registerFactory("technicolor_glasses", new FactoryRegistry.Factory<Item>() {
-				@Override
-				public Item construct() {
-					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR);
-				}
-			});
+			itemFactory.registerFactory("technicolor_glasses", () -> new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR));
 
-			itemFactory.registerFactory("serious_glasses", new FactoryRegistry.Factory<Item>() {
-				@Override
-				public Item construct() {
-					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD);
-				}
-			});
+			itemFactory.registerFactory("serious_glasses", () -> new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD));
 		}
 
 	};

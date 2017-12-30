@@ -26,7 +26,6 @@ import openblocks.client.Icons.IDrawableIcon;
 import openblocks.common.item.ItemSonicGlasses;
 import openmods.config.properties.ConfigurationChange;
 import openmods.renderer.ManualDisplayList;
-import openmods.renderer.ManualDisplayList.Renderer;
 import openmods.utils.TextureUtils;
 import openmods.utils.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
@@ -145,49 +144,46 @@ public class SoundEventsManager {
 		}
 
 		if (!notPumpkinOverlay.isCompiled()) {
-			notPumpkinOverlay.compile(new Renderer() {
-				@Override
-				public void render() {
-					GL11.glMatrixMode(GL11.GL_MODELVIEW);
-					GL11.glPushMatrix();
-					GL11.glLoadIdentity();
+			notPumpkinOverlay.compile(() -> {
+				GL11.glMatrixMode(GL11.GL_MODELVIEW);
+				GL11.glPushMatrix();
+				GL11.glLoadIdentity();
 
-					GL11.glMatrixMode(GL11.GL_PROJECTION);
-					GL11.glPushMatrix();
-					GL11.glLoadIdentity();
-					GL11.glOrtho(-1, 1, -1, 1, -1, 1);
+				GL11.glMatrixMode(GL11.GL_PROJECTION);
+				GL11.glPushMatrix();
+				GL11.glLoadIdentity();
+				GL11.glOrtho(-1, 1, -1, 1, -1, 1);
 
-					final float maxU = (float)mc.displayWidth / 1024;
-					final float maxV = (float)mc.displayHeight / 1024;
+				final float maxU = (float)mc.displayWidth / 1024;
+				final float maxV = (float)mc.displayHeight / 1024;
 
-					if (Config.sonicGlassesUseTexture) {
-						GL11.glBegin(GL11.GL_QUADS);
+				if (Config.sonicGlassesUseTexture) {
+					GL11.glBegin(GL11.GL_QUADS);
 
-						GL11.glTexCoord2f(0, 0);
-						GL11.glVertex3f(-1, -1, 0);
+					GL11.glTexCoord2f(0, 0);
+					GL11.glVertex3f(-1, -1, 0);
 
-						GL11.glTexCoord2f(maxU, 0);
-						GL11.glVertex3f(+1, -1, 0);
+					GL11.glTexCoord2f(maxU, 0);
+					GL11.glVertex3f(+1, -1, 0);
 
-						GL11.glTexCoord2f(maxU, maxV);
-						GL11.glVertex3f(+1, +1, 0);
+					GL11.glTexCoord2f(maxU, maxV);
+					GL11.glVertex3f(+1, +1, 0);
 
-						GL11.glTexCoord2f(0, maxV);
-						GL11.glVertex3f(-1, +1, 0);
-						GL11.glEnd();
-					} else {
-						GL11.glBegin(GL11.GL_QUADS);
-						GL11.glVertex3f(-1, -1, 0);
-						GL11.glVertex3f(+1, -1, 0);
-						GL11.glVertex3f(+1, +1, 0);
-						GL11.glVertex3f(-1, +1, 0);
-						GL11.glEnd();
-					}
-
-					GL11.glPopMatrix();
-					GL11.glMatrixMode(GL11.GL_MODELVIEW);
-					GL11.glPopMatrix();
+					GL11.glTexCoord2f(0, maxV);
+					GL11.glVertex3f(-1, +1, 0);
+					GL11.glEnd();
+				} else {
+					GL11.glBegin(GL11.GL_QUADS);
+					GL11.glVertex3f(-1, -1, 0);
+					GL11.glVertex3f(+1, -1, 0);
+					GL11.glVertex3f(+1, +1, 0);
+					GL11.glVertex3f(-1, +1, 0);
+					GL11.glEnd();
 				}
+
+				GL11.glPopMatrix();
+				GL11.glMatrixMode(GL11.GL_MODELVIEW);
+				GL11.glPopMatrix();
 			});
 		}
 

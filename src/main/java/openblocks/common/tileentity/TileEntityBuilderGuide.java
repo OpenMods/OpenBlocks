@@ -99,19 +99,16 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 
 	@Override
 	public void trigger(BlockPos pos, final int stateId) {
-		GeometryUtils.line3D(this.pos, pos, new IShapeable() {
-			@Override
-			public void setBlock(int x, int y, int z) {
-				final double dx = x + 0.5;
-				final double dy = y + 0.5;
-				final double dz = z + 0.5;
-				for (int i = 0; i < 5; i++) {
-					double px = dx + 0.3 * RANDOM.nextFloat();
-					double py = dy + 0.3 * RANDOM.nextFloat();
-					double pz = dz + 0.3 * RANDOM.nextFloat();
-					world.spawnParticle(EnumParticleTypes.PORTAL, px, py, pz, 0, 0, 0);
-					world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px, py, pz, 0, 0, 0, stateId);
-				}
+		GeometryUtils.line3D(this.pos, pos, (IShapeable)(x, y, z) -> {
+			final double dx = x + 0.5;
+			final double dy = y + 0.5;
+			final double dz = z + 0.5;
+			for (int i = 0; i < 5; i++) {
+				double px = dx + 0.3 * RANDOM.nextFloat();
+				double py = dy + 0.3 * RANDOM.nextFloat();
+				double pz = dz + 0.3 * RANDOM.nextFloat();
+				world.spawnParticle(EnumParticleTypes.PORTAL, px, py, pz, 0, 0, 0);
+				world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px, py, pz, 0, 0, 0, stateId);
 			}
 		});
 	}

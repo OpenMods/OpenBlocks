@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -28,12 +27,7 @@ public class ItemLuggage extends Item {
 	public ItemLuggage() {
 		setMaxStackSize(1);
 
-		addPropertyOverride(new ResourceLocation("inventory"), new IItemPropertyGetter() {
-			@Override
-			public float apply(@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return getInventorySize(stack);
-			}
-		});
+		addPropertyOverride(new ResourceLocation("inventory"), (@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> getInventorySize(stack));
 	}
 
 	@Override

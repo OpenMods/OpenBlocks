@@ -142,13 +142,10 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 		final float y = inputBuffer.getFloat();
 		final float z = inputBuffer.getFloat();
 
-		return new IVertexElementWriter() {
-			@Override
-			public void write(ByteBuffer output, RenderInfo info) {
-				output.putFloat((float)(x + info.x));
-				output.putFloat((float)(y + info.y));
-				output.putFloat((float)(z + info.z));
-			}
+		return (output, info) -> {
+			output.putFloat((float)(x + info.x));
+			output.putFloat((float)(y + info.y));
+			output.putFloat((float)(z + info.z));
 		};
 	}
 
@@ -160,19 +157,16 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 		final float inputG = inputBuffer.get() & 0xFF;
 		final float inputR = inputBuffer.get() & 0xFF;
 
-		return new IVertexElementWriter() {
-			@Override
-			public void write(ByteBuffer output, RenderInfo info) {
-				final int alpha = Math.min(0xFF, (int)(inputA * info.a));
-				final int red = Math.min(0xFF, (int)(inputR * info.r));
-				final int green = Math.min(0xFF, (int)(inputG * info.g));
-				final int blue = Math.min(0xFF, (int)(inputB * info.b));
+		return (output, info) -> {
+			final int alpha = Math.min(0xFF, (int)(inputA * info.a));
+			final int red = Math.min(0xFF, (int)(inputR * info.r));
+			final int green = Math.min(0xFF, (int)(inputG * info.g));
+			final int blue = Math.min(0xFF, (int)(inputB * info.b));
 
-				output.put((byte)red);
-				output.put((byte)green);
-				output.put((byte)blue);
-				output.put((byte)alpha);
-			}
+			output.put((byte)red);
+			output.put((byte)green);
+			output.put((byte)blue);
+			output.put((byte)alpha);
 		};
 	}
 
@@ -182,32 +176,20 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 		final float u = inputBuffer.getFloat();
 		final float v = inputBuffer.getFloat();
 
-		return new IVertexElementWriter() {
-			@Override
-			public void write(ByteBuffer output, RenderInfo info) {
-				output.putFloat(u);
-				output.putFloat(v);
-			}
+		return (output, info) -> {
+			output.putFloat(u);
+			output.putFloat(v);
 		};
 	}
 
-	private static final IVertexElementWriter FIXED_COLOR_WRITER = new IVertexElementWriter() {
-		@Override
-		public void write(ByteBuffer output, RenderInfo info) {
-			output.put((byte)Math.min(0xFF, 0xFF * info.a));
-			output.put((byte)Math.min(0xFF, 0xFF * info.b));
-			output.put((byte)Math.min(0xFF, 0xFF * info.g));
-			output.put((byte)Math.min(0xFF, 0xFF * info.r));
-		}
+	private static final IVertexElementWriter FIXED_COLOR_WRITER = (output, info) -> {
+		output.put((byte)Math.min(0xFF, 0xFF * info.a));
+		output.put((byte)Math.min(0xFF, 0xFF * info.b));
+		output.put((byte)Math.min(0xFF, 0xFF * info.g));
+		output.put((byte)Math.min(0xFF, 0xFF * info.r));
 	};
 
-	private static final IVertexElementWriter FIXED_BRIGHTNESS_WRITER = new IVertexElementWriter() {
-		@Override
-		public void write(ByteBuffer output, RenderInfo info) {
-			// maximum brightness, because imagination!
-			output.putInt(0x00F000F0);
-		}
-	};
+	private static final IVertexElementWriter FIXED_BRIGHTNESS_WRITER = (output, info) -> output.putInt(0x00F000F0);
 
 	private static void addQuads(List<BakedQuad> quads, List<VertexWriter> output) {
 		for (BakedQuad quad : quads) {

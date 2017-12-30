@@ -1,7 +1,6 @@
 package openblocks.common;
 
 import com.google.common.base.Preconditions;
-import java.util.concurrent.Callable;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -183,12 +182,7 @@ public class PedometerHandler {
 			@Override
 			public void readNBT(Capability<PedometerState> capability, PedometerState instance, EnumFacing side, NBTBase nbt) {}
 
-		}, new Callable<PedometerState>() {
-			@Override
-			public PedometerState call() throws Exception {
-				return new PedometerState();
-			}
-		});
+		}, PedometerState::new);
 
 		MinecraftForge.EVENT_BUS.register(new CapabilityInjector());
 	}
