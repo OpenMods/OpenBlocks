@@ -1,10 +1,15 @@
 package openblocks.common.block;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -16,6 +21,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -41,6 +47,64 @@ import openmods.infobook.BookDocumentation;
 @BookDocumentation(hasVideo = true)
 public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 
+	protected enum CanvasMaterial implements IStringSerializable {
+		SPONGE(Material.SPONGE),
+		GRASS(Material.GRASS),
+		GROUND(Material.GROUND),
+		WOOD(Material.WOOD),
+		ROCK(Material.ROCK),
+		IRON(Material.IRON),
+		LEAVES(Material.LEAVES),
+		PLANTS(Material.PLANTS),
+		CLOTH(Material.CLOTH),
+		SAND(Material.SAND),
+		CIRCUITS(Material.CIRCUITS),
+		GLASS(Material.GLASS),
+		ICE(Material.ICE),
+		SNOW(Material.SNOW),
+		CLAY(Material.CLAY),
+		CARPET(Material.CARPET);
+
+		private CanvasMaterial(Material material) {
+			this.material = material;
+			this.name = name().toLowerCase(Locale.ROOT);
+		}
+
+		private static final Map<Material, CanvasMaterial> MATERIAL_TO_VALUE;
+
+		private static final CanvasMaterial[] ID_TO_VALUE = new CanvasMaterial[16];
+
+		static {
+			ImmutableMap.Builder<Material, CanvasMaterial> builder = ImmutableMap.builder();
+			int i = 0;
+			for (CanvasMaterial material : values()) {
+				builder.put(material.material, material);
+				ID_TO_VALUE[i++] = material;
+			}
+
+			while (i < 16)
+				ID_TO_VALUE[i++] = SPONGE;
+
+			MATERIAL_TO_VALUE = builder.build();
+		}
+
+		public static CanvasMaterial wrap(Material material) {
+			final CanvasMaterial result = MATERIAL_TO_VALUE.get(material);
+			return result != null? result : CanvasMaterial.SPONGE;
+		}
+
+		public final Material material;
+
+		public final String name;
+
+		@Override
+		public String getName() {
+			return name;
+		}
+	}
+
+	public static final PropertyEnum<CanvasMaterial> MATERIAL = PropertyEnum.create("material", CanvasMaterial.class);
+
 	public static class InnerBlockColorHandler implements IBlockColor {
 
 		private final BlockColors blockColors;
@@ -62,21 +126,22 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	public BlockCanvas() {
-		this(Material.SPONGE);
+		super(Material.SPONGE);
 	}
 
-	public BlockCanvas(Material material) {
-		super(material);
-	}
-
-	public static void replaceBlock(World world, BlockPos pos) {
+	public static boolean replaceBlock(World world, BlockPos pos) {
 		final IBlockState state = world.getBlockState(pos);
+		if (state.getBlock() instanceof BlockCanvas) return true;
 
-		final Block toReplace = (state.getMaterial() == Material.GLASS)? OpenBlocks.Blocks.canvasGlass : OpenBlocks.Blocks.canvas;
-		world.setBlockState(pos, toReplace.getDefaultState());
+		final Block toReplace = state.isOpaqueCube()? OpenBlocks.Blocks.canvas : OpenBlocks.Blocks.canvasGlass;
+		if (toReplace == null) return false;
+
+		final CanvasMaterial material = CanvasMaterial.wrap(state.getMaterial());
+		world.setBlockState(pos, toReplace.getDefaultState().withProperty(MATERIAL, material));
 
 		final TileEntityCanvas tile = getTileEntity(world, pos, TileEntityCanvas.class);
 		if (tile != null) tile.setPaintedBlock(state);
+		return true;
 	}
 
 	@Override
@@ -94,8 +159,18 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this,
-				new IProperty[] { getPropertyOrientation() },
+				new IProperty[] { getPropertyOrientation(), MATERIAL },
 				new IUnlistedProperty[] { CanvasState.PROPERTY, InnerBlockState.PROPERTY });
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(MATERIAL).ordinal();
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return super.getStateFromMeta(meta).withProperty(MATERIAL, CanvasMaterial.ID_TO_VALUE[meta]);
 	}
 
 	@Override
@@ -571,5 +646,20 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 				return null;
 			}
 		});
+	}
+
+	@Override
+	public SoundType getSoundType(IBlockState state, World worldIn, BlockPos pos, final Entity entity) {
+		return getPaintedBlockProperty(worldIn, state, pos, new IWorldBlockPropertyGetter<SoundType>() {
+			@Override
+			public SoundType get(IBlockState state, World world, BlockPos pos) {
+				return state.getBlock().getSoundType(state, world, pos, entity);
+			}
+		}, blockSoundType);
+	}
+
+	@Override
+	public Material getMaterial(IBlockState state) {
+		return state.getValue(MATERIAL).material;
 	}
 }
