@@ -110,7 +110,6 @@ public class BlockTarget extends OpenBlock.FourDirections {
 
 		final TileEntityTarget target = getTileEntity(world, pos, TileEntityTarget.class);
 		target.setRedstoneStrength(15 - Math.min(15, Math.max(0, (int)(distance * 32))));
-
 	}
 
 	@Override

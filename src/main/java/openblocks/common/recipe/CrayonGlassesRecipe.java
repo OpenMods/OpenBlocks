@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
+import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openmods.utils.ItemUtils;
 
 public class CrayonGlassesRecipe extends ShapelessRecipes {
@@ -21,7 +22,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 	}
 
 	private static ItemStack createFakeResult() {
-		return OpenBlocks.Items.crayonGlasses.createCrayonGlasses(0x00FFFF);
+		return ItemCrayonGlasses.createCrayonGlasses(OpenBlocks.Items.crayonGlasses, 0x00FFFF);
 	}
 
 	public CrayonGlassesRecipe() {
@@ -57,7 +58,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 			if (stack != null && stack.getItem() instanceof ItemImaginary) {
 				NBTTagCompound tag = ItemUtils.getItemTag(stack);
 				int color = tag.getInteger(ItemImaginary.TAG_COLOR);
-				return OpenBlocks.Items.crayonGlasses.createCrayonGlasses(color);
+				return ItemCrayonGlasses.createCrayonGlasses(OpenBlocks.Items.crayonGlasses, color);
 			}
 		}
 

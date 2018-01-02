@@ -9,7 +9,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.common.MapDataManager;
 import openmods.utils.ItemUtils;
@@ -28,8 +27,8 @@ public class ItemEmptyMap extends Item {
 		result.add(String.format("Scale: 1:%d", 1 << tag.getByte(TAG_SCALE)));
 	}
 
-	public ItemStack createMap(int scale) {
-		ItemStack result = new ItemStack(this);
+	public static ItemStack createMap(Item item, int scale) {
+		ItemStack result = new ItemStack(item);
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
 		tag.setByte(TAG_SCALE, (byte)scale);
 		return result;
@@ -39,7 +38,7 @@ public class ItemEmptyMap extends Item {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 		for (int scale = 0; scale < ItemEmptyMap.MAX_SCALE; scale++)
-			result.add(OpenBlocks.Items.emptyMap.createMap(scale));
+			result.add(createMap(this, scale));
 	}
 
 	public static ItemStack upgradeToMap(World world, ItemStack emptyMap) {

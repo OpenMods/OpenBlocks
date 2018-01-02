@@ -275,8 +275,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		if (player.isSneaking()) {
 			if (!worldObj.isRemote) {
 				final Optional<StencilPattern> stencil = layer.popStencil();
-				if (stencil.isPresent()) {
-					ItemStack dropStack = OpenBlocks.Items.stencil.createItemStack(stencil.get());
+				if (stencil.isPresent() && OpenBlocks.Items.stencil != null) {
+					ItemStack dropStack = ItemStencil.createItemStack(OpenBlocks.Items.stencil, stencil.get());
 					dropStackFromSide(dropStack, side);
 					result = true;
 				}
@@ -293,8 +293,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	public List<ItemStack> getDrops(List<ItemStack> drops) {
 		for (SyncableBlockLayers sideLayers : allSides.values()) {
 			final Optional<StencilPattern> stencil = sideLayers.peekStencil();
-			if (stencil.isPresent()) {
-				drops.add(OpenBlocks.Items.stencil.createItemStack(stencil.get()));
+			if (stencil.isPresent() && OpenBlocks.Items.stencil != null) {
+				drops.add(ItemStencil.createItemStack(OpenBlocks.Items.stencil, stencil.get()));
 			}
 		}
 

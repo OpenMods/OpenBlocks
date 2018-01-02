@@ -13,9 +13,9 @@ import openmods.utils.ItemUtils;
 public class MapResizeRecipe extends ShapedOreRecipe {
 
 	public MapResizeRecipe() {
-		super(Items.emptyMap.createMap(1), " e ", "eme", " e ",
+		super(ItemEmptyMap.createMap(Items.emptyMap, 1), " e ", "eme", " e ",
 				'e', MetasGeneric.mapMemory.newItemStack(),
-				'm', Items.emptyMap.createMap(0));
+				'm', ItemEmptyMap.createMap(Items.emptyMap, 0));
 	}
 
 	@Override

@@ -81,7 +81,10 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	@Override
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
-		if (!isDead && !worldObj.isRemote) entityDropItem(toItemStack(), 0.5f);
+		if (!isDead && !worldObj.isRemote) {
+			final ItemStack drop = toItemStack();
+			if (drop != null) entityDropItem(drop, 0.5f);
+		}
 		setDead();
 		return true;
 	}

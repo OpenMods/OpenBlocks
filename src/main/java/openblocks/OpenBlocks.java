@@ -210,6 +210,7 @@ import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
 import openmods.Mods;
 import openmods.OpenMods;
+import openmods.block.OpenBlock;
 import openmods.config.BlockInstances;
 import openmods.config.ItemInstances;
 import openmods.config.game.FactoryRegistry;
@@ -218,6 +219,7 @@ import openmods.config.game.ModStartupHelper;
 import openmods.config.game.RegisterBlock;
 import openmods.config.game.RegisterItem;
 import openmods.config.properties.ConfigProcessing;
+import openmods.item.ItemGeneric;
 import openmods.liquids.BucketFillHandler;
 import openmods.network.event.NetworkEventEntry;
 import openmods.network.event.NetworkEventManager;
@@ -259,215 +261,215 @@ public class OpenBlocks {
 	private final ApiSetup apiSetup = new ApiSetup();
 
 	public static class Blocks implements BlockInstances {
-		@RegisterBlock(id = "ladder")
-		public static BlockLadder ladder;
+		@RegisterBlock(type = BlockLadder.class, id = "ladder")
+		public static Block ladder;
 
-		@RegisterBlock(id = "guide", tileEntity = TileEntityGuide.class, itemBlock = ItemGuide.class)
-		public static BlockGuide guide;
+		@RegisterBlock(type = BlockGuide.class, id = "guide", tileEntity = TileEntityGuide.class, itemBlock = ItemGuide.class)
+		public static Block guide;
 
-		@RegisterBlock(id = "builder_guide", tileEntity = TileEntityBuilderGuide.class, itemBlock = ItemGuide.class)
-		public static BlockBuilderGuide builderGuide;
+		@RegisterBlock(type = BlockBuilderGuide.class, id = "builder_guide", tileEntity = TileEntityBuilderGuide.class, itemBlock = ItemGuide.class)
+		public static Block builderGuide;
 
-		@RegisterBlock(id = "elevator", itemBlock = ItemElevator.class, registerDefaultItemModel = false)
-		public static BlockElevator elevator;
+		@RegisterBlock(type = BlockElevator.class, id = "elevator", itemBlock = ItemElevator.class, registerDefaultItemModel = false)
+		public static Block elevator;
 
-		@RegisterBlock(id = "elevator_rotating", tileEntity = TileEntityElevatorRotating.class, itemBlock = ItemElevator.class, registerDefaultItemModel = false)
-		public static BlockElevatorRotating elevatorRotating;
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "elevator_rotating", tileEntity = TileEntityElevatorRotating.class, itemBlock = ItemElevator.class, registerDefaultItemModel = false)
+		public static Block elevatorRotating;
 
-		@RegisterBlock(id = "heal", tileEntity = TileEntityHealBlock.class)
-		public static BlockHeal heal;
+		@RegisterBlock(type = BlockHeal.class, id = "heal", tileEntity = TileEntityHealBlock.class)
+		public static Block heal;
 
-		@RegisterBlock(id = "target", tileEntity = TileEntityTarget.class)
-		public static BlockTarget target;
+		@RegisterBlock(type = BlockTarget.class, id = "target", tileEntity = TileEntityTarget.class)
+		public static Block target;
 
-		@RegisterBlock(id = "grave", tileEntity = TileEntityGrave.class)
-		public static BlockGrave grave;
+		@RegisterBlock(type = BlockGrave.class, id = "grave", tileEntity = TileEntityGrave.class)
+		public static Block grave;
 
-		@RegisterBlock(id = "flag", tileEntity = TileEntityFlag.class, itemBlock = ItemFlagBlock.class)
-		public static BlockFlag flag;
+		@RegisterBlock(type = BlockFlag.class, id = "flag", tileEntity = TileEntityFlag.class, itemBlock = ItemFlagBlock.class)
+		public static Block flag;
 
-		@RegisterBlock(id = "tank", tileEntity = TileEntityTank.class, itemBlock = ItemTankBlock.class)
-		public static BlockTank tank;
+		@RegisterBlock(type = BlockTank.class, id = "tank", tileEntity = TileEntityTank.class, itemBlock = ItemTankBlock.class)
+		public static Block tank;
 
-		@RegisterBlock(id = "trophy", tileEntity = TileEntityTrophy.class, itemBlock = ItemTrophyBlock.class)
-		public static BlockTrophy trophy;
+		@RegisterBlock(type = BlockTrophy.class, id = "trophy", tileEntity = TileEntityTrophy.class, itemBlock = ItemTrophyBlock.class)
+		public static Block trophy;
 
-		@RegisterBlock(id = "beartrap", tileEntity = TileEntityBearTrap.class)
-		public static BlockBearTrap bearTrap;
+		@RegisterBlock(type = BlockBearTrap.class, id = "beartrap", tileEntity = TileEntityBearTrap.class)
+		public static Block bearTrap;
 
-		@RegisterBlock(id = "sprinkler", tileEntity = TileEntitySprinkler.class)
-		public static BlockSprinkler sprinkler;
+		@RegisterBlock(type = BlockSprinkler.class, id = "sprinkler", tileEntity = TileEntitySprinkler.class)
+		public static Block sprinkler;
 
-		@RegisterBlock(id = "cannon", tileEntity = TileEntityCannon.class)
-		public static BlockCannon cannon;
+		@RegisterBlock(type = BlockCannon.class, id = "cannon", tileEntity = TileEntityCannon.class)
+		public static OpenBlock cannon;
 
-		@RegisterBlock(id = "vacuum_hopper", tileEntity = TileEntityVacuumHopper.class, legacyIds = "vacuumhopper")
-		public static BlockVacuumHopper vacuumHopper;
+		@RegisterBlock(type = BlockVacuumHopper.class, id = "vacuum_hopper", tileEntity = TileEntityVacuumHopper.class, legacyIds = "vacuumhopper")
+		public static Block vacuumHopper;
 
-		@RegisterBlock(id = "sponge")
-		public static BlockSponge sponge;
+		@RegisterBlock(type = BlockSponge.class, id = "sponge")
+		public static Block sponge;
 
-		@RegisterBlock(id = "big_button", tileEntity = TileEntityBigButton.class, legacyIds = "bigbutton")
-		public static BlockBigButton bigButton;
+		@RegisterBlock(type = BlockBigButton.class, id = "big_button", tileEntity = TileEntityBigButton.class, legacyIds = "bigbutton")
+		public static Block bigButton;
 
 		@RegisterBlock(id = "imaginary", tileEntity = TileEntityImaginary.class, itemBlock = ItemImaginary.class, customItemModels = ItemImaginary.ModelProvider.class, registerDefaultItemModel = false)
 		public static BlockImaginary imaginary;
 
-		@RegisterBlock(id = "fan", tileEntity = TileEntityFan.class)
-		public static BlockFan fan;
+		@RegisterBlock(type = BlockFan.class, id = "fan", tileEntity = TileEntityFan.class)
+		public static Block fan;
 
-		@RegisterBlock(id = "xp_bottler", tileEntity = TileEntityXPBottler.class, legacyIds = "xpbottler")
-		public static BlockXPBottler xpBottler;
+		@RegisterBlock(type = BlockXPBottler.class, id = "xp_bottler", tileEntity = TileEntityXPBottler.class, legacyIds = "xpbottler")
+		public static Block xpBottler;
 
-		@RegisterBlock(id = "village_highlighter", tileEntity = TileEntityVillageHighlighter.class)
-		public static BlockVillageHighlighter villageHighlighter;
+		@RegisterBlock(type = BlockVillageHighlighter.class, id = "village_highlighter", tileEntity = TileEntityVillageHighlighter.class)
+		public static Block villageHighlighter;
 
-		@RegisterBlock(id = "path")
-		public static BlockPath path;
+		@RegisterBlock(type = BlockPath.class, id = "path")
+		public static Block path;
 
-		@RegisterBlock(id = "auto_anvil", tileEntity = TileEntityAutoAnvil.class, legacyIds = "autoanvil")
-		public static BlockAutoAnvil autoAnvil;
+		@RegisterBlock(type = BlockAutoAnvil.class, id = "auto_anvil", tileEntity = TileEntityAutoAnvil.class, legacyIds = "autoanvil")
+		public static Block autoAnvil;
 
-		@RegisterBlock(id = "auto_enchantment_table", tileEntity = TileEntityAutoEnchantmentTable.class, legacyIds = "autoenchantmenttable")
-		public static BlockAutoEnchantmentTable autoEnchantmentTable;
+		@RegisterBlock(type = BlockAutoEnchantmentTable.class, id = "auto_enchantment_table", tileEntity = TileEntityAutoEnchantmentTable.class, legacyIds = "autoenchantmenttable")
+		public static Block autoEnchantmentTable;
 
-		@RegisterBlock(id = "xp_drain", tileEntity = TileEntityXPDrain.class, legacyIds = "xpdrain")
-		public static BlockXPDrain xpDrain;
+		@RegisterBlock(type = BlockXPDrain.class, id = "xp_drain", tileEntity = TileEntityXPDrain.class, legacyIds = "xpdrain")
+		public static Block xpDrain;
 
-		@RegisterBlock(id = "block_breaker", tileEntity = TileEntityBlockBreaker.class, legacyIds = "blockbreaker")
-		public static BlockBlockBreaker blockBreaker;
+		@RegisterBlock(type = BlockBlockBreaker.class, id = "block_breaker", tileEntity = TileEntityBlockBreaker.class, legacyIds = "blockbreaker")
+		public static Block blockBreaker;
 
-		@RegisterBlock(id = "block_placer", tileEntity = TileEntityBlockPlacer.class, legacyIds = "blockPlacer")
-		public static BlockBlockPlacer blockPlacer;
+		@RegisterBlock(type = BlockBlockPlacer.class, id = "block_placer", tileEntity = TileEntityBlockPlacer.class, legacyIds = "blockPlacer")
+		public static Block blockPlacer;
 
-		@RegisterBlock(id = "item_dropper", tileEntity = TileEntityItemDropper.class, legacyIds = "itemDropper")
-		public static BlockItemDropper itemDropper;
+		@RegisterBlock(type = BlockItemDropper.class, id = "item_dropper", tileEntity = TileEntityItemDropper.class, legacyIds = "itemDropper")
+		public static Block itemDropper;
 
-		@RegisterBlock(id = "rope_ladder", legacyIds = "ropeladder")
-		public static BlockRopeLadder ropeLadder;
+		@RegisterBlock(type = BlockRopeLadder.class, id = "rope_ladder", legacyIds = "ropeladder")
+		public static Block ropeLadder;
 
-		@RegisterBlock(id = "donation_station", tileEntity = TileEntityDonationStation.class, legacyIds = "donationStation")
-		public static BlockDonationStation donationStation;
+		@RegisterBlock(type = BlockDonationStation.class, id = "donation_station", tileEntity = TileEntityDonationStation.class, legacyIds = "donationStation")
+		public static Block donationStation;
 
-		@RegisterBlock(id = "paint_mixer", tileEntity = TileEntityPaintMixer.class, legacyIds = "paintmixer")
-		public static BlockPaintMixer paintMixer;
+		@RegisterBlock(type = BlockPaintMixer.class, id = "paint_mixer", tileEntity = TileEntityPaintMixer.class, legacyIds = "paintmixer")
+		public static Block paintMixer;
 
-		@RegisterBlock(id = "canvas", tileEntity = TileEntityCanvas.class)
-		public static BlockCanvas canvas;
+		@RegisterBlock(type = BlockCanvas.class, id = "canvas", tileEntity = TileEntityCanvas.class)
+		public static Block canvas;
 
-		@RegisterBlock(id = "paint_can", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class, legacyIds = "paintcan")
-		public static BlockPaintCan paintCan;
+		@RegisterBlock(type = BlockPaintCan.class, id = "paint_can", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class, legacyIds = "paintcan")
+		public static Block paintCan;
 
-		@RegisterBlock(id = "canvas_glass", tileEntity = TileEntityCanvas.class, legacyIds = "canvasglass")
-		public static BlockCanvasGlass canvasGlass;
+		@RegisterBlock(type = BlockCanvasGlass.class, id = "canvas_glass", tileEntity = TileEntityCanvas.class, legacyIds = "canvasglass")
+		public static Block canvasGlass;
 
-		@RegisterBlock(id = "projector", tileEntity = TileEntityProjector.class)
-		public static BlockProjector projector;
+		@RegisterBlock(type = BlockProjector.class, id = "projector", tileEntity = TileEntityProjector.class)
+		public static Block projector;
 
-		@RegisterBlock(id = "drawing_table", tileEntity = TileEntityDrawingTable.class, legacyIds = "drawingtable")
-		public static BlockDrawingTable drawingTable;
+		@RegisterBlock(type = BlockDrawingTable.class, id = "drawing_table", tileEntity = TileEntityDrawingTable.class, legacyIds = "drawingtable")
+		public static Block drawingTable;
 
-		@RegisterBlock(id = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class, unlocalizedName = "sky.normal")
-		public static BlockSky sky;
+		@RegisterBlock(type = BlockSky.class, id = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class, unlocalizedName = "sky.normal")
+		public static Block sky;
 
-		@RegisterBlock(id = "xp_shower", tileEntity = TileEntityXPShower.class, legacyIds = "xpshower")
-		public static BlockXPShower xpShower;
+		@RegisterBlock(type = BlockXPShower.class, id = "xp_shower", tileEntity = TileEntityXPShower.class, legacyIds = "xpshower")
+		public static Block xpShower;
 
-		@RegisterBlock(id = "golden_egg", tileEntity = TileEntityGoldenEgg.class, legacyIds = "goldenegg")
-		public static BlockGoldenEgg goldenEgg;
+		@RegisterBlock(type = BlockGoldenEgg.class, id = "golden_egg", tileEntity = TileEntityGoldenEgg.class, legacyIds = "goldenegg")
+		public static Block goldenEgg;
 
-		@RegisterBlock(id = "scaffolding")
-		public static BlockScaffolding scaffolding;
+		@RegisterBlock(type = BlockScaffolding.class, id = "scaffolding")
+		public static Block scaffolding;
 	}
 
 	public static class Items implements ItemInstances {
 
-		@RegisterItem(id = "hang_glider", legacyIds = "hangglider")
-		public static ItemHangGlider hangGlider;
+		@RegisterItem(type = ItemHangGlider.class, id = "hang_glider", legacyIds = "hangglider")
+		public static Item hangGlider;
 
-		@RegisterItem(id = "generic", isConfigurable = false, registerDefaultModel = false)
-		public static ItemOBGeneric generic;
+		@RegisterItem(type = ItemOBGeneric.class, isConfigurable = false, id = "generic", registerDefaultModel = false)
+		public static ItemGeneric generic;
 
-		@RegisterItem(id = "luggage")
-		public static ItemLuggage luggage;
+		@RegisterItem(type = ItemLuggage.class, id = "luggage")
+		public static Item luggage;
 
-		@RegisterItem(id = "sonic_glasses", legacyIds = "sonicglasses")
-		public static ItemSonicGlasses sonicGlasses;
+		@RegisterItem(type = ItemSonicGlasses.class, id = "sonic_glasses", legacyIds = "sonicglasses")
+		public static Item sonicGlasses;
 
-		@RegisterItem(id = "pencil_glasses", unlocalizedName = "glasses.pencil", legacyIds = "pencilGlasses")
-		public static ItemImaginationGlasses pencilGlasses;
+		@RegisterItem(type = ItemImaginationGlasses.class, id = "pencil_glasses", unlocalizedName = "glasses.pencil", legacyIds = "pencilGlasses")
+		public static Item pencilGlasses;
 
-		@RegisterItem(id = "crayon_glasses", unlocalizedName = "glasses.crayon", legacyIds = "crayonGlasses")
-		public static ItemCrayonGlasses crayonGlasses;
+		@RegisterItem(type = ItemCrayonGlasses.class, id = "crayon_glasses", unlocalizedName = "glasses.crayon", legacyIds = "crayonGlasses")
+		public static Item crayonGlasses;
 
-		@RegisterItem(id = "technicolor_glasses", unlocalizedName = "glasses.technicolor", legacyIds = "technicolorGlasses")
-		public static ItemImaginationGlasses technicolorGlasses;
+		@RegisterItem(type = ItemImaginationGlasses.class, id = "technicolor_glasses", unlocalizedName = "glasses.technicolor", legacyIds = "technicolorGlasses")
+		public static Item technicolorGlasses;
 
-		@RegisterItem(id = "serious_glasses", unlocalizedName = "glasses.admin", legacyIds = "seriousGlasses")
-		public static ItemImaginationGlasses seriousGlasses;
+		@RegisterItem(type = ItemImaginationGlasses.class, id = "serious_glasses", unlocalizedName = "glasses.admin", legacyIds = "seriousGlasses")
+		public static Item seriousGlasses;
 
-		@RegisterItem(id = "crane_control", legacyIds = "craneControl")
-		public static ItemCraneControl craneControl;
+		@RegisterItem(type = ItemCraneControl.class, id = "crane_control", legacyIds = "craneControl")
+		public static Item craneControl;
 
-		@RegisterItem(id = "crane_backpack", legacyIds = "craneBackpack")
-		public static ItemCraneBackpack craneBackpack;
+		@RegisterItem(type = ItemCraneBackpack.class, id = "crane_backpack", legacyIds = "craneBackpack")
+		public static Item craneBackpack;
 
-		@RegisterItem(id = "slimalyzer")
-		public static ItemSlimalyzer slimalyzer;
+		@RegisterItem(type = ItemSlimalyzer.class, id = "slimalyzer")
+		public static Item slimalyzer;
 
-		@RegisterItem(id = "xp_bucket", legacyIds = "filledbucket")
-		public static ItemXpBucket xpBucket;
+		@RegisterItem(type = ItemXpBucket.class, id = "xp_bucket", legacyIds = "filledbucket")
+		public static Item xpBucket;
 
-		@RegisterItem(id = "sleeping_bag", legacyIds = "sleepingBag")
-		public static ItemSleepingBag sleepingBag;
+		@RegisterItem(type = ItemSleepingBag.class, id = "sleeping_bag", legacyIds = "sleepingBag")
+		public static Item sleepingBag;
 
-		@RegisterItem(id = "paintbrush", legacyIds = "paintBrush")
-		public static ItemPaintBrush paintBrush;
+		@RegisterItem(type = ItemPaintBrush.class, id = "paintbrush", legacyIds = "paintBrush")
+		public static Item paintBrush;
 
-		@RegisterItem(id = "stencil", registerDefaultModel = false)
-		public static ItemStencil stencil;
+		@RegisterItem(type = ItemStencil.class, id = "stencil", registerDefaultModel = false)
+		public static Item stencil;
 
-		@RegisterItem(id = "squeegee")
-		public static ItemSqueegee squeegee;
+		@RegisterItem(type = ItemSqueegee.class, id = "squeegee")
+		public static Item squeegee;
 
-		@RegisterItem(id = "height_map", legacyIds = "heightMap")
-		public static ItemHeightMap heightMap;
+		@RegisterItem(type = ItemHeightMap.class, id = "height_map", legacyIds = "heightMap")
+		public static Item heightMap;
 
-		@RegisterItem(id = "empty_map", legacyIds = "emptyMap")
-		public static ItemEmptyMap emptyMap;
+		@RegisterItem(type = ItemEmptyMap.class, id = "empty_map", legacyIds = "emptyMap")
+		public static Item emptyMap;
 
-		@RegisterItem(id = "cartographer")
-		public static ItemCartographer cartographer;
+		@RegisterItem(type = ItemCartographer.class, id = "cartographer")
+		public static Item cartographer;
 
-		@RegisterItem(id = "tasty_clay", legacyIds = "tastyClay")
-		public static ItemTastyClay tastyClay;
+		@RegisterItem(type = ItemTastyClay.class, id = "tasty_clay", legacyIds = "tastyClay")
+		public static Item tastyClay;
 
-		@RegisterItem(id = "golden_eye", legacyIds = "goldenEye")
-		public static ItemGoldenEye goldenEye;
+		@RegisterItem(type = ItemGoldenEye.class, id = "golden_eye", legacyIds = "goldenEye")
+		public static Item goldenEye;
 
-		@RegisterItem(id = "generic_unstackable", isConfigurable = false, registerDefaultModel = false, legacyIds = "genericUnstackable")
-		public static ItemOBGenericUnstackable genericUnstackable;
+		@RegisterItem(type = ItemOBGenericUnstackable.class, isConfigurable = false, id = "generic_unstackable", registerDefaultModel = false, legacyIds = "genericUnstackable")
+		public static ItemGeneric genericUnstackable;
 
-		@RegisterItem(id = "cursor")
-		public static ItemCursor cursor;
+		@RegisterItem(type = ItemCursor.class, id = "cursor")
+		public static Item cursor;
 
-		@RegisterItem(id = "info_book", legacyIds = "infoBook")
-		public static ItemInfoBook infoBook;
+		@RegisterItem(type = ItemInfoBook.class, id = "info_book", legacyIds = "infoBook")
+		public static Item infoBook;
 
-		@RegisterItem(id = "dev_null", legacyIds = "devnull")
-		public static ItemDevNull devNull;
+		@RegisterItem(type = ItemDevNull.class, id = "dev_null", legacyIds = "devnull")
+		public static Item devNull;
 
-		@RegisterItem(id = "sponge_on_a_stick", legacyIds = "spongeonastick")
-		public static ItemSpongeOnAStick spongeonastick;
+		@RegisterItem(type = ItemSpongeOnAStick.class, id = "sponge_on_a_stick", legacyIds = "spongeonastick")
+		public static Item spongeonastick;
 
-		@RegisterItem(id = "pedometer")
-		public static ItemPedometer pedometer;
+		@RegisterItem(type = ItemPedometer.class, id = "pedometer")
+		public static Item pedometer;
 
-		@RegisterItem(id = "epic_eraser", legacyIds = "epicEraser")
-		public static ItemEpicEraser epicEraser;
+		@RegisterItem(type = ItemEpicEraser.class, id = "epic_eraser", legacyIds = "epicEraser")
+		public static Item epicEraser;
 
-		@RegisterItem(id = "wrench")
-		public static ItemWrench wrench;
+		@RegisterItem(type = ItemWrench.class, id = "wrench")
+		public static Item wrench;
 	}
 
 	public static ResourceLocation location(String path) {

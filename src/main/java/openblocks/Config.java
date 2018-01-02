@@ -19,6 +19,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.common.TrophyHandler;
+import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemGoldenEye;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemPaintBrush;
@@ -658,7 +659,7 @@ public class Config {
 
 			ItemStack memory = MetasGeneric.mapMemory.newItemStack();
 			ItemStack cpu = MetasGeneric.mapController.newItemStack();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.emptyMap.createMap(0),
+			recipeList.add(new ShapedOreRecipe(ItemEmptyMap.createMap(OpenBlocks.Items.emptyMap, 0),
 					" m ", "mcm", " m ", 'm', memory, 'c', cpu));
 		}
 

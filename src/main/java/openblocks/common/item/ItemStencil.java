@@ -29,11 +29,11 @@ public class ItemStencil extends Item {
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> list) {
 		for (StencilPattern stencil : StencilPattern.values())
-			list.add(createItemStack(stencil));
+			list.add(createItemStack(this, stencil));
 	}
 
-	public ItemStack createItemStack(StencilPattern stencil) {
-		return new ItemStack(this, 1, stencil.ordinal());
+	public static ItemStack createItemStack(Item item, StencilPattern stencil) {
+		return new ItemStack(item, 1, stencil.ordinal());
 	}
 
 	public static Optional<IStencilPattern> getPattern(ItemStack stack) {

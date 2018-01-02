@@ -46,7 +46,7 @@ public class ItemCartographer extends Item {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 		for (AssistantType type : AssistantType.VALUES)
-			result.add(new ItemStack(this, 1, type.ordinal()));
+			result.add(createStack(this, type));
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ItemCartographer extends Item {
 		return AssistantType.VALUES[typeId];
 	}
 
-	public ItemStack createStack(AssistantType type) {
-		return new ItemStack(this, 1, type.ordinal());
+	public static ItemStack createStack(Item item, AssistantType type) {
+		return new ItemStack(item, 1, type.ordinal());
 	}
 }

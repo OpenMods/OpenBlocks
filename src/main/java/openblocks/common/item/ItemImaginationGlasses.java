@@ -47,7 +47,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 		@Override
 		public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 			for (ColorMeta color : ColorMeta.getAllColors())
-				result.add(createCrayonGlasses(color.rgb));
+				result.add(createCrayonGlasses(this, color.rgb));
 		}
 
 		@Override
@@ -55,8 +55,8 @@ public class ItemImaginationGlasses extends ItemArmor {
 			return getGlassesColor(stack);
 		}
 
-		public ItemStack createCrayonGlasses(int color) {
-			ItemStack stack = new ItemStack(this);
+		public static ItemStack createCrayonGlasses(Item item, int color) {
+			ItemStack stack = new ItemStack(item);
 
 			NBTTagCompound tag = ItemUtils.getItemTag(stack);
 			tag.setInteger(TAG_COLOR, color);

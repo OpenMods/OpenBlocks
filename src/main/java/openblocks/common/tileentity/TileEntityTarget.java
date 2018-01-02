@@ -11,7 +11,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Blocks;
+import openblocks.common.block.BlockTarget;
 import openmods.Log;
 import openmods.api.ISurfaceAttachment;
 import openmods.reflection.SafeClassLoad;
@@ -66,7 +66,7 @@ public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachme
 			RayTraceResult hit = EntityUtils.raytraceEntity(projectile);
 			if (hit.typeOfHit == Type.BLOCK && pos.equals(hit.getBlockPos())) {
 				if (state == null) state = worldObj.getBlockState(getPos());
-				Blocks.target.onTargetHit(worldObj, pos, state, hit.hitVec);
+				((BlockTarget)state.getBlock()).onTargetHit(worldObj, pos, state, hit.hitVec);
 			}
 		}
 	}
