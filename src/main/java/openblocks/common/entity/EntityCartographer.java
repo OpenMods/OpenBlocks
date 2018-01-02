@@ -253,7 +253,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	@Nonnull
 	public ItemStack toItemStack() {
 		if (Items.cartographer == null) return ItemStack.EMPTY;
-		ItemStack result = Items.cartographer.createStack(ItemCartographer.AssistantType.CARTOGRAPHER);
+		ItemStack result = ItemCartographer.createStack(Items.cartographer, ItemCartographer.AssistantType.CARTOGRAPHER);
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
 		writeOwnDataToNBT(tag);
 		return result;

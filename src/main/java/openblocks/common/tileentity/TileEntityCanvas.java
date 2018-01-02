@@ -270,7 +270,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			if (!world.isRemote) {
 				final Optional<StencilPattern> stencil = layer.popStencil();
 				if (stencil.isPresent() && OpenBlocks.Items.stencil != null) {
-					ItemStack dropStack = OpenBlocks.Items.stencil.createItemStack(stencil.get());
+					ItemStack dropStack = ItemStencil.createItemStack(OpenBlocks.Items.stencil, stencil.get());
 					dropStackFromSide(dropStack, side);
 					result = true;
 				}
@@ -288,7 +288,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		for (SyncableBlockLayers sideLayers : allSides.values()) {
 			final Optional<StencilPattern> stencil = sideLayers.peekStencil();
 			if (stencil.isPresent() && OpenBlocks.Items.stencil != null) {
-				drops.add(OpenBlocks.Items.stencil.createItemStack(stencil.get()));
+				drops.add(ItemStencil.createItemStack(OpenBlocks.Items.stencil, stencil.get()));
 			}
 		}
 

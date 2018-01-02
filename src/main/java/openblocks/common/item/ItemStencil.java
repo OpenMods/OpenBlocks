@@ -29,12 +29,12 @@ public class ItemStencil extends Item {
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
 		if (isInCreativeTab(tab)) {
 			for (StencilPattern stencil : StencilPattern.values())
-				list.add(createItemStack(stencil));
+				list.add(createItemStack(this, stencil));
 		}
 	}
 
-	public ItemStack createItemStack(StencilPattern stencil) {
-		return new ItemStack(this, 1, stencil.ordinal());
+	public static ItemStack createItemStack(Item item, StencilPattern stencil) {
+		return new ItemStack(item, 1, stencil.ordinal());
 	}
 
 	public static Optional<IStencilPattern> getPattern(@Nonnull ItemStack stack) {

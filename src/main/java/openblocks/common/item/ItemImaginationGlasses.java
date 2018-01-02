@@ -8,6 +8,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,7 +52,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 		public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
 			if (isInCreativeTab(tab)) {
 				for (ColorMeta color : ColorMeta.getAllColors())
-					result.add(createCrayonGlasses(color.rgb));
+					result.add(createCrayonGlasses(this, color.rgb));
 			}
 		}
 
@@ -61,8 +62,8 @@ public class ItemImaginationGlasses extends ItemArmor {
 		}
 
 		@Nonnull
-		public ItemStack createCrayonGlasses(int color) {
-			ItemStack stack = new ItemStack(this);
+		public static ItemStack createCrayonGlasses(Item item, int color) {
+			ItemStack stack = new ItemStack(item);
 
 			NBTTagCompound tag = ItemUtils.getItemTag(stack);
 			tag.setInteger(TAG_COLOR, color);

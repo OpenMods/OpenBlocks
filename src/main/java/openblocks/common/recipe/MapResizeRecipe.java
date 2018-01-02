@@ -23,7 +23,7 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 		example.height = 3;
 
 		Ingredient e = Ingredient.fromStacks(MetasGeneric.mapMemory.newItemStack());
-		Ingredient m = Ingredient.fromStacks(Items.emptyMap.createMap(0));
+		Ingredient m = Ingredient.fromStacks(ItemEmptyMap.createMap(Items.emptyMap, 0));
 
 		example.input = NonNullList.from(
 				Ingredient.EMPTY, e, Ingredient.EMPTY,
@@ -34,7 +34,7 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 	}
 
 	public MapResizeRecipe() {
-		super(OpenBlocks.location("crayons"), Items.emptyMap.createMap(1), createExample());
+		super(OpenBlocks.location("crayons"), ItemEmptyMap.createMap(Items.emptyMap, 1), createExample());
 	}
 
 	@Override

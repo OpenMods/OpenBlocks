@@ -31,8 +31,8 @@ public class ItemEmptyMap extends Item {
 	}
 
 	@Nonnull
-	public ItemStack createMap(int scale) {
-		ItemStack result = new ItemStack(this);
+	public static ItemStack createMap(Item item, int scale) {
+		ItemStack result = new ItemStack(item);
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
 		tag.setByte(TAG_SCALE, (byte)scale);
 		return result;
@@ -43,7 +43,7 @@ public class ItemEmptyMap extends Item {
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
 		if (isInCreativeTab(tab)) {
 			for (int scale = 0; scale < ItemEmptyMap.MAX_SCALE; scale++)
-				result.add(createMap(scale));
+				result.add(createMap(this, scale));
 		}
 	}
 

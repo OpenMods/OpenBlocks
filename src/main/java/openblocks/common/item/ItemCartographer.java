@@ -52,7 +52,7 @@ public class ItemCartographer extends Item {
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
 		if (isInCreativeTab(tab)) {
 			for (AssistantType type : AssistantType.VALUES)
-				result.add(new ItemStack(this, 1, type.ordinal()));
+				result.add(createStack(this, type));
 		}
 	}
 
@@ -80,8 +80,8 @@ public class ItemCartographer extends Item {
 	}
 
 	@Nonnull
-	public ItemStack createStack(AssistantType type) {
-		return new ItemStack(this, 1, type.ordinal());
+	public static ItemStack createStack(Item item, AssistantType type) {
+		return new ItemStack(item, 1, type.ordinal());
 	}
 
 	public static void registerFixes(DataFixer dataFixer) {
