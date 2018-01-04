@@ -6,7 +6,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.items.ItemHandlerHelper;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityLuggage;
@@ -31,7 +30,7 @@ public class EntityAICollectItem extends EntityAIBase {
 		if (!pathFinder.noPath()) return false;
 
 		if (luggage.world != null) {
-			List<EntityItem> items = luggage.world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(luggage.posX - 1, luggage.posY - 1, luggage.posZ - 1, luggage.posX + 1, luggage.posY + 1, luggage.posZ + 1).expand(10.0, 10.0, 10.0));
+			List<EntityItem> items = luggage.world.getEntitiesWithinAABB(EntityItem.class, luggage.getEntityBoundingBox().grow(10));
 			EntityItem closest = null;
 			double closestDistance = Double.MAX_VALUE;
 			for (EntityItem item : items) {

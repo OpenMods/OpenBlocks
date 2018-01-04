@@ -26,7 +26,7 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 		if (!pathFinder.noPath()) return false;
 
 		if (!minime.world.isRemote) {
-			List<EntityPlayer> players = minime.world.getEntitiesWithinAABB(EntityPlayer.class, minime.getEntityBoundingBox().expand(10, 10, 10));
+			List<EntityPlayer> players = minime.world.getEntitiesWithinAABB(EntityPlayer.class, minime.getEntityBoundingBox().grow(10));
 			for (EntityPlayer player : players) {
 				if (canRidePlayer(player)) {
 					targetPlayer = player;
