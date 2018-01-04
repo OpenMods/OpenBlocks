@@ -1,6 +1,5 @@
 package openblocks.client.renderer.block.canvas;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
@@ -40,11 +39,6 @@ public class ModelCanvas implements IModel {
 	}
 
 	@Override
-	public Collection<ResourceLocation> getTextures() {
-		return ImmutableList.of();
-	}
-
-	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		final ImmutableMap<TransformType, TRSRTransformation> transforms = PerspectiveMapWrapper.getTransforms(state);
 
@@ -58,11 +52,6 @@ public class ModelCanvas implements IModel {
 		final IBakedModel bakedBaseModel = base.bake(state, format, bakedTextureGetter);
 
 		return new BakedModelCanvas(bakedBaseModel, baseModelRenderLayers, transforms, bakedTextureGetter, format);
-	}
-
-	@Override
-	public IModelState getDefaultState() {
-		return TRSRTransformation.identity();
 	}
 
 	@Override

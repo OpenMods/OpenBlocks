@@ -326,11 +326,6 @@ public class PathModel implements IModel {
 	}
 
 	@Override
-	public IModelState getDefaultState() {
-		return TRSRTransformation.identity();
-	}
-
-	@Override
 	public IModel retexture(ImmutableMap<String, String> updates) {
 		final Optional<ModelTextureMap> newTextures = textures.update(updates);
 		return newTextures.isPresent()? new PathModel(newTextures.get(), maxBlockCount, inventorySeed, inventoryTransformProvider) : this;

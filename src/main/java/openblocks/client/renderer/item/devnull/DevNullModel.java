@@ -23,7 +23,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.common.model.TRSRTransformation;
 import openblocks.client.renderer.item.devnull.DevNullItemOverride.BakedModelParams;
 import openmods.utils.CollectionUtils;
 
@@ -133,11 +132,6 @@ public class DevNullModel implements IModel {
 
 		final DevNullItemOverride override = new DevNullItemOverride(bakedGui, bakedWorld, particle);
 		return override.getEmptyBakedModel();
-	}
-
-	@Override
-	public IModelState getDefaultState() {
-		return TRSRTransformation.identity();
 	}
 
 	@Override
