@@ -10,13 +10,14 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openmods.geometry.AabbBuilder;
 import openmods.renderer.DisplayListWrapper;
@@ -27,7 +28,64 @@ public class ModelCartographer extends ModelBase {
 	private final ModelRenderer body;
 	private final ModelRenderer base;
 
-	private DisplayListWrapper eyeList;
+	private DisplayListWrapper eyeList = new DisplayListWrapper() {
+		private final ItemStack enderEye = new ItemStack(Items.ENDER_EYE);
+
+		@Override
+		public void compile() {
+			final IBakedModel model = FMLClientHandler.instance().getClient().getRenderItem().getItemModelMesher().getItemModel(enderEye);
+
+			final List<BakedQuad> quads = Lists.newArrayList();
+
+			quads.addAll(model.getQuads(null, EnumFacing.WEST, 0));
+			quads.addAll(model.getQuads(null, EnumFacing.EAST, 0));
+
+			quads.addAll(model.getQuads(null, EnumFacing.NORTH, 0));
+			quads.addAll(model.getQuads(null, EnumFacing.SOUTH, 0));
+
+			quads.addAll(model.getQuads(null, EnumFacing.UP, 0));
+			quads.addAll(model.getQuads(null, EnumFacing.DOWN, 0));
+
+			quads.addAll(model.getQuads(null, null, 0));
+
+			final AabbBuilder allBoundsBuilder = AabbBuilder.create();
+			final AabbBuilder horizontalBoundsBuilder = AabbBuilder.create();
+
+			for (BakedQuad quad : quads) {
+				if (quad.getFace() == EnumFacing.EAST || quad.getFace() == EnumFacing.WEST)
+					addQuad(quad, horizontalBoundsBuilder);
+				addQuad(quad, allBoundsBuilder);
+			}
+
+			final AxisAlignedBB horizontalBounds = horizontalBoundsBuilder.build();
+			final AxisAlignedBB allBounds = allBoundsBuilder.build();
+
+			final AxisAlignedBB scaleBounds = !horizontalBounds.hasNaN()? horizontalBounds : allBounds;
+
+			final double scale = 1.0 / (scaleBounds.maxX - scaleBounds.minX);
+
+			final double middleX = (allBounds.maxX + allBounds.minX) / 2.0;
+			final double middleY = (allBounds.maxY + allBounds.minY) / 2.0;
+			final double middleZ = (allBounds.maxZ + allBounds.minZ) / 2.0;
+
+			GL11.glPushMatrix();
+
+			GL11.glScaled(scale, scale, scale);
+			GL11.glTranslated(-middleX, -middleY, -middleZ);
+
+			final Tessellator tessellator = Tessellator.getInstance();
+
+			BufferBuilder vertexBuffer = tessellator.getBuffer();
+			vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+
+			for (BakedQuad quad : quads)
+				vertexBuffer.addVertexData(quad.getVertexData());
+
+			tessellator.draw();
+
+			GL11.glPopMatrix();
+		}
+	};
 
 	public ModelCartographer() {
 		textureWidth = 32;
@@ -58,7 +116,7 @@ public class ModelCartographer extends ModelBase {
 			GL11.glRotated(Math.toDegrees(baseRotation) + 90, 0, 1, 0);
 			GL11.glRotated(Math.toDegrees(eyeRotation), 1, 0, 0);
 			GL11.glScalef(3 * SCALE, 3 * SCALE, 3 * SCALE);
-			eyeList.compile();
+			eyeList.render();
 			GL11.glPopMatrix();
 		}
 	}
@@ -70,66 +128,7 @@ public class ModelCartographer extends ModelBase {
 
 	@SubscribeEvent
 	public void onModelBake(ModelBakeEvent evt) {
-		final ModelResourceLocation modelLocation = new ModelResourceLocation(Items.ENDER_EYE.getRegistryName(), "inventory");
-		final IBakedModel bakedModel = evt.getModelRegistry().getObject(modelLocation);
-		setEyeRender(bakedModel);
-	}
-
-	private void setEyeRender(final IBakedModel model) {
-		final List<BakedQuad> quads = Lists.newArrayList();
-
-		quads.addAll(model.getQuads(null, EnumFacing.WEST, 0));
-		quads.addAll(model.getQuads(null, EnumFacing.EAST, 0));
-
-		quads.addAll(model.getQuads(null, EnumFacing.NORTH, 0));
-		quads.addAll(model.getQuads(null, EnumFacing.SOUTH, 0));
-
-		quads.addAll(model.getQuads(null, EnumFacing.UP, 0));
-		quads.addAll(model.getQuads(null, EnumFacing.DOWN, 0));
-
-		quads.addAll(model.getQuads(null, null, 0));
-
-		final AabbBuilder allBoundsBuilder = AabbBuilder.create();
-		final AabbBuilder horizontalBoundsBuilder = AabbBuilder.create();
-
-		for (BakedQuad quad : quads) {
-			if (quad.getFace() == EnumFacing.EAST || quad.getFace() == EnumFacing.WEST)
-				addQuad(quad, horizontalBoundsBuilder);
-			addQuad(quad, allBoundsBuilder);
-		}
-
-		final AxisAlignedBB horizontalBounds = horizontalBoundsBuilder.build();
-		final AxisAlignedBB allBounds = allBoundsBuilder.build();
-
-		final AxisAlignedBB scaleBounds = !horizontalBounds.hasNaN()? horizontalBounds : allBounds;
-
-		final double scale = 1.0 / (scaleBounds.maxX - scaleBounds.minX);
-
-		final double middleX = (allBounds.maxX + allBounds.minX) / 2.0;
-		final double middleY = (allBounds.maxY + allBounds.minY) / 2.0;
-		final double middleZ = (allBounds.maxZ + allBounds.minZ) / 2.0;
-
-		this.eyeList = new DisplayListWrapper() {
-			@Override
-			public void compile() {
-				GL11.glPushMatrix();
-
-				GL11.glScaled(scale, scale, scale);
-				GL11.glTranslated(-middleX, -middleY, -middleZ);
-
-				final Tessellator tessellator = Tessellator.getInstance();
-
-				BufferBuilder vertexBuffer = tessellator.getBuffer();
-				vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
-
-				for (BakedQuad quad : quads)
-					vertexBuffer.addVertexData(quad.getVertexData());
-
-				tessellator.draw();
-
-				GL11.glPopMatrix();
-			}
-		};
+		eyeList.invalidate();
 	}
 
 	private static void addQuad(BakedQuad quad, AabbBuilder aabbBuilder) {
