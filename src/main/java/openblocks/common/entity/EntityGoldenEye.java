@@ -58,10 +58,6 @@ public class EntityGoldenEye extends EntitySmoothMove {
 		}
 	}
 
-	public void setTarget(double x, double y, double z) {
-		smoother.setTarget(x, y, z);
-	}
-
 	@Override
 	public void onUpdate() {
 		if (!world.isRemote && timeToLive-- < 0) {
@@ -112,7 +108,7 @@ public class EntityGoldenEye extends EntitySmoothMove {
 			rotationYaw = (float)Math.toDegrees(Math.atan2(dx, dz));
 		}
 
-		setTarget(targetX, targetY, targetZ);
+		setPosition(targetX, targetY, targetZ);
 	}
 
 	@Override
