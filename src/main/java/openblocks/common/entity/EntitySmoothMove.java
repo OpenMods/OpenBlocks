@@ -41,7 +41,7 @@ public abstract class EntitySmoothMove extends Entity {
 		}
 
 		public void setTarget(double targetX, double targetY, double targetZ) {
-			if (shouldJump(targetX, targetY, targetZ)) {
+			if (!isPositionValid || shouldJump(targetX, targetY, targetZ)) {
 				setPositionRaw(targetX, targetY, targetZ);
 				motionX = motionY = motionZ = 0;
 			}
@@ -74,9 +74,10 @@ public abstract class EntitySmoothMove extends Entity {
 
 	protected final MoveSmoother smoother;
 
+	private boolean isPositionValid;
+
 	public EntitySmoothMove(World world) {
 		super(world);
-
 		smoother = createSmoother(world.isRemote);
 	}
 
@@ -84,13 +85,20 @@ public abstract class EntitySmoothMove extends Entity {
 		return isRemote? new MoveSmoother(0.25, 1.0, 8.0, 0.01) : new MoveSmoother(0.5, 5.0, 128.0, 0.01);
 	}
 
+	private boolean isFullyInitialized() {
+		// may be null for calls made in superclass
+		return smoother != null;
+	}
+
 	private void setPositionRaw(double x, double y, double z) {
+		// ignore dummy position set in super constructor
+		isPositionValid = isFullyInitialized();
 		super.setPosition(x, y, z);
 	}
 
 	@Override
 	public void setPosition(double x, double y, double z) {
-		if (smoother != null) smoother.setTarget(x, y, z);
+		if (isFullyInitialized()) smoother.setTarget(x, y, z);
 		else setPositionRaw(x, y, z);
 	}
 
