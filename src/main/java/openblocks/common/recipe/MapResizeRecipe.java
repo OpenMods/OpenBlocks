@@ -26,6 +26,7 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 		Ingredient m = Ingredient.fromStacks(ItemEmptyMap.createMap(Items.emptyMap, 0));
 
 		example.input = NonNullList.from(
+				Ingredient.EMPTY,
 				Ingredient.EMPTY, e, Ingredient.EMPTY,
 				e, m, e,
 				Ingredient.EMPTY, e, Ingredient.EMPTY);
