@@ -74,7 +74,6 @@ public class TileEntityItemDropper extends SyncedTileEntity implements INeighbou
 			if (stack.isEmpty()) continue;
 
 			final ItemStack dropped = stack.splitStack(1);
-			inventory.setInventorySlotContents(i, dropped);
 
 			final Orientation orientation = getOrientation();
 
