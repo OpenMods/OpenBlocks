@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import openblocks.Config;
 import openmods.Log;
 import openmods.renderer.PreWorldRenderHookVisitor;
@@ -72,6 +73,15 @@ public class SkyBlockRenderer {
 		if (!Config.renderSkyBlocks) {
 			Log.info("Disabled by config");
 			return;
+		}
+
+		if (FMLClientHandler.instance().hasOptifine()) {
+			if (Config.skyBlocksOptifineOverride) {
+				Log.warn("Optifine detected: skyblocks + shaders may hang your game");
+			} else {
+				Log.info("Disabled due to Optifine (use `optifineOverride` config to override)");
+				return;
+			}
 		}
 
 		if (!OpenGlHelper.isFramebufferEnabled()) {

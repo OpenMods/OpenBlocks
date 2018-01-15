@@ -391,8 +391,11 @@ public class Config {
 	@ConfigProperty(category = "canvas", name = "replaceBlacklist", comment = "List of block ids that should not be replaceable by canvas (by using brush, stencil, etc)")
 	public static String[] canvasBlacklist = new String[0];
 
-	@ConfigProperty(category = "canvas", name = "skyblock", comment = "Enables skyblock rendering. Disable when there are graphic glitches or performance problems")
+	@ConfigProperty(category = "skyblock", name = "renderingEnabled", comment = "Enables skyblock rendering. Disable when there are graphic glitches or performance problems")
 	public static boolean renderSkyBlocks = true;
+
+	@ConfigProperty(category = "skyblock", name = "optifineOverride", comment = "Forces skyblock rendering even when Optifine is enabled (warning: skyblocks may be incompatible with shaders!)")
+	public static boolean skyBlocksOptifineOverride = false;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "breaker", name = "actionLimit", comment = "Maximum number of actions that can be performed by block breaker in single tick")
