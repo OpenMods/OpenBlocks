@@ -16,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.client.renderer.TextureUploader;
-import openblocks.client.renderer.TextureUploader.IUploadableTexture;
 import openblocks.common.IStencilPattern;
 import openmods.Log;
 
@@ -28,13 +27,13 @@ public class StencilTextureManager {
 
 	private static class TexturePool {
 
-		private class PoolTexture extends TextureAtlasSprite implements IUploadableTexture {
+		private class PoolTexture extends TextureAtlasSprite {
 
 			private final ResourceLocation selfLocation;
 
-			private final int mipmapLevels;
+			private int mipmapLevels;
 
-			private boolean requiresUpload;
+			private boolean queuedForUpload;
 
 			private PoolTexture(ResourceLocation selfLocation, int mipmapLevels) {
 				super(selfLocation.toString());
@@ -72,7 +71,7 @@ public class StencilTextureManager {
 
 			@Override
 			public void generateMipmaps(int level) {
-				Preconditions.checkArgument(level == this.mipmapLevels, "Mismatched mipmap levels: %s -> %s", level, this.mipmapLevels);
+				this.mipmapLevels = level;
 				copyTextureDataFromPrimer();
 			}
 
@@ -80,21 +79,22 @@ public class StencilTextureManager {
 				if (bitmap == null)
 					bitmap = new StencilableBitmap(backgroundSprite.getFrameTextureData(0)[0], width);
 
-				clearFramesTextureData();
-				final int[][] mipmaps = new int[this.mipmapLevels + 1][];
-				mipmaps[0] = bitmap.apply(pattern);
-				framesTextureData.add(mipmaps);
-				super.generateMipmaps(this.mipmapLevels);
-				requiresUpload = true;
-				TextureUploader.INSTANCE.scheduleTextureUpload(this);
+				if (!queuedForUpload) {
+					queuedForUpload = true;
+					TextureUploader.INSTANCE.scheduleTextureUpload(() -> upload(pattern));
+				}
 			}
 
-			@Override
-			public void upload() {
-				if (requiresUpload) {
-					requiresUpload = false;
-					TextureUtil.uploadTextureMipmap(this.framesTextureData.get(0), this.width, this.height, this.originX, this.originY, false, false);
-				}
+			private void upload(IStencilPattern pattern) {
+				queuedForUpload = false;
+
+				clearFramesTextureData();
+				int[][] mipmaps = new int[this.mipmapLevels + 1][];
+				mipmaps[0] = bitmap.apply(pattern);
+				mipmaps = TextureUtil.generateMipmapData(this.mipmapLevels, this.width, mipmaps);
+				framesTextureData.add(mipmaps);
+
+				TextureUtil.uploadTextureMipmap(mipmaps, this.width, this.height, this.originX, this.originY, false, false);
 			}
 		}
 
