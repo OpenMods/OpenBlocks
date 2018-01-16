@@ -26,7 +26,7 @@ public class GoldenEyeRechargeRecipe extends ShapelessRecipes {
 	}
 
 	public GoldenEyeRechargeRecipe() {
-		super(OpenBlocks.location("golden_eye").toString(), createDummyOutput(), NonNullList.from(createDummyInput(), Ingredient.fromItem(Items.ENDER_PEARL)));
+		super(OpenBlocks.location("golden_eye").toString(), createDummyOutput(), NonNullList.from(Ingredient.EMPTY, createDummyInput(), Ingredient.fromItem(Items.ENDER_PEARL)));
 	}
 
 	@Override

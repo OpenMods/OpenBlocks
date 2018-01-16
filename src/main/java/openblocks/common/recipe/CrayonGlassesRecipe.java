@@ -19,7 +19,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 	private static NonNullList<Ingredient> createFakeIngredientsList() {
 		ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON);
 		ItemImaginary.setupValues(block, 0x00FFFF);
-		return NonNullList.from(Ingredient.fromItem(Items.PAPER), Ingredient.fromStacks(block));
+		return NonNullList.from(Ingredient.EMPTY, Ingredient.fromItem(Items.PAPER), Ingredient.fromStacks(block));
 	}
 
 	@Nonnull
