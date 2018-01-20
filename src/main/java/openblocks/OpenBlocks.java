@@ -20,7 +20,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -220,7 +219,8 @@ import openmods.config.game.RegisterBlock;
 import openmods.config.game.RegisterItem;
 import openmods.config.properties.ConfigProcessing;
 import openmods.item.ItemGeneric;
-import openmods.liquids.BucketFillHandler;
+import openmods.liquids.ContainerBucketFillHandler;
+import openmods.liquids.SingleFluidBucketFillHandler;
 import openmods.network.event.NetworkEventEntry;
 import openmods.network.event.NetworkEventManager;
 import openmods.network.rpc.MethodEntry;
@@ -710,6 +710,10 @@ public class OpenBlocks {
 		// needed first, to properly initialize delegates
 		FluidRegistry.registerFluid(Fluids.xpJuice);
 
+		if (Config.registerUniversalXpBucket) {
+			FluidRegistry.addBucketForFluid(Fluids.xpJuice);
+		}
+
 		startupHelper.registerBlocksHolder(OpenBlocks.Blocks.class);
 		startupHelper.registerItemsHolder(OpenBlocks.Items.class);
 
@@ -775,7 +779,8 @@ public class OpenBlocks {
 		}
 
 		if (Items.xpBucket != null) {
-			MinecraftForge.EVENT_BUS.register(new BucketFillHandler(new ItemStack(Items.xpBucket), new FluidStack(Fluids.xpJuice, Fluid.BUCKET_VOLUME)));
+			if (Config.xpBucketDirectFill)
+				MinecraftForge.EVENT_BUS.register(new SingleFluidBucketFillHandler(new ItemStack(Items.xpBucket)));
 		}
 
 		if (Items.pedometer != null) {
@@ -784,6 +789,10 @@ public class OpenBlocks {
 
 		if (Items.sleepingBag != null)
 			MinecraftForge.EVENT_BUS.register(new ItemSleepingBag.IsSleepingHandler());
+
+		if (Items.xpBucket != null && Config.registerLegacyXpBucket) {
+			registerLegacyBucket();
+		}
 
 		MinecraftForge.EVENT_BUS.register(CanvasReplaceBlacklist.instance);
 
@@ -796,6 +805,11 @@ public class OpenBlocks {
 		LootHandler.register();
 
 		proxy.preInit();
+	}
+
+	@SuppressWarnings("deprecation")
+	private static void registerLegacyBucket() {
+		net.minecraftforge.fluids.FluidContainerRegistry.registerFluidContainer(Fluids.xpJuice, new ItemStack(Items.xpBucket), new ItemStack(net.minecraft.init.Items.BUCKET));
 	}
 
 	@EventHandler
@@ -838,6 +852,13 @@ public class OpenBlocks {
 			FlimFlamRegistry.instance.registerFlimFlam("skyblock", -100, 150, new SkyblockFlimFlam()).setRange(Integer.MIN_VALUE, -400);
 
 			FlimFlamRegistry.BLACKLIST.init();
+		}
+
+		if (Blocks.tank != null) {
+			if (Config.allowBucketDrain) {
+				final ContainerBucketFillHandler tankFillHandler = new TileEntityTank.BucketFillHandler();
+				MinecraftForge.EVENT_BUS.register(tankFillHandler);
+			}
 		}
 	}
 

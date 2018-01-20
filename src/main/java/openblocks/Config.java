@@ -91,6 +91,9 @@ public class Config {
 	@ConfigProperty(category = "tanks", name = "fluidDifferenceUpdateThreshold", comment = "Minimal difference in fluid level between neigbors required for tank update (can be used for performance finetuning")
 	public static int tankFluidUpdateThreshold = 0;
 
+	@ConfigProperty(category = "tanks", name = "allowBucketDrain", comment = "Can buckets be filled directly from tank? (works only for vanilla fluids, universal bucket and ones registered in 'bucketItems')")
+	public static boolean allowBucketDrain = true;
+
 	@OnLineModifiable
 	@ConfigProperty(category = "trophy", name = "trophyDropChance", comment = "Legacy value. For actual configuration, see 'trophyDropChanceFormula'")
 	public static double trophyDropChance = 0.001;
@@ -404,6 +407,18 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "placer", name = "actionLimit", comment = "Maximum number of actions that can be performed by block placer in single tick")
 	public static int blockPlacerActionLimit = 16;
+
+	@ConfigProperty(category = "xpBucket", name = "directFill", comment = "Can bucket be filled with liquid XP directly from any source?")
+	public static boolean xpBucketDirectFill = true;
+
+	@ConfigProperty(category = "xpBucket", name = "legacyBucketSupport", comment = "Should liquid XP be registered for legacy bucket support")
+	public static boolean registerLegacyXpBucket = true;
+
+	@ConfigProperty(category = "xpBucket", name = "universalBucketSupport", comment = "Should liquid XP be registered for universal bucket support (does not enable universal bucket)")
+	public static boolean registerUniversalXpBucket = true;
+
+	@ConfigProperty(category = "xpBucket", name = "showInCreativeGui", comment = "Should XP bucket be shown in inventory (if this is set, while universal bucket is enabled and registerUniversalXpBucket is set, creative menu will contain two buckets containing liquid XP)")
+	public static boolean showXpBucketInCreative = true;
 
 	public static void register() {
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();

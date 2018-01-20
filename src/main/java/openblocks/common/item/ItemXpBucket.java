@@ -1,6 +1,8 @@
 package openblocks.common.item;
 
+import java.util.List;
 import javax.annotation.Nullable;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,6 +13,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.liquids.SingleFluidBucketHandler;
 
@@ -47,6 +50,12 @@ public class ItemXpBucket extends Item {
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
 		return new CapabilityProvider(stack);
+	}
+
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> items) {
+		if (Config.showXpBucketInCreative)
+			super.getSubItems(item, tab, items);
 	}
 
 }
