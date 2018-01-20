@@ -1,5 +1,7 @@
 package openblocks;
 
+import com.google.common.collect.Lists;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -19,7 +21,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -209,6 +210,7 @@ import openblocks.rpc.ITriggerable;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
+import openmods.Log;
 import openmods.OpenMods;
 import openmods.block.OpenBlock;
 import openmods.config.BlockInstances;
@@ -221,7 +223,8 @@ import openmods.config.game.RegisterItem;
 import openmods.config.properties.ConfigProcessing;
 import openmods.entity.EntityBlock;
 import openmods.item.ItemGeneric;
-import openmods.liquids.BucketFillHandler;
+import openmods.liquids.ContainerBucketFillHandler;
+import openmods.liquids.SingleFluidBucketFillHandler;
 import openmods.network.event.NetworkEventEntry;
 import openmods.network.event.NetworkEventManager;
 import openmods.network.rpc.MethodEntry;
@@ -691,6 +694,10 @@ public class OpenBlocks {
 		// needed first, to properly initialize delegates
 		FluidRegistry.registerFluid(Fluids.xpJuice);
 
+		if (Config.registerUniversalXpBucket) {
+			FluidRegistry.addBucketForFluid(Fluids.xpJuice);
+		}
+
 		Criterions.init();
 
 		startupHelper.registerBlocksHolder(OpenBlocks.Blocks.class);
@@ -765,7 +772,8 @@ public class OpenBlocks {
 		}
 
 		if (Items.xpBucket != null) {
-			MinecraftForge.EVENT_BUS.register(new BucketFillHandler(new ItemStack(Items.xpBucket), new FluidStack(Fluids.xpJuice, Fluid.BUCKET_VOLUME)));
+			if (Config.xpBucketDirectFill)
+				MinecraftForge.EVENT_BUS.register(new SingleFluidBucketFillHandler(new ItemStack(Items.xpBucket)));
 		}
 
 		if (Items.pedometer != null) {
@@ -829,13 +837,42 @@ public class OpenBlocks {
 
 			FlimFlamRegistry.BLACKLIST.init();
 		}
+
+		if (Blocks.tank != null) {
+			if (Config.allowBucketDrain) {
+				final ContainerBucketFillHandler tankFillHandler = new TileEntityTank.BucketFillHandler();
+
+				for (ItemStack bucket : filledBuckets)
+					tankFillHandler.addFilledBucket(bucket);
+
+				filledBuckets.clear();
+
+				for (String bucketId : Config.bucketItems) {
+					final ResourceLocation bucketLocation = new ResourceLocation(bucketId);
+					final Item item = Item.REGISTRY.getObject(bucketLocation);
+					if (item == null) {
+						Log.warn("Failed to find bucket item %s", item);
+					} else {
+						tankFillHandler.addFilledBucket(new ItemStack(item));
+					}
+				}
+
+				MinecraftForge.EVENT_BUS.register(tankFillHandler);
+			}
+		}
 	}
+
+	private final List<ItemStack> filledBuckets = Lists.newArrayList();
 
 	@EventHandler
 	public void processMessage(FMLInterModComms.IMCEvent event) {
 		for (FMLInterModComms.IMCMessage m : event.getMessages()) {
 			if (m.isStringMessage() && "donateUrl".equalsIgnoreCase(m.key)) {
 				DonationUrlManager.instance().addUrl(m.getSender(), m.getStringValue());
+			}
+
+			if (m.isItemStackMessage() && "bucket".equalsIgnoreCase(m.key)) {
+				filledBuckets.add(m.getItemStackValue());
 			}
 		}
 	}

@@ -18,6 +18,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraftforge.common.capabilities.Capability;
@@ -42,6 +43,7 @@ import openmods.api.IActivateAwareTile;
 import openmods.api.ICustomHarvestDrops;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
+import openmods.liquids.ContainerBucketFillHandler;
 import openmods.model.variant.VariantModelState;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
@@ -52,6 +54,13 @@ import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
 
 public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlaceAwareTile, INeighbourAwareTile, ICustomHarvestDrops, ITickable {
+
+	public static class BucketFillHandler extends ContainerBucketFillHandler {
+		@Override
+		protected boolean canFill(World world, BlockPos pos, TileEntity te) {
+			return te instanceof TileEntityTank;
+		}
+	}
 
 	private class RenderUpdateListeners implements ISyncListener {
 
