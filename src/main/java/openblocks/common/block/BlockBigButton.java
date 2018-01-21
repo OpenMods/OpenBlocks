@@ -100,8 +100,7 @@ public class BlockBigButton extends OpenBlock.SixDirections {
 		return (side == getFront(blockState) && pressed)? 15 : 0;
 	}
 
-	private void setPoweredState(World world, BlockPos pos, boolean isPowered) {
-		final IBlockState state = world.getBlockState(pos);
+	private void setPoweredState(IBlockState state, World world, BlockPos pos, boolean isPowered) {
 		world.setBlockState(pos, state.withProperty(BlockBigButton.POWERED, isPowered), BlockNotifyFlags.ALL);
 
 		world.notifyNeighborsOfStateChange(pos, this, false);
@@ -118,23 +117,38 @@ public class BlockBigButton extends OpenBlock.SixDirections {
 				final TileEntityBigButton te = getTileEntity(worldIn, pos, TileEntityBigButton.class);
 				te.openGui(OpenBlocks.instance, playerIn);
 			} else if (!state.getValue(POWERED)) {
-				worldIn.playSound(null, pos, SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.6F);
-				setPoweredState(worldIn, pos, true);
-				final TileEntityBigButton te = getTileEntity(worldIn, pos, TileEntityBigButton.class);
-				worldIn.scheduleUpdate(pos, this, te.getTickTime());
+				push(state, worldIn, pos);
 			}
 		}
 
 		return true;
+	}
 
+	protected void scheduleUpdate(World worldIn, BlockPos pos) {
+		final TileEntityBigButton te = getTileEntity(worldIn, pos, TileEntityBigButton.class);
+		worldIn.scheduleUpdate(pos, this, te.getTickTime());
+	}
+
+	protected void push(IBlockState state, World worldIn, BlockPos pos) {
+		worldIn.playSound(null, pos, SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.6F);
+		setPoweredState(state, worldIn, pos, true);
+		scheduleUpdate(worldIn, pos);
+	}
+
+	protected void pop(IBlockState state, World worldIn, BlockPos pos) {
+		worldIn.playSound(null, pos, SoundEvents.BLOCK_STONE_BUTTON_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.5F);
+		setPoweredState(state, worldIn, pos, false);
 	}
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		if (!worldIn.isRemote) {
-			setPoweredState(worldIn, pos, false);
-			worldIn.playSound(null, pos, SoundEvents.BLOCK_STONE_BUTTON_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.5F);
+			updateAfterTimeout(state, worldIn, pos);
 		}
+	}
+
+	protected void updateAfterTimeout(IBlockState state, World worldIn, BlockPos pos) {
+		pop(state, worldIn, pos);
 	}
 
 	@Override

@@ -2,8 +2,8 @@
     "forge_marker" : 1,
     "defaults" : {
         "textures": {
-            "particle": "minecraft:blocks/stone",
-            "all": "minecraft:blocks/stone"
+            "particle": "minecraft:blocks/planks_oak",
+            "all": "minecraft:blocks/planks_oak"
         },
         "transform": "forge:default-block"
     },

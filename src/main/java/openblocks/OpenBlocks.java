@@ -63,6 +63,7 @@ import openblocks.common.block.BlockAutoAnvil;
 import openblocks.common.block.BlockAutoEnchantmentTable;
 import openblocks.common.block.BlockBearTrap;
 import openblocks.common.block.BlockBigButton;
+import openblocks.common.block.BlockBigButtonWood;
 import openblocks.common.block.BlockBlockBreaker;
 import openblocks.common.block.BlockBlockPlacer;
 import openblocks.common.block.BlockBuilderGuide;
@@ -315,6 +316,9 @@ public class OpenBlocks {
 
 		@RegisterBlock(type = BlockBigButton.class, id = "big_button", tileEntity = TileEntityBigButton.class, legacyIds = "bigbutton")
 		public static Block bigButton;
+
+		@RegisterBlock(type = BlockBigButtonWood.class, id = "big_button_wood", tileEntity = TileEntityBigButton.class)
+		public static Block bigButtonWood;
 
 		@RegisterBlock(id = "imaginary", tileEntity = TileEntityImaginary.class, itemBlock = ItemImaginary.class, customItemModels = ItemImaginary.ModelProvider.class, registerDefaultItemModel = false)
 		public static BlockImaginary imaginary;
