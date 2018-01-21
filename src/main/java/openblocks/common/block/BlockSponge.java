@@ -76,7 +76,7 @@ public class BlockSponge extends OpenBlock {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
 		clearupLiquid(world, pos);
-		world.scheduleUpdate(pos, this, TICK_RATE + world.rand.nextInt(5));
+		world.scheduleUpdate(pos.toImmutable(), this, TICK_RATE + world.rand.nextInt(5));
 	}
 
 	private void clearupLiquid(World world, BlockPos pos) {

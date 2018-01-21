@@ -19,7 +19,7 @@ import openmods.tileentity.OpenTileEntity;
 
 public class TileEntityBigButton extends OpenTileEntity implements ISurfaceAttachment, IHasGui, IInventoryProvider {
 
-	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "bigbutton", true, 1));
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "bigbutton", true, 8));
 
 	@Override
 	public Object getServerGui(EntityPlayer player) {
@@ -37,8 +37,11 @@ public class TileEntityBigButton extends OpenTileEntity implements ISurfaceAttac
 	}
 
 	public int getTickTime() {
-		ItemStack stack = inventory.getStackInSlot(0);
-		return stack == null? 1 : stack.stackSize;
+		int result = 0;
+		for (ItemStack stack : inventory.contents())
+			if (stack != null)
+				result += stack.stackSize;
+		return Math.max(result, 1);
 	}
 
 	@Override
