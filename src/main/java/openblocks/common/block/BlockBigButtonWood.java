@@ -34,7 +34,7 @@ public class BlockBigButtonWood extends BlockBigButton {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entityIn) {
-		if (!world.isRemote) {
+		if (!world.isRemote && !state.getValue(POWERED)) {
 			if (hasStuckArrows(state, world, pos)) {
 				push(state, world, pos);
 			}
