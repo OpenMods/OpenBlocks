@@ -142,7 +142,7 @@ public class BlockBigButton extends OpenBlock.SixDirections {
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if (!worldIn.isRemote) {
+		if (!worldIn.isRemote && state.getValue(POWERED)) {
 			updateAfterTimeout(state, worldIn, pos);
 		}
 	}
