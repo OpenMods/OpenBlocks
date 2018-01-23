@@ -1,7 +1,7 @@
 {
-    "parent": "item/generated",
+    "parent": "item/handheld_rod",
     "textures": {
-        "layer0": "openblocks:items/paintbrush",
+        "layer0": "openblocks:items/paintbrush_handle",
         "layer1": "openblocks:items/paintbrush_paint"
     }
 }
