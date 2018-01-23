@@ -83,15 +83,17 @@ public class ItemPaintBrush extends Item {
 		final Integer color = getColorFromStack(stack);
 		if (stack.getItemDamage() > MAX_USES || color == null) return EnumActionResult.FAIL;
 
-		if (Config.paintbrushReplacesBlocks && CanvasReplaceBlacklist.instance.isAllowedToReplace(world, pos)) {
-			BlockCanvas.replaceBlock(world, pos);
-		}
-
-		final boolean changed;
-
 		final int solidColor = 0xFF000000 | color;
-		if (player.isSneaking()) changed = tryRecolorBlock(world, pos, solidColor, EnumFacing.VALUES);
-		else changed = tryRecolorBlock(world, pos, solidColor, facing);
+
+		boolean changed = tryRecolorBlock(player, world, pos, facing, solidColor);
+
+		if (!changed) {
+			if (Config.paintbrushReplacesBlocks
+					&& CanvasReplaceBlacklist.instance.isAllowedToReplace(world, pos)
+					&& BlockCanvas.replaceBlock(world, pos)) {
+				changed = tryRecolorBlock(player, world, pos, facing, solidColor);
+			}
+		}
 
 		if (changed) {
 			world.playSound(null, player.getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.PLAYERS, 0.1F, 0.8F);
@@ -108,6 +110,11 @@ public class ItemPaintBrush extends Item {
 		}
 
 		return EnumActionResult.FAIL;
+	}
+
+	private static boolean tryRecolorBlock(EntityPlayer player, World world, BlockPos pos, EnumFacing facing, int color) {
+		if (player.isSneaking()) return tryRecolorBlock(world, pos, color, EnumFacing.VALUES);
+		return tryRecolorBlock(world, pos, color, facing);
 	}
 
 	private static boolean tryRecolorBlock(World world, BlockPos pos, int rgb, EnumFacing... sides) {
