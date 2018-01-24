@@ -103,14 +103,17 @@ public class DevNullModel implements IModel {
 
 	private final Optional<ResourceLocation> particle;
 
+	private final Optional<ResourceLocation> font;
+
 	public DevNullModel() {
-		this(new ModelParams(), new ModelParams(), Optional.empty());
+		this(new ModelParams(), new ModelParams(), Optional.empty(), Optional.empty());
 	}
 
-	public DevNullModel(ModelParams gui, ModelParams world, Optional<ResourceLocation> particle) {
+	public DevNullModel(ModelParams gui, ModelParams world, Optional<ResourceLocation> particle, Optional<ResourceLocation> font) {
 		this.gui = gui;
 		this.world = world;
 		this.particle = particle;
+		this.font = font;
 	}
 
 	@Override
@@ -120,24 +123,28 @@ public class DevNullModel implements IModel {
 
 	@Override
 	public Collection<ResourceLocation> getTextures() {
-		return CollectionUtils.asSet(particle);
+		return Sets.union(CollectionUtils.asSet(particle), CollectionUtils.asSet(font));
 	}
+
+	private static final ResourceLocation DEFAULT_FONT = new ResourceLocation("minecraft", "font/ascii");
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		final TextureAtlasSprite particle = bakedTextureGetter.apply(this.particle.orElse(TextureMap.LOCATION_MISSING_TEXTURE));
+		final TextureAtlasSprite font = bakedTextureGetter.apply(this.font.orElse(DEFAULT_FONT));
 
 		final BakedModelParams bakedGui = this.gui.bake(state, format, bakedTextureGetter);
 		final BakedModelParams bakedWorld = this.world.bake(state, format, bakedTextureGetter);
 
-		final DevNullItemOverride override = new DevNullItemOverride(bakedGui, bakedWorld, particle);
+		final DevNullItemOverride override = new DevNullItemOverride(bakedGui, bakedWorld, particle, font, format);
 		return override.getEmptyBakedModel();
 	}
 
 	@Override
 	public IModel retexture(ImmutableMap<String, String> textures) {
 		final Optional<ResourceLocation> newParticle = tryReplace(textures.get("particle"), this.particle);
-		return new DevNullModel(this.gui, this.world, newParticle);
+		final Optional<ResourceLocation> newFont = tryReplace(textures.get("font"), this.font);
+		return new DevNullModel(this.gui, this.world, newParticle, newFont);
 	}
 
 	private static Optional<ResourceLocation> tryReplace(String newTexture, Optional<ResourceLocation> currentTexture) {
@@ -174,7 +181,7 @@ public class DevNullModel implements IModel {
 			}
 		}
 
-		return changed? new DevNullModel(newGui, newWorld, this.particle) : this;
+		return changed? new DevNullModel(newGui, newWorld, this.particle, this.font) : this;
 	}
 
 }

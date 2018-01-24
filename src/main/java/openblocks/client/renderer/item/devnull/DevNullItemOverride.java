@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
+import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,10 +25,13 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.SimpleModelFontRenderer;
 import openblocks.common.item.ItemDevNull;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -39,16 +43,13 @@ public class DevNullItemOverride extends ItemOverrideList {
 
 		private final List<BakedQuad> quads;
 
-		private final TextureAtlasSprite frame;
-
 		private final boolean isAmbientOcclusion;
 
 		private final boolean isGui3d;
 
-		public BakedDevNull(ModelKey key, List<BakedQuad> quads, TextureAtlasSprite frame, boolean isAmbientOcclusion, boolean isGui3d) {
+		public BakedDevNull(ModelKey key, List<BakedQuad> quads, boolean isAmbientOcclusion, boolean isGui3d) {
 			this.key = key;
 			this.quads = quads;
-			this.frame = frame;
 			this.isAmbientOcclusion = isAmbientOcclusion;
 			this.isGui3d = isGui3d;
 		}
@@ -75,7 +76,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 
 		@Override
 		public TextureAtlasSprite getParticleTexture() {
-			return frame;
+			return particle;
 		}
 
 		@Override
@@ -110,6 +111,8 @@ public class DevNullItemOverride extends ItemOverrideList {
 			this.scaleFactor = scaleFactor;
 		}
 	}
+
+	private static final ResourceLocation dummyFontLocation = new ResourceLocation("minecraft", "textures/font/ascii.png");
 
 	private class ModelFactory extends CacheLoader<ModelKey, Pair<? extends IBakedModel, Matrix4f>> {
 
@@ -149,7 +152,12 @@ public class DevNullItemOverride extends ItemOverrideList {
 			final List<BakedQuad> allQuads = Lists.newArrayList();
 			apppendFrameQuads(isGui? frameQuads2d : frameQuads3d, depth, transformType, allQuads);
 			appendScaledModelQuads(allQuads, innerModel, quadTransformMatrix, ItemDevNull.NESTED_ITEM_TINT_DELTA);
-			final BakedDevNull model = new BakedDevNull(key, allQuads, particle, innerModel.isAmbientOcclusion(), innerModel.isGui3d());
+
+			if (isGui) {
+				appendItemCount(allQuads, key.stackSize);
+			}
+
+			final BakedDevNull model = new BakedDevNull(key, allQuads, innerModel.isAmbientOcclusion(), innerModel.isGui3d());
 			return Pair.of(model, perspectiveMatrix);
 		}
 	}
@@ -158,11 +166,13 @@ public class DevNullItemOverride extends ItemOverrideList {
 		public final int depth;
 		@Nullable
 		public final IBakedModel innerItem;
+		public final int stackSize;
 		public final TransformType transform;
 
-		public ModelKey(@Nullable IBakedModel innerItem, int depth, TransformType transform) {
+		public ModelKey(@Nullable IBakedModel innerItem, int depth, int stackSize, TransformType transform) {
 			this.innerItem = innerItem;
 			this.depth = depth;
+			this.stackSize = stackSize;
 			this.transform = transform;
 		}
 
@@ -177,7 +187,8 @@ public class DevNullItemOverride extends ItemOverrideList {
 				final ModelKey other = (ModelKey)obj;
 				return this.depth == other.depth &&
 						Objects.equal(this.innerItem, other.innerItem) &&
-						this.transform == other.transform;
+						this.transform == other.transform &&
+						this.stackSize == other.stackSize;
 			}
 
 			return false;
@@ -190,11 +201,12 @@ public class DevNullItemOverride extends ItemOverrideList {
 			result = prime * result + depth;
 			result = prime * result + (innerItem != null? innerItem.hashCode() : 0);
 			result = prime * result + transform.hashCode();
+			result = prime * result + Integer.hashCode(stackSize);
 			return result;
 		}
 
 		public ModelKey update(TransformType cameraTransformType) {
-			return new ModelKey(this.innerItem, this.depth, cameraTransformType);
+			return new ModelKey(this.innerItem, this.depth, this.stackSize, cameraTransformType);
 		}
 	}
 
@@ -221,6 +233,14 @@ public class DevNullItemOverride extends ItemOverrideList {
 			output.add(rescaleQuad(quad, transform, tintDelta));
 
 		return output;
+	}
+
+	private void appendItemCount(List<BakedQuad> output, int count) {
+		if (count > 1) {
+			final String s = Integer.toString(count);
+			fontRenderer.drawStringWithShadow(s, 19 - 2 - fontRenderer.getStringWidth(s), 6 + 3, 0x00FFFF00);
+			output.addAll(fontRenderer.build());
+		}
 	}
 
 	private static IBakedModel getItemModel(@Nonnull ItemStack stack) {
@@ -282,6 +302,8 @@ public class DevNullItemOverride extends ItemOverrideList {
 	private final List<IBakedModel> emptyFrameModels3d;
 	private final Map<TransformType, Matrix4f> transforms3d;
 
+	private final SimpleModelFontRenderer fontRenderer;
+
 	private final LoadingCache<ModelKey, Pair<? extends IBakedModel, Matrix4f>> wrappedModelCache = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.SECONDS).build(new ModelFactory());
 
 	private static List<BakedQuad> rescaleModel(IBakedModel model, float scale, boolean is3d) {
@@ -323,14 +345,14 @@ public class DevNullItemOverride extends ItemOverrideList {
 
 		for (int i = 0; i < scaledFrames.size(); i++) {
 			final List<BakedQuad> quads = scaledFrames.get(i);
-			final ModelKey key = new ModelKey(null, i, type);
-			emptyFrameModels.add(new BakedDevNull(key, quads, particle, true, false));
+			final ModelKey key = new ModelKey(null, i, 1, type);
+			emptyFrameModels.add(new BakedDevNull(key, quads, true, false));
 		}
 
 		return emptyFrameModels.build();
 	}
 
-	public DevNullItemOverride(BakedModelParams gui, BakedModelParams world, TextureAtlasSprite particle) {
+	public DevNullItemOverride(BakedModelParams gui, BakedModelParams world, TextureAtlasSprite particle, TextureAtlasSprite font, VertexFormat format) {
 		super(ImmutableList.<ItemOverride> of());
 
 		this.particle = particle;
@@ -350,6 +372,30 @@ public class DevNullItemOverride extends ItemOverrideList {
 			this.scaleFactor3d = world.scaleFactor;
 			this.transforms3d = world.transforms;
 		}
+
+		final Matrix4f textTranform = new Matrix4f();
+		final float scale = 1f / 16f;
+		textTranform.m00 = +scale;
+		textTranform.m11 = -scale;
+		textTranform.m22 = +scale;
+		textTranform.m33 = 1;
+		textTranform.setTranslation(new Vector3f(0, 1, 2f));
+
+		fontRenderer = new SimpleModelFontRenderer(
+				Minecraft.getMinecraft().gameSettings,
+				dummyFontLocation,
+				Minecraft.getMinecraft().getTextureManager(),
+				false,
+				textTranform,
+				format) {
+
+			@Override
+			protected float renderUnicodeChar(char c, boolean italic) {
+				return super.renderDefaultChar(126, italic);
+			}
+		};
+
+		fontRenderer.setSprite(font);
 	}
 
 	private static void apppendFrameQuads(List<List<BakedQuad>> framesQuads, int depth, TransformType transformType, List<BakedQuad> output) {
@@ -369,8 +415,6 @@ public class DevNullItemOverride extends ItemOverrideList {
 
 	@Override
 	public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
-		final TransformType transformType = TransformType.NONE;
-
 		final Pair<ItemStack, Integer> r = ItemDevNull.getContents(stack);
 		final int depth = Math.max(1, r.getRight());
 
@@ -384,7 +428,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 
 		final IBakedModel innerModel = getItemModel(innerStack);
 
-		final ModelKey key = new ModelKey(innerModel, modelId, transformType);
+		final ModelKey key = new ModelKey(innerModel, modelId, innerStack.getCount(), TransformType.NONE);
 		return wrappedModelCache.getUnchecked(key).getLeft();
 	}
 

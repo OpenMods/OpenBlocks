@@ -16,7 +16,8 @@
                 }
             },
             "textures": {
-                "particle": "openblocks:items/dev_null"
+                "particle": "openblocks:items/dev_null",
+                "font": "minecraft:font/ascii"
             }
         }],
 
