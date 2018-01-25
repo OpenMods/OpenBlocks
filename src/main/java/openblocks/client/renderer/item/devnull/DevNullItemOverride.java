@@ -227,8 +227,9 @@ public class DevNullItemOverride extends ItemOverrideList {
 		return output;
 	}
 
-	private static IBakedModel getItemModel(ItemStack stack) {
-		return Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack);
+	private static IBakedModel getItemModel(ItemStack stack, World world, EntityLivingBase entity) {
+		final IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack);
+		return model.getOverrides().handleItemState(model, stack, world, entity);
 	}
 
 	private static BakedQuad rescaleQuad(BakedQuad quad, Matrix4f transform, int tintDelta) {
@@ -386,7 +387,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 		if (innerStack == null)
 			return emptyFrameModels2d.get(modelId);
 
-		final IBakedModel innerModel = getItemModel(innerStack);
+		final IBakedModel innerModel = getItemModel(innerStack, world, entity);
 
 		final ModelKey key = new ModelKey(innerModel, modelId, transformType);
 		return wrappedModelCache.getUnchecked(key).getLeft();
