@@ -693,6 +693,10 @@ public class OpenBlocks {
 		}
 	}
 
+	private static final String decorateEntityName(String name) {
+		return "openblocks." + name;
+	}
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
 		// needed first, to properly initialize delegates
@@ -723,17 +727,16 @@ public class OpenBlocks {
 			// was: GuiOpenHandler: handler for PlayerOpenContainerEvent
 		}
 
-		EntityRegistry.registerModEntity(OpenBlocks.location("luggage"), EntityLuggage.class, "luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
-
-		EntityRegistry.registerModEntity(OpenBlocks.location("xp_orb_no_fly"), EntityXPOrbNoFly.class, "xp_orb_no_fly", ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(OpenBlocks.location("hang_glider"), EntityHangGlider.class, "hang_glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(OpenBlocks.location("magnet"), EntityMagnet.class, "magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(OpenBlocks.location("mounted_block"), EntityMountedBlock.class, "mounted_block", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(OpenBlocks.location("player_magnet"), EntityMagnet.PlayerBound.class, "player_magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(OpenBlocks.location("cartographer"), EntityCartographer.class, "cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
-		EntityRegistry.registerModEntity(OpenBlocks.location("item_projectile"), EntityItemProjectile.class, "item_projectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(OpenBlocks.location("golden_eye"), EntityGoldenEye.class, "golden_eye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
-		EntityRegistry.registerModEntity(OpenBlocks.location("mini_me"), EntityMiniMe.class, "mini_me", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(location("luggage"), EntityLuggage.class, decorateEntityName("luggage"), ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(location("xp_orb_no_fly"), EntityXPOrbNoFly.class, decorateEntityName("xp_orb_no_fly"), ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(location("hang_glider"), EntityHangGlider.class, decorateEntityName("hang_glider"), ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(location("magnet"), EntityMagnet.class, decorateEntityName("magnet"), ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(location("mounted_block"), EntityMountedBlock.class, decorateEntityName("mounted_block"), ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(location("player_magnet"), EntityMagnet.PlayerBound.class, decorateEntityName("player_magnet"), ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(location("cartographer"), EntityCartographer.class, decorateEntityName("cartographer"), ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
+		EntityRegistry.registerModEntity(location("item_projectile"), EntityItemProjectile.class, decorateEntityName("item_projectile"), ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(location("golden_eye"), EntityGoldenEye.class, decorateEntityName("golden_eye"), ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
+		EntityRegistry.registerModEntity(location("mini_me"), EntityMiniMe.class, decorateEntityName("mini_me"), ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
 
 		final DataFixer dataFixer = FMLCommonHandler.instance().getDataFixer();
 		EntityLiving.registerFixesMob(dataFixer, EntityMiniMe.class);

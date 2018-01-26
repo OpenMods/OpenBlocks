@@ -242,7 +242,7 @@ public class Config {
 	public static int cursorDistanceLimit = 64;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "additional", name = "disableMobNames", comment = "List any mob names you want disabled on the server")
+	@ConfigProperty(category = "additional", name = "disableMobNames", comment = "List any mob names (like 'minecraft:bat') you want disabled on the server")
 	public static String[] disableMobNames = new String[0];
 
 	@OnLineModifiable
