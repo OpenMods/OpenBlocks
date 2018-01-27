@@ -150,6 +150,7 @@ import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityBearTrap;
 import openblocks.common.tileentity.TileEntityBigButton;
+import openblocks.common.tileentity.TileEntityBigButtonWood;
 import openblocks.common.tileentity.TileEntityBlockBreaker;
 import openblocks.common.tileentity.TileEntityBlockPlacer;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
@@ -317,7 +318,7 @@ public class OpenBlocks {
 		@RegisterBlock(type = BlockBigButton.class, id = "big_button", tileEntity = TileEntityBigButton.class, legacyIds = "bigbutton")
 		public static Block bigButton;
 
-		@RegisterBlock(type = BlockBigButtonWood.class, id = "big_button_wood", tileEntity = TileEntityBigButton.class)
+		@RegisterBlock(type = BlockBigButtonWood.class, id = "big_button_wood", tileEntity = TileEntityBigButtonWood.class)
 		public static Block bigButtonWood;
 
 		@RegisterBlock(id = "imaginary", tileEntity = TileEntityImaginary.class, itemBlock = ItemImaginary.class, customItemModels = ItemImaginary.ModelProvider.class, registerDefaultItemModel = false)
