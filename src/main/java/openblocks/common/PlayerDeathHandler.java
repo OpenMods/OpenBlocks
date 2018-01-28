@@ -350,6 +350,11 @@ public class PlayerDeathHandler {
 			return;
 		}
 
+		if (!tryConsumeGrave(player, drops, true)) {
+			Log.log(debugLevel(), "No grave in drops for player '%s', grave will not be spawned'", player);
+			return;
+		}
+
 		final GraveDropsEvent dropsEvent = new GraveDropsEvent(player);
 		for (EntityItem drop : drops)
 			dropsEvent.addItem(drop);
@@ -382,8 +387,9 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		if (!tryConsumeGrave(player, Iterables.concat(graveLoot, drops))) {
-			Log.log(debugLevel(), "No grave in drops for player '%s', grave will not be spawned'", player);
+		if (!tryConsumeGrave(player, Iterables.concat(graveLoot, drops), false)) {
+			Log.log(debugLevel(), "No grave in drops for player '%s' after firing event, grave will not be spawned'", player);
+			drops.addAll(graveLoot); // re-add any loot that would have gone to grave
 			return;
 		}
 
@@ -394,7 +400,7 @@ public class PlayerDeathHandler {
 	}
 
 	// TODO: candidate for scripting
-	private static boolean tryConsumeGrave(EntityPlayer player, Iterable<EntityItem> graveLoot) {
+	private static boolean tryConsumeGrave(EntityPlayer player, Iterable<EntityItem> graveLoot, boolean simulate) {
 		if (!Config.requiresGraveInInv || player.capabilities.isCreativeMode) return true;
 
 		final Item graveItem = Item.getItemFromBlock(OpenBlocks.Blocks.grave);
@@ -405,11 +411,13 @@ public class PlayerDeathHandler {
 			final EntityItem drop = lootIter.next();
 			final ItemStack itemStack = drop.getItem();
 			if (itemStack.getItem() == graveItem && !itemStack.isEmpty()) {
-				itemStack.shrink(1);
-				if (itemStack.isEmpty()) {
-					lootIter.remove();
-				} else {
-					drop.setItem(itemStack);
+				if (!simulate) {
+					itemStack.shrink(1);
+					if (itemStack.isEmpty()) {
+						lootIter.remove();
+					} else {
+						drop.setItem(itemStack);
+					}
 				}
 
 				return true;
