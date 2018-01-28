@@ -1,5 +1,45 @@
 [
     {
+        "version" : "1.7.5",
+        "sections" :
+        [
+            {
+                "title": "openblocks.gui.features",
+                "lines":
+                [
+                    "Added wooden big button (works like vanilla)",
+                    "Extended big button inventory size",
+                    "Display size of stack contained in /dev/null/",
+                    "Canvas blocks now mimic material and sounds. Also, fixes connection to fences"
+                ]
+            },
+            {
+                "title": "openblocks.gui.bugfixes",
+                "lines":
+                [
+                    "Fix item duplication with dropper",
+                    "Fix draining fluids from tank with bucket",
+                    "Fix translation names for entities",
+                    "Fix incorrect spawn position of cartographer, magnet, golden eye",
+                    "Fix luggage item search",
+                    "Fix rendering of some custom models in /dev/null",
+                    "Fix dummy contents of custom recipes",
+                    "Fix block shapes (fence connectivity now works correctly)"
+                ]
+            },
+            {
+                "title" : "openblocks.gui.tweaks",
+                "lines" :
+                [
+                    "Changed paintbrush model to fix flickering",
+                    "Paintbrush tries to recolor block before replacing with canvas",
+                    "Skyblocks rendering disabled by default when Optifine is detected",
+                    "Sponge no longer updates liquid blocks (configurable)"
+                ]
+            }
+        ]
+    },
+    {
         "version" : "1.7.4",
         "sections" :
         [

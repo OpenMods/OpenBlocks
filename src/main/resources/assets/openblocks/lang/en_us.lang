@@ -235,6 +235,8 @@ tile.openblocks.paint_mixer.description=The paint mixer can mix any colour of pa
 tile.openblocks.canvas.name=Canvas
 tile.openblocks.canvas.description=The canvas is a perfectly white block that's perfect for painting. See the Paint Mixer for information about making paints.
 
+tile.openblocks.canvas_glass.name=Canvas
+
 tile.openblocks.fan.name=Fan
 tile.openblocks.fan.description=The fan will blow players, mobs or entities in the direction it's facing.
 

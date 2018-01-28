@@ -174,6 +174,8 @@ openblocks.misc.command.flim_flam_failed=Не удалось стать брат
 openblocks.misc.command.luck_added=Удача изменена для игрока %s, текущая: %d
 openblocks.misc.command.luck_current=Удача: %2$d игрока %1$s
 
+#openblocks.misc.total_ticks=Total ticks: %d (%.2fs) ## NEEDS TRANSLATION ##
+
 #openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
 openblocks.flim_flammed=Что-то странное происходит вокруг Вас
 
@@ -233,6 +235,8 @@ tile.openblocks.paint_mixer.description=Смеситель краски може
 tile.openblocks.canvas.name=Холст
 tile.openblocks.canvas.description=Холст - это совершенно белый блок, который идеально подходит для рисования. Смотрите информацию о смесители краски, чтобы узнать больше о рисовании.
 
+#tile.openblocks.canvas_glass.name=Canvas ## NEEDS TRANSLATION ##
+
 tile.openblocks.fan.name=Вентилятор
 tile.openblocks.fan.description=Вентилятор будет сдувать игроков, мобов и других сущностей туда, куда он повёрнут.
 
@@ -247,6 +251,8 @@ tile.openblocks.item_dropper.description=Выбрасыватель предме
 
 tile.openblocks.big_button.name=Большая кнопка
 tile.openblocks.big_button.description=Большая кнопка - это большая кнопка, которая может быть поставлена на стену. Если Вы нажмёте shift-ПКМ по кнопке пустой рукой, Вам будет показан инвентарь с одним слотом. Вы можете положить предметы в этот слот, чтобы увеличить количество времени, во время которого кнопка остаётся нажатой - один предмет увеличивает время нажатия кнопки на один тик.
+
+#tile.openblocks.big_button_wood.name=Wooden Big Button ## NEEDS TRANSLATION ##
 
 tile.openblocks.xp_drain.name=Всасыватель опыта
 tile.openblocks.xp_drain.description=Поместите всасыватель опыта над резервуаром OpenBlocks и встаньте на него. Ваш опыт будет накапливаться в резервуаре, который в дальнейшем может быть использован в автоматическом столе зачаровывания, или в автоматической наковальне.
