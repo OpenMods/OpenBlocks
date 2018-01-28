@@ -390,7 +390,8 @@ public class PlayerDeathHandler {
 		}
 
 		if (!tryConsumeGrave(player, Iterables.concat(graveLoot, drops))) {
-			Log.log(debugLevel(), "No grave in drops for player '%s', grave will not be spawned'", player);
+			Log.log(debugLevel(), "No grave in drops for player '%s' after firing event, grave will not be spawned'", player);
+			drops.addAll(graveLoot); // re-add any loot that would have gone to grave
 			return;
 		}
 
