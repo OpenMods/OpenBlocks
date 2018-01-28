@@ -32,6 +32,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.SimpleModelFontRenderer;
+import openblocks.Config;
 import openblocks.common.item.ItemDevNull;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -238,7 +239,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 	private void appendItemCount(List<BakedQuad> output, int count) {
 		if (count > 1) {
 			final String s = Integer.toString(count);
-			fontRenderer.drawStringWithShadow(s, 19 - 2 - fontRenderer.getStringWidth(s), 6 + 3, 0x00FFFF00);
+			fontRenderer.drawStringWithShadow(s, 19 - 2 - fontRenderer.getStringWidth(s), 6 + 3, Config.devNullCountColor);
 			output.addAll(fontRenderer.build());
 		}
 	}

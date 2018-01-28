@@ -352,6 +352,10 @@ public class Config {
 	public static boolean devNullSneakGui = true;
 
 	@OnLineModifiable
+	@ConfigProperty(category = "devnull", name = "countColor", comment = "Color of contained stack size in GUI")
+	public static int devNullCountColor = 0x00FFFF00;
+
+	@OnLineModifiable
 	@ConfigProperty(category = "hangglider", name = "enableThermal", comment = "Enable a whole new level of hanggliding experience through thermal lift. See keybindings for acoustic vario controls")
 	public static boolean hanggliderEnableThermal = true;
 
