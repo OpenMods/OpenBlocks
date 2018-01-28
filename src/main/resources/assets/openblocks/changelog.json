@@ -1,5 +1,39 @@
 [
     {
+        "version" : "1.7.5",
+        "sections" :
+        [
+            {
+                "title": "openblocks.gui.features",
+                "lines":
+                [
+                    "Added wooden big button (works like vanilla)",
+                    "Extended big button inventory size",
+                    "Canvas blocks now mimic material and sounds"
+                ]
+            },
+            {
+                "title": "openblocks.gui.bugfixes",
+                "lines":
+                [
+                    "Fix incorrect spawn position of cartographer, magnet, golden eye",
+                    "Fix draining fluids from tank with bucket",
+                    "Fix rendering of some custom models in /dev/null"
+                ]
+            },
+            {
+                "title" : "openblocks.gui.tweaks",
+                "lines" :
+                [
+                    "Changed paintbrush model to fix flickering",
+                    "Paintbrush tries to recolor block before replacing with canvas",
+                    "Skyblocks rendering disabled by default when Optifine is detected",
+                    "Sponge no longer updates liquid blocks (configurable)"
+                ]
+            }
+        ]
+    },
+    {
         "version" : "1.7.4",
         "sections" :
         [

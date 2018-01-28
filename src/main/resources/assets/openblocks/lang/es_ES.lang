@@ -174,6 +174,8 @@ openblocks.misc.command.flim_flam_failed=¡La estafa ha fallado!
 openblocks.misc.command.luck_added=Al jugador %s le ha cambiado la suerte, actualmente: %d
 openblocks.misc.command.luck_current=Suerte del jugador %s: %d
 
+#openblocks.misc.total_ticks=Total ticks: %d (%.2fs) ## NEEDS TRANSLATION ##
+
 #openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
 openblocks.flim_flammed=Ha ocurrido algo extraño a tu alrededor
 
@@ -233,6 +235,8 @@ tile.openblocks.paint_mixer.description=¡El mezclador de pintura puede mezclar 
 tile.openblocks.canvas.name=Lienzo
 tile.openblocks.canvas.description=El lienzo es un bloque blanco perfecto para pintar. Consulta la Máquina de Pintar para información sobre la creación de pinturas.
 
+#tile.openblocks.canvas_glass.name=Canvas ## NEEDS TRANSLATION ##
+
 tile.openblocks.fan.name=Ventilador
 tile.openblocks.fan.description=El ventilador moverá jugadores, criaturas o entidades hacia la dirección en la que esté mirando.
 
@@ -247,6 +251,8 @@ tile.openblocks.item_dropper.description=El lanzador de objetos es similar al la
 
 tile.openblocks.big_button.name=Botón Grande
 tile.openblocks.big_button.description=El botón grande es un botón más grande que se puede colocar en las paredes. Si haces shift+clic con la mano vacía, abrirá un inventario con una sola ranura. Puedes colocar objetos en esta ranura para aumentar la duración del tiempo en que el botón permanece presionado. Un objeto aumenta el tiempo un tic.
+
+#tile.openblocks.big_button_wood.name=Wooden Big Button ## NEEDS TRANSLATION ##
 
 tile.openblocks.xp_drain.name=Drenador de XP
 tile.openblocks.xp_drain.description=Coloca el drenador de XP encima de un tanque de Openblocks y permanece encima. Tu XP se drenará al tanque, que puede usarse con bloques como la mesa de encantamientos automática o al yunque automático.
