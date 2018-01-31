@@ -126,13 +126,19 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude '**/*.info'
     }
+
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 //================================================
 // Jar tasks
 
 // Generate FML Coremod manifest
-ext.fmlManifest = manifest {}
+ext.fmlManifest = manifest {
+    attributes(
+        "FMLAT": "openblocks_at.cfg",
+    )
+}
 
 if (project.hasProperty('keyStore')) {
     task signJar(type: SignJar, dependsOn: reobfJar) {
