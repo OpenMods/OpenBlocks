@@ -24,8 +24,13 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.ITickableTextureObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -354,6 +359,43 @@ public class DevNullItemOverride extends ItemOverrideList {
 		return emptyFrameModels.build();
 	}
 
+	// TODO remove, if problem is fixed in Forge
+	private static final TextureManager DUMMY_TEXTURE_MANAGER = new TextureManager(null) {
+
+		@Override
+		public void bindTexture(ResourceLocation resource) {}
+
+		@Override
+		public boolean loadTickableTexture(ResourceLocation textureLocation, ITickableTextureObject textureObj) {
+			return false;
+		}
+
+		@Override
+		public boolean loadTexture(ResourceLocation textureLocation, ITextureObject textureObj) {
+			return false;
+		}
+
+		@Override
+		public ITextureObject getTexture(ResourceLocation textureLocation) {
+			return null;
+		}
+
+		@Override
+		public ResourceLocation getDynamicTextureLocation(String name, DynamicTexture texture) {
+			return null;
+		}
+
+		@Override
+		public void tick() {}
+
+		@Override
+		public void deleteTexture(ResourceLocation textureLocation) {}
+
+		@Override
+		public void onResourceManagerReload(IResourceManager resourceManager) {}
+
+	};
+
 	public DevNullItemOverride(BakedModelParams gui, BakedModelParams world, TextureAtlasSprite particle, TextureAtlasSprite font, VertexFormat format) {
 		super(ImmutableList.<ItemOverride> of());
 
@@ -386,7 +428,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 		fontRenderer = new SimpleModelFontRenderer(
 				Minecraft.getMinecraft().gameSettings,
 				dummyFontLocation,
-				Minecraft.getMinecraft().getTextureManager(),
+				DUMMY_TEXTURE_MANAGER,
 				false,
 				textTranform,
 				format) {
