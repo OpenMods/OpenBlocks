@@ -11,6 +11,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -77,7 +80,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 			LightUtil.renderQuadColor(wr, quad, 0xFFFFFFFF);
 	}
 
-	private static void renderTrophy(Trophy type, double x, double y, double z, float angle) {
+	private void renderTrophy(Trophy type, double x, double y, double z, float angle) {
 		Entity entity = type.getEntity();
 		if (entity != null) {
 			GL11.glPushMatrix();
@@ -92,6 +95,18 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 				// yeah we don't care about fonts, but we do care that the
 				// renderManager is available
 				if (renderer != null && renderer.getFontRendererFromRenderManager() != null) {
+
+					final boolean blurLast;
+					final boolean mipmapLast;
+					final AbstractTexture blocksTexture = getBlockTexture();
+					if (blocksTexture != null) {
+						blurLast = blocksTexture.blurLast;
+						mipmapLast = blocksTexture.mipmapLast;
+					} else {
+						blurLast = false;
+						mipmapLast = false;
+					}
+
 					GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 					final boolean lightmapEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
 					GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
@@ -107,11 +122,26 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 					else GlStateManager.disableTexture2D();
 					GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
+					if (blocksTexture != null) {
+						blocksTexture.mipmapLast = mipmapLast;
+						blocksTexture.blurLast = blurLast;
+					}
 				}
 			}
 			GL11.glPopMatrix();
 
 		}
+	}
+
+	private AbstractTexture getBlockTexture() {
+		final TextureManager texturemanager = rendererDispatcher.renderEngine;
+		if (texturemanager != null) {
+			final ITextureObject texture = texturemanager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			if (texture instanceof AbstractTexture)
+				return (AbstractTexture)texture;
+		}
+
+		return null;
 	}
 
 }
