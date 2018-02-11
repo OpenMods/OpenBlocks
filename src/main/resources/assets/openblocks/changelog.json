@@ -1,5 +1,18 @@
 [
     {
+        "version" : "1.7.6",
+        "sections" :
+        [
+            {
+                "title": "openblocks.gui.bugfixes",
+                "lines":
+                [
+                    "Fixed flickering leaves after rendering snowman trophy"
+                ]
+            }
+        ]
+    },
+    {
         "version" : "1.7.5",
         "sections" :
         [
