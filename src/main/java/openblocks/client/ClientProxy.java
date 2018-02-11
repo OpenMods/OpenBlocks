@@ -6,8 +6,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -64,24 +62,12 @@ import openblocks.client.renderer.tileentity.guide.TileEntityBuilderGuideRendere
 import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
 import openblocks.common.StencilPattern;
 import openblocks.common.TrophyHandler.Trophy;
-import openblocks.common.block.BlockCanvas;
-import openblocks.common.block.BlockElevator;
-import openblocks.common.block.BlockFlag;
-import openblocks.common.block.BlockPaintCan;
-import openblocks.common.block.BlockPaintMixer;
 import openblocks.common.entity.EntityCartographer;
 import openblocks.common.entity.EntityGoldenEye;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMiniMe;
-import openblocks.common.item.ItemDevNull;
-import openblocks.common.item.ItemElevator;
-import openblocks.common.item.ItemFlagBlock;
-import openblocks.common.item.ItemImaginary;
-import openblocks.common.item.ItemImaginationGlasses;
-import openblocks.common.item.ItemPaintBrush;
-import openblocks.common.item.ItemPaintCan;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityBearTrap;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
@@ -260,53 +246,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
 		}
 
-		final ItemColors itemColors = Minecraft.getMinecraft().getItemColors();
-		final BlockColors blockColors = Minecraft.getMinecraft().getBlockColors();
-
-		if (OpenBlocks.Items.paintBrush != null) {
-			itemColors.registerItemColorHandler(new ItemPaintBrush.ColorHandler(), OpenBlocks.Items.paintBrush);
-		}
-
-		if (OpenBlocks.Items.crayonGlasses != null) {
-			itemColors.registerItemColorHandler(new ItemImaginationGlasses.CrayonColorHandler(), OpenBlocks.Items.crayonGlasses);
-		}
-
-		if (OpenBlocks.Blocks.paintCan != null) {
-			itemColors.registerItemColorHandler(new ItemPaintCan.ItemColorHandler(), OpenBlocks.Blocks.paintCan);
-			blockColors.registerBlockColorHandler(new BlockPaintCan.BlockColorHandler(), OpenBlocks.Blocks.paintCan);
-		}
-
 		if (OpenBlocks.Blocks.imaginary != null) {
-			itemColors.registerItemColorHandler(new ItemImaginary.CrayonColorHandler(), OpenBlocks.Blocks.imaginary);
 			MinecraftForge.EVENT_BUS.register(new TileEntityImaginaryRenderer.CacheFlushListener());
 		}
 
-		if (OpenBlocks.Items.devNull != null) {
-			itemColors.registerItemColorHandler(new ItemDevNull.NestedItemColorHandler(itemColors), OpenBlocks.Items.devNull);
-		}
-
-		if (OpenBlocks.Blocks.elevator != null) {
-			blockColors.registerBlockColorHandler(new BlockElevator.BlockColorHandler(), OpenBlocks.Blocks.elevator);
-			itemColors.registerItemColorHandler(new ItemElevator.ItemColorHandler(), OpenBlocks.Blocks.elevator);
-		}
-
-		if (OpenBlocks.Blocks.elevatorRotating != null) {
-			blockColors.registerBlockColorHandler(new BlockElevator.BlockColorHandler(), OpenBlocks.Blocks.elevatorRotating);
-			itemColors.registerItemColorHandler(new ItemElevator.ItemColorHandler(), OpenBlocks.Blocks.elevatorRotating);
-		}
-
-		if (OpenBlocks.Blocks.canvas != null) {
-			blockColors.registerBlockColorHandler(new BlockCanvas.InnerBlockColorHandler(blockColors), OpenBlocks.Blocks.canvas);
-		}
-
-		if (OpenBlocks.Blocks.flag != null) {
-			itemColors.registerItemColorHandler(new ItemFlagBlock.ItemColorHandler(), OpenBlocks.Blocks.flag);
-			blockColors.registerBlockColorHandler(new BlockFlag.BlockColorHandler(), OpenBlocks.Blocks.flag);
-		}
-
-		if (OpenBlocks.Blocks.paintMixer != null) {
-			blockColors.registerBlockColorHandler(new BlockPaintMixer.BlockColorHandler(), OpenBlocks.Blocks.paintMixer);
-		}
 	}
 
 	@SuppressWarnings("deprecation")
