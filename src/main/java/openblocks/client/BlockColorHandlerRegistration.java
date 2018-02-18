@@ -15,6 +15,7 @@ import openblocks.common.block.BlockPaintMixer;
 import openblocks.common.item.ItemDevNull;
 import openblocks.common.item.ItemElevator;
 import openblocks.common.item.ItemFlagBlock;
+import openblocks.common.item.ItemGlyph;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemPaintBrush;
@@ -62,6 +63,10 @@ public class BlockColorHandlerRegistration {
 		if (OpenBlocks.Blocks.flag != null) {
 			itemColors.registerItemColorHandler(new ItemFlagBlock.ItemColorHandler(), OpenBlocks.Blocks.flag);
 			blockColors.registerBlockColorHandler(new BlockFlag.BlockColorHandler(), OpenBlocks.Blocks.flag);
+		}
+
+		if (OpenBlocks.Items.glyph != null) {
+			itemColors.registerItemColorHandler(new ItemGlyph.ColorHandler(), OpenBlocks.Items.glyph);
 		}
 	}
 

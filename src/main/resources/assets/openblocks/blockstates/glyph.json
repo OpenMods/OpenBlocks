@@ -1,0 +1,14 @@
+{
+    "forge_marker" : 1,
+    "variants" : {
+        "inventory" : [{
+            "model": "openblocks:magic-glyph",
+            "custom": {
+                "base": "openblocks:item/glyph_base"
+            },
+            "textures": {
+                "font": "minecraft:font/ascii"
+            }
+        }]
+    }
+}

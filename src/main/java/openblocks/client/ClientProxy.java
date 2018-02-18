@@ -40,6 +40,7 @@ import openblocks.client.renderer.entity.EntityLuggageRenderer;
 import openblocks.client.renderer.entity.EntityMagnetRenderer;
 import openblocks.client.renderer.entity.EntityMiniMeRenderer;
 import openblocks.client.renderer.entity.EntitySelectionHandler;
+import openblocks.client.renderer.item.ModelGlyph;
 import openblocks.client.renderer.item.devnull.DevNullModel;
 import openblocks.client.renderer.item.stencil.ModelStencil;
 import openblocks.client.renderer.item.stencil.StencilItemOverride;
@@ -118,6 +119,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 				.put("magic-path", PathModel.INSTANCE)
 				.put("magic-stencil", ModelStencil.INSTANCE)
 				.put("magic-canvas", ModelCanvas.INSTANCE)
+				.put("magic-glyph", ModelGlyph.INSTANCE)
 				.build(OpenBlocks.MODID));
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, EntityHangGliderRenderer::new);
@@ -171,6 +173,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Blocks.tank != null) {
 			MinecraftForge.EVENT_BUS.register(new FluidTextureRegisterListener());
+		}
+
+		if (OpenBlocks.Items.glyph != null) {
+			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.glyph);
 		}
 
 		SoundEventsManager.instance.init();

@@ -119,6 +119,7 @@ import openblocks.common.item.ItemElevator;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemEpicEraser;
 import openblocks.common.item.ItemFlagBlock;
+import openblocks.common.item.ItemGlyph;
 import openblocks.common.item.ItemGoldenEye;
 import openblocks.common.item.ItemGuide;
 import openblocks.common.item.ItemHangGlider;
@@ -479,6 +480,9 @@ public class OpenBlocks {
 
 		@RegisterItem(type = ItemWrench.class, id = "wrench")
 		public static Item wrench;
+
+		@RegisterItem(type = ItemGlyph.class, id = "glyph")
+		public static Item glyph;
 	}
 
 	public static ResourceLocation location(String path) {

@@ -352,6 +352,9 @@ item.openblocks.crane_control.description=This hi-tech wireless remote is used f
 item.openblocks.wrench.name=Big Metal Bar
 item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok?
 
+item.openblocks.glyph.name=Glyph
+item.openblocks.glyph.with_char='%c' Glyph
+
 item.openblocks.stencil.name=Stencil
 item.openblocks.crayon.name=Magic Crayon
 item.openblocks.pencil.name=Magic Pencil
