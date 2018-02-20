@@ -177,6 +177,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Items.glyph != null) {
 			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.glyph);
+			MinecraftForge.EVENT_BUS.register(new GlyphPlacementGridRenderer());
 		}
 
 		SoundEventsManager.instance.init();
