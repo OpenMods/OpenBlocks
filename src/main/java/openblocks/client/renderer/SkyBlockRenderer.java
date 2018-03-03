@@ -118,6 +118,10 @@ public class SkyBlockRenderer {
 		isActive = true;
 	}
 
+	public void bindSkyTexture() {
+		skyFb.bindFramebufferTexture();
+	}
+
 	public void renderSkyTexture() {
 		if (!isActive) return;
 
