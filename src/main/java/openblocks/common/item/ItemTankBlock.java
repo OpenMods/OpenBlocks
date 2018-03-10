@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,6 +34,20 @@ import openmods.utils.MiscUtils;
 import openmods.utils.TranslationUtils;
 
 public class ItemTankBlock extends ItemOpenBlock {
+
+	@SideOnly(Side.CLIENT)
+	public static class ColorHandler implements IItemColor {
+		@Override
+		public int colorMultiplier(@Nonnull ItemStack stack, int tintIndex) {
+			if (tintIndex == 0) {
+				final FluidTank tank = readTank(stack);
+				final FluidStack fluid = tank.getFluid();
+				if (fluid != null) return fluid.getFluid().getColor(fluid);
+			}
+
+			return 0xFFFFFFFF;
+		}
+	}
 
 	public static final String TANK_TAG = "tank";
 

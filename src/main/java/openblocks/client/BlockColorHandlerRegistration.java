@@ -20,6 +20,7 @@ import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
+import openblocks.common.item.ItemTankBlock;
 
 @EventBusSubscriber(Side.CLIENT)
 public class BlockColorHandlerRegistration {
@@ -67,6 +68,10 @@ public class BlockColorHandlerRegistration {
 
 		if (OpenBlocks.Items.glyph != null) {
 			itemColors.registerItemColorHandler(new ItemGlyph.ColorHandler(), OpenBlocks.Items.glyph);
+		}
+
+		if (OpenBlocks.Blocks.tank != null) {
+			itemColors.registerItemColorHandler(new ItemTankBlock.ColorHandler(), OpenBlocks.Blocks.tank);
 		}
 	}
 
