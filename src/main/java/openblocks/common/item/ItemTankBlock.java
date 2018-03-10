@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -209,6 +210,11 @@ public class ItemTankBlock extends ItemOpenBlock {
 		if (fluidStack != null && fluidStack.amount > 0) {
 			float percent = Math.max(100.0f / fakeTank.getCapacity() * fluidStack.amount, 1);
 			result.add(String.format("%d mB (%.0f%%)", fluidStack.amount, percent));
+
+			if (flag.isAdvanced()) {
+				final Fluid fluid = fluidStack.getFluid();
+				result.add(TextFormatting.DARK_GRAY + FluidRegistry.getDefaultFluidName(fluid) + TextFormatting.RESET);
+			}
 		}
 	}
 
