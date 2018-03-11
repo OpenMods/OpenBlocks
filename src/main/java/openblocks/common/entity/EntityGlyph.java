@@ -48,15 +48,18 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 		final EnumFacing normal = this.facingDirection;
 		if (normal != null) {
 			final EnumFacing left = normal.rotateY();
-			x -= left.getFrontOffsetX() * (offsetX - 8) / 16.0;
+			if (left.getAxis() == EnumFacing.Axis.Z) {
+				z -= (offsetX - 8) / 16.0;
+			} else {
+				x -= (offsetX - 8) / 16.0;
+			}
 			y -= (offsetY - 8) / 16.0;
-			z -= left.getFrontOffsetZ() * (offsetX - 8) / 16.0;
 		}
 
 		super.setPosition(x, y, z);
 	}
 
-	private static final double DEPTH = 1.0D;
+	private static final double DEPTH = 0.5D;
 
 	@Override
 	protected void updateBoundingBox() {
@@ -67,13 +70,17 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 			double centerZ = this.hangingPosition.getZ() + (8.0 / 16.0);
 
 			// move towards wall
-			centerX -= normal.getFrontOffsetX() * (7.5 / 16.0);
-			centerZ -= normal.getFrontOffsetZ() * (7.5 / 16.0);
+			centerX -= normal.getFrontOffsetX() * (16 - DEPTH) / 16 / 2;
+			centerZ -= normal.getFrontOffsetZ() * (16 - DEPTH) / 16 / 2;
 
 			final EnumFacing left = normal.rotateY();
-			centerX += left.getFrontOffsetX() * (offsetX - 8) / 16.0;
 			centerY += (offsetY - 8) / 16.0;
-			centerZ += left.getFrontOffsetZ() * (offsetX - 8) / 16.0;
+
+			if (left.getAxis() == EnumFacing.Axis.Z) {
+				centerZ += (offsetX - 8) / 16.0;
+			} else {
+				centerX += (offsetX - 8) / 16.0;
+			}
 
 			this.posX = centerX;
 			this.posY = centerY;

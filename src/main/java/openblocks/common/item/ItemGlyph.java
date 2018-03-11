@@ -111,7 +111,7 @@ public class ItemGlyph extends Item {
 		}
 	}
 
-	private final BlockTextureTransform transform = BlockTextureTransform.builder().mirrorU(EnumFacing.SOUTH).mirrorU(EnumFacing.WEST).build();
+	private final BlockTextureTransform transform = BlockTextureTransform.builder().build();
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -122,7 +122,6 @@ public class ItemGlyph extends Item {
 			final TexCoords localHit = transform.worldVecToTextureCoords(facing, hitX, hitY, hitZ);
 			final byte xOffset = (byte)(localHit.u * 16);
 			final byte yOffset = (byte)(16 - localHit.v * 16);
-			System.out.println(localHit.u * 16 + " " + localHit.v * 16);
 			final EntityHanging entityhanging = new EntityGlyph(worldIn, blockpos, facing, getCharIndex(stack), xOffset, yOffset);
 
 			if (entityhanging.onValidSurface()) {

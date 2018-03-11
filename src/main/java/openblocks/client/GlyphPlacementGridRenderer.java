@@ -147,6 +147,7 @@ public class GlyphPlacementGridRenderer {
 
 	private void drawGrid(EntityPlayer player, RayTraceResult target, float partialTicks) {
 		final EnumFacing side = target.sideHit;
+		if (side.getAxis() == Axis.Y) return; // TODO
 		final BlockPos pos = target.getBlockPos();
 		final Vec3d posD = new Vec3d(pos);
 		final Vec3d hitRel = target.hitVec.subtract(posD);
