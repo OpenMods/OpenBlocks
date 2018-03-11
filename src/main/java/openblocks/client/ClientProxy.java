@@ -5,6 +5,7 @@ import java.util.Map;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.item.Item;
@@ -35,6 +36,7 @@ import openblocks.client.renderer.block.PathModel;
 import openblocks.client.renderer.block.canvas.CanvasTextureManager;
 import openblocks.client.renderer.block.canvas.ModelCanvas;
 import openblocks.client.renderer.entity.EntityCartographerRenderer;
+import openblocks.client.renderer.entity.EntityGlyphRenderer;
 import openblocks.client.renderer.entity.EntityHangGliderRenderer;
 import openblocks.client.renderer.entity.EntityLuggageRenderer;
 import openblocks.client.renderer.entity.EntityMagnetRenderer;
@@ -64,6 +66,7 @@ import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
 import openblocks.common.StencilPattern;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.entity.EntityCartographer;
+import openblocks.common.entity.EntityGlyph;
 import openblocks.common.entity.EntityGoldenEye;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
@@ -127,13 +130,20 @@ public class ClientProxy implements IOpenBlocksProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMagnet.class, EntityMagnetRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBlock.class, EntityBlockRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMiniMe.class, EntityMiniMeRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGlyph.class, (manager) -> {
+			final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+			return new EntityGlyphRenderer(manager, renderItem);
+		});
 
 		EntityCartographerRenderer.registerListener();
 		RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, EntityCartographerRenderer::new);
 
 		if (OpenBlocks.Items.goldenEye != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class,
-					(manager) -> new RenderSnowball<>(manager, OpenBlocks.Items.goldenEye, Minecraft.getMinecraft().getRenderItem()));
+					(manager) -> {
+						final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+						return new RenderSnowball<>(manager, OpenBlocks.Items.goldenEye, renderItem);
+					});
 		}
 
 		if (OpenBlocks.Items.stencil != null) {

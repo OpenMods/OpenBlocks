@@ -102,6 +102,7 @@ import openblocks.common.block.BlockXPDrain;
 import openblocks.common.block.BlockXPShower;
 import openblocks.common.entity.EntityCartographer;
 import openblocks.common.entity.EntityCartographer.MapJobs;
+import openblocks.common.entity.EntityGlyph;
 import openblocks.common.entity.EntityGoldenEye;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityItemProjectile;
@@ -258,6 +259,7 @@ public class OpenBlocks {
 	private static final int ENTITY_MAGNET_PLAYER_ID = 708;
 	private static final int ENTITY_XP_ID = 709;
 	private static final int ENTITY_MINIME_ID = 710;
+	private static final int ENTITY_GLYPH_ID = 711;
 
 	@Instance(MODID)
 	public static OpenBlocks instance;
@@ -545,6 +547,12 @@ public class OpenBlocks {
 		@ObjectHolder("luggage.eat.item")
 		public static final SoundEvent ENTITY_LUGGAGE_EAT_ITEM = null;
 
+		@ObjectHolder("minecraft:entity.painting.place")
+		public static final SoundEvent ENTITY_GLYPH_PLACE = null;
+
+		@ObjectHolder("minecraft:entity.painting.break")
+		public static final SoundEvent ENTITY_GLYPH_BREAK = null;
+
 		@ObjectHolder("pedometer.use")
 		public static final SoundEvent ITEM_PEDOMETER_USE = null;
 
@@ -742,6 +750,7 @@ public class OpenBlocks {
 		EntityRegistry.registerModEntity(location("item_projectile"), EntityItemProjectile.class, decorateEntityName("item_projectile"), ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(location("golden_eye"), EntityGoldenEye.class, decorateEntityName("golden_eye"), ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
 		EntityRegistry.registerModEntity(location("mini_me"), EntityMiniMe.class, decorateEntityName("mini_me"), ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(location("glyph"), EntityGlyph.class, decorateEntityName("glyph"), ENTITY_GLYPH_ID, OpenBlocks.instance, 160, Integer.MAX_VALUE, false);
 
 		final DataFixer dataFixer = FMLCommonHandler.instance().getDataFixer();
 		EntityLiving.registerFixesMob(dataFixer, EntityMiniMe.class);
