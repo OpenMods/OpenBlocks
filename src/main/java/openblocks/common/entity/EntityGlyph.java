@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import openblocks.OpenBlocks.Items;
@@ -29,7 +30,7 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 
 	private byte offsetY;
 
-	private ItemStack itemStack;
+	private ItemStack itemStack = ItemStack.EMPTY;
 
 	public EntityGlyph(World world) {
 		super(world);
@@ -100,6 +101,11 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 
 			setEntityBoundingBox(new AxisAlignedBB(centerX - halfSizeX, centerY - halfSizeY, centerZ - halfSizeZ, centerX + halfSizeX, centerY + halfSizeY, centerZ + halfSizeZ));
 		}
+	}
+
+	@Override
+	public ItemStack getPickedResult(RayTraceResult target) {
+		return itemStack.copy();
 	}
 
 	@Override
