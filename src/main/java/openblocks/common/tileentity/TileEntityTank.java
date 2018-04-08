@@ -280,8 +280,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (world.isRemote) return true;
-
 		if (hand == EnumHand.MAIN_HAND) {
 			final ItemStack heldItem = player.getHeldItemMainhand();
 			if (!heldItem.isEmpty()) {
