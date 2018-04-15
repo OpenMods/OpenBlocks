@@ -59,6 +59,11 @@ public class BlockSky extends OpenBlock {
 	}
 
 	@Override
+	public int damageDropped(IBlockState state) {
+		return getMetaFromState(state) & MASK_INVERTED;
+	}
+
+	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neigbourPos) {
 		updatePowerState(state, world, blockPos);
 		super.neighborChanged(state, world, blockPos, neighbour, neigbourPos);
