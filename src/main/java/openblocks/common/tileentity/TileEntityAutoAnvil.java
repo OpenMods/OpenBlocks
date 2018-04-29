@@ -16,9 +16,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
-import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoAnvil;
-import openblocks.common.LiquidXpUtils;
+import openblocks.common.FluidXpUtils;
+import openblocks.common.FluidXpUtils.IFluidXpConverter;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
 import openmods.api.IHasGui;
@@ -54,7 +54,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 
 	protected static final int TOTAL_COOLDOWN = 40;
 	public static final int MAX_STORED_LEVELS = 45;
-	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(MAX_STORED_LEVELS);
+	public static final int TANK_CAPACITY = FluidXpUtils.getMaxPossibleFluidForLevel(MAX_STORED_LEVELS);
 
 	private int cooldown = 0;
 
@@ -119,7 +119,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		modifierSides = new SyncableSides();
 		outputSides = new SyncableSides();
 		xpSides = new SyncableSides();
-		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.Fluids.xpJuice);
+		tank = new SyncableTank(TANK_CAPACITY, FluidXpUtils.getAcceptedFluids());
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 	}
 
@@ -172,16 +172,22 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		if (!output.isEmpty()) {
 			int levelCost = helper.getLevelCost();
 			int xpCost = EnchantmentUtils.getExperienceForLevel(levelCost);
-			int liquidXpCost = LiquidXpUtils.xpToLiquidRatio(xpCost);
 
-			FluidStack drained = tank.drain(liquidXpCost, false);
+			final FluidStack contents = tank.getFluid();
+			final java.util.Optional<IFluidXpConverter> maybeConverter = FluidXpUtils.getConverter(contents);
+			if (maybeConverter.isPresent()) {
+				final IFluidXpConverter converter = maybeConverter.get();
+				int liquidXpCost = converter.xpToFluid(xpCost);
 
-			if (drained != null && drained.amount == liquidXpCost) {
-				tank.drain(liquidXpCost, true);
-				removeModifiers(helper.getModifierCost());
-				inventory.setInventorySlotContents(Slots.tool.ordinal(), ItemStack.EMPTY);
-				inventory.setInventorySlotContents(Slots.output.ordinal(), output);
-				playSoundAtBlock(SoundEvents.BLOCK_ANVIL_USE, 0.3f, 1f);
+				FluidStack drained = tank.drain(liquidXpCost, false);
+
+				if (drained != null && drained.amount == liquidXpCost) {
+					tank.drain(liquidXpCost, true);
+					removeModifiers(helper.getModifierCost());
+					inventory.setInventorySlotContents(Slots.tool.ordinal(), ItemStack.EMPTY);
+					inventory.setInventorySlotContents(Slots.output.ordinal(), output);
+					playSoundAtBlock(SoundEvents.BLOCK_ANVIL_USE, 0.3f, 1f);
+				}
 			}
 		}
 	}

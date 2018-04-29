@@ -7,7 +7,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import openblocks.common.LiquidXpUtils;
+import openblocks.common.FluidXpUtils;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
@@ -70,7 +70,7 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 
 		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 30, 17, 37, TileEntityAutoEnchantmentTable.MAX_STORED_LEVELS);
 		tankLevel.setDisplayFluidNameInTooltip(false);
-		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver(), LiquidXpUtils.FLUID_TO_LEVELS));
+		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver(), FluidXpUtils.FLUID_TO_LEVELS));
 		root.addComponent(tankLevel);
 
 		final GuiComponentToggleButton<VanillaEnchantLogic.Level> levelSelect = new GuiComponentToggleButton<>(16, 60, 0xFFFFFF, icons);

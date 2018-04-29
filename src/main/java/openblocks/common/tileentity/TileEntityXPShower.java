@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,7 +10,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
-import openblocks.common.LiquidXpUtils;
+import openblocks.common.FluidXpUtils;
+import openblocks.common.FluidXpUtils.IFluidXpConverter;
 import openblocks.common.block.BlockXPShower;
 import openblocks.common.entity.EntityXPOrbNoFly;
 import openmods.OpenMods;
@@ -25,7 +27,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 
 	private static final int ORB_SPAWN_FREQUENCY = 3;
 
-	private GenericTank bufferTank = new GenericTank(Fluid.BUCKET_VOLUME, OpenBlocks.Fluids.xpJuice);
+	private GenericTank bufferTank = new GenericTank(Fluid.BUCKET_VOLUME, FluidXpUtils.getAcceptedFluids());
 
 	private SyncableBoolean particleSpawnerActive;
 	private int particleSpawnTimer = 0;
@@ -49,12 +51,14 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 		if (OpenMods.proxy.getTicks(world) % ORB_SPAWN_FREQUENCY == 0 && isPowered()) {
 			bufferTank.fillFromSide(DRAIN_PER_CYCLE, world, pos, getBack());
 
-			final int amountInTank = bufferTank.getFluidAmount();
+			final FluidStack tankContents = bufferTank.getFluid();
 
-			if (amountInTank > 0) {
-				final int xpInTank = LiquidXpUtils.liquidToXpRatio(amountInTank);
+			final Optional<IFluidXpConverter> maybeConverter = FluidXpUtils.getConverter(tankContents);
+			if (maybeConverter.isPresent()) {
+				final IFluidXpConverter converter = maybeConverter.get();
+				final int xpInTank = converter.fluidToXp(tankContents.amount);
 				final int xpInOrb = EntityXPOrb.getXPSplit(xpInTank);
-				final int toDrain = LiquidXpUtils.xpToLiquidRatio(xpInOrb);
+				final int toDrain = converter.xpToFluid(xpInOrb);
 
 				if (toDrain > 0) {
 					bufferTank.drain(toDrain, true);

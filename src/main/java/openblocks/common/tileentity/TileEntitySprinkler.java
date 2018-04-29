@@ -77,7 +77,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 	@Override
 	protected void createSyncedFields() {
 		flags = SyncableFlags.create(Flags.values().length);
-		tank = new SyncableTank(Config.sprinklerInternalTank, FluidRegistry.WATER, OpenBlocks.Fluids.xpJuice);
+		tank = new SyncableTank(Config.sprinklerInternalTank, FluidRegistry.WATER);
 	}
 
 	private static int selectFromRange(int range) {

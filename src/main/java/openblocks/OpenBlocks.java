@@ -48,6 +48,7 @@ import openblocks.common.DonationUrlManager;
 import openblocks.common.ElevatorActionHandler;
 import openblocks.common.ElevatorBlockRules;
 import openblocks.common.EntityEventHandler;
+import openblocks.common.FluidXpUtils;
 import openblocks.common.GameRuleManager;
 import openblocks.common.GuideActionHandler;
 import openblocks.common.LootHandler;
@@ -819,6 +820,8 @@ public class OpenBlocks {
 
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
+		FluidXpUtils.initializeFromConfig();
+
 		MinecraftForge.EVENT_BUS.register(new ServerTickHandler());
 		proxy.init();
 		proxy.registerRenderInformation();

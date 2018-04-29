@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import com.google.common.collect.Lists;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,7 +38,8 @@ import openblocks.client.renderer.tileentity.tank.ITankConnections;
 import openblocks.client.renderer.tileentity.tank.ITankRenderFluidData;
 import openblocks.client.renderer.tileentity.tank.NeighbourMap;
 import openblocks.client.renderer.tileentity.tank.TankRenderLogic;
-import openblocks.common.LiquidXpUtils;
+import openblocks.common.FluidXpUtils;
+import openblocks.common.FluidXpUtils.IFluidXpConverter;
 import openblocks.common.item.ItemTankBlock;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ICustomHarvestDrops;
@@ -298,15 +300,17 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	protected boolean tryDrainXp(EntityPlayer player) {
 		final FluidStack fluid = tank.getFluid();
-		if (fluid != null && fluid.isFluidEqual(new FluidStack(OpenBlocks.Fluids.xpJuice, 0))) {
+		final Optional<IFluidXpConverter> maybeConverter = FluidXpUtils.getConverter(fluid);
+		if (maybeConverter.isPresent()) {
+			final IFluidXpConverter converter = maybeConverter.get();
 			int requiredXp = MathHelper.ceil(player.xpBarCap() * (1 - player.experience));
-			int requiredXPJuice = LiquidXpUtils.xpToLiquidRatio(requiredXp);
+			int requiredXpFluid = converter.xpToFluid(requiredXp);
 
-			FluidStack drained = tankCapabilityWrapper.drain(requiredXPJuice, false);
+			FluidStack drained = tankCapabilityWrapper.drain(requiredXpFluid, false);
 			if (drained != null) {
-				int xp = LiquidXpUtils.liquidToXpRatio(drained.amount);
+				int xp = converter.fluidToXp(drained.amount);
 				if (xp > 0) {
-					int actualDrain = LiquidXpUtils.xpToLiquidRatio(xp);
+					int actualDrain = converter.xpToFluid(xp);
 					EnchantmentUtils.addPlayerXP(player, xp);
 					tankCapabilityWrapper.drain(actualDrain, true);
 					return true;

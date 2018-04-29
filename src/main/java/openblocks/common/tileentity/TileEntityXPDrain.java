@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import openblocks.OpenBlocks;
-import openblocks.common.LiquidXpUtils;
+import openblocks.common.FluidXpUtils;
 import openmods.OpenMods;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.BlockUtils;
@@ -54,14 +54,14 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 
 		int maxDrainedXp = Math.min(4, playerXP);
 
-		int xpAmount = LiquidXpUtils.xpToLiquidRatio(maxDrainedXp);
+		int xpAmount = FluidXpUtils.xpJuiceConverter.xpToFluid(maxDrainedXp);
 		FluidStack xpStack = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
 
 		int maxAcceptedLiquid = tank.fill(xpStack, false);
 
 		// rounding down, so we only use as much as we can
-		int acceptedXP = LiquidXpUtils.liquidToXpRatio(maxAcceptedLiquid);
-		int acceptedLiquid = LiquidXpUtils.xpToLiquidRatio(acceptedXP);
+		int acceptedXP = FluidXpUtils.xpJuiceConverter.fluidToXp(maxAcceptedLiquid);
+		int acceptedLiquid = FluidXpUtils.xpJuiceConverter.xpToFluid(acceptedXP);
 
 		xpStack.amount = acceptedLiquid;
 		int finallyAcceptedLiquid = tank.fill(xpStack, true);
@@ -77,7 +77,7 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 
 	protected void tryConsumeOrb(IFluidHandler tank, EntityXPOrb orb) {
 		if (!orb.isDead) {
-			int xpAmount = LiquidXpUtils.xpToLiquidRatio(orb.getXpValue());
+			int xpAmount = FluidXpUtils.xpJuiceConverter.xpToFluid(orb.getXpValue());
 			FluidStack xpStack = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
 			int filled = tank.fill(xpStack, false);
 			if (filled == xpStack.amount) {

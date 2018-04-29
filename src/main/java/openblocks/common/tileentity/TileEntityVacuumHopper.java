@@ -26,7 +26,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiVacuumHopper;
-import openblocks.common.LiquidXpUtils;
+import openblocks.common.FluidXpUtils;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.entity.EntityItemProjectile;
 import openmods.OpenMods;
@@ -62,7 +62,7 @@ import openmods.utils.bitmap.IWriteableBitMap;
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
 public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, INeighbourAwareTile, ITickable {
 
-	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
+	public static final int TANK_CAPACITY = FluidXpUtils.xpJuiceConverter.xpToFluid(EnchantmentUtils.getExperienceForLevel(5));
 
 	public static final String OUTPUT_ITEMS = "items";
 	public static final String OUTPUT_FLUIDS = "fluids";
@@ -273,7 +273,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 			} else if (entity instanceof EntityXPOrb) {
 				if (tank.getSpace() > 0) {
 					EntityXPOrb orb = (EntityXPOrb)entity;
-					int xpAmount = LiquidXpUtils.xpToLiquidRatio(orb.getXpValue());
+					int xpAmount = FluidXpUtils.xpJuiceConverter.xpToFluid(orb.getXpValue());
 					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
 					tank.fill(newFluid, true);
 					entity.setDead();

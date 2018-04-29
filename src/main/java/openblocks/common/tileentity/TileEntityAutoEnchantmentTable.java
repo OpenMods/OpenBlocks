@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import javax.annotation.Nonnull;
@@ -19,9 +20,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
-import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoEnchantmentTable;
-import openblocks.common.LiquidXpUtils;
+import openblocks.common.FluidXpUtils;
+import openblocks.common.FluidXpUtils.IFluidXpConverter;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openblocks.rpc.ILevelChanger;
@@ -62,7 +63,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	private static final String TAG_SEED = "Seed";
 
 	public static final int MAX_STORED_LEVELS = 30;
-	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(MAX_STORED_LEVELS);
+	public static final int TANK_CAPACITY = FluidXpUtils.getMaxPossibleFluidForLevel(MAX_STORED_LEVELS);
 
 	public static enum Slots {
 		tool,
@@ -242,7 +243,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 	@Override
 	protected void createSyncedFields() {
-		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.Fluids.xpJuice);
+		tank = new SyncableTank(TANK_CAPACITY, FluidXpUtils.getAcceptedFluids());
 		inputSides = new SyncableSides();
 		outputSides = new SyncableSides();
 		xpSides = new SyncableSides();
@@ -316,12 +317,17 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		if (lapis.getCount() < logic.getLapisCost()) return;
 
 		final int levelsRequirement = logic.getLevelRequirement();
-		final int availableXp = LiquidXpUtils.liquidToXpRatio(tank.getFluidAmount());
+		final FluidStack contents = tank.getFluid();
+		final Optional<IFluidXpConverter> maybeConverter = FluidXpUtils.getConverter(contents);
+		if (!maybeConverter.isPresent()) return;
+
+		final IFluidXpConverter converter = maybeConverter.get();
+		final int availableXp = converter.fluidToXp(contents.amount);
 		final int availableLevels = EnchantmentUtils.getLevelForExperience(availableXp);
 		if (availableLevels < levelsRequirement) return;
 
 		final int xpCost = EnchantmentUtils.getExperienceForLevel(levelsRequirement) - EnchantmentUtils.getExperienceForLevel(levelsRequirement - logic.getLevelCost());
-		final int liquidXpCost = LiquidXpUtils.xpToLiquidRatio(xpCost);
+		final int liquidXpCost = converter.xpToFluid(xpCost);
 		final FluidStack drainedXp = tank.drain(liquidXpCost, false);
 		if (drainedXp == null || drainedXp.amount < xpCost) return;
 

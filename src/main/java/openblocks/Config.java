@@ -316,6 +316,9 @@ public class Config {
 	@ConfigProperty(category = "features", name = "xpToLiquidRatio", comment = "Storage in mB needed to store single XP point")
 	public static int xpToLiquidRatio = 20;
 
+	@ConfigProperty(category = "features", name = "additionalXpFluids", comment = "Other fluids accepted instead liquid XP")
+	public static String[] additionalXpFluids = { "experience:20" };
+
 	@OnLineModifiable
 	@ConfigProperty(category = "guide", name = "redstoneSensitivity", comment = "How builder guide should react to redstone. 0 - not sensitive, 1 - powered == on, -1 - inverted")
 	public static int guideRedstone = 1;
