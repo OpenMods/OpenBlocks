@@ -59,6 +59,9 @@ public class ItemCartographer extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
+
+		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, stack);
+
 		if (!player.capabilities.isCreativeMode) stack.shrink(1);
 
 		if (!world.isRemote) {

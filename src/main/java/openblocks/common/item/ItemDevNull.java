@@ -134,13 +134,19 @@ public class ItemDevNull extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if (!world.isRemote && (!Config.devNullSneakGui || player.isSneaking())) player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.devNull.ordinal(), world, player.inventory.currentItem, 0, 0);
-		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+		final ItemStack stack = player.getHeldItem(hand);
+
+		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, stack);
+
+		if (!world.isRemote && (!Config.devNullSneakGui || player.isSneaking())) {
+			player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.devNull.ordinal(), world, player.inventory.currentItem, 0, 0);
+		}
+
+		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (hand == EnumHand.OFF_HAND) return EnumActionResult.PASS;
 		final ItemStack containerStack = player.getHeldItem(hand);
 		final ItemInventory inventory = new ItemInventory(containerStack, 1);
 		ItemStack containedStack = inventory.getStackInSlot(0);

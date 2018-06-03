@@ -279,6 +279,9 @@ public class ItemImaginary extends ItemOpenBlock {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
+
+		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, stack);
+
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		if (getUses(tag) <= 0) {
 			stack.setCount(0);

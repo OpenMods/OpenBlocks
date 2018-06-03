@@ -38,6 +38,9 @@ public class ItemLuggage extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
+
+		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, stack);
+
 		if (!world.isRemote) {
 			Vec3d vec3 = new Vec3d(player.posX, player.posY, player.posZ);
 			Vec3d vec31 = player.getLook(1.0f);

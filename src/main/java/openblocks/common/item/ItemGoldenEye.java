@@ -47,7 +47,10 @@ public class ItemGoldenEye extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
-		if (hand == EnumHand.MAIN_HAND && world instanceof WorldServer && player instanceof EntityPlayerMP) {
+
+		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, stack);
+
+		if (world instanceof WorldServer && player instanceof EntityPlayerMP) {
 			final EntityPlayerMP betterPlayer = (EntityPlayerMP)player;
 			final WorldServer betterWorld = (WorldServer)world;
 			if (player.isSneaking()) tryLearnStructure(stack, betterWorld, betterPlayer);

@@ -44,8 +44,12 @@ public class ItemCursor extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		final ItemStack heldStack = player.getHeldItem(hand);
+
+		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, heldStack);
+
 		if (!world.isRemote) {
-			NBTTagCompound tag = player.getHeldItem(hand).getTagCompound();
+			NBTTagCompound tag = heldStack.getTagCompound();
 			if (tag != null && NbtUtils.hasCoordinates(tag) && tag.hasKey("dimension")) {
 				final int dimension = tag.getInteger("dimension");
 
@@ -56,7 +60,7 @@ public class ItemCursor extends Item {
 				}
 			}
 		}
-		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+		return ActionResult.newResult(EnumActionResult.SUCCESS, heldStack);
 	}
 
 	private static void clickBlock(World world, EntityPlayer player, EnumHand hand, BlockPos pos, EnumFacing side) {

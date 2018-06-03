@@ -58,6 +58,9 @@ public class ItemSleepingBag extends ItemArmor {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		final ItemStack heldStack = player.getHeldItem(hand);
+
+		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, heldStack);
+
 		if (!world.isRemote) {
 			ItemStack currentArmor = getChestpieceSlot(player);
 			if (!currentArmor.isEmpty()) currentArmor = currentArmor.copy();
