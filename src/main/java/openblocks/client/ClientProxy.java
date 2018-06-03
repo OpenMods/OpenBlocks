@@ -8,6 +8,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -170,7 +171,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Blocks.sky != null) {
 			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Blocks.sky);
-			SkyBlockRenderer.INSTANCE.setup();
+			((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager()).registerReloadListener(SkyBlockRenderer.INSTANCE);
 		}
 
 		if (OpenBlocks.Items.heightMap != null) {

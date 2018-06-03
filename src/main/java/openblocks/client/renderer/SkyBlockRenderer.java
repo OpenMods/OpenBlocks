@@ -1,30 +1,33 @@
 package openblocks.client.renderer;
 
-import com.google.common.base.Preconditions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import openblocks.Config;
 import openmods.Log;
+import openmods.reflection.MethodAccess;
+import openmods.reflection.MethodAccess.Function0;
 import openmods.renderer.PreWorldRenderHookVisitor;
 import openmods.utils.render.FramebufferBlitter;
 import openmods.utils.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
 
-public class SkyBlockRenderer {
+public class SkyBlockRenderer implements IResourceManagerReloadListener {
 
 	public static final SkyBlockRenderer INSTANCE = new SkyBlockRenderer();
 
 	private Framebuffer skyFb;
 
-	private boolean isInitialized;
-
 	private boolean isActive;
 
-	private int stencilMask = -1;
+	private int stencilBit = -1;
+
+	private int stencilMask;
 
 	private int lastRenderUsers;
 
@@ -37,6 +40,8 @@ public class SkyBlockRenderer {
 	public int getStencilMask() {
 		return stencilMask;
 	}
+
+	private static Runnable NULL_HOOK = () -> {};
 
 	private class SkyCapture implements Runnable {
 
@@ -66,56 +71,98 @@ public class SkyBlockRenderer {
 		lastRenderUsers++;
 	}
 
-	public void setup() {
-		Preconditions.checkState(!isInitialized, "Double initialization");
-		isInitialized = true;
+	@Override
+	public void onResourceManagerReload(IResourceManager resourceManager) {
+		final boolean canActivate = checkActivationConditions();
 
+		if (canActivate) {
+			if (!isActive) {
+				isActive = activate();
+			}
+		} else {
+			if (isActive) {
+				deactivate();
+				isActive = false;
+			}
+		}
+	}
+
+	private static boolean checkActivationConditions() {
 		if (!Config.renderSkyBlocks) {
 			Log.info("Disabled by config");
-			return;
+			return false;
 		}
 
-		if (FMLClientHandler.instance().hasOptifine()) {
+		if (FMLClientHandler.instance().hasOptifine() && optifineShadersEnabled()) {
 			if (Config.skyBlocksOptifineOverride) {
 				Log.warn("Optifine detected: skyblocks + shaders may hang your game");
 			} else {
-				Log.info("Disabled due to Optifine (use `optifineOverride` config to override)");
-				return;
+				Log.info("Disabled due to Optifine shaders (use `optifineOverride` config to override)");
+				return false;
 			}
 		}
 
 		if (!OpenGlHelper.isFramebufferEnabled()) {
 			Log.info("Framebuffer not enabled");
-			return;
+			return false;
 		}
 
 		if (!FramebufferBlitter.INSTANCE.isValid()) {
 			Log.info("Framebuffer blit not enabled");
-			return;
+			return false;
 		}
 
 		if (!PreWorldRenderHookVisitor.isActive()) {
 			Log.info("Pre-world render hook not active");
-			return;
+			return false;
 		}
 
 		final Framebuffer mcFb = Minecraft.getMinecraft().getFramebuffer();
 
 		if (!mcFb.isStencilEnabled() && !mcFb.enableStencil()) {
 			Log.info("Stencil not enabled");
-			return;
+			return false;
 		}
 
-		final int stencilBit = MinecraftForgeClient.reserveStencilBit();
+		return true;
+	}
+
+	private static boolean optifineShadersEnabled() {
+		try {
+			final Class<?> config = Class.forName("Config");
+			final Function0<Boolean> isShaders = MethodAccess.create(boolean.class, config, "isShaders");
+			return isShaders.call(null);
+		} catch (Exception e) {
+			Log.info(e, "Failed to read Optifine config");
+		}
+
+		// can't tell, assume the worst
+		return true;
+	}
+
+	private boolean activate() {
+		stencilBit = MinecraftForgeClient.reserveStencilBit();
 		if (stencilBit < 0) {
 			Log.info("All stencil bits reserved");
-			return;
+			return false;
 		}
 
 		PreWorldRenderHookVisitor.setHook(new SkyCapture());
 		Log.debug("Sky block rendering initialized correctly, stencilBit = %d", stencilBit);
 		stencilMask = 1 << stencilBit;
-		isActive = true;
+
+		return true;
+	}
+
+	private void deactivate() {
+		PreWorldRenderHookVisitor.setHook(NULL_HOOK);
+
+		if (stencilBit >= 0) {
+			MinecraftForgeClient.releaseStencilBit(stencilBit);
+			stencilBit = -1;
+		}
+
+		Log.debug("Sky block rendering deactivated");
 	}
 
 	public void bindSkyTexture() {
