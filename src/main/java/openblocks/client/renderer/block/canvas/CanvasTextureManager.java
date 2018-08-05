@@ -2,14 +2,15 @@ package openblocks.client.renderer.block.canvas;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
+import io.netty.util.collection.IntObjectHashMap;
+import io.netty.util.collection.IntObjectMap;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -22,7 +23,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.TextureUploader;
-import openblocks.client.renderer.TextureUploader.IUploadableTexture;
 import openmods.Log;
 
 public class CanvasTextureManager {
@@ -42,7 +42,7 @@ public class CanvasTextureManager {
 	private CanvasTextureManager() {}
 
 	private static class EmptyTextureData {
-		final Map<Integer, int[][]> mipmapLevels = Maps.newHashMap();
+		final IntObjectMap<int[][]> mipmapLevels = new IntObjectHashMap<>();
 
 		public int[][] getContents(int mipmapLevel) {
 			int[][] contents = mipmapLevels.get(mipmapLevel);
@@ -67,7 +67,7 @@ public class CanvasTextureManager {
 		}
 	}
 
-	private class CanvasTexture extends TextureAtlasSprite implements IUploadableTexture {
+	private class CanvasTexture extends TextureAtlasSprite {
 		public final ResourceLocation location;
 
 		private final EmptyTextureData emptyTexture;
@@ -76,7 +76,11 @@ public class CanvasTextureManager {
 
 		private int mipmapLevels;
 
-		private boolean requiresUpload;
+		private boolean queuedForUpload;
+
+		private int background;
+
+		private List<CanvasLayer> layers;
 
 		public CanvasTexture(ResourceLocation location, EmptyTextureData emptyTexture) {
 			super(location.toString());
@@ -107,10 +111,22 @@ public class CanvasTextureManager {
 			if (!layers.isEmpty() && layers.get(0).orientation != TextureOrientation.R0)
 				Log.warn("Unoptimized texture: %s!", layers);
 
+			if (!queuedForUpload) {
+				queuedForUpload = true;
+				this.background = background;
+				this.layers = ImmutableList.copyOf(layers);
+				TextureUploader.INSTANCE.scheduleTextureUpload(this::upload);
+			}
+		}
+
+		private void upload() {
+			queuedForUpload = false;
+
 			clearFramesTextureData();
-			final int[][] mipmaps = new int[this.mipmapLevels + 1][];
+			int[][] mipmaps = new int[this.mipmapLevels + 1][];
 			final int size = CanvasLayer.TEXTURE_WIDTH * CanvasLayer.TEXTURE_HEIGHT;
 			final int[] contents = mipmaps[0] = new int[size];
+
 			for (int i = 0; i < size; i++) {
 				int color = background;
 				for (CanvasLayer layer : layers) {
@@ -120,19 +136,10 @@ public class CanvasTextureManager {
 				contents[i] = color;
 			}
 
+			mipmaps = TextureUtil.generateMipmapData(this.mipmapLevels, this.width, mipmaps);
 			framesTextureData.add(mipmaps);
-			super.generateMipmaps(this.mipmapLevels);
 
-			requiresUpload = true;
-			TextureUploader.INSTANCE.scheduleTextureUpload(this);
-		}
-
-		@Override
-		public void upload() {
-			if (requiresUpload) {
-				requiresUpload = false;
-				TextureUtil.uploadTextureMipmap(this.framesTextureData.get(0), this.width, this.height, this.originX, this.originY, false, false);
-			}
+			TextureUtil.uploadTextureMipmap(this.framesTextureData.get(0), this.width, this.height, this.originX, this.originY, false, false);
 		}
 	}
 

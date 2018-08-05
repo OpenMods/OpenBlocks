@@ -35,6 +35,8 @@ public class StencilTextureManager {
 
 			private boolean queuedForUpload;
 
+			private IStencilPattern pattern;
+
 			private PoolTexture(ResourceLocation selfLocation, int mipmapLevels) {
 				super(selfLocation.toString());
 				this.selfLocation = selfLocation;
@@ -81,11 +83,12 @@ public class StencilTextureManager {
 
 				if (!queuedForUpload) {
 					queuedForUpload = true;
-					TextureUploader.INSTANCE.scheduleTextureUpload(() -> upload(pattern));
+					this.pattern = pattern;
+					TextureUploader.INSTANCE.scheduleTextureUpload(this::upload);
 				}
 			}
 
-			private void upload(IStencilPattern pattern) {
+			private void upload() {
 				queuedForUpload = false;
 
 				clearFramesTextureData();
