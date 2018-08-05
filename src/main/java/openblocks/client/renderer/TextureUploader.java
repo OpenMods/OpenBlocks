@@ -10,25 +10,21 @@ import openmods.utils.TextureUtils;
 
 public class TextureUploader {
 
-	public interface IUploadableTexture {
-		public void upload();
-	}
-
 	public static final TextureUploader INSTANCE = new TextureUploader();
 
-	private final Queue<IUploadableTexture> texturesToUpload = Queues.newConcurrentLinkedQueue();
+	private final Queue<Runnable> texturesToUpload = Queues.newConcurrentLinkedQueue();
 
-	public void scheduleTextureUpload(IUploadableTexture texture) {
-		texturesToUpload.add(texture);
+	public void scheduleTextureUpload(Runnable uploader) {
+		texturesToUpload.add(uploader);
 	}
 
 	@SubscribeEvent
 	public void onRenderEnd(RenderWorldLastEvent evt) {
 		TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-		IUploadableTexture t;
+		Runnable t;
 		while ((t = texturesToUpload.poll()) != null)
-			t.upload();
+			t.run();
 	}
 
 	@SubscribeEvent
