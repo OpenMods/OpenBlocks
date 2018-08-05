@@ -2,6 +2,7 @@ package openblocks.common.block;
 
 import com.google.common.collect.Lists;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.Nullable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -35,7 +36,7 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 	public enum Type implements IStringSerializable {
 		PENCIL, CRAYON;
 
-		private final String name = name().toLowerCase();
+		private final String name = name().toLowerCase(Locale.ROOT);
 
 		@Override
 		public String getName() {
@@ -103,7 +104,7 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 
 		public final static Shape[] VALUES = values();
 
-		private final String name = name().toLowerCase();
+		private final String name = name().toLowerCase(Locale.ROOT);
 
 		@Override
 		public String getName() {

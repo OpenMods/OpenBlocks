@@ -11,6 +11,7 @@ import com.google.common.primitives.Ints;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nonnull;
@@ -102,7 +103,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		ImmutableMap.Builder<String, IShapeManipulator> commands = ImmutableMap.builder();
 
 		for (HalfAxis ha : HalfAxis.VALUES) {
-			final String name = ha.name().toLowerCase();
+			final String name = ha.name().toLowerCase(Locale.ROOT);
 			commands.put("inc_" + name, createHalfAxisIncrementer(ha));
 			commands.put("dec_" + name, createHalfAxisDecrementer(ha));
 			commands.put("copy_" + name, createHalfAxisCopier(ha));
