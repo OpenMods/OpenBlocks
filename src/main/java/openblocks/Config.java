@@ -147,6 +147,15 @@ public class Config {
 	@ConfigProperty(category = "crane", name = "showTurtles", comment = "Show magnet turtles in creative list")
 	public static boolean showCraneTurtles = true;
 
+	@ConfigProperty(category = "crane", name = "magnetBlockWhitelist", comment = "List of resource location names of blocks that can be picked by magnet")
+	public static String[] magnetBlockWhitelist = {};
+
+	@ConfigProperty(category = "crane", name = "magnetEntityWhitelist", comment = "List of resource location names of entities that can be picked by magnet")
+	public static String[] magnetEntityWhitelist = {};
+
+	@ConfigProperty(category = "crane", name = "magnetTileEntityWhitelist", comment = "List of resource location names of tile entities that can be picked by magnet")
+	public static String[] magnetTileEntityWhitelist = {};
+
 	@ConfigProperty(category = "hacks", name = "enableExperimentalFeatures", comment = "Enable experimental features that may be buggy or broken entirely")
 	public static boolean experimentalFeatures = false;
 

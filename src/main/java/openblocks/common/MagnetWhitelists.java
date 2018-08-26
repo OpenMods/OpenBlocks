@@ -1,5 +1,8 @@
 package openblocks.common;
 
+import com.google.common.collect.ImmutableSet;
+import java.util.Arrays;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
@@ -9,6 +12,7 @@ import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
@@ -25,11 +29,13 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.tileentity.TileEntityNote;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import openblocks.Config;
 import openmods.utils.ITester;
 import openmods.utils.ITester.Result;
 import openmods.utils.ObjectTester;
@@ -106,10 +112,18 @@ public class MagnetWhitelists {
 	}
 
 	public void initTesters() {
+		MinecraftForge.EVENT_BUS.post(new EntityRegisterEvent(entityWhitelist));
+
 		entityWhitelist.addTester(new ClassTester<Entity>(EntityItem.class));
 		entityWhitelist.addTester(new ClassTester<Entity>(EntityBoat.class));
 		entityWhitelist.addTester(new ClassTester<Entity>(EntityMinecart.class));
-		MinecraftForge.EVENT_BUS.post(new EntityRegisterEvent(entityWhitelist));
+
+		{
+			final Set<ResourceLocation> allowedEntityLocations = toResourceLocationSet(Config.magnetEntityWhitelist);
+			entityWhitelist.addTester(e -> allowedEntityLocations.contains(EntityList.getKey(e))? Result.ACCEPT : Result.CONTINUE);
+		}
+
+		MinecraftForge.EVENT_BUS.post(new BlockRegisterEvent(blockWhitelist));
 
 		blockWhitelist.addTester(o -> {
 			float hardness = o.blockState.getBlockHardness(o.world, o);
@@ -123,7 +137,13 @@ public class MagnetWhitelists {
 		blockWhitelist.addTester(createBlockClassTester(BlockFence.class));
 		blockWhitelist.addTester(createBlockClassTester(BlockFenceGate.class));
 		blockWhitelist.addTester(createBlockIdentityTester(Blocks.CACTUS));
-		MinecraftForge.EVENT_BUS.post(new BlockRegisterEvent(blockWhitelist));
+
+		{
+			final Set<ResourceLocation> allowedBlockLocations = toResourceLocationSet(Config.magnetBlockWhitelist);
+			blockWhitelist.addTester(e -> allowedBlockLocations.contains(Block.REGISTRY.getNameForObject(e.blockState.getBlock()))? Result.ACCEPT : Result.CONTINUE);
+		}
+
+		MinecraftForge.EVENT_BUS.post(new TileEntityRegisterEvent(tileEntityWhitelist));
 
 		tileEntityWhitelist
 				.addTester(new ClassTester<TileEntity>(TileEntityBeacon.class))
@@ -137,6 +157,15 @@ public class MagnetWhitelists {
 				.addTester(new ClassTester<TileEntity>(TileEntityHopper.class))
 				.addTester(new ClassTester<TileEntity>(TileEntityNote.class))
 				.addTester(new ClassTester<TileEntity>(TileEntityJukebox.class));
+
+		{
+			final Set<ResourceLocation> allowedTileEntityLocations = toResourceLocationSet(Config.magnetTileEntityWhitelist);
+			tileEntityWhitelist.addTester(e -> allowedTileEntityLocations.contains(TileEntity.getKey(e.getClass()))? Result.ACCEPT : Result.CONTINUE);
+		}
+	}
+
+	private static ImmutableSet<ResourceLocation> toResourceLocationSet(final String[] names) {
+		return Arrays.asList(names).stream().map(ResourceLocation::new).collect(ImmutableSet.toImmutableSet());
 	}
 
 	public boolean testBlock(World world, BlockPos pos) {
