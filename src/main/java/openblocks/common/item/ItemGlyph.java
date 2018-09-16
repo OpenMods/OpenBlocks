@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.Config;
 import openblocks.common.entity.EntityGlyph;
 import openmods.geometry.BlockTextureTransform;
 import openmods.geometry.BlockTextureTransform.TexCoords;
@@ -103,7 +104,7 @@ public class ItemGlyph extends Item {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (tab == CreativeTabs.SEARCH) {
+		if (Config.showGlypsInSearch && tab == CreativeTabs.SEARCH) {
 			for (int i = 0; i < ALMOST_ASCII.length; i++) {
 				final char ch = ALMOST_ASCII[i];
 				if (!isHiddenCharacter(ch))

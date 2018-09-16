@@ -408,8 +408,13 @@ public class Config {
 	@ConfigProperty(category = "xpBucket", name = "universalBucketSupport", comment = "Should liquid XP be registered for universal bucket support (does not enable universal bucket)")
 	public static boolean registerUniversalXpBucket = true;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "xpBucket", name = "showInCreativeGui", comment = "Should XP bucket be shown in inventory (if this is set, while universal bucket is enabled and registerUniversalXpBucket is set, creative menu will contain two buckets containing liquid XP)")
 	public static boolean showXpBucketInCreative = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "glyphs", name = "showInCreativeSearch", comment = "Should glyphs be added to creative search GUI")
+	public static boolean showGlypsInSearch = true;
 
 	public static void register() {
 		if (OpenBlocks.Items.generic != null) {
