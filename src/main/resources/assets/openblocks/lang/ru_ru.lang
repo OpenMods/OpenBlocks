@@ -1,14 +1,14 @@
 achievement.openblocks.droppedBrick=Упс!
 achievement.openblocks.droppedBrick.desc=К сожалению, это только что произошло...
-stat.openblocks.bricksDropped=Кирпичей сброшено
+stat.openblocks.bricksDropped=Кирпичи сброшены
 achievement.openblocks.stackOverflow=Переполнение стека
 achievement.openblocks.stackOverflow.desc=Оно забито звёздами!
 
 openblocks.keybind.category=OpenBlocks
-openblocks.keybind.drop_brick=Будьте глупым
-#openblocks.keybind.vario_switch=Vario on/off ## NEEDS TRANSLATION ##
-#openblocks.keybind.vario_vol_up=Vario volume up ## NEEDS TRANSLATION ##
-#openblocks.keybind.vario_vol_down=Vario volume down ## NEEDS TRANSLATION ##
+openblocks.keybind.drop_brick=Будь проще
+openblocks.keybind.vario_switch=Vario вкл/выкл
+openblocks.keybind.vario_vol_up=Vario добавить громкость
+openblocks.keybind.vario_vol_down=Vario убавить громкость
 
 enchantment.openblocks.explosive=Нестабильность
 enchantment.openblocks.laststand=Последний рубеж
@@ -41,8 +41,8 @@ openblocks.gui.drawingtable=Стол для рисования
 openblocks.gui.digitalfuse=Цифровой запал
 openblocks.gui.xp_outputs=Выходы опыта
 openblocks.gui.item_outputs=Выходы предметов
-#openblocks.gui.limit=Limit ## NEEDS TRANSLATION ##
-#openblocks.gui.available_power=Available power: %d ## NEEDS TRANSLATION ##
+openblocks.gui.limit=Предел
+openblocks.gui.available_power=Доступная мощность: %d
 openblocks.gui.save_folder=Сохранить папку
 
 openblocks.gui.welcome.title=Добро пожаловать!
@@ -89,18 +89,18 @@ openblocks.misc.selected_cannon=Выбрана пушка для прицели�
 openblocks.misc.pointed_cannon=Пушка направлена на %s, %s, %s
 openblocks.misc.change_mode=Изменение режима на %s
 openblocks.misc.change_size=Изменение размера на %sx%sx%s
-#openblocks.misc.change_box_size=Changing size to (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
+openblocks.misc.change_box_size=Изменить размеры на (%d,%d,%d):(%d,%d,%d)
 openblocks.misc.total_blocks=Общее количество блоков: %d
 openblocks.misc.get_witched=Get witched!
 openblocks.misc.page=Страница %d из %d
 openblocks.misc.oh_no_ceiling=Вы не можете спать здесь. Вас беспокоит потолок...
-openblocks.misc.oh_no_ground=Вы хотите спать на ЭТОМ!?
+openblocks.misc.oh_no_ground=Вы хотите спать на ЭТОМ?!
 openblocks.misc.sleeping_bag_broken=Предмет недоступен из-за неудавшейся инициализации
-#openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
-#openblocks.misc.structure_not_locked=Not locked on any structure! ## NEEDS TRANSLATION ##
-#openblocks.misc.locked_on_nearest_structure=Locked on nearest %s ## NEEDS TRANSLATION ##
-#openblocks.misc.locked_on_structure=Locked on %s ## NEEDS TRANSLATION ##
-#openblocks.misc.no_nearby_structures=Can't find any nearby structures ## NEEDS TRANSLATION ##
+openblocks.misc.inverted=Инвертировано
+openblocks.misc.structure_not_locked=Не фиксировано ни на одной структуре!
+openblocks.misc.locked_on_nearest_structure=Фиксировано на ближайшем %s
+openblocks.misc.locked_on_structure=Фиксировано на %s
+openblocks.misc.no_nearby_structures=Не обнаружено ближайших структур
 
 openblocks.misc.grave_msg=%s (день: %.1f)
 
@@ -134,16 +134,16 @@ openblocks.misc.shape=Форма: %s
 openblocks.misc.shape.sphere=Сфера
 openblocks.misc.shape.cylinder=Цилиндр
 openblocks.misc.shape.cuboid=Куб
-#openblocks.misc.shape.full_cuboid=Full Cuboid ## NEEDS TRANSLATION ##
+openblocks.misc.shape.full_cuboid=Параллелепипед
 openblocks.misc.shape.dome=Купол
 openblocks.misc.shape.triangle=Треугольник
 openblocks.misc.shape.pentagon=Пятиугольник
 openblocks.misc.shape.hexagon=Шестиугольник
 openblocks.misc.shape.octagon=Восьмиугольник
-#openblocks.misc.shape.axes=Axes ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.planes=Planes ## NEEDS TRANSLATION ##
+openblocks.misc.shape.axes=Оси
+openblocks.misc.shape.planes=Плоскости
 
-#openblocks.misc.box=Dimensions: (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
+openblocks.misc.box=Размеры: (%d,%d,%d):(%d,%d,%d)
 openblocks.misc.width=Ширина: %d
 openblocks.misc.height=Высота: %d
 openblocks.misc.depth=Глубина: %d
@@ -174,13 +174,13 @@ openblocks.misc.command.flim_flam_failed=Не удалось стать брат
 openblocks.misc.command.luck_added=Удача изменена для игрока %s, текущая: %d
 openblocks.misc.command.luck_current=Удача: %2$d игрока %1$s
 
-#openblocks.misc.total_ticks=Total ticks: %d (%.2fs) ## NEEDS TRANSLATION ##
+openblocks.misc.total_ticks=Всего тактов: %d (%.2fs)
 
-#openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
+openblocks.misc.hidden_lore=§a§oУдерживайте ALT, чтобы увидеть историю§r
 openblocks.flim_flammed=Что-то странное происходит вокруг Вас
 
-#openblocks.misc.dropper.speed=Speed ## NEEDS TRANSLATION ##
-#openblocks.misc.dropper.use_redstone=Scale by redstone signal strength ## NEEDS TRANSLATION ##
+openblocks.misc.dropper.speed=Скорость
+openblocks.misc.dropper.use_redstone=Маштаб пропорционально силе сигнала красного камня
 
 openblocks.turtle.magnet=Магнит
 
@@ -217,8 +217,8 @@ tile.openblocks.sponge.description=Губка является заменой о
 item.openblocks.sponge_on_a_stick.name=Губка на палочке
 item.openblocks.sponge_on_a_stick.description=Губка на палочке - это инструмент для очистки жидкостей. Работает, как простая губка, но более мобильна за счёт изнашивания.
 
-#item.openblocks.epic_eraser.name=Epic Eraser ## NEEDS TRANSLATION ##
-#item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence. ## NEEDS TRANSLATION ##
+item.openblocks.epic_eraser.name=Эпичный стиратель
+item.openblocks.epic_eraser.description=Каждая вещь имеет свою историю...\n\nВы ненавидите это, не так ли?\nС этим вы сможете очистить все следы полученные вашими вещами на протяжении многих лет, а затем не задумываясь продать их на чёрном рынке.
 
 tile.openblocks.cannon.name=Предметная пушка
 tile.openblocks.cannon.description=Когда подан сигнал красного камня, предметная пушка будет выстреливать предметы, которые она найдёт в соседнем инвентаре. Используйте 'указатель', чтобы направить пушку.
@@ -235,7 +235,7 @@ tile.openblocks.paint_mixer.description=Смеситель краски може
 tile.openblocks.canvas.name=Холст
 tile.openblocks.canvas.description=Холст - это совершенно белый блок, который идеально подходит для рисования. Смотрите информацию о смесители краски, чтобы узнать больше о рисовании.
 
-#tile.openblocks.canvas_glass.name=Canvas ## NEEDS TRANSLATION ##
+tile.openblocks.canvas_glass.name=Холст
 
 tile.openblocks.fan.name=Вентилятор
 tile.openblocks.fan.description=Вентилятор будет сдувать игроков, мобов и других сущностей туда, куда он повёрнут.
@@ -252,7 +252,7 @@ tile.openblocks.item_dropper.description=Выбрасыватель предме
 tile.openblocks.big_button.name=Большая кнопка
 tile.openblocks.big_button.description=Большая кнопка - это большая кнопка, которая может быть поставлена на стену. Если Вы нажмёте shift-ПКМ по кнопке пустой рукой, Вам будет показан инвентарь с одним слотом. Вы можете положить предметы в этот слот, чтобы увеличить количество времени, во время которого кнопка остаётся нажатой - один предмет увеличивает время нажатия кнопки на один тик.
 
-#tile.openblocks.big_button_wood.name=Wooden Big Button ## NEEDS TRANSLATION ##
+tile.openblocks.big_button_wood.name=Большая деревянная кнопка
 
 tile.openblocks.xp_drain.name=Всасыватель опыта
 tile.openblocks.xp_drain.description=Поместите всасыватель опыта над резервуаром OpenBlocks и встаньте на него. Ваш опыт будет накапливаться в резервуаре, который в дальнейшем может быть использован в автоматическом столе зачаровывания, или в автоматической наковальне.
@@ -272,9 +272,9 @@ tile.openblocks.block_placer.description=Когда будет подан сиг
 tile.openblocks.block_breaker.name=Разрушитель блоков
 tile.openblocks.block_breaker.description=Когда будет подан сигнал красного камня, разрушитель блоков разрушит блок, который стоит перед ним.
 
-tile.openblocks.projector.name=Прожектор карты высот
+tile.openblocks.projector.name=Проектор карты высот
 tile.openblocks.projector.description=Пусть boq напишет описание для него!
-#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
+tile.openblocks.projector.working.name=Проектор карты высот
 
 tile.openblocks.auto_enchantment_table.name=Автоматический стол зачаровывания
 tile.openblocks.auto_enchantment_table.description=Автоматический стол зачаровывания работает так же, как и обычный стол зачаровывания, но он требует жидкий опыт. В правой части интерфейса Вы можете выбрать, какие стороны стола будут использованы для извлечения/помещения жидкого опыта/предметов. Так же, книжные полки будут влиять на уровень зачарования.
@@ -349,8 +349,8 @@ item.openblocks.crane_backpack.description=В мире Minecraft "магнит" 
 item.openblocks.crane_control.name=Крановое управление
 item.openblocks.crane_control.description=Этот высокотехнологичный беспроводной пульт используется для управления хранилищами.\n\nПКМ, чтобы поднять, ПКМ, присев, чтобы опустить, ЛКМ, чтобы поднять/отпустить.\nМигающие световые сигналы относятся к магниту.
 
-#item.openblocks.wrench.name=Big Metal Bar ## NEEDS TRANSLATION ##
-#item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok? ## NEEDS TRANSLATION ##
+item.openblocks.wrench.name=Большой металлический ключ
+item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok? ## NEEDS TRANSLATION ##
 
 item.openblocks.stencil.name=Трафарет
 item.openblocks.crayon.name=Магический цветной карандаш
@@ -386,8 +386,8 @@ itemGroup.tabOpenBlocks=OpenBlocks
 entity.openblocks.luggage.name=Багаж
 entity.openblocks.cartographer.name=Картограф
 entity.openblocks.block.name=Парящий блок
-entity.openblocks.mini_me.name=Мини-Мы
+entity.openblocks.mini_me.name=Мини-Ми
 
 fluid.openblocks.xp_juice=Жидкий опыт
 
-#entity.Villager.audiophile=Audiophile ## NEEDS TRANSLATION ##
+entity.Villager.audiophile=Меломан
