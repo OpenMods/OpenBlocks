@@ -1,5 +1,43 @@
 [
     {
+        "version": "1.8",
+        "sections":
+        [
+            {
+                "title": "openblocks.gui.features",
+                "lines":
+                [
+                    "Glyphs (created with drawing table)",
+                    "Machines now accept Thermal Foundation's Essence of Knowledge",
+                    "Magnets now have configurable whitelists"
+                ]
+            },
+            {
+                "title": "openblocks.gui.bugfixes",
+                "lines":
+                [
+                    "Add tint to fluids in tanks (fixes TiC fluids)",
+                    "Fix potential crash when rendering sprinkler outside of world",
+                    "Fix skyblock drops",
+                    "Fix off-hand usage of few items",
+                    "Add missing recipe for big wooden button",
+                    "Fix shower XP dupe",
+                    "Fix blocks sometimes dropping when placed with magnet",
+                    "Improvements to sky block rendering speed",
+                    "Fix guide book recipe rendering"
+                ]
+            },
+            {
+                "title": "openblocks.gui.tweaks",
+                "lines":
+                [
+                    "Tanks can now be drained without sneaking",
+                    "Skyblocks are now disabled only when Optifine shaders are enabled"
+                ]
+            }
+        ]
+    },
+    {
         "version" : "1.7.6",
         "sections" :
         [

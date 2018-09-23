@@ -45,6 +45,10 @@ openblocks.gui.item_outputs=Itemabgabe
 #openblocks.gui.available_power=Available power: %d ## NEEDS TRANSLATION ##
 openblocks.gui.save_folder=Sichere Ordner
 
+#openblocks.gui.drawingtable.stencils=Stencils ## NEEDS TRANSLATION ##
+#openblocks.gui.drawingtable.glyphs=Glyphs ## NEEDS TRANSLATION ##
+#openblocks.gui.drawingtable.print=Print ## NEEDS TRANSLATION ##
+
 openblocks.gui.welcome.title=Willkommen!
 openblocks.gui.welcome.content=OpenBlocks ist eine neue Open-Source-Mod, die verschiedene Ideen in Minecraft einbringt, inklusive Gleitschirme, Aufzüge, Tanks, Gräber, Farben, Kräne, flüssige XP, Kartographen, Trophäen und mehr!
 
@@ -351,6 +355,9 @@ item.openblocks.crane_control.description=Dise drahtlose Hi-Tech-Fernbedienung w
 
 #item.openblocks.wrench.name=Big Metal Bar ## NEEDS TRANSLATION ##
 #item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok? ## NEEDS TRANSLATION ##
+
+#item.openblocks.glyph.name=Glyph ## NEEDS TRANSLATION ##
+#item.openblocks.glyph.with_char='%c' Glyph ## NEEDS TRANSLATION ##
 
 item.openblocks.stencil.name=Schablone
 item.openblocks.crayon.name=Magischer Buntstift

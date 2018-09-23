@@ -45,6 +45,10 @@ openblocks.gui.item_outputs=아이템 추출
 #openblocks.gui.available_power=Available power: %d ## NEEDS TRANSLATION ##
 #openblocks.gui.save_folder=Save folder ## NEEDS TRANSLATION ##
 
+#openblocks.gui.drawingtable.stencils=Stencils ## NEEDS TRANSLATION ##
+#openblocks.gui.drawingtable.glyphs=Glyphs ## NEEDS TRANSLATION ##
+#openblocks.gui.drawingtable.print=Print ## NEEDS TRANSLATION ##
+
 openblocks.gui.welcome.title=어서오세요!
 openblocks.gui.welcome.content=OpenBlocks는 행글라이더, 엘리베이터, 탱크, 무덤, 페인트, 크레인, 액체 XP, 지도, 트로피 등외에도 많은것들을 추가하는 오픈 소스 모드입니다!
 
@@ -351,6 +355,9 @@ item.openblocks.crane_control.name=크레인 조작기
 
 #item.openblocks.wrench.name=Big Metal Bar ## NEEDS TRANSLATION ##
 #item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok? ## NEEDS TRANSLATION ##
+
+#item.openblocks.glyph.name=Glyph ## NEEDS TRANSLATION ##
+#item.openblocks.glyph.with_char='%c' Glyph ## NEEDS TRANSLATION ##
 
 item.openblocks.stencil.name=형판
 item.openblocks.crayon.name=마법의 크래용

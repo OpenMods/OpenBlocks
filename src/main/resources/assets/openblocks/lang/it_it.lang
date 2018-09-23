@@ -45,6 +45,10 @@ openblocks.gui.item_outputs=Emissione di Oggetti
 #openblocks.gui.available_power=Available power: %d ## NEEDS TRANSLATION ##
 openblocks.gui.save_folder=Cartella di salvataggio
 
+#openblocks.gui.drawingtable.stencils=Stencils ## NEEDS TRANSLATION ##
+#openblocks.gui.drawingtable.glyphs=Glyphs ## NEEDS TRANSLATION ##
+#openblocks.gui.drawingtable.print=Print ## NEEDS TRANSLATION ##
+
 openblocks.gui.welcome.title=Benvenuto!
 openblocks.gui.welcome.content=OpenBlocks è una nuova mod "open source" che introduce una varietà di idee in Minecraft, tra cui deltaplani, ascensori, taniche, tombe, dipinti, gru, punti esperienza liquidi, cartografi, trofei e altro!
 
@@ -351,6 +355,9 @@ item.openblocks.crane_control.description=Questo telecomando wireless ad alta te
 
 item.openblocks.wrench.name=Grande Barra di Metallo
 item.openblocks.wrench.description=Questo strumento estremamente sofisticato è usato per trasformare oggetti con simmetria ottaedra.\n\n\nO semplicemente un grande e stupido pezzo di metallo che puoi usare per ruotare cubi e altre cose.\n\nQuinfi sì, è semplicemente un'altra chiave inglese. Sto solo cercando di essere originale, ok?
+
+#item.openblocks.glyph.name=Glyph ## NEEDS TRANSLATION ##
+#item.openblocks.glyph.with_char='%c' Glyph ## NEEDS TRANSLATION ##
 
 item.openblocks.stencil.name=Stampo
 item.openblocks.crayon.name=Pastello Magico
