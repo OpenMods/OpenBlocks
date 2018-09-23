@@ -414,7 +414,7 @@ public class Config {
 
 	@OnLineModifiable
 	@ConfigProperty(category = "glyphs", name = "showInCreativeSearch", comment = "Should glyphs be added to creative search GUI")
-	public static boolean showGlypsInSearch = true;
+	public static boolean showGlypsInSearch = false;
 
 	public static void register() {
 		if (OpenBlocks.Items.generic != null) {

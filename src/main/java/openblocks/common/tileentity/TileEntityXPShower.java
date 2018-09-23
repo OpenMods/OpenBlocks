@@ -57,10 +57,11 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 			if (maybeConverter.isPresent()) {
 				final IFluidXpConverter converter = maybeConverter.get();
 				final int xpInTank = converter.fluidToXp(tankContents.amount);
+				// Note: following never returns 0!
 				final int xpInOrb = EntityXPOrb.getXPSplit(xpInTank);
 				final int toDrain = converter.xpToFluid(xpInOrb);
 
-				if (toDrain > 0) {
+				if (toDrain > 0 && toDrain <= tankContents.amount) {
 					bufferTank.drain(toDrain, true);
 					hasSpawnedParticle = true;
 

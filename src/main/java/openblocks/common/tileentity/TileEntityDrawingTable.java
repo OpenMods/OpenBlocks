@@ -114,7 +114,7 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 
 	@Override
 	protected void createSyncedFields() {
-		selectedMode = SyncableEnum.create(IStencilCrafter.Mode.GLYPHS);
+		selectedMode = SyncableEnum.create(IStencilCrafter.Mode.STENCILS);
 		selectedGlyph = new SyncableInt(ArrayUtils.indexOf(ItemGlyph.ALMOST_ASCII, 'A'));
 		selectedPattern = SyncableEnum.create(StencilPattern.CREEPER_FACE);
 		textToPrint = new SyncableString();

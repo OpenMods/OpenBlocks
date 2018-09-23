@@ -246,7 +246,7 @@ public class OpenBlocks {
 	public static final String VERSION = "$VERSION$";
 	public static final String PROXY_SERVER = "openblocks.common.ServerProxy";
 	public static final String PROXY_CLIENT = "openblocks.client.ClientProxy";
-	public static final String DEPENDENCIES = "required:forge@[14.23.2.2611,);required-after:openmods@[$LIB-VERSION$,$NEXT-LIB-VERSION$)";
+	public static final String DEPENDENCIES = "required:forge@[14.23.4.2705,);required-after:openmods@[$LIB-VERSION$,$NEXT-LIB-VERSION$)";
 	public static final String GUI_FACTORY = "openblocks.client.ModGuiFactory";
 	public static final String UPDATE_JSON = "http://openmods.info/versions/openblocks.json"; // HTTP, for wider support
 
