@@ -1,80 +1,82 @@
-#achievement.openblocks.droppedBrick=Zoinks! ## NEEDS TRANSLATION ##
-#achievement.openblocks.droppedBrick.desc=Sorry, it just happened... ## NEEDS TRANSLATION ##
-#stat.openblocks.bricksDropped=Bricks dropped ## NEEDS TRANSLATION ##
-#achievement.openblocks.stackOverflow=Stack Overflow ## NEEDS TRANSLATION ##
-#achievement.openblocks.stackOverflow.desc=It's full of stars! ## NEEDS TRANSLATION ##
+# Portuguese (Brazil) localization updated by SAMUELPV
 
-#openblocks.keybind.category=OpenBlocks ## NEEDS TRANSLATION ##
-#openblocks.keybind.drop_brick=Be silly ## NEEDS TRANSLATION ##
-#openblocks.keybind.vario_switch=Vario on/off ## NEEDS TRANSLATION ##
-#openblocks.keybind.vario_vol_up=Vario volume up ## NEEDS TRANSLATION ##
-#openblocks.keybind.vario_vol_down=Vario volume down ## NEEDS TRANSLATION ##
+achievement.openblocks.droppedBrick=Zoinks!
+achievement.openblocks.droppedBrick.desc=Desculpe, apenas aconteceu...
+stat.openblocks.bricksDropped=Tijolos dropados
+achievement.openblocks.stackOverflow=Excesso de Stacks
+achievement.openblocks.stackOverflow.desc=É cheio de estrelas!
 
-#enchantment.openblocks.explosive=Unstable ## NEEDS TRANSLATION ##
-#enchantment.openblocks.laststand=Last Stand ## NEEDS TRANSLATION ##
-#enchantment.openblocks.flimflam=Flim Flam ## NEEDS TRANSLATION ##
+openblocks.keybind.category=OpenBlocks
+openblocks.keybind.drop_brick=Ser estúpido
+openblocks.keybind.vario_switch=Vario Ligado/Desligado
+openblocks.keybind.vario_vol_up=Aumentar volume Vario
+openblocks.keybind.vario_vol_down=Diminuir volume Vario
 
-#openblocks.gui.blocks=Blocks ## NEEDS TRANSLATION ##
-#openblocks.gui.items=Items ## NEEDS TRANSLATION ##
-#openblocks.gui.misc=Miscellanea ## NEEDS TRANSLATION ##
-#openblocks.gui.changelogs=Changelogs ## NEEDS TRANSLATION ##
+enchantment.openblocks.explosive=Instável
+enchantment.openblocks.laststand=Último Combate
+enchantment.openblocks.flimflam=Falcatrua
 
-#openblocks.gui.features=Features ## NEEDS TRANSLATION ##
-#openblocks.gui.bugfixes=Bugfixes ## NEEDS TRANSLATION ##
-#openblocks.gui.tweaks=Tweaks ## NEEDS TRANSLATION ##
+openblocks.gui.blocks=Blocos
+openblocks.gui.items=Itens
+openblocks.gui.misc=Variados
+openblocks.gui.changelogs=Changelogs
+
+openblocks.gui.features=Características
+openblocks.gui.bugfixes=Correção de Bugs
+openblocks.gui.tweaks=Ajustes
 
 openblocks.gui.luggage=Bagagem
 openblocks.gui.sprinkler=Borrifador
-openblocks.gui.vacuumhopper=Funil a vácuo
-openblocks.gui.bigbutton=Grande botão
-openblocks.gui.xpbottler=Engarrafador de experiência
-openblocks.gui.autoanvil=Bigorna automática
-openblocks.gui.autoeject=Ejetar automaticamente
-openblocks.gui.autoextract=Extrair automaticamente
-openblocks.gui.autodrink=Beber automaticamente
-openblocks.gui.autoenchantmenttable=Mesa de encantamentos automática
-#openblocks.gui.donationstation=Donation Station ## NEEDS TRANSLATION ##
-#openblocks.gui.itemdropper=Item Dropper ## NEEDS TRANSLATION ##
-#openblocks.gui.blockplacer=Block Placer ## NEEDS TRANSLATION ##
-#openblocks.gui.paintmixer=Paint Mixer ## NEEDS TRANSLATION ##
-#openblocks.gui.drawingtable=Drawing Table ## NEEDS TRANSLATION ##
-#openblocks.gui.digitalfuse=Digital Fuse ## NEEDS TRANSLATION ##
-#openblocks.gui.xp_outputs=XP Outputs ## NEEDS TRANSLATION ##
-#openblocks.gui.item_outputs=Item Outputs ## NEEDS TRANSLATION ##
-#openblocks.gui.limit=Limit ## NEEDS TRANSLATION ##
-#openblocks.gui.available_power=Available power: %d ## NEEDS TRANSLATION ##
-#openblocks.gui.save_folder=Save folder ## NEEDS TRANSLATION ##
+openblocks.gui.vacuumhopper=Funil à Vácuo
+openblocks.gui.bigbutton=Botão Grande
+openblocks.gui.xpbottler=Engarrafador de XP
+openblocks.gui.autoanvil=Bigorna Automática
+openblocks.gui.autoeject=Ejetar Automaticamente
+openblocks.gui.autoextract=Extrair Automaticamente
+openblocks.gui.autodrink=Beber Automaticamente
+openblocks.gui.autoenchantmenttable=Mesa de Encantamentos Automática
+openblocks.gui.donationstation=Estação de Doações
+openblocks.gui.itemdropper=Lançador de Itens
+openblocks.gui.blockplacer=Colocador de Blocos
+openblocks.gui.paintmixer=Misturador de Tintas
+openblocks.gui.drawingtable=Mesa de Desenho
+openblocks.gui.digitalfuse=Detonador Digital
+openblocks.gui.xp_outputs=Saídas de XP
+openblocks.gui.item_outputs=Saídas de Itens
+openblocks.gui.limit=Limite
+openblocks.gui.available_power=Energia disponível: %d
+openblocks.gui.save_folder=Pasta da Salvos
 
-#openblocks.gui.drawingtable.stencils=Stencils ## NEEDS TRANSLATION ##
-#openblocks.gui.drawingtable.glyphs=Glyphs ## NEEDS TRANSLATION ##
-#openblocks.gui.drawingtable.print=Print ## NEEDS TRANSLATION ##
+openblocks.gui.drawingtable.stencils=Estêncis
+openblocks.gui.drawingtable.glyphs=Glifos
+openblocks.gui.drawingtable.print=Imprimir
 
-#openblocks.gui.welcome.title=Welcome! ## NEEDS TRANSLATION ##
-#openblocks.gui.welcome.content=OpenBlocks is a new open source mod that introduces a variety of ideas into Minecraft, including hang gliders, elevators, tanks, graves, paints, cranes, liquid XP, cartographers, trophies and more! ## NEEDS TRANSLATION ##
+openblocks.gui.welcome.title=Bem-vindo!
+openblocks.gui.welcome.content=OpenBlocks é um novo mod de código aberto que apresenta uma variedade de idéias em Minecraft, incluindo planadores, elevadores, tanques, túmulos, tintas, guindastes, XP Líquido, cartógrafos, troféus e muito mais!
 
-#openblocks.gui.credits.title=Credits ## NEEDS TRANSLATION ##
-#openblocks.gui.credits.content=§LBoq, Mikee and NeverCast§R - Leading developers of OpenBlocks (are we allowed to credit ourselves?)\n\n§LSinZ and Yoshi2§R - members of the OpenMods team from the start.\n\n§LVexatos and crafteverywhere§R - Regularly translating the mods.\n\nEveryone else who has contributed to the code over the past two years.\n\n§LDirewolf20 and the rest of ForgeCraft§R - for putting up with the bugs and crashes before we release.\n\nEveryone who's done spotlights, lets plays and generally supported the mod since we started! ## NEEDS TRANSLATION ##
+openblocks.gui.credits.title=Créditos
+openblocks.gui.credits.content=§LBoq, Mikee e NeverCast§R - Desenvolvedores Chefe do OpenBlocks (se nos permite dar créditos a nós mesmos?)\n\n§LSinZ e Yoshi2§R - membros da Equipe OpenMods desde o início.\n\n§LVexatos e crafteverywhere§R - Traduzindo os mods regularmente.\n\nTodo mundo que tem contribuído para o código ao longo dos últimos dois anos.\n\n§LDirewolf20 e o resto de ForgeCraft§R - por avisa dos bugs e falhas antes do lançamento.\n\nTodos aqueles que fizeram spotlights, gameplays e que sempre apoiaram o mod desde o início!\n\n§LSAMUELPV§R - Tradução Português-BR
 
-#openblocks.gui.config.title=Easy Config Editing ## NEEDS TRANSLATION ##
-#openblocks.gui.config.content=OpenMods allow for both client and server config options to be changed from chat commands. Some don't even require restart!\n\nServer config settings can be changed using '§L/om_config_s§R' (op needed) and client config settings can be changed using '§L/om_config_c§R'\n\nFor example:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nFor a full list of commands type: §L/help om_config_s§R or §L/help om_config_c§R ## NEEDS TRANSLATION ##
+openblocks.gui.config.title=Edição de Configuração Fácil
+openblocks.gui.config.content=OpenMods permite que ambos cliente e servidor alterem as opções de configuração pelos comandos de chat. Alguns nem sequer precisam reiniciar!\n\nConfigurações do Servidor podem ser alteradas usando '§L/om_config_s§R' (op é necessário) e as Configurações de Cliente podem ser alteradas usando '§L/om_config_c§R'\n\nPor exemplo:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nPara uma lista completa dos comandos, digite: §L/help om_config_s§R or §L/help om_config_c§R
 
-#openblocks.gui.restore_inv.title=Inventory backup ## NEEDS TRANSLATION ##
-#openblocks.gui.restore_inv.content=Everyone can make mistake. But with §L/ob_inventory§R command you can fix some of them. This command can be used to restore inventory. Backup is created when:\n - player dies\n - grave is spawned \n - player issued command §L/ob_inventory store§R\n\nTo restore inventory you need backup name. Go to folder below or to saves folder on server and look for files named §Linventory-*.dat§R. Then restore inventory with §L/ob_inventory restore <player> <id>§R - where id is either full filename or just middle part, without §Linventory-§R and §L.dat§R. You can also use tab completion. Backups are normal NBT files and can be opened with any editor. ## NEEDS TRANSLATION ##
+openblocks.gui.restore_inv.title=Backup do Inventário
+openblocks.gui.restore_inv.content=Todos podem cometer erros. Mas com o comando §L/ob_inventory§R, você pode corrigir alguns deles. Este comando pode ser usado para restaurar o inventário. Backup é criado quando:\n - o jogador morre\n - túmulo é spawnado \n - o jogador ativa o comando §L/ob_inventory store§R\n\nPara restaurar o inventário você precisa do nome do backup. Vá para a pasta abaixo ou para a pasta de salvos no servidor e procure por arquivos nomeados como §Linventário-*.dat§R. Então restaure o inventário com §L/ob_inventory restore <player> <id>§R - onde id é ou nome completo ou apenas parte do nome, sem §Linventário-§R e §L.dat§R. Você também pode usar tab para completar. Backups são arquivos .NBT normais e podem ser abertos com qualquer editor.
 
-#openblocks.gui.bkey.title=The Infamous 'B' Key ## NEEDS TRANSLATION ##
-#openblocks.gui.bkey.content=The 'B' key is a very special key in OpenBlocks.\n\nEnabling the 'weAreSeriousPeople' config option in the 'tomfoolery' category of both the client and server config files will give you your very own digestive system.\n\nTry eating some of that tasty clay and press 'B' to digest! ## NEEDS TRANSLATION ##
+openblocks.gui.bkey.title=A Infame Tecla 'B'
+openblocks.gui.bkey.content=A tecla 'B' é uma tecla muito especial no OpenBlocks.\n\nAtivando a opção 'weAreSeriousPeople' na categoria 'tomfoolery' dos arquivos de configuração de ambos cliente e servidor vai lhe dar o seu próprio sistema digestivo.\n\nExperimente comer um pouco de argila saborosa e pressione 'B' para digerir!
 
-#openblocks.gui.unstable.title=Unstable Enchantment ## NEEDS TRANSLATION ##
-#openblocks.gui.unstable.content=We've had unconfirmed reports that this enchantment causes any gunpowder you're carrying to become unstable when you're attacked or when you jump off something.\n\nUse at your own risk! ## NEEDS TRANSLATION ##
+openblocks.gui.unstable.title=Encantamento: Instável
+openblocks.gui.unstable.content=Tivemos relatos não confirmados de que esse encantamento faz com que qualquer pólvora você estiver carregando, se torne instável quando você é atacado ou quando você pular de alguma coisa.\n\nUse por sua conta e risco!
 
-#openblocks.gui.flimflam.title=Flim Flam Enchantment ## NEEDS TRANSLATION ##
-#openblocks.gui.flimflam.content=Scientists have yet to discover the properties of this enchantment. ## NEEDS TRANSLATION ##
+openblocks.gui.flimflam.title=Encantamento: Falcatrua
+openblocks.gui.flimflam.content=Os cientistas ainda não descobriram as propriedades desse encantamento.
 
-#openblocks.gui.laststand.title=Last Stand Enchantment ## NEEDS TRANSLATION ##
-#openblocks.gui.laststand.content=The last stand enchantment uses your XP bar as a final protection against dying.\n\nWhen you reach 0.5 hearts, the game will take XP from you whenever you're damaged instead of killing you. The higher number of enchantments you have the cheaper the XP cost will be. ## NEEDS TRANSLATION ##
+openblocks.gui.laststand.title=Encantamento: Último Combate
+openblocks.gui.laststand.content=O encantamento último combate usa a sua barra de XP como uma proteção final contra a morte.\n\nQuando você atinge 0.5 (meio) coração, o jogar vai tomar XP de você sempre que você receber danos em vez de te matar. Quanto maior o seu nível de XP, mais barato será o custo.
 
-#openblocks.changelog.title=What's new in OpenBlocks %s ## NEEDS TRANSLATION ##
-#openblocks.misc.url=URL: %s ## NEEDS TRANSLATION ##
+openblocks.changelog.title=O que há de novo no OpenBlocks %s
+openblocks.misc.url=URL: %s
 openblocks.misc.type=Tipo: %s
 openblocks.misc.uses=Usa: %.2f
 openblocks.misc.color=Cor: %06X
@@ -87,314 +89,314 @@ openblocks.misc.mode.inverted_block=Bloco invertido
 openblocks.misc.mode.inverted_panel=Painel invertido
 openblocks.misc.mode.inverted_half_panel=Painel ao meio invertido
 openblocks.misc.mode.inverted_stairs=Escadas invertidas
-#openblocks.misc.structure_pos=Debug: found structure %s at (%d,%d,%d) ## NEEDS TRANSLATION ##
-#openblocks.misc.locked=Locked ## NEEDS TRANSLATION ##
-#openblocks.misc.selected_cannon=Selected cannon for targeting ## NEEDS TRANSLATION ##
-#openblocks.misc.pointed_cannon=Pointed cannon at %s, %s, %s ## NEEDS TRANSLATION ##
-#openblocks.misc.change_mode=Changing to %s mode ## NEEDS TRANSLATION ##
-#openblocks.misc.change_size=Changing size to %sx%sx%s ## NEEDS TRANSLATION ##
-#openblocks.misc.change_box_size=Changing size to (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
-#openblocks.misc.total_blocks=Total block count: %d ## NEEDS TRANSLATION ##
-#openblocks.misc.get_witched=Get witched! ## NEEDS TRANSLATION ##
-#openblocks.misc.page=Page %d of %d ## NEEDS TRANSLATION ##
-#openblocks.misc.oh_no_ceiling=You can't fall asleep here. Ceiling disturbs you too much... ## NEEDS TRANSLATION ##
-#openblocks.misc.oh_no_ground=You want to sleep on THAT!? ## NEEDS TRANSLATION ##
-#openblocks.misc.sleeping_bag_broken=Item inactive due to failed initialization ## NEEDS TRANSLATION ##
-#openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
-#openblocks.misc.structure_not_locked=Not locked on any structure! ## NEEDS TRANSLATION ##
-#openblocks.misc.locked_on_nearest_structure=Locked on nearest %s ## NEEDS TRANSLATION ##
-#openblocks.misc.locked_on_structure=Locked on %s ## NEEDS TRANSLATION ##
-#openblocks.misc.no_nearby_structures=Can't find any nearby structures ## NEEDS TRANSLATION ##
+openblocks.misc.structure_pos=Debug: estrutura %s encontrada em (%d,%d,%d)
+openblocks.misc.locked=Bloqueado
+openblocks.misc.selected_cannon=Canhão selecionado para apontar
+openblocks.misc.pointed_cannon=Canhão apontado para %s, %s, %s
+openblocks.misc.change_mode=Mudando para o modo: %s
+openblocks.misc.change_size=Mudando o tamanho para %sx%sx%s
+openblocks.misc.change_box_size=Mudando o tamanho para (%d,%d,%d):(%d,%d,%d)
+openblocks.misc.total_blocks=Contagem total de blocos: %d
+openblocks.misc.get_witched=Embruxado(a)!
+openblocks.misc.page=Página %d de %d
+openblocks.misc.oh_no_ceiling=Você não pode cair no sono aqui. O teto perturba demais ...
+openblocks.misc.oh_no_ground=Você quer dormir em cima DISSO?
+openblocks.misc.sleeping_bag_broken=Item inativo devido a uma falha na inicialização
+openblocks.misc.inverted=Invertido
+openblocks.misc.structure_not_locked=Não travou em nenhuma estrutura!
+openblocks.misc.locked_on_nearest_structure=Travou na(o) %s mais próxima
+openblocks.misc.locked_on_structure=Travou na(o) %s
+openblocks.misc.no_nearby_structures=Não encontramos nenhuma estrutura próxima
 
-#openblocks.misc.grave_msg=%s (day: %.1f) ## NEEDS TRANSLATION ##
+openblocks.misc.grave_msg=%s (dia: %.1f)
 
-#openblocks.misc.cant_restore_player=Can't restore inventory for player %s ## NEEDS TRANSLATION ##
-#openblocks.misc.cant_restore_inventory=Can't restore inventory ## NEEDS TRANSLATION ##
-#openblocks.misc.cant_store=Can't store player %s inventory ## NEEDS TRANSLATION ##
-#openblocks.misc.invalid_sub_inventory=Can't restore sub inventory %s ## NEEDS TRANSLATION ##
-#openblocks.misc.stored_inventory=Stored player inventory to %s ## NEEDS TRANSLATION ##
-#openblocks.misc.restored_inventory=Restored inventory for player %s ## NEEDS TRANSLATION ##
-#openblocks.misc.invalid_index=Invalid index ## NEEDS TRANSLATION ##
-#openblocks.misc.empty_slot=No item in slot ## NEEDS TRANSLATION ##
+openblocks.misc.cant_restore_player=Não é possível restaurar o inventário de %s
+openblocks.misc.cant_restore_inventory=Não é possível restaurar o inventário
+openblocks.misc.cant_store=Não é possível armazenar o inventário de %s
+openblocks.misc.invalid_sub_inventory=Não é possível restaurar o sub-inventário %s
+openblocks.misc.stored_inventory=Inventário do jogador armazenado em %s
+openblocks.misc.restored_inventory=Inventário de %s foi restaurado
+openblocks.misc.invalid_index=Índice invalido
+openblocks.misc.empty_slot=Não há itens no slot
 
-#openblocks.misc.pedometer.tracking_reset=Tracking reset ## NEEDS TRANSLATION ##
-#openblocks.misc.pedometer.tracking_started=Tracking started ## NEEDS TRANSLATION ##
+openblocks.misc.pedometer.tracking_reset=Rastreio reiniciado
+openblocks.misc.pedometer.tracking_started=Rastreio iniciado
 
-#openblocks.misc.pedometer.start_point=Start point: %s ## NEEDS TRANSLATION ##
-#openblocks.misc.pedometer.speed=Speed: %s ## NEEDS TRANSLATION ##
-#openblocks.misc.pedometer.avg_speed=Average speed: %s ## NEEDS TRANSLATION ##
-#openblocks.misc.pedometer.total_distance=Total distance: %s ## NEEDS TRANSLATION ##
+openblocks.misc.pedometer.start_point=Ponto de partida: %s
+openblocks.misc.pedometer.speed=Velocidade: %s
+openblocks.misc.pedometer.avg_speed=Velocidade média: %s
+openblocks.misc.pedometer.total_distance=Distância total: %s
 
-#openblocks.misc.pedometer.straght_line_distance=Straight line distance: %s ## NEEDS TRANSLATION ##
-#openblocks.misc.pedometer.straigh_line_speed=Straight line speed: %s ## NEEDS TRANSLATION ##
+openblocks.misc.pedometer.straght_line_distance=Distância em linha reta: %s
+openblocks.misc.pedometer.straigh_line_speed=Velocidade em linha reta: %s
 
-#openblocks.misc.pedometer.last_check_distance=Distance from last check: %s ## NEEDS TRANSLATION ##
-#openblocks.misc.pedometer.last_check_speed=Last check speed: %s ## NEEDS TRANSLATION ##
-#openblocks.misc.pedometer.last_check_time=Time from last check: %d ticks ## NEEDS TRANSLATION ##
+openblocks.misc.pedometer.last_check_distance=Distância da última verificação: %s
+openblocks.misc.pedometer.last_check_speed=Velocidade da última verificação: %s
+openblocks.misc.pedometer.last_check_time=Tempo da última verificação: %d tiques
 
-#openblocks.misc.pedometer.total_time=Total time: %d ticks ## NEEDS TRANSLATION ##
+openblocks.misc.pedometer.total_time=Tempo Total: %d tiques
 
-#openblocks.misc.shape=Shape: %s ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.sphere=Sphere ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.cylinder=Cylinder ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.cuboid=Cuboid ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.full_cuboid=Full Cuboid ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.dome=Dome ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.triangle=Triangle ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.pentagon=Pentagon ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.hexagon=Hexagon ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.octagon=Octagon ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.axes=Axes ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.planes=Planes ## NEEDS TRANSLATION ##
+openblocks.misc.shape=Formato: %s
+openblocks.misc.shape.sphere=Esfera
+openblocks.misc.shape.cylinder=Cilindro
+openblocks.misc.shape.cuboid=Cubóide
+openblocks.misc.shape.full_cuboid=Cubóide Completo
+openblocks.misc.shape.dome=Domo
+openblocks.misc.shape.triangle=Triângulo
+openblocks.misc.shape.pentagon=Pentágono
+openblocks.misc.shape.hexagon=Hexágono
+openblocks.misc.shape.octagon=Octágono
+openblocks.misc.shape.axes=Eixos
+openblocks.misc.shape.planes=Planos
 
-#openblocks.misc.box=Dimensions: (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
-#openblocks.misc.width=Width: %d ## NEEDS TRANSLATION ##
-#openblocks.misc.height=Height: %d ## NEEDS TRANSLATION ##
-#openblocks.misc.depth=Depth: %d ## NEEDS TRANSLATION ##
+openblocks.misc.box=Dimensões: (%d,%d,%d):(%d,%d,%d)
+openblocks.misc.width=Largura: %d
+openblocks.misc.height=Altura: %d
+openblocks.misc.depth=Profundidade: %d
 
-#openblocks.misc.radio.too_many=Too many radios already playing ## NEEDS TRANSLATION ##
-#openblocks.misc.radio.invalid_stream=Invalid stream ## NEEDS TRANSLATION ##
-#openblocks.misc.radio.invalid_url=Invalid URL ## NEEDS TRANSLATION ##
-#openblocks.misc.radio.url_not_found=URL not found ## NEEDS TRANSLATION ##
-#openblocks.misc.radio.unknown_stream_type=Unknown stream type ## NEEDS TRANSLATION ##
-#openblocks.misc.radio.malformed_data=Malformed data in stream ## NEEDS TRANSLATION ##
-#openblocks.misc.radio.not_ready=Stream not ready, try again later ## NEEDS TRANSLATION ##
-#openblocks.misc.radio.cant_connect=Can't connect ## NEEDS TRANSLATION ##
-#openblocks.misc.radio.unknown_error=Unknown error ## NEEDS TRANSLATION ##
-#openblocks.misc.radio.muted=Sounds are muted! ## NEEDS TRANSLATION ##
+openblocks.misc.radio.too_many=Muitos rádios já estão tocando
+openblocks.misc.radio.invalid_stream=Transmissão inválida
+openblocks.misc.radio.invalid_url=URL inválida
+openblocks.misc.radio.url_not_found=URL não encontrada
+openblocks.misc.radio.unknown_stream_type=Tipo de transmissão desconhecida
+openblocks.misc.radio.malformed_data=Dados malformados na transmissão
+openblocks.misc.radio.not_ready=A transmissão não está pronta, tente novamente mais tarde
+openblocks.misc.radio.cant_connect=Não é possível conectar
+openblocks.misc.radio.unknown_error=Error desconhecido
+openblocks.misc.radio.muted=Sons estão mudos!
 
-#openblocks.misc.side.east=East side ## NEEDS TRANSLATION ##
-#openblocks.misc.side.west=West side ## NEEDS TRANSLATION ##
-#openblocks.misc.side.north=North side ## NEEDS TRANSLATION ##
-#openblocks.misc.side.south=South side ## NEEDS TRANSLATION ##
-#openblocks.misc.side.up=Top side ## NEEDS TRANSLATION ##
-#openblocks.misc.side.down=Bottom side ## NEEDS TRANSLATION ##
+openblocks.misc.side.east=Lado Leste
+openblocks.misc.side.west=Lado Oeste
+openblocks.misc.side.north=Lado Norte
+openblocks.misc.side.south=Lado Sul
+openblocks.misc.side.up=Lado de cima
+openblocks.misc.side.down=Lado de baixo
 
-#openblocks.misc.command.invalid=Invalid command arguments ## NEEDS TRANSLATION ##
-#openblocks.misc.command.no_flim_flam=Invalid flim-flam name ## NEEDS TRANSLATION ##
-#openblocks.misc.command.flim_flam_source=Player %s had been successfully flim-flammed with %s ## NEEDS TRANSLATION ##
-#openblocks.misc.command.flim_flam_target=Someone doesn't like you. Someone with power ## NEEDS TRANSLATION ##
-#openblocks.misc.command.flim_flam_failed=Flim-flamming failed! ## NEEDS TRANSLATION ##
-#openblocks.misc.command.luck_added=Luck changed for player %s, current: %d ## NEEDS TRANSLATION ##
-#openblocks.misc.command.luck_current=Player %s luck: %d ## NEEDS TRANSLATION ##
+openblocks.misc.command.invalid=Argumentos de comando inválidos
+openblocks.misc.command.no_flim_flam=Nome de falcatrua inválida
+openblocks.misc.command.flim_flam_source=%s foi enganado com sucesso com %s
+openblocks.misc.command.flim_flam_target=Alguém não gosta de você. Alguém com poder
+openblocks.misc.command.flim_flam_failed=A falcatrua falhou!
+openblocks.misc.command.luck_added=Sorte do jogador alterada para %s, atual: %d
+openblocks.misc.command.luck_current=Jogador %s sorte: %d
 
-#openblocks.misc.total_ticks=Total ticks: %d (%.2fs) ## NEEDS TRANSLATION ##
+openblocks.misc.total_ticks=Total tiques: %d (%.2fs)
 
-#openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
-#openblocks.flim_flammed=Something weird happens around you ## NEEDS TRANSLATION ##
+openblocks.misc.hidden_lore=§a§oSegure ALT para ver histórico§r
+openblocks.flim_flammed=Algo estranho está acontecendo ao seu redor
 
-#openblocks.misc.dropper.speed=Speed ## NEEDS TRANSLATION ##
-#openblocks.misc.dropper.use_redstone=Scale by redstone signal strength ## NEEDS TRANSLATION ##
+openblocks.misc.dropper.speed=Velocidade
+openblocks.misc.dropper.use_redstone=Escala pela força do sinal de redstone
 
 openblocks.turtle.magnet=Imã
 
 tile.openblocks.elevator.name=Elevador
-#tile.openblocks.elevator.description=Place one elevator directly three or more blocks above another with no blocks inbetween and you'll be able to either 'jump' to move up, or 'crouch' to move down. Elevators can be dyed by clicking on them with dye, however, you can only teleport between elevators of the same color. ## NEEDS TRANSLATION ##
+tile.openblocks.elevator.description=Coloque um elevador diretamente em três ou mais blocos acima de outro com nenhum bloco entre eles e você será capaz de 'Saltar' para ir para cima, ou 'Agachar' para ir para baixo. Elevadores podem ser tingidos clicando neles com algum corante, entretanto, você pode se teleportar apenas entre elevadores da mesma cor.
 
-#tile.openblocks.elevator_rotating.name=Rotating Elevator ## NEEDS TRANSLATION ##
+tile.openblocks.elevator_rotating.name=Elevador Rotativo
 
 tile.openblocks.heal.name=Curador
-#tile.openblocks.heal.description=The healing block is a creative-mode only block that gives off a slight healing effect over time. ## NEEDS TRANSLATION ##
+tile.openblocks.heal.description=O bloco curador é um bloco disponível apenas no modo criativo que dá um leve efeito de cura ao longo do tempo.
 
-tile.openblocks.guide.name=Guia de construção
-#tile.openblocks.guide.description=The building guide, once powered with redstone, will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\nUse touch-buttons on block to change outline dimensions and shapes.\nColor of markers can be changed by using dye on central block. ## NEEDS TRANSLATION ##
+tile.openblocks.guide.name=Guia de Construção
+tile.openblocks.guide.description=O guia de construção, uma vez energizada com redstone, vai te dar uma esboço de blocos fantasmas em diferentes formas e tamanhos que vai te ajudar a construir.\nUse os botões do bloco para alterar o tamanho e as formas do esboço.\nA cor dos marcadores podem ser alteradas usando corante no centro do bloco.
 
-#tile.openblocks.builder_guide.name=Enhanced Building Guide ## NEEDS TRANSLATION ##
-#tile.openblocks.builder_guide.description=This enhanced version of building guide not only displays ghost blocks to make building easier, but also allows you to place actual blocks. Just click central block with any block stack!\nWhen in creative mode you can place an obsidian block above, then hit the building guide with any block you like to automatically create the shape. ## NEEDS TRANSLATION ##
+tile.openblocks.builder_guide.name=Guia de Construção Encantado
+tile.openblocks.builder_guide.description=Esta versão encantada do guia de construção não só exibe blocos fantasmas para fazer a construção mais fácil, mas também permite que você coloque blocos reais. Apenas clique no centro do bloco com qualquer pilha de bloco!\nQuando em modo criativo, você pode colocar um bloco obsidiana em cima, então, bata no guia de construção com qualquer bloco que você gostaria para criar a forma automaticamente.
 
-tile.openblocks.ladder.name=Escada cansada
-#tile.openblocks.ladder.description=The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time. ## NEEDS TRANSLATION ##
+tile.openblocks.ladder.name=Alçapão-Escada
+tile.openblocks.ladder.description=O alçapão-escada resolve esse problema irritante de pular de um alçapão para o topo de uma escada. O alçapão-escada age como um alçapão e uma escada ao mesmo tempo.
 
-#tile.openblocks.tank.filled.name=%s Tank ## NEEDS TRANSLATION ##
+tile.openblocks.tank.filled.name=Tanque com %s
 tile.openblocks.tank.name=Tanque
-#tile.openblocks.tank.description=Tanks can hold liquids. If you place tanks next to each other and they'll distribute their liquid between the tanks. You can place liquid into the tanks using buckets. If the tank contains XP Juice you can click on them with an empty hand to give yourself some of the XP. When broken tanks will retain their liquid. ## NEEDS TRANSLATION ##
+tile.openblocks.tank.description=Tanques podem armazenar líquidos. Se você colocar tanques próximos, cada um deles vai distribuir seus líquidos entre eles. Você pode colocar líquidos dentro dos tanques usando baldes. Se o tanque contém XP Líquido, você pode clicar nele com a mão vazia para dar a si mesmo um pouco do XP. Quando os tanques são quebrados, ele vai manter o seu líquido.
 
 tile.openblocks.flag.name=Bandeira
-#tile.openblocks.flag.description=Flags can be used for decoration or for marking the way back out of a cave you've ventured in to. The flag will point in the direction that you placed it, or you can put it on walls. If you shift-click with a flag in your hand it will change color. ## NEEDS TRANSLATION ##
+tile.openblocks.flag.description=Bandeiras podem ser usadas para decoração ou para marcar o caminho de volta de uma caverna que você já se aventurou. A bandeira vai apontar para a direção que você colocou, ou você pode colocá-la em paredes. Se você segurar o SHIFT e clicar com uma bandeira na sua mão, vai alterar a cor dela.
 
-tile.openblocks.beartrap.name=Armadilha de ursos
-#tile.openblocks.beartrap.description=Place a bear trap and click on it to open it up. When a mob walks over the trap they'll be unable to move! ## NEEDS TRANSLATION ##
+tile.openblocks.beartrap.name=Armadilha de Ursos
+tile.openblocks.beartrap.description=Coloque uma armadilha de ursos e clique nela para abrí-la. Quando mobs passarem em cima da armadilha, eles vão ficar presos!
 
 tile.openblocks.sponge.name=Esponja
-#tile.openblocks.sponge.description=The sponge is a replacement for the vanilla sponge. Perfect for removing small pockets of lava or water. Be careful when using it on large areas of liquid though as it'll start to get quite messy. ## NEEDS TRANSLATION ##
+tile.openblocks.sponge.description=A esponja é um substituto da esponja do Minecraft. Perfeita para remover pequenas porções de lava ou água. Tenha cuidado ao usá-lo em áreas grandes de líquido através de como ele vai começar a ficar muito bagunçado.
 
-#item.openblocks.sponge_on_a_stick.name=Sponge ## NEEDS TRANSLATION ##
-#item.openblocks.sponge_on_a_stick.description=The sponge on a stick is a tool for cleaning up liquids. Works just like the sponge, but is more mobile at the expense of wearing out. ## NEEDS TRANSLATION ##
+item.openblocks.sponge_on_a_stick.name=Vara com Esponja
+item.openblocks.sponge_on_a_stick.description=A vara com esponja é uma ferramenta para limpar líquidos. Funciona exatamente como a esponja, mais é portátil e mais cansativo.
 
-#item.openblocks.epic_eraser.name=Epic Eraser ## NEEDS TRANSLATION ##
-#item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence. ## NEEDS TRANSLATION ##
+item.openblocks.epic_eraser.name=Borracha Épica
+item.openblocks.epic_eraser.description=Cada item tem sua própria história...\n\nVocê não odeia isso?\nCom este item você pode limpar todos os vestígios de frases épicas de seus espólios que foram recolhidos ao longo dos anos e, em seguida, vendê-los no mercado negro sem se preocupar com provas.
 
-tile.openblocks.cannon.name=Canhão de itens
-#tile.openblocks.cannon.description=When given a redstone signal, the item cannon will shoot items that it finds in an adjacent inventory. Use the 'pointer' item to aim the cannon. ## NEEDS TRANSLATION ##
+tile.openblocks.cannon.name=Canhão de Itens
+tile.openblocks.cannon.description=Quando tem um sinal de redstone, o canhão de itens vai atirar os itens que ele encontrar dentro do baú ao lado dele. Use o 'Ponteiro' para mirar o canhão.
 
-tile.openblocks.rope_ladder.name=Corda
-#tile.openblocks.rope_ladder.description=When you place a rope ladder it'll roll out all the way to the ground. For every created ladder block it will use one item from stack. ## NEEDS TRANSLATION ##
+tile.openblocks.rope_ladder.name=Escada de Corda
+tile.openblocks.rope_ladder.description=Quando você coloca uma escada de corda que vai rolar todo o caminho até o chão. Para cada escada de corda criada, ela vai usar um item da pilha.
 
 tile.openblocks.sprinkler.name=Borrifador
-#tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simply place it above an OpenBlocks tank filled with water! You can also add bonemeal for an even faster rate of growth.\nIt also acts as a water source block! ## NEEDS TRANSLATION ##
+tile.openblocks.sprinkler.description=O borrifador irá ajudar a fertilizar as plantações até 4 blocos de distância. Basta colocá-lo em cima de um tanque do OpenBlocks cheio de água! Você também pode adicionar farinha de osso para aumentar a velocidade do crescimento.\nEle também age como um bloco de fonte de água!
 
-#tile.openblocks.paint_mixer.name=Paint Mixer ## NEEDS TRANSLATION ##
-#tile.openblocks.paint_mixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix! ## NEEDS TRANSLATION ##
+tile.openblocks.paint_mixer.name=Misturador de Tintas
+tile.openblocks.paint_mixer.description=O misturador de tinta pode misturar qualquer cor de tinta que você quiser! Coloque um balde de tinta ou um balde de leite no slot superior, depois, coloque os corantes ciano, magenta, amarelo e preto nos outros quatro slots e clicque em misturar!
 
-#tile.openblocks.canvas.name=Canvas ## NEEDS TRANSLATION ##
-#tile.openblocks.canvas.description=The canvas is a perfectly white block that's perfect for painting. See the Paint Mixer for information about making paints. ## NEEDS TRANSLATION ##
+tile.openblocks.canvas.name=Lona
+tile.openblocks.canvas.description=A lona é um bloco perfeitamente branco que é perfeito para pintura. Veja mais informações sobre como fazer pinturas no Misturador de Tintas.
 
-#tile.openblocks.canvas_glass.name=Canvas ## NEEDS TRANSLATION ##
+tile.openblocks.canvas_glass.name=Lona
 
 tile.openblocks.fan.name=Ventilador
-#tile.openblocks.fan.description=The fan will blow players, mobs or entities in the direction it's facing. ## NEEDS TRANSLATION ##
+tile.openblocks.fan.description=O Ventilador vai soprar os jogadores, mobs ou entidades para frente.
 
 tile.openblocks.target.name=Alvo
-#tile.openblocks.target.description=The target will give out a redstone signal of a strength relative to the accuracy of the player's aim. Give the target a redstone signal to make it pop up! ## NEEDS TRANSLATION ##
+tile.openblocks.target.description=O alvo dará um sinal redstone de uma força relativa à precisão da pontaria do jogador. Dê ao alvo um sinal de redstone para levantá-lo!
 
 tile.openblocks.path.name=Caminho
-#tile.openblocks.path.description=The path doesn't do anything. It just looks nice! ## NEEDS TRANSLATION ##
+tile.openblocks.path.description=O caminho não faz nada. Ele só parece legal!
 
-#tile.openblocks.item_dropper.name=Item Dropper ## NEEDS TRANSLATION ##
-#tile.openblocks.item_dropper.description=The item dropper is similar to the vanilla dropper, except it drops items without any random bias. User can also control speed of dropped item from GUI and with redstone power. ## NEEDS TRANSLATION ##
+tile.openblocks.item_dropper.name=Liberador de Itens
+tile.openblocks.item_dropper.description=O liberador de itens é similar ao liberador do Minecraft, exceto que ela dropa os itens diretamente para baixo e em linha reta.
 
-tile.openblocks.big_button.name=Grande botão
-#tile.openblocks.big_button.description=The big button is a large button that can be placed on walls. If you shift-click on the button with an empty hand it will bring up an inventory. You can put items in there to increase the length of time the button is pressed - one item increases the button press by one tick. ## NEEDS TRANSLATION ##
+tile.openblocks.big_button.name=Botão Grande
+tile.openblocks.big_button.description=O botão grande é um botão maior que pode ser colocado em paredes. Se você segurar SHIFT e clicar no botão com a mão vazia, vai abrir um inventário com um único slot. Você pode colocar itens dentro deste slot para aumentar o período de tempo que o botão é pressionado - um item aumenta o tempo em um tique.
 
-#tile.openblocks.big_button_wood.name=Wooden Big Button ## NEEDS TRANSLATION ##
+tile.openblocks.big_button_wood.name=Botão Grande de Madeira
 
-tile.openblocks.xp_drain.name=Dreno de experiência
-#tile.openblocks.xp_drain.description=Place the XP drain above an OpenBlocks tank and stand on it. Your XP will drain into the tank, which can then be used for blocks such as the auto enchantment table or the auto anvil. ## NEEDS TRANSLATION ##
+tile.openblocks.xp_drain.name=Dreno de XP
+tile.openblocks.xp_drain.description=Coloque o dreno de xp em cima de um tanque do OpenBlocks e fique em cima. Seu XP vai ser drenado para dentro do tanque, que pode então ser usado em blocos, tais como a mesa de encantamento automática ou a bigorna automática.
 
-tile.openblocks.vacuum_hopper.name=Funil a vácuo
-#tile.openblocks.vacuum_hopper.description=The vacuum hopper will suck up items and XP orbs around it. You can use the tabs on the right of the interface to select which sides to output to. ## NEEDS TRANSLATION ##
+tile.openblocks.vacuum_hopper.name=Funil à Vácuo
+tile.openblocks.vacuum_hopper.description=O funil à vácuo vai sugar os itens e orbs de XP que estão em volta. Você pode usar as guias no lado direito do inventário para selecionar a(s) saída(s) nos lados do funil.
 
-tile.openblocks.village_highlighter.name=Realçador de aldeões
-#tile.openblocks.village_highlighter.description=Drop the village highlighter down in a village and give it a redstone signal. It will outline the perimeter of the village and draw a box in the iron golem spawning area. Useful if you want to make sure villages don't merge into each other or you're making an iron farm! ## NEEDS TRANSLATION ##
+tile.openblocks.village_highlighter.name=Realçador de Aldeões
+tile.openblocks.village_highlighter.description=Coloque o realçador de aldeões no chão em uma vila e dê-lhe um sinal de redstone. Ele vai marcar o perímetro da aldeia e desenhar uma caixa na área de spawn de Golem de Ferro. Útil se você não quer que as aldeias se misturem umas com as outras ou você está fazendo uma farm de ferro!
 
-#tile.openblocks.donation_station.name=Donation Station ## NEEDS TRANSLATION ##
-#tile.openblocks.donation_station.description=Love a block or item and want to show the mod developer some appreciation? Drop it into the donation station and if we know the authors donation page we'll give you a link. ## NEEDS TRANSLATION ##
+tile.openblocks.donation_station.name=Estação de Doação
+tile.openblocks.donation_station.description=Gosta de um bloco ou item e quer mostrar alguma apreciação ao desenvolvedor do mod? Coloque-o na estação de doação e, se conhecermos a página de doação do autor, vamos lhe dar um link.
 
-#tile.openblocks.block_placer.name=Block Placer ## NEEDS TRANSLATION ##
-#tile.openblocks.block_placer.description=When given a redstone pulse the block placer will place an item in the direction it's facing. ## NEEDS TRANSLATION ##
+tile.openblocks.block_placer.name=Colocador de Blocos
+tile.openblocks.block_placer.description=Quando é dado um pulso de redstone, o colocador de blocos vai colocar um item na frente dele.
 
-#tile.openblocks.block_breaker.name=Block Breaker ## NEEDS TRANSLATION ##
-#tile.openblocks.block_breaker.description=When given a redstone pulse the block breaker will break the block it's facing. ## NEEDS TRANSLATION ##
+tile.openblocks.block_breaker.name=Quebra-Blocos
+tile.openblocks.block_breaker.description=Quando é dado um pulso de redstone, o quebra-blocos vai quebrar o bloco que estiver na frente dele.
 
-#tile.openblocks.projector.name=Height Map Projector ## NEEDS TRANSLATION ##
-#tile.openblocks.projector.description=I'll let you write this one boq! ## NEEDS TRANSLATION ##
-#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
+tile.openblocks.projector.name=Projetor de Altura do Mapa
+tile.openblocks.projector.description=Vou deixar você escrever isso, boq!
+tile.openblocks.projector.working.name=Projetor de Altura do Mapa
 
-tile.openblocks.auto_enchantment_table.name=Mesa de encantamentos automática
-#tile.openblocks.auto_enchantment_table.description=The auto enchantment table works in a similar way to the vanilla enchantment table except it runs off XP juice. Use the tabs on the right side of the interface to select where items or xp can be pulled from. Just like with the vanilla table bookshelves are required for higher levels. ## NEEDS TRANSLATION ##
+tile.openblocks.auto_enchantment_table.name=Mesa de Encantamentos Automática
+tile.openblocks.auto_enchantment_table.description=A mesa de encantamentos automática funciona que nem a mesa de encantamentos do Minecraft, exceto que esta usa XP líquido. Use as guias no lado direito da interface para selecionar onde os itens ou o XP pode ser retirados. Assim como com as estantes da mesa de encantamentos do Minecraft, são necessários níveis mais elevados.
 
-tile.openblocks.xp_bottler.name=Engarrafador de experiência
-#tile.openblocks.xp_bottler.description=The XP bottler will take XP juice and bottle it up into glass bottles to create bottles o' enchanting. ## NEEDS TRANSLATION ##
+tile.openblocks.xp_bottler.name=Engarrafador de XP
+tile.openblocks.xp_bottler.description=O engarrafador de xp vai pegar o XP líquido e engarrafar-lo em frascos de vidro para criar frascos de encantamentos.
 
-tile.openblocks.auto_anvil.name=Bigorna automática
-#tile.openblocks.auto_anvil.description=The auto anvil works just like the vanilla anvil, except it runs from XP juice and can be fully automated.\n\nUse the tabs on the right of the GUI to select which sides of the anvil items or liquid can be inserted or extracted. Right click and drag the anvil in the tab to spin it around and select other sides! ## NEEDS TRANSLATION ##
+tile.openblocks.auto_anvil.name=Bigorna Automática
+tile.openblocks.auto_anvil.description=A bigorna automática funciona que nem a bigorna do Minecraft,exceto que esta usa XP líquido e pode ser se encher automaticamente.\n\nUse as guias do lado direito da interface para selecionar quais lados da bigorna, itens ou líquido podem ser inseridos ou extraídos. Segure o botão direito do mouse e arraste a bigorna na guia para girá-la ao redor e selecionar os outros lados!
 
-#tile.openblocks.drawing_table.name=Drawing Table ## NEEDS TRANSLATION ##
-#tile.openblocks.drawing_table.description=The drawing table is for creating stencils which can be used while painting. Insert an Unprepared Stencil into the drawing table then use the arrows to select which stencil you want! ## NEEDS TRANSLATION ##
+tile.openblocks.drawing_table.name=Mesa de Desenho
+tile.openblocks.drawing_table.description=A mesa de desenho é para a criação de estêncis que podem ser usados durante a pintura. Insira um Estêncil em Branco dentro da mesa de desenho, e então use as setas para selecionar qual estêncil que você quer!
 
 tile.openblocks.grave.name=Túmulo
 tile.openblocks.trophy.name=Troféu
-#tile.openblocks.trophy.entity.name=%s Trophy ## NEEDS TRANSLATION ##
-#tile.openblocks.canvasglass.name=Glass Canvas ## NEEDS TRANSLATION ##
-#tile.openblocks.paint_can.name=Paint Can ## NEEDS TRANSLATION ##
+tile.openblocks.trophy.entity.name=Troféu de %s
+tile.openblocks.canvasglass.name=Lona de Vidro
+tile.openblocks.paint_can.name=Lata de Tinta
 
-#tile.openblocks.sky.normal.name=Sky Block ## NEEDS TRANSLATION ##
-#tile.openblocks.sky.normal.description=Bring the outside inside with the new Sky block! Just apply a redstone signal. We also offer an inverted version. ## NEEDS TRANSLATION ##
-#tile.openblocks.sky.inverted.name=Inverted Sky Block ## NEEDS TRANSLATION ##
+tile.openblocks.sky.normal.name=Bloco de Céu
+tile.openblocks.sky.normal.description=Traga o lado de fora para dentro com o novo Bloco de Céu! Apenas dê um sinal de redstone. Também oferecemos uma versão invertida.
+tile.openblocks.sky.inverted.name=Bloco de Céu Invertido
 
-#tile.openblocks.radio.name=Radio ## NEEDS TRANSLATION ##
-#tile.openblocks.radio.description=The radio allows you to stream internet radio! First, you need some tuned crystals which you can find in dungeon chests or from a special villager. Place the crystal in the radio and supply it with a redstone signal to turn it on.  The redstone strength controls the volume.\n\nYou can configure which radio stations are available in the servers config file. ## NEEDS TRANSLATION ##
+tile.openblocks.radio.name=Rádio
+tile.openblocks.radio.description=O rádio permite que você transmita rádio da internet! Primeiro, você precisa de alguns cristais sintonizados que você pode encontrar em baús de dungeons ou de um aldeão especial. Coloque o cristal no rádio e dê um sinal de redstone para ligá-lo.  A força da corrente de redstone controla o volume.\n\nVocê pode configurar quais estações de rádio estão disponíveis no arquivo de configuração dos servidores.
 
-#tile.openblocks.xp_shower.name=XP Shower ## NEEDS TRANSLATION ##
-#tile.openblocks.xp_shower.description=Attach an XP shower to a tank of XP juice and it'll pour out XP orbs. These orbs can be collected by an XP Drain or an MFR Sewer. ## NEEDS TRANSLATION ##
+tile.openblocks.xp_shower.name=Chuveiro de XP
+tile.openblocks.xp_shower.description=Anexe um chuveiro de XP em um tanque de XP líquido e ele vai derramar orbs de XP. Estes orbs podem ser recolhidos por um dreno de XP ou um Esgoto do MineFactory Reloaded.
 
-#tile.openblocks.scaffolding.name=Scaffolding ## NEEDS TRANSLATION ##
-#tile.openblocks.scaffolding.description=Have you ever wanted to pillar up somewhere without leaving an ugly tower behind? Well, now you can! Simply build with scaffolding blocks and they will automatically despawn when you are done. ## NEEDS TRANSLATION ##
+tile.openblocks.scaffolding.name=Andaime
+tile.openblocks.scaffolding.description=Alguma vez você já quis pilar em algum lugar sem deixar uma torre feia por trás? Bem, agora você pode! Basta construir com blocos de andaimes e eles vão desaparecer automaticamente quando terminar.
 
-#tile.openblocks.golden_egg.name=Golden Egg ## NEEDS TRANSLATION ##
+tile.openblocks.golden_egg.name=Ovo de Ouro
 
-#tile.openblocks.digitalfuse.name=Digital Fuse ## NEEDS TRANSLATION ##
+tile.openblocks.digitalfuse.name=Detonador Digital
 
-#item.openblocks.cursor.name=Cursor ## NEEDS TRANSLATION ##
-#item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking. ## NEEDS TRANSLATION ##
+item.openblocks.cursor.name=Cursor
+item.openblocks.cursor.description=O cursor vai deixar você clicar em blocos remotamente.\nBasta segurar SHIFT e clicar em um bloco para ligar o cursor, em seguida, usar o cursor onde quiser que clicar sobre o bloco de destino. Esteja avisado, por padrão, o cursor usa o seu XP em relação ao quão longe você está do bloco que você está clicando.
 
-#item.openblocks.dev_null.name=/dev/null ## NEEDS TRANSLATION ##
-#item.openblocks.dev_null.description=Click using /dev/null to open the inventory. There's a single inventory slot - put an item in there - dirt, for example. As you gather dirt from the ground this slot will fill up. Once it's full, any more dirt you pick up will be automatically discarded. You can shift-click with the item in your hand as though you were placing the block! ## NEEDS TRANSLATION ##
+item.openblocks.dev_null.name=/dev/null
+item.openblocks.dev_null.description=Clique usando /dev/null para abrir o inventário. Há um único slot Inventário - coloque um item lá - terra, por exemplo. A medida que você pega terra, este slot vai se encher. Depois que estiver cheio, qualquer terra você pegar serão descartados automaticamente. Você pode segurar SHIFT e clicar com o item na sua mão como se estivesse colocando o bloco!
 
 item.openblocks.slimalyzer.name=Gosmalizador
-#item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk. ## NEEDS TRANSLATION ##
+item.openblocks.slimalyzer.description=Andar por aí com o gosmalizador em sua mão, ele vai acender quando você estiver em um chunk de spawn de slime.
 
 item.openblocks.hang_glider.name=Planador
-#item.openblocks.hang_glider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!\n\nYour hang glider now also includes an acoustic variometer indicating vertical air movement. Press V to activate it and stay up forever (or until the sun goes down)! ## NEEDS TRANSLATION ##
+item.openblocks.hang_glider.description=O planador é auto-explicativo. Segure-o em sua mão e clique para colocá-lo nas suas costas. Agora pule!\nPara aumentar sua velocidade você pode pressionar SHIFT enquanto plana, mas cuidado, você vai perder altitude mais rápido!
 
-item.openblocks.glider_wing.name=Asa do planador
+item.openblocks.glider_wing.name=Asa do Planador
 
 item.openblocks.sleeping_bag.name=Saco de Dormir
-#item.openblocks.sleeping_bag.description=The sleeping bag lets you sleep out in the wilderness without having to reset your spawn location. To sleep, simply wear it on your back. ## NEEDS TRANSLATION ##
+item.openblocks.sleeping_bag.description=O saco de dormir te deixa dormir no deserto, sem ter que redefinir o seu local de spawn. Para dormir, simplesmente use-o em sua volta.
 
 item.openblocks.luggage.name=Bagagem
-#item.openblocks.luggage.description=Luggage is your new friend. He'll follow you around anywhere you go collecting any items he finds on the floor. Nom nom nom!\nTo dismantle him just shift-click on him and he'll turn into an item that you can carry around.\nIf he ever gets struck by lightning he'll be able to carry even more items! ## NEEDS TRANSLATION ##
+item.openblocks.luggage.description=Bagagem é o seu novo amigo. Ele vai te segui onde quer que você vá recolhendo todos os itens que ele encontra no chão. Nom nom nom!\nPara desmontá-lo apenas segure SHIFT e clique nele e ele vai se transformar em um item que você pode carregá-lo.\nSe ele for atingido por um raio, ele vai ser capaz de transportar ainda mais itens!
 
-item.openblocks.sonic_glasses.name=Óculos sônicos
-#item.openblocks.sonic_glasses.description=Introducing the fantabulous new Sonic Glasses!\nThis new and exciting technology from OpenMods Inc allow you see what you hear! ## NEEDS TRANSLATION ##
+item.openblocks.sonic_glasses.name=Óculos Sônico
+item.openblocks.sonic_glasses.description=Apresentando o fabuloso novo Óculos Sônico!\nEsta nova e excitante tecnologia do OpenMods Inc permitir que você veja o que você ouve!
 
-#item.openblocks.squeegee.name=Squeegee ## NEEDS TRANSLATION ##
-#item.openblocks.squeegee.description=The squeegee removes paint from any painted blocks. Just click on the side of the block you want to remove the paint from, or alternative shift-click the block to remove paint from all sides! ## NEEDS TRANSLATION ##
+item.openblocks.squeegee.name=Rodo
+item.openblocks.squeegee.description=O rodo remove a tinta de algum bloco pintado. Apenas clique no lado do bloco que desejar para remover a tinta, ou segure SHIFT e clique no bloco para remover a tinta de todos os lados!
 
-#item.openblocks.paintbrush.name=Paint Brush ## NEEDS TRANSLATION ##
-#item.openblocks.paintbrush.description=Paint brushes let you paint blocks in whatever color you like!\n\nDab your paint brush in a Paint Can made in the Paint Mixer then click on a block to paint it.\n\nCanvas blocks are perfect for painting, but you can also paint quite a few vanilla blocks and even some blocks from other mods. You can also place stencils on blocks and then paint over the stencil! ## NEEDS TRANSLATION ##
+item.openblocks.paintbrush.name=Pincel de Pintura
+item.openblocks.paintbrush.description=Pincéis de pintura permite que você pinte blocos na cor você gosta!\n\nMergulhe o seu pincel numa Lata de Tinta feito no Misturador de Tintas, e então, clique no bloco para pintá-lo.\n\nLonas são blocos perfeitos para pintura, mas você também pode pintar vários blocos do Minecraft e até mesmo alguns blocos de outros mods. Você também pode colocar estêncis nos blocos e então, pintar o estêncil!
 
-#item.openblocks.unprepared_stencil.name=Unprepared Stencil ## NEEDS TRANSLATION ##
-#item.openblocks.unprepared_stencil.description=Stencils can be placed onto blocks and then painted over using paint brushes!\n\nYou can paint a block using multiple stencils and you can click on them with an empty hand to rotate them.\n\nPlace an Unprepared Stencil in a Drawing table to create different patterns. ## NEEDS TRANSLATION ##
+item.openblocks.unprepared_stencil.name=Estêncil em Branco
+item.openblocks.unprepared_stencil.description=Estêncis podem ser colocados em blocos e então,  serem pintados usando pincéis!\n\nVocê pode pintar um bloco usando vários estêncis e você pode clicar neles com a mão vazia para girá-los.\n\nColoque um Estêncil em Branco numa Mesa de Desenho para criar modelos diferentes.
 
-item.openblocks.crane_backpack.name=Mochila de guindaste
-#item.openblocks.crane_backpack.description=In Minecraft world "magnet" is ancient word for "how do this works?".\n\nThis particular piece of very equipment allows you to pick and carry mobs, players, items and blocks. Can be controlled with magnet control. ## NEEDS TRANSLATION ##
+item.openblocks.crane_backpack.name=Mochila de Guindaste
+item.openblocks.crane_backpack.description=No mundo de Minecraft, "magnético" é uma palavra antiga para "Como isso funciona?".\n\nEsta peça particular do equipamento, permite que você pegue e transporte mobs, jogadores, itens e blocos. Pode ser controlado com o controle de guindaste.
 
-item.openblocks.crane_control.name=Controle do guindaste
-#item.openblocks.crane_control.description=This hi-tech wireless remote is used for controlling magnet backpacks.\n\nRight click to raise, Sneak + right click to lower, left click to pick/release.\nBlinking light signals something is under magnet. ## NEEDS TRANSLATION ##
+item.openblocks.crane_control.name=Controle do Guindaste
+item.openblocks.crane_control.description=Este controle remoto sem fio de alta tecnologia é usado para controlar mochilas magnéticas.\n\nClique com o botão direito para levantar, SHIFT + botão direito para descer, botão esquerdo para pegar/soltar.\nLuzes piscando indica que algo está debaixo do ímã.
 
-#item.openblocks.wrench.name=Big Metal Bar ## NEEDS TRANSLATION ##
-#item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok? ## NEEDS TRANSLATION ##
+item.openblocks.wrench.name=Barra de Metal Grande
+item.openblocks.wrench.description=Essa é uma ferramenta extremamente sofisticada usada to para realizar transformações de objetos com simetria octaédrica.\n\n\nOu apenas um grande, pedaço de metal que você pode usar para girar cubos e outras coisas.\n\nEntão, sim, é mais uma chave inglesa. Eu só estou tentando ser original aqui, ok?
 
-#item.openblocks.glyph.name=Glyph ## NEEDS TRANSLATION ##
-#item.openblocks.glyph.with_char='%c' Glyph ## NEEDS TRANSLATION ##
+item.openblocks.glyph.name=Glifo
+item.openblocks.glyph.with_char=Glifo '%c'
 
-#item.openblocks.stencil.name=Stencil ## NEEDS TRANSLATION ##
-item.openblocks.crayon.name=Giz de cera mágico
-item.openblocks.pencil.name=Lapis mágico
-item.openblocks.glasses.pencil.name=Óculos de lápis
-item.openblocks.glasses.crayon.name=Óculos de giz de cera
-item.openblocks.glasses.technicolor.name=Incríveis óculos technicolor
+item.openblocks.stencil.name=Estêncil
+item.openblocks.crayon.name=Giz de Cera Mágico
+item.openblocks.pencil.name=Lápis Mágico
+item.openblocks.glasses.pencil.name=Óculos de Lápis
+item.openblocks.glasses.crayon.name=Óculos de Giz de Cera
+item.openblocks.glasses.technicolor.name=Incríveis Óculos Tecnicolor
 item.openblocks.glasses.admin.name=Óculos Fodões
-item.openblocks.crane_engine.name=Motor do guindaste
-item.openblocks.crane_magnet.name=Imã do guindaste
+item.openblocks.crane_engine.name=Motor do Guindaste
+item.openblocks.crane_magnet.name=Imã do Guindaste
 item.openblocks.beam.name=Holofote
 item.openblocks.line.name=Linha
-item.openblocks.miracle_magnet.name=§5Imã milagroso§r
-#item.openblocks.info_book.name=World Domination with OpenBlocks ## NEEDS TRANSLATION ##
-item.openblocks.xp_bucket.name=Balde de experiência
-#item.openblocks.height_map.name=Height Map ## NEEDS TRANSLATION ##
-#item.openblocks.empty_map.name=Empty Map ## NEEDS TRANSLATION ##
-#item.openblocks.map_controller.name=Map Controller Module ## NEEDS TRANSLATION ##
-#item.openblocks.map_memory.name=Map Memory Module ## NEEDS TRANSLATION ##
-#item.openblocks.cartographer.name=Cartographer ## NEEDS TRANSLATION ##
-#item.openblocks.assistant_base.name=Assistant's base ## NEEDS TRANSLATION ##
-#item.openblocks.sketching_pencil.name=Sketching Pencil ## NEEDS TRANSLATION ##
-#item.openblocks.tasty_clay.name=Tasty Clay ## NEEDS TRANSLATION ##
-#item.openblocks.golden_eye.name=Golden eye ## NEEDS TRANSLATION ##
-#item.openblocks.pointer.name=Pointer ## NEEDS TRANSLATION ##
-#item.openblocks.tuned_crystal.name=Tuned Crystal ## NEEDS TRANSLATION ##
-#item.openblocks.pedometer.name=Pedometer ## NEEDS TRANSLATION ##
+item.openblocks.miracle_magnet.name=§5Imã Milagroso§r
+item.openblocks.info_book.name=Dominação do Mundo com OpenBlocks
+item.openblocks.xp_bucket.name=Balde de XP
+item.openblocks.height_map.name=Altura do Mapa
+item.openblocks.empty_map.name=Mapa em Branco
+item.openblocks.map_controller.name=Módulo de Controle de Mapa
+item.openblocks.map_memory.name=Módulo de Memoria de Mapa
+item.openblocks.cartographer.name=Cartógrafo
+item.openblocks.assistant_base.name=Base de Assistente
+item.openblocks.sketching_pencil.name=Lápis de Rascunho
+item.openblocks.tasty_clay.name=Argila Saborosa
+item.openblocks.golden_eye.name=Olho Dourado
+item.openblocks.pointer.name=Ponteiro
+item.openblocks.tuned_crystal.name=Cristal Sintonizado
+item.openblocks.pedometer.name=Pedômetro
 
-#item.openblocks.wallpaper.name=Wallpaper ## NEEDS TRANSLATION ##
+item.openblocks.wallpaper.name=Papel de Parede
 
 itemGroup.tabOpenBlocks=OpenBlocks
 
-#entity.openblocks.luggage.name=Luggage ## NEEDS TRANSLATION ##
-#entity.openblocks.cartographer.name=Cartographer ## NEEDS TRANSLATION ##
-#entity.openblocks.block.name=Floating Block ## NEEDS TRANSLATION ##
-#entity.openblocks.mini_me.name=Mini Me ## NEEDS TRANSLATION ##
+entity.openblocks.luggage.name=Bagagem
+entity.openblocks.cartographer.name=Cartógrafo
+entity.openblocks.block.name=Bloco Flutuante
+entity.openblocks.mini_me.name=Mini Me
 
-#fluid.openblocks.xp_juice=Liquid XP ## NEEDS TRANSLATION ##
+fluid.openblocks.xp_juice=Mini-Eu
 
-#entity.Villager.audiophile=Audiophile ## NEEDS TRANSLATION ##
+entity.Villager.audiophile=Audiófilo
