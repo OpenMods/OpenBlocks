@@ -1,7 +1,7 @@
 achievement.openblocks.droppedBrick=Zoinks!
 achievement.openblocks.droppedBrick.desc=Entschuldigung, das ist einfach so passiert...
 stat.openblocks.bricksDropped=Fallen gelassene Ziegel
-achievement.openblocks.stackOverflow=Stapel Überflutet
+achievement.openblocks.stackOverflow=Stack Overflow
 achievement.openblocks.stackOverflow.desc=Es ist voller Sterne!
 
 openblocks.keybind.category=OpenBlocks
