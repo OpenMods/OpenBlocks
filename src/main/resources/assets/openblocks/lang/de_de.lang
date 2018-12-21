@@ -15,7 +15,7 @@ enchantment.openblocks.laststand=Letzte Rettung
 enchantment.openblocks.flimflam=Blödsinn
 
 openblocks.gui.blocks=Blöcke
-openblocks.gui.items=Gegenstände
+openblocks.gui.items=Items
 openblocks.gui.misc=Verschiedenes
 openblocks.gui.changelogs=Änderungsprotokoll
 
@@ -34,13 +34,13 @@ openblocks.gui.autoextract=Autom. Extrahierer
 openblocks.gui.autodrink=Autom. Trinkgerät
 openblocks.gui.autoenchantmenttable=Autom. Zaubertisch
 openblocks.gui.donationstation=Spendenstation
-openblocks.gui.itemdropper=Gegenstandspender
+openblocks.gui.itemdropper=Itemspender
 openblocks.gui.blockplacer=Blockplatzierer
 openblocks.gui.paintmixer=Farbmischer
 openblocks.gui.drawingtable=Zeichentisch
 openblocks.gui.digitalfuse=Digitaler Zünder
 openblocks.gui.xp_outputs=XP-Abgabe
-openblocks.gui.item_outputs=Gegenstands-Abgabe
+openblocks.gui.item_outputs=Item-Abgabe
 openblocks.gui.limit=Grenze
 openblocks.gui.available_power=Verfügbare Energie: %d
 openblocks.gui.save_folder=Ordner sichern
@@ -87,7 +87,7 @@ openblocks.misc.mode.inverted_block=Invertierter Block
 openblocks.misc.mode.inverted_panel=Invertierte Platte
 openblocks.misc.mode.inverted_half_panel=Invertierte Halbhohe Platte
 openblocks.misc.mode.inverted_stairs=Invertierte Treppe
-openblocks.misc.structure_pos=Fehlersuche: Struktur %s gefunden bei (%d,%d,%d)
+openblocks.misc.structure_pos=Debug: Struktur %s gefunden bei (%d,%d,%d)
 openblocks.misc.locked=Gesperrt
 openblocks.misc.selected_cannon=Kanone zum Zielen ausgewählt
 openblocks.misc.pointed_cannon=Kanone zielt nun auf %s, %s, %s
@@ -98,7 +98,7 @@ openblocks.misc.total_blocks=Insgesamt gezählte Blöcke: %d
 openblocks.misc.get_witched=Werde verhext!
 openblocks.misc.page=Seite %d von %d
 openblocks.misc.oh_no_ceiling=Du kannst hier nicht schlafen. Die Decke beunruhigt dich zu sehr...
-openblocks.misc.oh_no_ground=Auf DEM DING willst du schlafen?!
+openblocks.misc.oh_no_ground=Auf DEM Ding willst du schlafen?!
 openblocks.misc.sleeping_bag_broken=Gegenstand inaktiv wegen fehlerhafter Initialisierung
 openblocks.misc.inverted=Invertiert
 openblocks.misc.structure_not_locked=Mit keiner Struktur verbunden!
@@ -115,7 +115,7 @@ openblocks.misc.invalid_sub_inventory=Kann Unterinventar %s nicht widerherstelle
 openblocks.misc.stored_inventory=Spielerinventar gespeichert in %s
 openblocks.misc.restored_inventory=Inventar von Spieler %s wiederhergestellt
 openblocks.misc.invalid_index=Fehlerhaftes Verzeichnis
-openblocks.misc.empty_slot=Kein Gegenstand im Slot
+openblocks.misc.empty_slot=Kein Item im Slot
 
 openblocks.misc.pedometer.tracking_reset=Zähler zurückgesetzt
 openblocks.misc.pedometer.tracking_started=Zähler gestartet
@@ -197,7 +197,7 @@ tile.openblocks.heal.name=Heiler
 tile.openblocks.heal.description=Der Heil-Block ist ein Block für den Kreativ-Modus, der nach und nach einen kleinen Heilungs-Effekt bringt.
 
 tile.openblocks.guide.name=Bau-Hilfe
-tile.openblocks.guide.description=Die Bau-Hilfe, wenn du sie mit Redstone aktivierst, wird dir eine Schablone aus Phantoblöcken geben, in unterschiedlichen Formen und Größen. Es wird dir helfen, deine Bauten zu planen.\nDu kannst den Block Shift-rechtsklicken, um die Form zu verändern, oder du kannst verschiedene Seiten anklicken, um die Schablone zu vergößern bzw. zu verkleinern.\nIm Kreativ-Modus kannst du einen Obsidian-Block oberhalb der Bau-Hilfe platzieren und diese dann mit irgendeinem Block rechtsklicken, um die Schablone automatisch mit diesem Block auszufüllen.
+tile.openblocks.guide.description=Die Bau-Hilfe wird, wenn du sie mit Redstone aktivierst, dir eine Schablone aus Phantoblöcken geben, in unterschiedlichen Formen und Größen. Es wird dir helfen, deine Bauten zu planen.\nDu kannst den Block Shift-rechtsklicken, um die Form zu verändern, oder du kannst verschiedene Seiten anklicken, um die Schablone zu vergößern bzw. zu verkleinern.\nIm Kreativ-Modus kannst du einen Obsidian-Block oberhalb der Bau-Hilfe platzieren und diese dann mit irgendeinem Block rechtsklicken, um die Schablone automatisch mit diesem Block auszufüllen.
 
 tile.openblocks.builder_guide.name=Verbesserte Bau-Hilfe
 tile.openblocks.builder_guide.description=Die verbesserte Form der Bau-Hilfe zeigt nicht nur Phantomblöcken zum einfacheren Bauen, sondern erlaubt auch das Setzen der eigentlichen Blöcke. Klicke dazu einfach auf den zentralen Block mit einem beliebigen Stapel!\nIm Kreativmodus kannst du einen Obisidanblock darüber platzieren und dann die Bau-Hilfe mit einem beliebigen Block hauen um das Gebäude zu bauen.
@@ -224,8 +224,8 @@ item.openblocks.sponge_on_a_stick.description=Der Schwamm am Stiel ist ein Werkz
 item.openblocks.epic_eraser.name=Geschichtsveränderndes Radiergummi
 item.openblocks.epic_eraser.description=Jeder Gegenstand erzählt eine Geschichte...\n\nIst das nicht eigentlich saublöd?\n Mit diesen Gegenstand kannst du jegliche Spuren epischer Abenteuer, die dein Kram im Laufe der Jahrtausende erlebt hat, vollständig vernichten. Dann wird auch keiner Fragen stellen, wenn du ihn auf dem Schwarzmarkt vertickst.
 
-tile.openblocks.cannon.name=Gegenstands-Kanone
-tile.openblocks.cannon.description=Wenn ein Redstone-Signal anliegt, wird die Gegenstands-Kannone Gegenstände, die es in einem benachbarten Inventar findet, schießen. Benutze den 'Zeiger', um die Kannone auszurichten.
+tile.openblocks.cannon.name=Item-Kanone
+tile.openblocks.cannon.description=Wenn ein Redstone-Signal anliegt, wird die Item-Kannone Gegenstände, die es in einem benachbarten Inventar findet, schießen. Benutze den 'Zeiger', um die Kannone auszurichten.
 
 tile.openblocks.rope_ladder.name=Strickleiter
 tile.openblocks.rope_ladder.description=Wenn du eine Strickleiter platzierst, wird sie sich bis zum Boden ausrollen.
@@ -259,7 +259,7 @@ tile.openblocks.big_button.description=Der große Knopf ist ein Knopf, der an de
 tile.openblocks.big_button_wood.name=Großer Holzknopf
 
 tile.openblocks.xp_drain.name=XP-Gitter
-tile.openblocks.xp_drain.description=Platziere ein Erfahrungspunkte-Gittter über einem OpenBlocks-Tank und stelle dich darauf. Deine Erfahrungspunkte werden in den Tank entleert, was dann für Blöcke wie den Automatischen Zaubertisch oder den Automatischen Amboss benutzt werden kann.
+tile.openblocks.xp_drain.description=Platziere ein XP-Gittter über einem OpenBlocks-Tank und stelle dich darauf. Deine Erfahrungspunkte werden in den Tank entleert, was dann für Blöcke wie den Automatischen Zaubertisch oder den Automatischen Amboss benutzt werden kann.
 
 tile.openblocks.vacuum_hopper.name=Vakuumtrichter
 tile.openblocks.vacuum_hopper.description=Der Vakuumtrichter saugt Gegenstände und Erfahrungs-Kugeln um sich herum auf. Du kannst die Tabs auf der rechten Seite der Oberfläche verwenden, um auszuwählen, zu welchen Seiten etwas ausgegeben werden soll.
@@ -284,7 +284,7 @@ tile.openblocks.auto_enchantment_table.name=Autom. Zaubertisch
 tile.openblocks.auto_enchantment_table.description=Der Automatischer Zaubertisch funktioniert ähnlich wie der Vanilla-Zaubertisch, außer dass er mit flüssigen XP arbeitet. Benutze die Tabs auf der rechten Seite der Oberfläche, um auszuwählen, von wo Gegenstände und Erfahrungspunkte genommen werden sollen. Genau wie beim Vanilla-Zaubertisch brauchst du Bücherregale, wenn du mit höhere Leveln verzaubern willst.
 
 tile.openblocks.xp_bottler.name=XP-Abfüllgerät
-tile.openblocks.xp_bottler.description=Das Erfahrungspunkte-Abfüllgerät nimmt flüssige Erfahrungspunkten und füllt sie in Glasflaschen, um Erfahrungsfläschchen herzustellen.
+tile.openblocks.xp_bottler.description=Das XP-Abfüllgerät nimmt flüssige Erfahrungspunkten und füllt sie in Glasflaschen, um Erfahrungsfläschchen herzustellen.
 
 tile.openblocks.auto_anvil.name=Autom. Amboss
 tile.openblocks.auto_anvil.description=Der Automatischer Amboss funktioniert ähnlich wie ein Vanilla-Amboss, außer dass er mit flüssigen Erfahrungspunkten arbeitet und komplett automatisierbar ist.\n\nBenutze die Tabs auf der rechten Seite der Oberfläche, um auszuwählen, welche Seiten des Ambosses für Ein-/Ausgabe von Gegenstände oder Flüssigkeiten vorgesehen sind. Rechts-klicke und ziehe den Amboss im Tab, um ihn zu drehen und andere Seiten auszuwählen!
@@ -372,7 +372,7 @@ item.openblocks.beam.name=Balken
 item.openblocks.line.name=Leine
 item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
 item.openblocks.info_book.name=Welteroberung mit OpenBlocks
-item.openblocks.xp_bucket.name=Erfahrungspunkte-Eimer
+item.openblocks.xp_bucket.name=Erfahrungs-Eimer
 item.openblocks.height_map.name=Höhenkarte
 item.openblocks.empty_map.name=Leere Karte
 item.openblocks.map_controller.name=Kartenkontrollmodul
@@ -390,7 +390,7 @@ item.openblocks.wallpaper.name=Poster
 
 itemGroup.tabOpenBlocks=OpenBlocks
 
-entity.openblocks.luggage.name=Reisengepäck
+entity.openblocks.luggage.name=Reisegepäck
 entity.openblocks.cartographer.name=Kartograph
 entity.openblocks.block.name=Schwebender Block
 entity.openblocks.mini_me.name=Kleines Ich
