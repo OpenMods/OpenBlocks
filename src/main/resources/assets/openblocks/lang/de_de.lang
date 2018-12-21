@@ -295,7 +295,7 @@ tile.openblocks.drawing_table.description=Der Zeichentisch wird gebraucht, um Sc
 tile.openblocks.grave.name=Grab
 tile.openblocks.trophy.name=Trophäe
 tile.openblocks.trophy.entity.name=%s Trophäe
-tile.openblocks.canvasglass.name=Glas-Leinwand
+tile.openblocks.canvasglass.name=Glasleinwand
 tile.openblocks.paint_can.name=Farbeimer
 
 tile.openblocks.sky.normal.name=Himmelsblock
