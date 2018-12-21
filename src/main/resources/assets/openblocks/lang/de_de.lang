@@ -234,7 +234,7 @@ tile.openblocks.sprinkler.name=Rasensprenger
 tile.openblocks.sprinkler.description=Der Rasensprenger hilft dir, Pflanzen bis zu 4 Blöcke weit weg, zu düngen. Platziere ihn einfach über einem OpenBlocks-Tank, der mit Wasser gefüllt ist! Du kannst auch Knochenmehl für noch schnelleres Wachstum hinzufügen.\nEr zählt auch als Wasser-Quellblock!
 
 tile.openblocks.paint_mixer.name=Farbenmischer
-tile.openblocks.paint_mixer.description=Der Farbmixer kann jede Farbe, die du willst, zusammenmixen! Gib entweder einen Farbeimer oder einen Eimer Milch in den oberen Slot, dann Türkisen, Magentafarbenen, Gelben und Schwarzen Farbstoff in die anderen vier Slots und klicke auf Mixen!
+tile.openblocks.paint_mixer.description=Der Farbenmischer kann jede Farbe, die du willst, zusammenmixen! Gib entweder einen Farbeimer oder einen Eimer Milch in den oberen Slot, dann Türkisen, Magentafarbenen, Gelben und Schwarzen Farbstoff in die anderen vier Slots und klicke auf Mixen!
 
 tile.openblocks.canvas.name=Leinwand
 tile.openblocks.canvas.description=Die Leinwand ist ein perfekt weißer Block, der perfekt zum Streichen ist. Siehe die Farbmischer-Information für die Herstellung von Farbe.
