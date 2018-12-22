@@ -264,8 +264,8 @@ tile.openblocks.xp_drain.description=Platziere ein XP-Gittter über einem OpenBl
 tile.openblocks.vacuum_hopper.name=Vakuumtrichter
 tile.openblocks.vacuum_hopper.description=Der Vakuumtrichter saugt Gegenstände und Erfahrungs-Kugeln um sich herum auf. Du kannst die Tabs auf der rechten Seite der Oberfläche verwenden, um auszuwählen, zu welchen Seiten etwas ausgegeben werden soll.
 
-tile.openblocks.village_highlighter.name=Dorf-Markierer
-tile.openblocks.village_highlighter.description=Platziere den Dorf-Markierer in einem Dorf und gib ihm ein Redstone-Signal. Er wird den Umriss des Dorfes darstellen und eine Box im Eisengolem-Spawnbereich zeichnen. Nützlich, wenn du sichergehen willst, dass Dörfer nicht verschmelzen, oder wenn du eine Eisengolem-Farm baust!
+tile.openblocks.village_highlighter.name=Dorf-Textmarker
+tile.openblocks.village_highlighter.description=Platziere den Dorf-Textmarker in einem Dorf und gib ihm ein Redstone-Signal. Er wird den Umriss des Dorfes darstellen und eine Box im Eisengolem-Spawnbereich zeichnen. Nützlich, wenn du sichergehen willst, dass Dörfer nicht verschmelzen, oder wenn du eine Eisengolem-Farm baust!
 
 tile.openblocks.donation_station.name=Spendenstation
 tile.openblocks.donation_station.description=Du magst einen Block oder ein Gegenstand und willst dem Mod-Entwickler ein wenig Anerkennung zeigen? Schmeiß es in die Spendenstation und, wenn wir die Spendenseite der Entwickler kennen, geben wir dir einen Link.
