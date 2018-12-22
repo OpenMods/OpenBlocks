@@ -306,7 +306,7 @@ tile.openblocks.radio.name=Radio
 tile.openblocks.radio.description=Das Radio erlaubt es dir, Internetradio zu spielen! Zunächst brauchst du Wellenkristalle, die du in Truhen aus Verliesen findest oder von einem bestimmten Dorfbewohner bekommst. Platziere den Kristall ins Radio und gib diesem ein Redstone-Signal, um es anzuschalten. Die Stärke des Redstone-Signals bestimmt die Lautstärke.\n\nIn der Konfigurations-Datei des Servers kannst du konfigurieren, welche Radiosender verfügbar sind.
 
 tile.openblocks.xp_shower.name=XP-Dusche
-tile.openblocks.xp_shower.description=Bringe eine XP-Dusche an einen Tank voller Erfahrungs-Saft an und sie wird Erfahrungs-Kugeln ausschütten. Diese Kugeln können von einem Erfahrungspunkte-Gitter oder einer MFR-Kloake aufgesammelt werden.
+tile.openblocks.xp_shower.description=Bringe eine XP-Dusche an einen Tank voller Erfahrungssaft an und sie wird Erfahrungskugeln ausschütten. Diese Kugeln können von einem XP-Gitter oder einer MFR-Kloake aufgesammelt werden.
 
 tile.openblocks.scaffolding.name=Gerüst
 tile.openblocks.scaffolding.description=Wolltest du jemals irgendwo hochbauen, ohne einen häslichen Turm zu hinterlassen? Jetzt kannst du! Baue mit Gerüstblöcken und sie verschwinden wenn du fertig bist mit bauen.
