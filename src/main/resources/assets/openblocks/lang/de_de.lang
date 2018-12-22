@@ -250,8 +250,8 @@ tile.openblocks.target.description=Die Zielscheibe gibt ein Redstone-Signal mit 
 tile.openblocks.path.name=Pfad
 tile.openblocks.path.description=Der Pfad macht überhaupt nichts. Er sieht einfach nur gut aus!
 
-tile.openblocks.item_dropper.name=Sachenspender
-tile.openblocks.item_dropper.description=Der Sachenspender ist dem Vanilla-Spender ähnlich, außer dass er Gegenstände direkt in einer geraden Linie nach unten wirft.
+tile.openblocks.item_dropper.name=Itemspender
+tile.openblocks.item_dropper.description=Der Itemspender ist dem Vanilla-Spender ähnlich, außer dass er Gegenstände direkt in einer geraden Linie nach unten wirft.
 
 tile.openblocks.big_button.name=Großer Knopf
 tile.openblocks.big_button.description=Der große Knopf ist ein Knopf, der an der Wand platziert werden kann. Wenn du auf den Knopf mit einer leeren Hand Shift-klickst, wird ein Inventar mit einem einzelnen Slot erscheinen. Du kannst Gegenstände in diesen Slot geben, um die Zeit, die der Knopf gedrückt ist, zu verlängern - ein Gegenstand erhöht die Dauer um einen Tick.
