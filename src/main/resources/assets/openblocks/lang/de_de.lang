@@ -222,7 +222,7 @@ item.openblocks.sponge_on_a_stick.name=Schwamm
 item.openblocks.sponge_on_a_stick.description=Der Schwamm am Stiel ist ein Werkzeug zum Enfernen von Flüssigkeiten. Funktioniert wie der Schwamm, ist aber mobil und wird mit der Zeit aufgebraucht.
 
 item.openblocks.epic_eraser.name=Geschichtsveränderndes Radiergummi
-item.openblocks.epic_eraser.description=Jeder Gegenstand erzählt eine Geschichte...\n\nIst das nicht eigentlich saublöd?\n Mit diesen Gegenstand kannst du jegliche Spuren epischer Abenteuer, die dein Kram im Laufe der Jahrtausende erlebt hat, vollständig vernichten. Dann wird auch keiner Fragen stellen, wenn du ihn auf dem Schwarzmarkt vertickst.
+item.openblocks.epic_eraser.description=Jeder Gegenstand erzählt eine Geschichte...\n\nIst das nicht eigentlich saublöd?\n Mit diesem Gegenstand kannst du jegliche Spuren epischer Abenteuer, die dein Kram im Laufe der Jahrtausende erlebt hat, vollständig vernichten. Dann wird auch keiner Fragen stellen, wenn du ihn auf dem Schwarzmarkt vertickst.
 
 tile.openblocks.cannon.name=Item-Kanone
 tile.openblocks.cannon.description=Wenn ein Redstone-Signal anliegt, wird die Item-Kannone Gegenstände, die es in einem benachbarten Inventar findet, schießen. Benutze den 'Zeiger', um die Kannone auszurichten.
