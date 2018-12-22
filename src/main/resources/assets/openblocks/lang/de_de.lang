@@ -189,7 +189,7 @@ openblocks.misc.dropper.use_redstone=Hängt von der Redstone-Signalstärke ab
 openblocks.turtle.magnet=Magnet
 
 tile.openblocks.elevator.name=Fahrstuhl
-tile.openblocks.elevator.description=Platziere einen Fahrstuhl drei oder mehr Blöcke oberhalb eines anderen ohne Blöcke dazwischen und du wirst fähig sein, entweder zu 'springen', um dich aufwärts zu bewegen oder zu 'kriechen', um dich abwärts zu bewegen. Fahrstühle können gefärbt werden, indem man mit einem Farbstoff in der Hand rechtsklickt. Wie auch immer, du kannst dich jedoch nur zwischen Fahrstühlen in der selben Farbe teleportieren.
+tile.openblocks.elevator.description=Platziere einen Fahrstuhl drei oder mehr Blöcke oberhalb eines anderen ohne Blöcke dazwischen und du wirst fähig sein, entweder zu 'springen', um dich aufwärts zu bewegen oder zu 'kriechen', um dich abwärts zu bewegen. Fahrstühle können gefärbt werden, indem man mit einem Farbstoff in der Hand rechtsklickt. Du kannst dich jedoch nur zwischen Fahrstühlen in der selben Farbe teleportieren.
 
 tile.openblocks.elevator_rotating.name=Rotierender Fahrstuhl
 
