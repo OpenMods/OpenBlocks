@@ -393,7 +393,7 @@ itemGroup.tabOpenBlocks=OpenBlocks
 entity.openblocks.luggage.name=Reisegepäck
 entity.openblocks.cartographer.name=Kartograph
 entity.openblocks.block.name=Schwebender Block
-entity.openblocks.mini_me.name=Kleines Ich
+entity.openblocks.mini_me.name=Mini-Me
 
 fluid.openblocks.xp_juice=Flüssige Erfahrungspunkte
 
