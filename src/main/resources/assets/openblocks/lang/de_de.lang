@@ -231,7 +231,7 @@ tile.openblocks.rope_ladder.name=Strickleiter
 tile.openblocks.rope_ladder.description=Wenn du eine Strickleiter platzierst, wird sie sich bis zum Boden ausrollen.
 
 tile.openblocks.sprinkler.name=Rasensprenger
-tile.openblocks.sprinkler.description=Der Rasensprenger hilft dir, Pflanzen bis zu 4 Blöcke weit weg, zu düngen. Platziere ihn einfach über einem OpenBlocks-Tank, der mit Wasser gefüllt ist! Du kannst auch Knochenmehl für noch schnelleres Wachstum hinzufügen.\nEr zählt auch als Wasser-Quellblock!
+tile.openblocks.sprinkler.description=Der Rasensprenger hilft dir die Pflanzen zu düngen und hat einen Radius von bis zu 4 Blöcken. Platziere ihn einfach über einem OpenBlocks-Tank, der mit Wasser gefüllt ist! Du kannst auch Knochenmehl für noch schnelleres Wachstum hinzufügen.\nEr zählt auch als Wasser-Quellblock!
 
 tile.openblocks.paint_mixer.name=Farbmischer
 tile.openblocks.paint_mixer.description=Der Farbmischer kann jede Farbe, die du willst, zusammenmixen! Gib entweder einen Farbeimer oder einen Eimer Milch in den oberen Slot, dann Türkisen, Magentafarbenen, Gelben und Schwarzen Farbstoff in die anderen vier Slots und klicke auf Mixen!
