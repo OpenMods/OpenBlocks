@@ -50,7 +50,7 @@ openblocks.gui.drawingtable.glyphs=Glyphen
 openblocks.gui.drawingtable.print=Druck
 
 openblocks.gui.welcome.title=Willkommen!
-openblocks.gui.welcome.content=OpenBlocks ist eine neue freie Modifikation, die verschiedene Ideen in Minecraft einbringt, inklusive Gleitschirme, Aufzüge, Tanks, Gräber, Farben, Kräne, flüssige Erfahrungspunkte, Kartographen, Trophäen und mehr!
+openblocks.gui.welcome.content=OpenBlocks ist eine neue freie Mod, die verschiedene Ideen in Minecraft einbringt, inklusive Gleitschirme, Aufzüge, Tanks, Gräber, Farben, Kräne, flüssige Erfahrungspunkte, Kartographen, Trophäen und mehr!
 
 openblocks.gui.credits.title=Danksagungen
 openblocks.gui.credits.content=§LBoq, Mikee und NeverCast§R - Führende Entwickler von OpenBlocks (Dürfen wir uns selbst hier nennen?)\n\n§LSinZ und Yoshi2§R - Von Anfang an Mitglieder des OpenMods-Teams.\n\n§LVexatos und crafteverywhere§R -Übersetzen regelmäßig die Modifikation.\n\nJeder, der innerhalb der letzten zwei Jahre zum Code beigetragen hat.\n\n§LDirewolf20 und der Rest von ForgeCraft§R - Für das Entdecken der Fehler und Abstürze vor der Veröffentlichung einer Version.\n\nJeder, der einen Einblick oder Let's Play machte sowie generell die Modifikation untertützt hat, seit wir begannen!
