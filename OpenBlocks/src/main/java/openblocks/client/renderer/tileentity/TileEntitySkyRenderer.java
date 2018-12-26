@@ -2,6 +2,7 @@ package openblocks.client.renderer.tileentity;
 
 import com.google.common.collect.Maps;
 import java.util.Map;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -41,7 +42,8 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
 		IBlockState state = world.getBlockState(pos).getActualState(world, pos);
 
-		if (!(state.getBlock() instanceof BlockSky) || !BlockSky.isActive(state)) return;
+		final Block block = state.getBlock();
+		if (!(block instanceof BlockSky) || !((BlockSky)block).isActive(state)) return;
 
 		SkyBlockRenderer.INSTANCE.incrementUsers();
 

@@ -131,13 +131,13 @@ import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.item.ItemInfoBook;
+import openblocks.common.item.ItemInvertedSkyBlock;
 import openblocks.common.item.ItemLuggage;
 import openblocks.common.item.ItemMiracleMagnet;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
 import openblocks.common.item.ItemPedometer;
 import openblocks.common.item.ItemPointer;
-import openblocks.common.item.ItemSkyBlock;
 import openblocks.common.item.ItemSleepingBag;
 import openblocks.common.item.ItemSlimalyzer;
 import openblocks.common.item.ItemSonicGlasses;
@@ -161,7 +161,6 @@ import openblocks.common.tileentity.TileEntityBlockPlacer;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
 import openblocks.common.tileentity.TileEntityCannon;
 import openblocks.common.tileentity.TileEntityCanvas;
-import openblocks.common.tileentity.TileEntityCanvasGlass;
 import openblocks.common.tileentity.TileEntityDonationStation;
 import openblocks.common.tileentity.TileEntityDrawingTable;
 import openblocks.common.tileentity.TileEntityElevatorRotating;
@@ -228,6 +227,7 @@ import openmods.config.game.FactoryRegistry;
 import openmods.config.game.GameRegistryObjectsProvider;
 import openmods.config.game.ModStartupHelper;
 import openmods.config.game.RegisterBlock;
+import openmods.config.game.RegisterBlock.RegisterTileEntity;
 import openmods.config.game.RegisterItem;
 import openmods.config.properties.ConfigProcessing;
 import openmods.entity.EntityBlock;
@@ -370,13 +370,13 @@ public class OpenBlocks {
 		@RegisterBlock(type = BlockPaintMixer.class, id = "paint_mixer", tileEntity = TileEntityPaintMixer.class, legacyIds = "paintmixer")
 		public static Block paintMixer;
 
-		@RegisterBlock(type = BlockCanvas.class, id = "canvas", tileEntity = TileEntityCanvas.class)
+		@RegisterBlock(type = BlockCanvas.class, id = "canvas", tileEntities = @RegisterTileEntity(name = "canvas", cls = TileEntityCanvas.class, main = true))
 		public static Block canvas;
 
 		@RegisterBlock(type = BlockPaintCan.class, id = "paint_can", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class, legacyIds = "paintcan")
 		public static Block paintCan;
 
-		@RegisterBlock(type = BlockCanvasGlass.class, id = "canvas_glass", tileEntity = TileEntityCanvasGlass.class, legacyIds = "canvasglass")
+		@RegisterBlock(type = BlockCanvasGlass.class, id = "canvas_glass", tileEntities = @RegisterTileEntity(name = "canvas", cls = TileEntityCanvas.class, main = true), legacyIds = "canvasglass")
 		public static Block canvasGlass;
 
 		@RegisterBlock(type = BlockProjector.class, id = "projector", tileEntity = TileEntityProjector.class)
@@ -385,8 +385,11 @@ public class OpenBlocks {
 		@RegisterBlock(type = BlockDrawingTable.class, id = "drawing_table", tileEntity = TileEntityDrawingTable.class, legacyIds = "drawingtable")
 		public static Block drawingTable;
 
-		@RegisterBlock(type = BlockSky.class, id = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class, unlocalizedName = "sky.normal")
+		@RegisterBlock(type = BlockSky.class, id = "sky", tileEntities = @RegisterTileEntity(name = "sky", cls = TileEntitySky.class, main = true), unlocalizedName = "sky.normal")
 		public static Block sky;
+
+		@RegisterBlock(type = BlockSky.Inverted.class, id = "inverted_sky", tileEntities = @RegisterTileEntity(name = "sky", cls = TileEntitySky.class, main = true), itemBlock = ItemInvertedSkyBlock.class, unlocalizedName = "sky.normal")
+		public static Block invertedSky;
 
 		@RegisterBlock(type = BlockXPShower.class, id = "xp_shower", tileEntity = TileEntityXPShower.class, legacyIds = "xpshower")
 		public static Block xpShower;
@@ -695,9 +698,7 @@ public class OpenBlocks {
 		@Override
 		protected void setupItemFactory(FactoryRegistry<Item> itemFactory) {
 			itemFactory.registerFactory("pencil_glasses", () -> new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL));
-
 			itemFactory.registerFactory("technicolor_glasses", () -> new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR));
-
 			itemFactory.registerFactory("serious_glasses", () -> new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD));
 		}
 

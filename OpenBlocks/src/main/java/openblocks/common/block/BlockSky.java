@@ -18,18 +18,22 @@ import openmods.infobook.BookDocumentation;
 
 @BookDocumentation(customName = "sky.normal")
 public class BlockSky extends OpenBlock {
-
-	private static final int MASK_INVERTED = 1 << 0;
 	private static final int MASK_POWERED = 1 << 1;
 
 	private static final AxisAlignedBB EMPTY = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 
-	public static final PropertyBool INVERTED = PropertyBool.create("inverted");
-
 	public static final PropertyBool POWERED = PropertyBool.create("powered");
 
-	public static boolean isInverted(int meta) {
-		return (meta & MASK_INVERTED) != 0;
+	// TODO sub-class to instance when registry changes are done
+	public static class Inverted extends BlockSky {
+		@Override
+		protected boolean isInverted() {
+			return true;
+		}
+	}
+
+	protected boolean isInverted() {
+		return false;
 	}
 
 	public BlockSky() {
@@ -40,27 +44,18 @@ public class BlockSky extends OpenBlock {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, getPropertyOrientation(), INVERTED, POWERED);
+		return new BlockStateContainer(this, getPropertyOrientation(), POWERED);
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState()
-				.withProperty(POWERED, (meta & MASK_POWERED) != 0)
-				.withProperty(INVERTED, (meta & MASK_INVERTED) != 0);
+				.withProperty(POWERED, (meta & MASK_POWERED) != 0);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		final int isPowered = state.getValue(POWERED)? MASK_POWERED : 0;
-		final int isInverted = state.getValue(INVERTED)? MASK_INVERTED : 0;
-
-		return isPowered | isInverted;
-	}
-
-	@Override
-	public int damageDropped(IBlockState state) {
-		return getMetaFromState(state) & MASK_INVERTED;
+		return state.getValue(POWERED)? MASK_POWERED : 0;
 	}
 
 	@Override
@@ -91,10 +86,9 @@ public class BlockSky extends OpenBlock {
 		world.setBlockState(pos, state.withProperty(POWERED, isPowered));
 	}
 
-	public static boolean isActive(IBlockState state) {
+	public boolean isActive(IBlockState state) {
 		boolean isPowered = state.getValue(POWERED);
-		boolean isInverted = state.getValue(INVERTED);
-		return isPowered ^ isInverted;
+		return isPowered ^ isInverted();
 	}
 
 	@Override
