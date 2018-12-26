@@ -1,0 +1,45 @@
+# OpenMods Java Project .gitignore file
+# Last Authored: 20150816
+
+# Runtime output
+*.class
+*.log
+*.pid
+*.log.gz
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# Gradle
+.gradle/
+build/
+run/
+bin/
+
+# Eclipse
+.classpath
+.project
+.settings/
+*.launch
+
+# IntelliJ IDEA
+*.iml
+*.iws
+*.ipr
+.idea/
+
+# OS Garbage
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Misc
+download/
+config/
+saves/
+crash-reports/
+screenshots/
+usernamecache.json
+options.txt

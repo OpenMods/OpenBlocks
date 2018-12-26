@@ -1,0 +1,199 @@
+buildscript {
+    repositories {
+        // General deps
+        jcenter()
+        mavenCentral()
+        // Minecraft Forge
+        maven {
+            name = 'Forge'
+            url = 'http://files.minecraftforge.net/maven'
+        }
+        maven {
+              name 'OpenMods Third Party'
+              url 'http://repo.openmods.info/artifactory/simple/thirdparty'
+        }
+    }
+
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.thesilkminer.gradle.translationchecker:TranslationChecker:1.1'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+//================================================
+// Dependencies
+
+dependencies {
+    compile project(":OpenModsLib") // Load OpenModsLib from submodule
+
+    compile group: 'info.openmods', name: 'calc', version: '0.3'
+    compile "info.computercraft:ComputerCraft-API:1.80pr0"
+    compile "info.openmods:OpenPeripheralCore-API:"+opc_api_version
+}
+
+//================================================
+// Jar data
+
+version = mc_version + "-" + mod_version
+
+def String git(String... arguments) {
+    def out = new ByteArrayOutputStream()
+    exec {
+        executable = 'git'
+        args = arguments.toList()
+        standardOutput = out
+    }
+    out.toString().trim()
+}
+
+def String gitHash() {
+    git 'rev-parse', '--short', 'HEAD'
+}
+
+def String gitBranch() {
+    git 'rev-parse', '--abbrev-ref', 'HEAD'
+}
+
+def env = System.getenv()
+
+def in_jenkins = false
+
+def jenkinsManifest = manifest {
+    if (env.BUILD_TAG != null) { // If this works, we'll assume we're in Jenkins atleast.
+        attributes("Jenkins-Build": "true", "Jenkins-Tag": env.BUILD_TAG, "Jenkins-ID": env.BUILD_ID)
+        in_jenkins = true
+    } else {
+        attributes("Jenkins-Build": "false")
+    }
+}
+
+def branch = in_jenkins ? env.GIT_BRANCH.minus("origin/") : gitBranch()
+def hash = gitHash()
+
+if (branch != null && !branch.equals("master")) {
+    version += "-" + branch
+}
+
+if (env.BUILD_NUMBER != null) {
+    version += "-snapshot-" + env.BUILD_NUMBER
+}
+
+def gitManifest = manifest {
+    if (branch != null) {
+        attributes("Git-Branch": branch, "Git-Hash": hash)
+    }
+}
+
+// Setup Forge plugin
+minecraft {
+    version = mc_version + "-" + forge_version
+    runDir = "run"
+
+    mappings = mcp_mappings
+
+    replaceIn 'openblocks/OpenBlocks.java'
+    replace '$VERSION$', mod_version
+    replace '$OP-API-VERSION$', opc_api_version
+    replace '$LIB-VERSION$', project(':OpenModsLib').mod_version
+    replace '$NEXT-LIB-VERSION$', project(':OpenModsLib').next_mod_version
+
+    replaceIn "openblocks/api/package-info.java"
+    replace '$API-VERSION$', api_version
+}
+
+processResources {
+    inputs.property "version", mod_version
+    inputs.property "mc_version", mc_version
+
+    // Process mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.info'
+        expand 'version':mod_version, 'mc_version':mc_version
+    }
+
+    // Copy anything else directly
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/*.info'
+    }
+
+    rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
+//================================================
+// Jar tasks
+
+// Generate FML Coremod manifest
+ext.fmlManifest = manifest {
+    attributes(
+        "FMLAT": "openblocks_at.cfg",
+    )
+}
+
+if (project.hasProperty('keyStore')) {
+    task signJar(type: SignJar, dependsOn: reobfJar) {
+        keyStore = project.keyStore
+        alias = project.keyStoreAlias
+        storePass = project.keyStorePass
+        keyPass = project.keyStoreKeyPass
+
+        inputFile = jar.archivePath
+        outputFile = jar.archivePath
+    }
+
+    build.dependsOn signJar
+}
+
+// Merge Jenkins and Git manifests to form final manifest in final release jar
+jar {
+    manifest {
+        from jenkinsManifest, gitManifest, fmlManifest
+    }
+}
+
+ext.sourcesPath = new File(new File(new File(buildDir, "sources"), "main"), "java")
+
+task apiJar(type: Jar) {
+    baseName "OpenBlocks-API"
+    version api_version
+
+    from sourceSets.main.output
+
+    include 'openblocks/api/**'
+
+    manifest {
+        from jenkinsManifest, gitManifest
+    }
+}
+
+task apiSrcJar(type: Jar) {
+    baseName "OpenBlocks-API"
+    version api_version
+    classifier 'sources'
+
+    from sourcesPath
+
+    include 'openblocks/api/**'
+
+    manifest {
+        from jenkinsManifest, gitManifest
+    }
+}
+
+artifacts {
+    archives apiJar
+    archives apiSrcJar
+}
+
+task updateTranslations(type: net.thesilkminer.gradle.plugin.translationchecker.tasks.TranslationCheckTask) {
+    modId = "openblocks"
+    templateFileName = "en_us.lang"
+}
+
+task checkTranslations(type: net.thesilkminer.gradle.plugin.translationchecker.tasks.TranslationCheckTask) {
+    modId = "openblocks"
+    dryRun = true
+    templateFileName = "en_us.lang"
+}
