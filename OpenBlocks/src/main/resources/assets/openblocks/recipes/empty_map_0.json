@@ -8,7 +8,11 @@
     },
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:map_controller"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:map_memory"
     }
   ],
   "pattern": [
@@ -19,15 +23,11 @@
   "key": {
     "c": {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 6,
-      "_hint": "map_controller"
+      "item": "openblocks:map_controller"
     },
     "m": {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 7,
-      "_hint": "map_memory"
+      "item": "openblocks:map_memory"
     }
   },
   "result": {

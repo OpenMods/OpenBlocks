@@ -8,51 +8,49 @@
     },
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:crane_engine"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:crane_magnet"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:beam"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:line"
     }
   ],
   "ingredients": [
     {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 2,
-      "_hint": "crane_engine"
+      "item": "openblocks:crane_engine"
     },
     {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 3,
-      "_hint": "crane_magnet"
+      "item": "openblocks:crane_magnet"
     },
     {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 1,
-      "_hint": "beam"
+      "item": "openblocks:beam"
     },
     {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 1,
-      "_hint": "beam"
+      "item": "openblocks:beam"
     },
     {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 5,
-      "_hint": "line"
+      "item": "openblocks:line"
     },
     {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 5,
-      "_hint": "line"
+      "item": "openblocks:line"
     },
     {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 5,
-      "_hint": "line"
+      "item": "openblocks:line"
     },
     {
       "type": "minecraft:item",

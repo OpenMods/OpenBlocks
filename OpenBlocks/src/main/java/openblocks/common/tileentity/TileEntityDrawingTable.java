@@ -8,12 +8,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.GuiDrawingTable;
 import openblocks.common.StencilPattern;
 import openblocks.common.container.ContainerDrawingTable;
 import openblocks.common.item.ItemGlyph;
 import openblocks.common.item.ItemStencil;
-import openblocks.common.item.MetasGeneric;
 import openblocks.rpc.IStencilCrafter;
 import openmods.api.ICustomBreakDrops;
 import openmods.api.IHasGui;
@@ -50,15 +50,15 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "drawingtable", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int slotId, ItemStack itemstack) {
-			return itemstack.isEmpty() || (slotId == SLOT_INPUT && MetasGeneric.unpreparedStencil.isA(itemstack));
+			return itemstack.isEmpty() || (slotId == SLOT_INPUT && itemstack.getItem() == Items.unpreparedStencil);
 		}
 
 		@Override
 		public void onInventoryChanged(int slotNumber) {
-			if (MetasGeneric.unpreparedStencil.isAvailable()) {
+			if (Items.unpreparedStencil != null) {
 				if (slotNumber == SLOT_INPUT) {
 					final ItemStack input = inventoryContents.get(SLOT_INPUT);
-					if (MetasGeneric.unpreparedStencil.isA(input)) {
+					if (input.getItem() == Items.unpreparedStencil) {
 						final ItemStack output = createOutput(input.getCount());
 						inventoryContents.set(SLOT_OUTPUT, output);
 					} else {
@@ -67,7 +67,7 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 				} else if (slotNumber == SLOT_OUTPUT) {
 					final ItemStack output = inventoryContents.get(SLOT_OUTPUT);
 					if (isValidOutput(output)) {
-						final ItemStack input = MetasGeneric.unpreparedStencil.newItemStack(output.getCount());
+						final ItemStack input = new ItemStack(Items.unpreparedStencil, output.getCount());
 						inventoryContents.set(SLOT_INPUT, input);
 					} else {
 						inventoryContents.set(SLOT_INPUT, ItemStack.EMPTY);
@@ -156,8 +156,7 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 
 	@Override
 	public void printGlyphs(String text) {
-		if (OpenBlocks.Items.glyph == null)
-			return;
+		if (OpenBlocks.Items.glyph == null) return;
 
 		final ItemStack resources = inventory.getStackInSlot(SLOT_INPUT);
 		final int resourceCount = resources.getCount();

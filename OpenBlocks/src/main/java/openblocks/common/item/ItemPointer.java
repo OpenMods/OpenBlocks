@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -15,20 +16,15 @@ import openblocks.api.IPointable;
 import openmods.utils.ItemUtils;
 import openmods.utils.NbtUtils;
 
-/**
- * Pointer item is used for.. pointing
- *
- * @author Mikee
- *
- */
-public class MetaPointer extends MetaGeneric {
+public class ItemPointer extends Item {
 
-	public MetaPointer(String name) {
-		super(name);
+	public ItemPointer() {
+		setMaxStackSize(1);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		final ItemStack itemStack = player.getHeldItem(hand);
 		if (player.isSneaking()) {
 			Vec3d posVec = new Vec3d(player.posX, player.posY + 1.62F, player.posZ);
 			Vec3d lookVec = player.getLook(1.0f);

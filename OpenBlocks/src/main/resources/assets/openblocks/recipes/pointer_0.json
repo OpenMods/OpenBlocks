@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic_unstackable"
+      "item": "openblocks:pointer"
     }
   ],
   "pattern": [
@@ -20,7 +20,6 @@
     }
   },
   "result": {
-    "item": "openblocks:generic_unstackable",
-    "data": 0
+    "item": "openblocks:pointer"
   }
 }

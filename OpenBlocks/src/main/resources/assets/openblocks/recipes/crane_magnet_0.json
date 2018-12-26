@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:crane_magnet"
     }
   ],
   "pattern": [
@@ -30,7 +30,6 @@
     }
   },
   "result": {
-    "item": "openblocks:generic",
-    "data": 3
+    "item": "openblocks:crane_magnet"
   }
 }

@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:line"
     }
   ],
   "pattern": [
@@ -23,8 +23,7 @@
     }
   },
   "result": {
-    "item": "openblocks:generic",
-    "count": 2,
-    "data": 5
+    "item": "openblocks:line",
+    "count": 2
   }
 }

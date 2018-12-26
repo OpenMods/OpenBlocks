@@ -8,15 +8,13 @@
     },
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:assistant_base"
     }
   ],
   "ingredients": [
     {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 9,
-      "_hint": "assistant_base"
+      "item": "openblocks:assistant_base"
     },
     {
       "type": "minecraft:item",

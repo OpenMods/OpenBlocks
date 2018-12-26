@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelCannon;
-import openblocks.common.item.MetasGenericUnstackable;
 import openblocks.common.tileentity.TileEntityCannon;
 import openmods.OpenMods;
 import org.lwjgl.opengl.GL11;
@@ -68,7 +67,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEnti
 		EntityPlayer player = OpenMods.proxy.getThePlayer();
 		if (player == null) return false;
 		ItemStack held = player.getHeldItemMainhand();
-		return !held.isEmpty() && MetasGenericUnstackable.pointer.isA(held);
+		return held.getItem() == OpenBlocks.Items.pointer;
 	}
 
 }

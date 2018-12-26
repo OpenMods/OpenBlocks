@@ -19,7 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
-import openblocks.common.item.MetasGeneric;
+import openblocks.OpenBlocks.Items;
 import openperipheral.api.ApiAccess;
 import openperipheral.api.architecture.cc.IComputerCraftObjectsFactory;
 import org.apache.commons.lang3.tuple.Pair;
@@ -49,7 +49,7 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 	@Override
 	@Nonnull
 	public ItemStack getCraftingItem() {
-		return MetasGeneric.miracleMagnet.newItemStack();
+		return new ItemStack(Items.miracleMagnet);
 	}
 
 	@Override

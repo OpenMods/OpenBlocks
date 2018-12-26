@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:unprepared_stencil"
     }
   ],
   "pattern": [
@@ -23,7 +23,6 @@
     }
   },
   "result": {
-    "item": "openblocks:generic",
-    "data": 10
+    "item": "openblocks:unprepared_stencil"
   }
 }

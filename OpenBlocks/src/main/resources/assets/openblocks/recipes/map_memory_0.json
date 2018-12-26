@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:map_memory"
     }
   ],
   "pattern": [
@@ -23,7 +23,6 @@
     }
   },
   "result": {
-    "item": "openblocks:generic",
-    "data": 7
+    "item": "openblocks:map_memory"
   }
 }

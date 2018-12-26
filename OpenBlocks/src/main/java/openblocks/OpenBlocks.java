@@ -22,6 +22,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -131,11 +132,11 @@ import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.item.ItemInfoBook;
 import openblocks.common.item.ItemLuggage;
-import openblocks.common.item.ItemOBGeneric;
-import openblocks.common.item.ItemOBGenericUnstackable;
+import openblocks.common.item.ItemMiracleMagnet;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
 import openblocks.common.item.ItemPedometer;
+import openblocks.common.item.ItemPointer;
 import openblocks.common.item.ItemSkyBlock;
 import openblocks.common.item.ItemSleepingBag;
 import openblocks.common.item.ItemSlimalyzer;
@@ -146,6 +147,7 @@ import openblocks.common.item.ItemStencil;
 import openblocks.common.item.ItemTankBlock;
 import openblocks.common.item.ItemTastyClay;
 import openblocks.common.item.ItemTrophyBlock;
+import openblocks.common.item.ItemUnpreparedStencil;
 import openblocks.common.item.ItemWrench;
 import openblocks.common.item.ItemXpBucket;
 import openblocks.common.sync.SyncableBlockLayers;
@@ -220,6 +222,8 @@ import openmods.OpenMods;
 import openmods.block.OpenBlock;
 import openmods.config.BlockInstances;
 import openmods.config.ItemInstances;
+import openmods.config.game.AbstractFeatureManager;
+import openmods.config.game.ConfigurableFeatureManager;
 import openmods.config.game.FactoryRegistry;
 import openmods.config.game.GameRegistryObjectsProvider;
 import openmods.config.game.ModStartupHelper;
@@ -227,7 +231,6 @@ import openmods.config.game.RegisterBlock;
 import openmods.config.game.RegisterItem;
 import openmods.config.properties.ConfigProcessing;
 import openmods.entity.EntityBlock;
-import openmods.item.ItemGeneric;
 import openmods.liquids.ContainerBucketFillHandler;
 import openmods.liquids.SingleFluidBucketFillHandler;
 import openmods.network.event.NetworkEventEntry;
@@ -400,8 +403,38 @@ public class OpenBlocks {
 		@RegisterItem(type = ItemHangGlider.class, id = "hang_glider", legacyIds = "hangglider")
 		public static Item hangGlider;
 
-		@RegisterItem(type = ItemOBGeneric.class, id = "generic", registerDefaultModel = false)
-		public static ItemGeneric generic;
+		@RegisterItem(id = "glider_wing")
+		public static Item gliderWing;
+
+		@RegisterItem(id = "beam")
+		public static Item beam;
+
+		@RegisterItem(id = "crane_engine")
+		public static Item craneEngine;
+
+		@RegisterItem(id = "crane_magnet")
+		public static Item craneMagnet;
+
+		@RegisterItem(id = "line")
+		public static Item line;
+
+		@RegisterItem(id = "map_controller")
+		public static Item mapController;
+
+		@RegisterItem(id = "map_memory")
+		public static Item mapMemory;
+
+		@RegisterItem(id = "assistant_base")
+		public static Item assistantBase;
+
+		@RegisterItem(type = ItemUnpreparedStencil.class, id = "unprepared_stencil")
+		public static Item unpreparedStencil;
+
+		@RegisterItem(id = "sketching_pencil")
+		public static Item sketchingPencil;
+
+		@RegisterItem(type = ItemMiracleMagnet.class, id = "miracle_magnet")
+		public static Item miracleMagnet;
 
 		@RegisterItem(type = ItemLuggage.class, id = "luggage")
 		public static Item luggage;
@@ -460,8 +493,8 @@ public class OpenBlocks {
 		@RegisterItem(type = ItemGoldenEye.class, id = "golden_eye", legacyIds = "goldenEye")
 		public static Item goldenEye;
 
-		@RegisterItem(type = ItemOBGenericUnstackable.class, id = "generic_unstackable", registerDefaultModel = false, legacyIds = "genericUnstackable")
-		public static ItemGeneric genericUnstackable;
+		@RegisterItem(type = ItemPointer.class, id = "pointer")
+		public static Item pointer;
 
 		@RegisterItem(type = ItemCursor.class, id = "cursor")
 		public static Item cursor;
@@ -639,9 +672,7 @@ public class OpenBlocks {
 		};
 	}
 
-	public static final StatBase brickStat = new StatBasic("openblocks.dropped",
-			new TextComponentTranslation("stat.openblocks.bricksDropped"),
-			StatBase.simpleStatType).registerStat();
+	public static final StatBase brickStat = new StatBasic("openblocks.dropped", new TextComponentTranslation("stat.openblocks.bricksDropped"), StatBase.simpleStatType).registerStat();
 
 	private final ModStartupHelper startupHelper = new ModStartupHelper("openblocks") {
 
@@ -655,6 +686,11 @@ public class OpenBlocks {
 			gameConfig.setCreativeTab(OpenBlocks::createTabOpenBlocks);
 			gameConfig.addModIdToRemap("OpenBlocks");
 		}
+
+		@Override
+		protected void registerCustomFeatures(ConfigurableFeatureManager features) {
+			features.addCustomRule(AbstractFeatureManager.CATEGORY_ITEMS, "miracle_magnet", value -> value && Config.enableCraneTurtles && Loader.isModLoaded(openmods.Mods.OPENPERIPHERALCORE));
+		};
 
 		@Override
 		protected void setupItemFactory(FactoryRegistry<Item> itemFactory) {
@@ -794,16 +830,14 @@ public class OpenBlocks {
 		}
 
 		if (Items.xpBucket != null) {
-			if (Config.xpBucketDirectFill)
-				MinecraftForge.EVENT_BUS.register(new SingleFluidBucketFillHandler(new ItemStack(Items.xpBucket)));
+			if (Config.xpBucketDirectFill) MinecraftForge.EVENT_BUS.register(new SingleFluidBucketFillHandler(new ItemStack(Items.xpBucket)));
 		}
 
 		if (Items.pedometer != null) {
 			PedometerHandler.registerCapability();
 		}
 
-		if (Items.sleepingBag != null)
-			MinecraftForge.EVENT_BUS.register(new ItemSleepingBag.IsSleepingHandler());
+		if (Items.sleepingBag != null) MinecraftForge.EVENT_BUS.register(new ItemSleepingBag.IsSleepingHandler());
 
 		MinecraftForge.EVENT_BUS.register(CanvasReplaceBlacklist.instance);
 

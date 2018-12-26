@@ -8,7 +8,11 @@
     },
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:sketching_pencil"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:unprepared_stencil"
     }
   ],
   "pattern": [
@@ -27,15 +31,11 @@
     },
     "s": {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 10,
-      "_hint": "unprepared_stencil"
+      "item": "openblocks:unprepared_stencil"
     },
     "k": {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 11,
-      "_hint": "sketching_pencil"
+      "item": "openblocks:sketching_pencil"
     }
   },
   "result": {

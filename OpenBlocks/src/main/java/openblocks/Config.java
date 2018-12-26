@@ -5,8 +5,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import openblocks.common.TrophyHandler;
-import openblocks.common.item.MetasGeneric;
-import openblocks.common.item.MetasGenericUnstackable;
 import openblocks.enchantments.EnchantmentExplosive;
 import openblocks.enchantments.EnchantmentFlimFlam;
 import openblocks.enchantments.EnchantmentLastStand;
@@ -417,14 +415,6 @@ public class Config {
 	public static boolean showGlypsInSearch = false;
 
 	public static void register() {
-		if (OpenBlocks.Items.generic != null) {
-			OpenBlocks.Items.generic.registerItems(MetasGeneric.values());
-		}
-
-		if (OpenBlocks.Items.genericUnstackable != null) {
-			OpenBlocks.Items.genericUnstackable.registerItems(MetasGenericUnstackable.values());
-		}
-
 		if (OpenBlocks.Blocks.trophy != null) {
 			MinecraftForge.EVENT_BUS.register(new TrophyHandler());
 		}

@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:assistant_base"
     }
   ],
   "pattern": [
@@ -26,7 +26,6 @@
     }
   },
   "result": {
-    "item": "openblocks:generic",
-    "data": 9
+    "item": "openblocks:assistant_base"
   }
 }

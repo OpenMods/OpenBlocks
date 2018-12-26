@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:sketching_pencil"
     }
   ],
   "pattern": [
@@ -24,7 +24,6 @@
     }
   },
   "result": {
-    "item": "openblocks:generic",
-    "data": 11
+    "item": "openblocks:sketching_pencil"
   }
 }

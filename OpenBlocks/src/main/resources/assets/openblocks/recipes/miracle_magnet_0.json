@@ -4,7 +4,11 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:crane_magnet"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:miracle_magnet"
     }
   ],
   "pattern": [
@@ -23,13 +27,10 @@
     },
     "m": {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 3,
-      "_hint": "crane_magnet"
+      "item": "openblocks:crane_magnet"
     }
   },
   "result": {
-    "item": "openblocks:generic",
-    "data": 4
+    "item": "openblocks:miracle_magnet"
   }
 }

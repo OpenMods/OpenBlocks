@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:glider_wing"
     },
     {
       "type": "minecraft:item_exists",
@@ -21,9 +21,7 @@
     },
     "w": {
       "type": "minecraft:item",
-      "item": "openblocks:generic",
-      "data": 0,
-      "_hint": "glider_wing"
+      "item": "openblocks:glider_wing"
     }
   },
   "result": {

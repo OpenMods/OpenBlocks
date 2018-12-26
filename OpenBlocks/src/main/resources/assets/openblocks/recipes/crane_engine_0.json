@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:crane_engine"
     }
   ],
   "pattern": [
@@ -27,7 +27,6 @@
     }
   },
   "result": {
-    "item": "openblocks:generic",
-    "data": 2
+    "item": "openblocks:crane_engine"
   }
 }

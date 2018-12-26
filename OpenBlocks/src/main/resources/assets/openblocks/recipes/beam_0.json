@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:generic"
+      "item": "openblocks:beam"
     }
   ],
   "pattern": [
@@ -27,8 +27,7 @@
     }
   },
   "result": {
-    "item": "openblocks:generic",
-    "count": 2,
-    "data": 1
+    "item": "openblocks:beam",
+    "count": 2
   }
 }
