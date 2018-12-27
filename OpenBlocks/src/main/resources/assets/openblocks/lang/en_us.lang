@@ -188,10 +188,42 @@ openblocks.misc.dropper.use_redstone=Scale by redstone signal strength
 
 openblocks.turtle.magnet=Magnet
 
+tile.openblocks.white_elevator.name=White Elevator
+tile.openblocks.orange_elevator.name=Orange Elevator
+tile.openblocks.magenta_elevator.name=Magenta Elevator
+tile.openblocks.light_blue_elevator.name=Light Blue Elevator
+tile.openblocks.yellow_elevator.name=Yellow Elevator
+tile.openblocks.lime_elevator.name=Lime Elevator
+tile.openblocks.pink_elevator.name=Pink Elevator
+tile.openblocks.gray_elevator.name=Gray Elevator
+tile.openblocks.light_gray_elevator.name=Light Gray Elevator
+tile.openblocks.cyan_elevator.name=Cyan Elevator
+tile.openblocks.purple_elevator.name=Purple Elevator
+tile.openblocks.blue_elevator.name=Blue Elevator
+tile.openblocks.brown_elevator.name=Brown Elevator
+tile.openblocks.green_elevator.name=Green Elevator
+tile.openblocks.red_elevator.name=Red Elevator
+tile.openblocks.black_elevator.name=Black Elevator
+
 tile.openblocks.elevator.name=Elevator
 tile.openblocks.elevator.description=Place one elevator directly three or more blocks above another with no blocks inbetween and you'll be able to either 'jump' to move up, or 'crouch' to move down. Elevators can be dyed by clicking on them with dye, however, you can only teleport between elevators of the same color.
 
-tile.openblocks.elevator_rotating.name=Rotating Elevator
+tile.openblocks.white_elevator_rotating.name=White Rotating Elevator
+tile.openblocks.orange_elevator_rotating.name=Orange Rotating Elevator
+tile.openblocks.magenta_elevator_rotating.name=Magenta Rotating Elevator
+tile.openblocks.light_blue_elevator_rotating.name=Light Blue Rotating Elevator
+tile.openblocks.yellow_elevator_rotating.name=Yellow Rotating Elevator
+tile.openblocks.lime_elevator_rotating.name=Lime Rotating Elevator
+tile.openblocks.pink_elevator_rotating.name=Pink Rotating Elevator
+tile.openblocks.gray_elevator_rotating.name=Gray Rotating Elevator
+tile.openblocks.light_gray_elevator_rotating.name=Light Gray Rotating Elevator
+tile.openblocks.cyan_elevator_rotating.name=Cyan Rotating Elevator
+tile.openblocks.purple_elevator_rotating.name=Purple Rotating Elevator
+tile.openblocks.blue_elevator_rotating.name=Blue Rotating Elevator
+tile.openblocks.brown_elevator_rotating.name=Brown Rotating Elevator
+tile.openblocks.green_elevator_rotating.name=Green Rotating Elevator
+tile.openblocks.red_elevator_rotating.name=Red Rotating Elevator
+tile.openblocks.black_elevator_rotating.name=Black Rotating Elevator
 
 tile.openblocks.heal.name=Healer
 tile.openblocks.heal.description=The healing block is a creative-mode only block that gives off a slight healing effect over time.

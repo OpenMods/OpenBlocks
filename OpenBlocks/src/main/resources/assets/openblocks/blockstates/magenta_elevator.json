@@ -1,0 +1,16 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "model" : "openmods:cube_all_tinted",
+        "transform": "forge:default-block",
+        "textures": {
+            "all": "openblocks:blocks/elevator"
+        }
+    },
+    "variants" : {
+        "inventory" :     [{}],
+        "orientation" : {
+            "xp_yp": { "x" : 0 }
+        }
+    }
+}

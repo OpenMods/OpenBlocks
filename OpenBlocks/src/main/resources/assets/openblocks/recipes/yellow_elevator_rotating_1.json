@@ -1,0 +1,31 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "openblocks:elevator_rotating",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:yellow_elevator"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:yellow_elevator_rotating"
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "minecraft:item",
+      "item": "openblocks:yellow_elevator"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  ],
+  "result": {
+    "item": "openblocks:yellow_elevator_rotating"
+  }
+}

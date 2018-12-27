@@ -1,0 +1,20 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "model" : "openmods:cube_top_tinted",
+        "transform": "forge:default-block",
+        "textures": {
+            "side": "openblocks:blocks/elevator",
+            "top" : "openblocks:blocks/elevator_rot"
+        }
+    },
+    "variants" : {
+        "inventory": [{}],
+        "orientation" : {
+            "xp_yp" : { "y" :   0 },
+            "zp_yp" : { "y" :  90 },
+            "xn_yp" : { "y" : 180 },
+            "zn_yp" : { "y" : 270 }
+        }
+    }
+}

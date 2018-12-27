@@ -118,7 +118,6 @@ import openblocks.common.item.ItemCraneBackpack;
 import openblocks.common.item.ItemCraneControl;
 import openblocks.common.item.ItemCursor;
 import openblocks.common.item.ItemDevNull;
-import openblocks.common.item.ItemElevator;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemEpicEraser;
 import openblocks.common.item.ItemFlagBlock;
@@ -163,7 +162,6 @@ import openblocks.common.tileentity.TileEntityCannon;
 import openblocks.common.tileentity.TileEntityCanvas;
 import openblocks.common.tileentity.TileEntityDonationStation;
 import openblocks.common.tileentity.TileEntityDrawingTable;
-import openblocks.common.tileentity.TileEntityElevatorRotating;
 import openblocks.common.tileentity.TileEntityFan;
 import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
@@ -219,6 +217,7 @@ import openblocks.rubbish.CommandLuck;
 import openmods.Log;
 import openmods.OpenMods;
 import openmods.block.OpenBlock;
+import openmods.colors.ColorMeta;
 import openmods.config.BlockInstances;
 import openmods.config.ItemInstances;
 import openmods.config.game.AbstractFeatureManager;
@@ -283,11 +282,101 @@ public class OpenBlocks {
 		@RegisterBlock(type = BlockBuilderGuide.class, id = "builder_guide", tileEntity = TileEntityBuilderGuide.class, itemBlock = ItemGuide.class)
 		public static Block builderGuide;
 
-		@RegisterBlock(type = BlockElevator.class, id = "elevator", itemBlock = ItemElevator.class, registerDefaultItemModel = false)
-		public static Block elevator;
+		@RegisterBlock(type = BlockElevator.class, id = "white_elevator")
+		public static Block whiteElevator;
 
-		@RegisterBlock(type = BlockElevatorRotating.class, id = "elevator_rotating", tileEntity = TileEntityElevatorRotating.class, itemBlock = ItemElevator.class, registerDefaultItemModel = false)
-		public static Block elevatorRotating;
+		@RegisterBlock(type = BlockElevator.class, id = "orange_elevator")
+		public static Block orangeElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "magenta_elevator")
+		public static Block magentaElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "light_blue_elevator")
+		public static Block lightBlueElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "yellow_elevator")
+		public static Block yellowElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "lime_elevator")
+		public static Block limeElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "pink_elevator")
+		public static Block pinkElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "gray_elevator")
+		public static Block grayElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "light_gray_elevator")
+		public static Block lightGrayElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "cyan_elevator")
+		public static Block cyanElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "purple_elevator")
+		public static Block purpleElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "blue_elevator")
+		public static Block blueElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "brown_elevator")
+		public static Block brownElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "green_elevator")
+		public static Block greenElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "red_elevator")
+		public static Block redElevator;
+
+		@RegisterBlock(type = BlockElevator.class, id = "black_elevator")
+		public static Block blackElevator;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "white_elevator_rotating")
+		public static Block whiteElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "orange_elevator_rotating")
+		public static Block orangeElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "magenta_elevator_rotating")
+		public static Block magentaElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "light_blue_elevator_rotating")
+		public static Block lightBlueElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "yellow_elevator_rotating")
+		public static Block yellowElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "lime_elevator_rotating")
+		public static Block limeElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "pink_elevator_rotating")
+		public static Block pinkElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "gray_elevator_rotating")
+		public static Block grayElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "light_gray_elevator_rotating")
+		public static Block lightGrayElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "cyan_elevator_rotating")
+		public static Block cyanElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "purple_elevator_rotating")
+		public static Block purpleElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "blue_elevator_rotating")
+		public static Block blueElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "brown_elevator_rotating")
+		public static Block brownElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "green_elevator_rotating")
+		public static Block greenElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "red_elevator_rotating")
+		public static Block redElevatorRotating;
+
+		@RegisterBlock(type = BlockElevatorRotating.class, id = "black_elevator_rotating")
+		public static Block blackElevatorRotating;
 
 		@RegisterBlock(type = BlockHeal.class, id = "heal", tileEntity = TileEntityHealBlock.class)
 		public static Block heal;
@@ -696,6 +785,14 @@ public class OpenBlocks {
 		};
 
 		@Override
+		protected void setupBlockFactory(FactoryRegistry<Block> blockFactory) {
+			for (final ColorMeta color : ColorMeta.getAllColors()) {
+				blockFactory.registerFactory(color.id + "_elevator", () -> new BlockElevator(color));
+				blockFactory.registerFactory(color.id + "_elevator_rotating", () -> new BlockElevatorRotating(color));
+			}
+		}
+
+		@Override
 		protected void setupItemFactory(FactoryRegistry<Item> itemFactory) {
 			itemFactory.registerFactory("pencil_glasses", () -> new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL));
 			itemFactory.registerFactory("technicolor_glasses", () -> new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR));
@@ -813,10 +910,8 @@ public class OpenBlocks {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());
 		}
 
-		if (OpenBlocks.Blocks.elevator != null || OpenBlocks.Blocks.elevatorRotating != null) {
-			MinecraftForge.EVENT_BUS.register(ElevatorBlockRules.instance);
-			MinecraftForge.EVENT_BUS.register(new ElevatorActionHandler());
-		}
+		MinecraftForge.EVENT_BUS.register(ElevatorBlockRules.instance);
+		MinecraftForge.EVENT_BUS.register(new ElevatorActionHandler());
 
 		if (Config.radioVillagerEnabled) {
 			RadioVillagerTrades.registerUselessVillager();

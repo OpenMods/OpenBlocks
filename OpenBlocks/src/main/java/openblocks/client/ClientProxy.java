@@ -161,16 +161,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 			MinecraftForge.EVENT_BUS.register(TextureUploader.INSTANCE);
 		}
 
-		if (OpenBlocks.Blocks.elevator != null) {
-			ModelUtils.registerMetaInsensitiveModel(Item.getItemFromBlock(OpenBlocks.Blocks.elevator));
-		}
-
-		if (OpenBlocks.Blocks.elevatorRotating != null) {
-			ModelUtils.registerMetaInsensitiveModel(Item.getItemFromBlock(OpenBlocks.Blocks.elevatorRotating));
-		}
-
 		if (OpenBlocks.Blocks.sky != null) {
-			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Blocks.sky);
 			((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager()).registerReloadListener(SkyBlockRenderer.INSTANCE);
 		}
 

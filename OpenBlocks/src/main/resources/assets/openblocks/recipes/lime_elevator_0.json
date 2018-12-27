@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "openblocks:elevator",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:lime_elevator"
+    }
+  ],
+  "pattern": [
+    "www",
+    "wew",
+    "www"
+  ],
+  "key": {
+    "e": {
+      "type": "minecraft:item",
+      "item": "minecraft:ender_pearl"
+    },
+    "w": {
+      "type": "minecraft:item",
+      "item": "minecraft:wool",
+      "data": 5
+    }
+  },
+  "result": {
+    "item": "openblocks:lime_elevator"
+  }
+}
