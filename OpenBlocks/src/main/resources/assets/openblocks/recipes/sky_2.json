@@ -5,13 +5,16 @@
     {
       "type": "minecraft:item_exists",
       "item": "openblocks:sky"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "openblocks:inverted_sky"
     }
   ],
   "ingredients": [
     {
       "type": "minecraft:item",
-      "item": "openblocks:sky",
-      "data": 0
+      "item": "openblocks:inverted_sky"
     },
     {
       "type": "minecraft:item",
@@ -19,7 +22,6 @@
     }
   ],
   "result": {
-    "item": "openblocks:sky",
-    "data": 1
+    "item": "openblocks:sky"
   }
 }
