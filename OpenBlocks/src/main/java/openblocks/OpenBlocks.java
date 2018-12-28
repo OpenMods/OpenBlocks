@@ -387,8 +387,53 @@ public class OpenBlocks {
 		@RegisterBlock(type = BlockGrave.class, id = "grave", tileEntity = TileEntityGrave.class)
 		public static Block grave;
 
-		@RegisterBlock(type = BlockFlag.class, id = "flag", tileEntity = TileEntityFlag.class, itemBlock = ItemFlagBlock.class)
-		public static Block flag;
+		@RegisterBlock(type = BlockFlag.class, id = "white_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block whiteFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "orange_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block orangeFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "magenta_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block magentaFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "light_blue_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block lightBlueFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "yellow_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block yellowFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "lime_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block limeFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "pink_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block pinkFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "gray_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block grayFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "light_gray_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block lightGrayFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "cyan_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block cyanFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "purple_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block purpleFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "blue_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block blueFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "brown_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block brownFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "green_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block greenFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "red_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block redFlag;
+
+		@RegisterBlock(type = BlockFlag.class, id = "black_flag", tileEntities = @RegisterTileEntity(name = "flag", cls = TileEntityFlag.class, main = true), itemBlock = ItemFlagBlock.class)
+		public static Block blackFlag;
 
 		@RegisterBlock(type = BlockTank.class, id = "tank", tileEntity = TileEntityTank.class, itemBlock = ItemTankBlock.class)
 		public static Block tank;
@@ -746,8 +791,8 @@ public class OpenBlocks {
 		return new CreativeTabs("tabOpenBlocks") {
 			@Override
 			public ItemStack getTabIconItem() {
-				if (OpenBlocks.Blocks.flag != null) {
-					return new ItemStack(OpenBlocks.Blocks.flag, 1, BlockFlag.DEFAULT_COLOR.vanillaBlockId);
+				if (OpenBlocks.Blocks.limeFlag != null) {
+					return new ItemStack(OpenBlocks.Blocks.limeFlag);
 				} else {
 					return new ItemStack(net.minecraft.init.Blocks.SPONGE);
 				}

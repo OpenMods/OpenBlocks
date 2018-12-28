@@ -5,16 +5,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -22,27 +17,54 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.OpenBlocks.Blocks;
 import openblocks.common.tileentity.TileEntityFlag;
 import openmods.block.OpenBlock;
 import openmods.colors.ColorMeta;
 import openmods.geometry.Orientation;
+import openmods.infobook.BookDocumentation;
 import openmods.model.eval.EvalModelState;
 
+@BookDocumentation(customName = "flag")
 public class BlockFlag extends OpenBlock.SixDirections {
 
-	public static final ColorMeta DEFAULT_COLOR = ColorMeta.LIME;
-
-	public static final PropertyEnum<ColorMeta> COLOR = PropertyEnum.create("color", ColorMeta.class);
-
-	@SideOnly(Side.CLIENT)
-	public static class BlockColorHandler implements IBlockColor {
-		private static final int WHITE = 0xFFFFFFFF;
-
-		@Override
-		public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
-			return tintIndex == 0? state.getValue(COLOR).rgb : WHITE;
+	@Nullable
+	public static Block colorToBlock(ColorMeta color) {
+		switch (color) {
+			case BLACK:
+				return Blocks.blackFlag;
+			case BLUE:
+				return Blocks.blueFlag;
+			case BROWN:
+				return Blocks.brownFlag;
+			case CYAN:
+				return Blocks.cyanFlag;
+			case GRAY:
+				return Blocks.grayFlag;
+			case GREEN:
+				return Blocks.greenFlag;
+			case LIGHT_BLUE:
+				return Blocks.lightBlueFlag;
+			case LIGHT_GRAY:
+				return Blocks.lightGrayFlag;
+			case LIME:
+				return Blocks.limeFlag;
+			case MAGENTA:
+				return Blocks.magentaFlag;
+			case ORANGE:
+				return Blocks.orangeFlag;
+			case PINK:
+				return Blocks.pinkFlag;
+			case PURPLE:
+				return Blocks.purpleFlag;
+			case RED:
+				return Blocks.redFlag;
+			case WHITE:
+				return Blocks.whiteFlag;
+			case YELLOW:
+				return Blocks.yellowFlag;
+			default:
+				return null;
 		}
 	}
 
@@ -50,13 +72,12 @@ public class BlockFlag extends OpenBlock.SixDirections {
 		super(Material.CIRCUITS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 		setHardness(0.0F);
-		setDefaultState(getDefaultState().withProperty(COLOR, DEFAULT_COLOR));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this,
-				new IProperty[] { getPropertyOrientation(), COLOR },
+				new IProperty[] { getPropertyOrientation() },
 				new IUnlistedProperty[] { EvalModelState.PROPERTY });
 	}
 
@@ -107,7 +128,7 @@ public class BlockFlag extends OpenBlock.SixDirections {
 		final IBlockState belowState = world.getBlockState(pos.down());
 		final Block belowBlock = belowState.getBlock();
 		if (belowBlock instanceof BlockFence) return true;
-		if (belowBlock == this && isFlagOnGround(belowState)) return true;
+		if (belowBlock instanceof BlockFlag && isFlagOnGround(belowState)) return true;
 
 		return false;
 	}
@@ -143,22 +164,6 @@ public class BlockFlag extends OpenBlock.SixDirections {
 		return BlockRenderLayer.CUTOUT;
 	}
 
-	private static ColorMeta getColorMeta(IBlockAccess world, BlockPos pos) {
-		final TileEntityFlag te = getTileEntity(world, pos, TileEntityFlag.class);
-		return te != null? te.getColor() : ColorMeta.WHITE;
-	}
-
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		final ColorMeta color = getColorMeta(world, pos);
-		return state.withProperty(COLOR, color);
-	}
-
-	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this, 1, DEFAULT_COLOR.vanillaBlockId));
-	}
-
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		final TileEntityFlag te = getTileEntity(world, pos, TileEntityFlag.class);
@@ -166,17 +171,6 @@ public class BlockFlag extends OpenBlock.SixDirections {
 		return (te != null)
 				? ((IExtendedBlockState)state).withProperty(EvalModelState.PROPERTY, te.getRenderState())
 				: state;
-	}
-
-	@Override
-	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
-		final IBlockState actualState = state.getActualState(worldIn, pos); // needed for drop damage when block is destroyed
-		super.dropBlockAsItemWithChance(worldIn, pos, actualState, chance, fortune);
-	}
-
-	@Override
-	public int damageDropped(IBlockState state) {
-		return state.getValue(COLOR).vanillaBlockId;
 	}
 
 	@Override

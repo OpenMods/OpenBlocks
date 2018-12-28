@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:flag"
+      "item": "openblocks:light_blue_flag"
     }
   ],
   "pattern": [
@@ -16,7 +16,7 @@
     "c": {
       "type": "minecraft:item",
       "item": "minecraft:carpet",
-      "data": 1
+      "data": 3
     },
     "s": {
       "type": "forge:ore_dict",
@@ -24,7 +24,6 @@
     }
   },
   "result": {
-    "item": "openblocks:flag",
-    "data": 1
+    "item": "openblocks:light_blue_flag"
   }
 }

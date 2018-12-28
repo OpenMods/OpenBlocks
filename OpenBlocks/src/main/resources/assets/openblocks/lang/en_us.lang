@@ -241,8 +241,25 @@ tile.openblocks.tank.filled.name=%s Tank
 tile.openblocks.tank.name=Tank
 tile.openblocks.tank.description=Tanks can hold liquids. If you place tanks next to each other and they'll distribute their liquid between the tanks. You can place liquid into the tanks using buckets. If the tank contains XP Juice you can click on them with an empty hand to give yourself some of the XP. When broken tanks will retain their liquid.
 
+tile.openblocks.white_flag.name=White Flag
+tile.openblocks.orange_flag.name=Orange Flag
+tile.openblocks.magenta_flag.name=Magenta Flag
+tile.openblocks.light_blue_flag.name=Light Blue Flag
+tile.openblocks.yellow_flag.name=Yellow Flag
+tile.openblocks.lime_flag.name=Lime Flag
+tile.openblocks.pink_flag.name=Pink Flag
+tile.openblocks.gray_flag.name=Gray Flag
+tile.openblocks.light_gray_flag.name=Light Gray Flag
+tile.openblocks.cyan_flag.name=Cyan Flag
+tile.openblocks.purple_flag.name=Purple Flag
+tile.openblocks.blue_flag.name=Blue Flag
+tile.openblocks.brown_flag.name=Brown Flag
+tile.openblocks.green_flag.name=Green Flag
+tile.openblocks.red_flag.name=Red Flag
+tile.openblocks.black_flag.name=Black Flag
+
 tile.openblocks.flag.name=Flag
-tile.openblocks.flag.description=Flags can be used for decoration or for marking the way back out of a cave you've ventured in to. The flag will point in the direction that you placed it, or you can put it on walls. If you shift-click with a flag in your hand it will change color.
+tile.openblocks.flag.description=Flags can be used for decoration or for marking the way back out of a cave you've ventured in to. The flag will point in the direction that you placed it, or you can put it on walls. If you right-click with a flag in your hand it will change color.
 
 tile.openblocks.beartrap.name=Bear Trap
 tile.openblocks.beartrap.description=Place a bear trap and click on it to open it up. When a mob walks over the trap they'll be unable to move!

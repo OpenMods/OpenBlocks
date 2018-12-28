@@ -1,7 +1,9 @@
 package openblocks.common.item;
 
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
+import java.util.NavigableSet;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -10,27 +12,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import openmods.colors.ColorMeta;
 import openmods.item.ItemOpenBlock;
 
 public class ItemFlagBlock extends ItemOpenBlock {
 
-	@SideOnly(Side.CLIENT)
-	public static class ItemColorHandler implements IItemColor {
-
-		private static final int COLOR_WHITE = 0xFFFFFFFF;
-
-		@Override
-		public int colorMultiplier(ItemStack stack, int tintIndex) {
-			return tintIndex == 0? ColorMeta.fromBlockMeta(stack.getMetadata()).rgb : COLOR_WHITE;
-		}
-	}
+	private static final NavigableSet<Block> BLOCKS = Sets.newTreeSet(Ordering.natural().onResultOf(Block::getRegistryName));
 
 	public ItemFlagBlock(Block block) {
 		super(block);
-		setHasSubtypes(true);
+		BLOCKS.add(block);
 	}
 
 	@Override
@@ -44,12 +34,16 @@ public class ItemFlagBlock extends ItemOpenBlock {
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
 		if (hand == EnumHand.MAIN_HAND) {
-			stack.setItemDamage((stack.getItemDamage() + 1) % ColorMeta.values().length);
-			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+			return ActionResult.newResult(EnumActionResult.SUCCESS, new ItemStack(nextBlock(), stack.getCount()));
 		} else {
 			return ActionResult.newResult(EnumActionResult.PASS, stack);
 		}
 
+	}
+
+	private Block nextBlock() {
+		final Block next = BLOCKS.higher(block);
+		return next != null? next : BLOCKS.first();
 	}
 
 }

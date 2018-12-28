@@ -169,10 +169,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.heightMap);
 		}
 
-		if (OpenBlocks.Blocks.flag != null) {
-			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Blocks.flag);
-		}
-
 		if (OpenBlocks.Blocks.tank != null) {
 			MinecraftForge.EVENT_BUS.register(new FluidTextureRegisterListener());
 		}

@@ -1,5 +1,6 @@
 package openblocks.client;
 
+import java.util.function.Function;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
@@ -15,7 +16,6 @@ import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockPaintCan;
 import openblocks.common.block.BlockPaintMixer;
 import openblocks.common.item.ItemDevNull;
-import openblocks.common.item.ItemFlagBlock;
 import openblocks.common.item.ItemGlyph;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
@@ -55,28 +55,9 @@ public class BlockColorHandlerRegistration {
 			itemColors.registerItemColorHandler(new ItemDevNull.NestedItemColorHandler(itemColors), OpenBlocks.Items.devNull);
 		}
 
-		if (OpenBlocks.Blocks.flag != null) {
-			itemColors.registerItemColorHandler(new ItemFlagBlock.ItemColorHandler(), OpenBlocks.Blocks.flag);
-			blockColors.registerBlockColorHandler(new BlockFlag.BlockColorHandler(), OpenBlocks.Blocks.flag);
-		}
-
-		for (final ColorMeta color : ColorMeta.getAllColors()) {
-			{
-				final Block block = BlockElevator.colorToBlock(color);
-				if (block != null) {
-					blockColors.registerBlockColorHandler(new BlockFixedColorHandler(color), block);
-					itemColors.registerItemColorHandler(new ItemFixedColorHandler(color), block);
-				}
-			}
-
-			{
-				final Block block = BlockElevatorRotating.colorToBlock(color);
-				if (block != null) {
-					blockColors.registerBlockColorHandler(new BlockFixedColorHandler(color), block);
-					itemColors.registerItemColorHandler(new ItemFixedColorHandler(color), block);
-				}
-			}
-		}
+		registerFixedColorHandlers(BlockElevator::colorToBlock, itemColors, blockColors);
+		registerFixedColorHandlers(BlockElevatorRotating::colorToBlock, itemColors, blockColors);
+		registerFixedColorHandlers(BlockFlag::colorToBlock, itemColors, blockColors);
 
 		if (OpenBlocks.Items.glyph != null) {
 			itemColors.registerItemColorHandler(new ItemGlyph.ColorHandler(), OpenBlocks.Items.glyph);
@@ -85,6 +66,17 @@ public class BlockColorHandlerRegistration {
 		if (OpenBlocks.Blocks.tank != null) {
 			itemColors.registerItemColorHandler(new ItemTankBlock.ColorHandler(), OpenBlocks.Blocks.tank);
 		}
+	}
+
+	private static void registerFixedColorHandlers(final Function<ColorMeta, Block> blockSupplier, final ItemColors itemColors, final BlockColors blockColors) {
+		ColorMeta.getAllColors().forEach(color -> {
+			final Block block = blockSupplier.apply(color);
+			if (block != null) {
+				blockColors.registerBlockColorHandler(new BlockFixedColorHandler(color), block);
+				itemColors.registerItemColorHandler(new ItemFixedColorHandler(color), block);
+			}
+		});
+
 	}
 
 	@SubscribeEvent

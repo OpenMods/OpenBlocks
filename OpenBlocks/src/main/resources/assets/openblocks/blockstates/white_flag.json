@@ -1,0 +1,27 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "model": "openblocks:flag_wall",
+        "transform": "forge:default-block"
+    },
+    "variants" : {
+        "inventory" : [{ "model": "openblocks:flag_ground" }],
+        "orientation" : {
+            "xp_yp" : {
+                "model": "openmods:eval",
+                "custom": {
+                    "base": "openblocks:block/flag_ground",
+                    "transforms": [
+                        "rotate(1 - (wrap_deg(rotation) + 180) / 360)"
+                    ]
+                }
+            },
+            "xp_yn" : { "model": "openblocks:flag_ground" },
+
+            "xp_zn" : { "y": 0 },
+            "zp_xp" : { "y" : 90 },
+            "xn_zp" : { "y": 180 },
+            "zn_xn" : { "y" : 270 }
+        }
+    }
+}
