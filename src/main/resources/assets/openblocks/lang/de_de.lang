@@ -27,7 +27,7 @@ openblocks.gui.luggage=Reisegepäck
 openblocks.gui.sprinkler=Rasensprenger
 openblocks.gui.vacuumhopper=Vakuumtrichter
 openblocks.gui.bigbutton=Großer Knopf
-openblocks.gui.xpbottler=XP-Abfüllgerät
+openblocks.gui.xpbottler=EP-Abfüllgerät
 openblocks.gui.autoanvil=Autom. Amboss
 openblocks.gui.autoeject=Autom. Auswerfer
 openblocks.gui.autoextract=Autom. Extrahierer
@@ -39,7 +39,7 @@ openblocks.gui.blockplacer=Blockplatzierer
 openblocks.gui.paintmixer=Farbmischer
 openblocks.gui.drawingtable=Zeichentisch
 openblocks.gui.digitalfuse=Digitaler Zünder
-openblocks.gui.xp_outputs=XP-Abgabe
+openblocks.gui.xp_outputs=EP-Abgabe
 openblocks.gui.item_outputs=Item-Abgabe
 openblocks.gui.limit=Grenze
 openblocks.gui.available_power=Verfügbare Energie: %d
@@ -258,8 +258,8 @@ tile.openblocks.big_button.description=Der große Knopf ist ein Knopf, der an de
 
 tile.openblocks.big_button_wood.name=Großer Holzknopf
 
-tile.openblocks.xp_drain.name=XP-Gitter
-tile.openblocks.xp_drain.description=Platziere ein XP-Gittter über einem OpenBlocks-Tank und stelle dich darauf. Deine Erfahrungspunkte werden in den Tank entleert, was dann für Blöcke wie den Automatischen Zaubertisch oder den Automatischen Amboss benutzt werden kann.
+tile.openblocks.xp_drain.name=EP-Gitter
+tile.openblocks.xp_drain.description=Platziere ein EP-Gittter über einem OpenBlocks-Tank und stelle dich darauf. Deine Erfahrungspunkte werden in den Tank entleert, was dann für Blöcke wie den Automatischen Zaubertisch oder den Automatischen Amboss benutzt werden kann.
 
 tile.openblocks.vacuum_hopper.name=Vakuumtrichter
 tile.openblocks.vacuum_hopper.description=Der Vakuumtrichter saugt Gegenstände und Erfahrungs-Kugeln um sich herum auf. Du kannst die Tabs auf der rechten Seite der Oberfläche verwenden, um auszuwählen, zu welchen Seiten etwas ausgegeben werden soll.
@@ -281,10 +281,10 @@ tile.openblocks.projector.description=Ich überlasse es dir, boq, das hier zu sc
 tile.openblocks.projector.working.name=Höhenkartenprojektor
 
 tile.openblocks.auto_enchantment_table.name=Autom. Zaubertisch
-tile.openblocks.auto_enchantment_table.description=Der Automatischer Zaubertisch funktioniert ähnlich wie der Vanilla-Zaubertisch, außer dass er mit flüssigen XP arbeitet. Benutze die Tabs auf der rechten Seite der Oberfläche, um auszuwählen, von wo Gegenstände und Erfahrungspunkte genommen werden sollen. Genau wie beim Vanilla-Zaubertisch brauchst du Bücherregale, wenn du mit höhere Leveln verzaubern willst.
+tile.openblocks.auto_enchantment_table.description=Der Automatischer Zaubertisch funktioniert ähnlich wie der Vanilla-Zaubertisch, außer dass er mit flüssigen EP arbeitet. Benutze die Tabs auf der rechten Seite der Oberfläche, um auszuwählen, von wo Gegenstände und Erfahrungspunkte genommen werden sollen. Genau wie beim Vanilla-Zaubertisch brauchst du Bücherregale, wenn du mit höhere Leveln verzaubern willst.
 
-tile.openblocks.xp_bottler.name=XP-Abfüllgerät
-tile.openblocks.xp_bottler.description=Das XP-Abfüllgerät nimmt flüssige Erfahrungspunkten und füllt sie in Glasflaschen, um Erfahrungsfläschchen herzustellen.
+tile.openblocks.xp_bottler.name=EP-Abfüllgerät
+tile.openblocks.xp_bottler.description=Das EP-Abfüllgerät nimmt flüssige Erfahrungspunkten und füllt sie in Glasflaschen, um Erfahrungsfläschchen herzustellen.
 
 tile.openblocks.auto_anvil.name=Autom. Amboss
 tile.openblocks.auto_anvil.description=Der Automatischer Amboss funktioniert ähnlich wie ein Vanilla-Amboss, außer dass er mit flüssigen Erfahrungspunkten arbeitet und komplett automatisierbar ist.\n\nBenutze die Tabs auf der rechten Seite der Oberfläche, um auszuwählen, welche Seiten des Ambosses für Ein-/Ausgabe von Gegenstände oder Flüssigkeiten vorgesehen sind. Rechts-klicke und ziehe den Amboss im Tab, um ihn zu drehen und andere Seiten auszuwählen!
@@ -305,8 +305,8 @@ tile.openblocks.sky.inverted.name=Invertierter Himmelsblock
 tile.openblocks.radio.name=Radio
 tile.openblocks.radio.description=Das Radio erlaubt es dir, Internetradio zu spielen! Zunächst brauchst du Wellenkristalle, die du in Truhen aus Verliesen findest oder von einem bestimmten Dorfbewohner bekommst. Platziere den Kristall ins Radio und gib diesem ein Redstone-Signal, um es anzuschalten. Die Stärke des Redstone-Signals bestimmt die Lautstärke.\n\nIn der Konfigurations-Datei des Servers kannst du konfigurieren, welche Radiosender verfügbar sind.
 
-tile.openblocks.xp_shower.name=XP-Dusche
-tile.openblocks.xp_shower.description=Bringe eine XP-Dusche an einen Tank voller Erfahrungssaft an und sie wird Erfahrungskugeln ausschütten. Diese Kugeln können von einem XP-Gitter oder einer MFR-Kloake aufgesammelt werden.
+tile.openblocks.xp_shower.name=EP-Dusche
+tile.openblocks.xp_shower.description=Bringe eine EP-Dusche an einen Tank voller EP-Saft an und sie wird EP-Kugeln ausschütten. Diese Kugeln können von einem EP-Gitter oder einer MFR-Kloake aufgesammelt werden.
 
 tile.openblocks.scaffolding.name=Gerüst
 tile.openblocks.scaffolding.description=Wolltest du jemals irgendwo hochbauen, ohne einen häslichen Turm zu hinterlassen? Jetzt kannst du! Baue mit Gerüstblöcken und sie verschwinden wenn du fertig bist mit bauen.
@@ -372,7 +372,7 @@ item.openblocks.beam.name=Balken
 item.openblocks.line.name=Leine
 item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
 item.openblocks.info_book.name=Welteroberung mit OpenBlocks
-item.openblocks.xp_bucket.name=Erfahrungs-Eimer
+item.openblocks.xp_bucket.name=EP-Eimer
 item.openblocks.height_map.name=Höhenkarte
 item.openblocks.empty_map.name=Leere Karte
 item.openblocks.map_controller.name=Kartenkontrollmodul
