@@ -7,6 +7,8 @@ import info.openmods.calc.SingleExprEvaluator;
 import info.openmods.calc.types.fp.DoubleCalculatorFactory;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Stream;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -297,23 +299,7 @@ public class TrophyHandler {
 			return "entity." + EntityList.getTranslationName(id) + ".name";
 		}
 
-		static {
-
-			ImmutableMap.Builder<ResourceLocation, Trophy> byId = ImmutableMap.builder();
-			ImmutableMap.Builder<String, Trophy> byName = ImmutableMap.builder();
-
-			for (Trophy t : values()) {
-				byId.put(t.id, t);
-				byName.put(t.name(), t);
-			}
-
-			TYPES_BY_ID = byId.build();
-			TYPES_BY_NAME = byName.build();
-		}
-
-		public final static Map<String, Trophy> TYPES_BY_NAME;
-
-		public final static Map<ResourceLocation, Trophy> TYPES_BY_ID;
+		public final static Map<ResourceLocation, Trophy> ENTITY_TO_TROPHY = Stream.of(values()).collect(ImmutableMap.toImmutableMap(t -> t.id, Function.identity()));
 
 		public final static Trophy[] VALUES = values();
 	}
@@ -335,7 +321,7 @@ public class TrophyHandler {
 			if (result > 0) {
 				final ResourceLocation entityName = EntityList.getKey(entity.getClass());
 				if (entityName != null) {
-					Trophy mobTrophy = Trophy.TYPES_BY_ID.get(entityName);
+					final Trophy mobTrophy = Trophy.ENTITY_TO_TROPHY.get(entityName);
 					if (mobTrophy != null) {
 						final ItemStack dropStack = mobTrophy.getItemStack();
 						if (!dropStack.isEmpty()) {

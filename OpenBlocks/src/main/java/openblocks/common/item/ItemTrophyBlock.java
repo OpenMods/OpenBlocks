@@ -15,9 +15,7 @@ import openmods.utils.TranslationUtils;
 
 public class ItemTrophyBlock extends ItemOpenBlock {
 
-	private static final String TAG_ENTITY = "entity";
-
-	private static final String TAG_ENTITY_ID = "entity_id";
+	private static final String TAG_ENTITY_ID = "Entity";
 
 	public ItemTrophyBlock(Block block) {
 		super(block);
@@ -28,12 +26,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag.hasKey(TAG_ENTITY_ID, Constants.NBT.TAG_STRING)) {
 				ResourceLocation id = new ResourceLocation(tag.getString(TAG_ENTITY_ID));
-				return Trophy.TYPES_BY_ID.get(id);
-			}
-
-			if (tag.hasKey(TAG_ENTITY)) {
-				String entityKey = tag.getString(TAG_ENTITY);
-				return Trophy.TYPES_BY_NAME.get(entityKey);
+				return Trophy.ENTITY_TO_TROPHY.get(id);
 			}
 		}
 
