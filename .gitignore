@@ -29,6 +29,7 @@ bin/
 *.iws
 *.ipr
 .idea/
+/**/out/
 
 # OS Garbage
 .DS_Store
