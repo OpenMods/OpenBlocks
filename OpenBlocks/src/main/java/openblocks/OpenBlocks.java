@@ -827,7 +827,7 @@ public class OpenBlocks {
 		@Override
 		protected void registerCustomFeatures(ConfigurableFeatureManager features) {
 			features.addCustomRule(AbstractFeatureManager.CATEGORY_ITEMS, "miracle_magnet", value -> value && Config.enableCraneTurtles && Loader.isModLoaded(openmods.Mods.OPENPERIPHERALCORE));
-		};
+		}
 
 		@Override
 		protected void setupBlockFactory(FactoryRegistry<Block> blockFactory) {

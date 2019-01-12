@@ -104,7 +104,8 @@ public class PathModel implements IModel {
 			rand.setSeed(seed);
 
 			final List<AxisAlignedBB> boundingBoxes = Lists.newArrayList();
-			LOOP: for (int i = 0; i < maxBlockCount; i++) {
+			LOOP:
+			for (int i = 0; i < maxBlockCount; i++) {
 				double width = rand.nextDouble() * 0.3 + 0.1;
 				double length = rand.nextDouble() * 0.3 + 0.1;
 				double pX = rand.nextDouble() * (1.0 - width);

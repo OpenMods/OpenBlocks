@@ -11,6 +11,7 @@ import openblocks.OpenBlocks;
 
 public enum StencilPattern implements IStencilPattern {
 
+	// @formatter:off
 	CREEPER_FACE(OpenBlocks.location("creeper_face"),
 			"                " +
 			"                " +
@@ -266,6 +267,7 @@ public enum StencilPattern implements IStencilPattern {
 			"      XXX       " +
 			"         X      " +
 			"          XXX   ");
+	// @formatter:on
 
 	public static final Map<ResourceLocation, StencilPattern> ID_TO_PATTERN = Stream.of(values()).collect(ImmutableMap.toImmutableMap(p -> p.id, Function.identity()));
 

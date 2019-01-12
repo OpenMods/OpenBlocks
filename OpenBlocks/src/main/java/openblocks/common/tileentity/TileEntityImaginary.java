@@ -36,7 +36,6 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 			}
 		},
 		PANEL {
-
 			@Override
 			public BlockImaginary.Shape readFromNBT(NBTTagCompound tag) {
 				final float height = tag.getFloat("PanelHeight");

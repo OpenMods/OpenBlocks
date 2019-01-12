@@ -113,8 +113,7 @@ public class BlockTank extends OpenBlock {
 					if (ItemTankBlock.fillTankItem(tankStack, fluid)) result.add(tankStack);
 					else Log.debug("Failed to create filled tank stack for fluid '%s'. Not registered?", fluid.getName());
 				} catch (Throwable t) {
-					throw new RuntimeException(String.format("Failed to create item for fluid '%s'" +
-							"Until this is fixed, you can bypass this code with config option 'tanks.displayAllFluids'",
+					throw new RuntimeException(String.format("Failed to create item for fluid '%s'. Until this is fixed, you can bypass this code with config option 'tanks.displayAllFluids'",
 							fluid.getName()), t);
 				}
 		}
