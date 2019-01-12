@@ -20,6 +20,7 @@ import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.common.model.IModelState;
 import openblocks.OpenBlocks;
 import openblocks.common.IStencilPattern;
+import openblocks.common.StencilPattern;
 import openblocks.common.item.ItemStencil;
 
 public class StencilItemOverride extends ItemOverrideList {
@@ -56,7 +57,7 @@ public class StencilItemOverride extends ItemOverrideList {
 
 	@Override
 	public IBakedModel handleItemState(IBakedModel originalModel, @Nonnull ItemStack stack, World world, EntityLivingBase entity) {
-		final Optional<IStencilPattern> pattern = ItemStencil.getPattern(stack);
+		final Optional<StencilPattern> pattern = ItemStencil.getPattern(stack);
 		if (pattern.isPresent()) {
 			return getModelForPattern(pattern.get());
 		} else {

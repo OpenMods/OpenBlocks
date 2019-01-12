@@ -609,7 +609,7 @@ public class OpenBlocks {
 		@RegisterItem(type = ItemPaintBrush.class, id = "paintbrush", legacyIds = "paintBrush")
 		public static Item paintBrush;
 
-		@RegisterItem(type = ItemStencil.class, id = "stencil", registerDefaultModel = false)
+		@RegisterItem(type = ItemStencil.class, id = "stencil")
 		public static Item stencil;
 
 		@RegisterItem(type = ItemSqueegee.class, id = "squeegee")

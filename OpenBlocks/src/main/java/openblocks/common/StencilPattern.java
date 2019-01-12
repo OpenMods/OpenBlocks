@@ -1,11 +1,18 @@
 package openblocks.common;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import java.math.BigInteger;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Stream;
+import net.minecraft.util.ResourceLocation;
+import openblocks.OpenBlocks;
 
 public enum StencilPattern implements IStencilPattern {
 
-	CREEPER_FACE("                " +
+	CREEPER_FACE(OpenBlocks.location("creeper_face"),
+			"                " +
 			"                " +
 			"  XXXX    XXXX  " +
 			"  XXXX    XXXX  " +
@@ -21,7 +28,8 @@ public enum StencilPattern implements IStencilPattern {
 			"    XX    XX    " +
 			"                " +
 			"                "),
-	BORDER("XX              " +
+	BORDER(OpenBlocks.location("border"),
+			"XX              " +
 			"XX              " +
 			"XX              " +
 			"XX              " +
@@ -37,7 +45,8 @@ public enum StencilPattern implements IStencilPattern {
 			"XX              " +
 			"XX              " +
 			"XX              "),
-	STRIPES("X X X X X X X X " +
+	STRIPES(OpenBlocks.location("stripes"),
+			"X X X X X X X X " +
 			"X X X X X X X X " +
 			"X X X X X X X X " +
 			"X X X X X X X X " +
@@ -53,7 +62,8 @@ public enum StencilPattern implements IStencilPattern {
 			"X X X X X X X X " +
 			"X X X X X X X X " +
 			"X X X X X X X X "),
-	CORNER("                " +
+	CORNER(OpenBlocks.location("corner"),
+			"                " +
 			"                " +
 			"  XXXXXX        " +
 			"  XXXXXX        " +
@@ -69,7 +79,8 @@ public enum StencilPattern implements IStencilPattern {
 			"                " +
 			"                " +
 			"                "),
-	CORNER2("XXXXXXXX        " +
+	CORNER2(OpenBlocks.location("corner2"),
+			"XXXXXXXX        " +
 			"XXXXXXX         " +
 			"XXXXXX          " +
 			"XXXXX           " +
@@ -85,7 +96,8 @@ public enum StencilPattern implements IStencilPattern {
 			"                " +
 			"                " +
 			"                "),
-	CORNER3("                " +
+	CORNER3(OpenBlocks.location("corner3"),
+			"                " +
 			" XXXXXXX        " +
 			" XXXXXXX        " +
 			" XX             " +
@@ -101,7 +113,8 @@ public enum StencilPattern implements IStencilPattern {
 			"                " +
 			"                " +
 			"                "),
-	HOLE("                " +
+	HOLE(OpenBlocks.location("hole"),
+			"                " +
 			"                " +
 			"                " +
 			"                " +
@@ -117,7 +130,8 @@ public enum StencilPattern implements IStencilPattern {
 			"                " +
 			"                " +
 			"                "),
-	SPIRAL("                " +
+	SPIRAL(OpenBlocks.location("spiral"),
+			"                " +
 			"XXXXXXXXXXXXXXX " +
 			"              X " +
 			" XXXXXXXXXXXX X " +
@@ -133,7 +147,8 @@ public enum StencilPattern implements IStencilPattern {
 			" X            X " +
 			" XXXXXXXXXXXXXX " +
 			"                "),
-	THICKSTRIPES("  XXXX    XXXX  " +
+	THICKSTRIPES(OpenBlocks.location("thick_stripes"),
+			"  XXXX    XXXX  " +
 			"  XXXX    XXXX  " +
 			"  XXXX    XXXX  " +
 			"  XXXX    XXXX  " +
@@ -149,7 +164,8 @@ public enum StencilPattern implements IStencilPattern {
 			"  XXXX    XXXX  " +
 			"  XXXX    XXXX  " +
 			"  XXXX    XXXX  "),
-	SPLAT(" XX     X    XX " +
+	SPLAT(OpenBlocks.location("splat"),
+			" XX     X    XX " +
 			"XXX    XXX   XXX" +
 			"XX     XX      X" +
 			"    X      XX   " +
@@ -165,7 +181,8 @@ public enum StencilPattern implements IStencilPattern {
 			"           XX   " +
 			"    XX     XXX  " +
 			"    XXX     XX  "),
-	STORAGE("                " +
+	STORAGE(OpenBlocks.location("storage"),
+			"                " +
 			"                " +
 			"                " +
 			"   XXXXXXXXXX   " +
@@ -181,7 +198,8 @@ public enum StencilPattern implements IStencilPattern {
 			"                " +
 			"                " +
 			"                "),
-	HEART("                " +
+	HEART(OpenBlocks.location("heart"),
+			"                " +
 			"                " +
 			"   XXX    XXX   " +
 			"  X   X  X   X  " +
@@ -197,7 +215,8 @@ public enum StencilPattern implements IStencilPattern {
 			"       XX       " +
 			"                " +
 			"                "),
-	HEART2("                " +
+	HEART2(OpenBlocks.location("heart2"),
+			"                " +
 			"                " +
 			"                " +
 			"   XXX    XXX   " +
@@ -213,7 +232,8 @@ public enum StencilPattern implements IStencilPattern {
 			"                " +
 			"                " +
 			"                "),
-	MUSIC("                " +
+	MUSIC(OpenBlocks.location("note"),
+			"                " +
 			"                " +
 			"       XXXXXX   " +
 			"  XXXXXXXXXXX   " +
@@ -229,7 +249,8 @@ public enum StencilPattern implements IStencilPattern {
 			"   X            " +
 			"                " +
 			"                "),
-	BALLOON("                " +
+	BALLOON(OpenBlocks.location("balloon"),
+			"                " +
 			"      XXXX      " +
 			"     XXXXXX     " +
 			"    XXXXXXXX    " +
@@ -246,9 +267,14 @@ public enum StencilPattern implements IStencilPattern {
 			"         X      " +
 			"          XXX   ");
 
+	public static final Map<ResourceLocation, StencilPattern> ID_TO_PATTERN = Stream.of(values()).collect(ImmutableMap.toImmutableMap(p -> p.id, Function.identity()));
+
+	public final ResourceLocation id;
+
 	private final BigInteger bits;
 
-	private StencilPattern(String format) {
+	private StencilPattern(final ResourceLocation id, final String format) {
+		this.id = id;
 		BigInteger tmp = BigInteger.ZERO;
 		Preconditions.checkState(format.length() == 16 * 16, "Invalid format string length");
 		for (int i = 0; i < 256; i++)
@@ -273,5 +299,4 @@ public enum StencilPattern implements IStencilPattern {
 		boolean bit = bits.testBit(bitIndex);
 		return bit? src : dst;
 	}
-
 }

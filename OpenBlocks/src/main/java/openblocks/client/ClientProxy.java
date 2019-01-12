@@ -150,7 +150,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Items.stencil != null) {
 			StencilTextureManager.INSTANCE.register(StencilItemOverride.BACKGROUND_TEXTURE, StencilPattern.values().length);
 			MinecraftForge.EVENT_BUS.register(StencilTextureManager.INSTANCE);
-			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.stencil);
 		}
 
 		if (OpenBlocks.Blocks.canvas != null) {
