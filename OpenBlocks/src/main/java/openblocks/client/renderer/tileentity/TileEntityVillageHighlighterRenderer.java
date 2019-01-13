@@ -20,7 +20,7 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(-8, -3, -8, 8, 3, 8);
 
-	private static float N = 1500;
+	private static final float N = 1500;
 
 	@Override
 	public void render(TileEntityVillageHighlighter vh, double x, double y, double z, float partialTick, int destroyProcess, float alpha) {

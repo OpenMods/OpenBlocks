@@ -88,7 +88,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 		if (!(world instanceof WorldServer)) return;
 		final int fertilizerChance = hasBonemeal? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance;
 		if (RANDOM.nextDouble() < 1.0 / fertilizerChance) {
-			FakePlayerPool.instance.executeOnPlayer((WorldServer)world, (PlayerUser)fakePlayer -> {
+			FakePlayerPool.instance.executeOnPlayer((WorldServer)world, fakePlayer -> {
 				final int x = selectFromRange(Config.sprinklerEffectiveRange);
 				final int z = selectFromRange(Config.sprinklerEffectiveRange);
 

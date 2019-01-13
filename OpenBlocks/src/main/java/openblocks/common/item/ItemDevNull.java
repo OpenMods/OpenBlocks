@@ -51,7 +51,7 @@ public class ItemDevNull extends Item {
 
 	private static final LoadingCache<ItemStack, Pair<ItemStack, Integer>> cache = CacheBuilder.newBuilder().softValues().expireAfterAccess(10, TimeUnit.SECONDS).build(new CacheLoader<ItemStack, Pair<ItemStack, Integer>>() {
 		@Override
-		public Pair<ItemStack, Integer> load(@Nonnull ItemStack container) throws Exception {
+		public Pair<ItemStack, Integer> load(@Nonnull ItemStack container) {
 			ItemStack stack = container;
 			int depth = 0;
 
@@ -176,7 +176,7 @@ public class ItemDevNull extends Item {
 		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			final ItemStack stack = player.inventory.getStackInSlot(i);
 
-			if (stack != null && stack.getItem() == this) {
+			if (stack.getItem() == this) {
 				final ItemInventory inventory = new ItemInventory(stack, 1);
 				final ItemStack containedStack = inventory.getStackInSlot(0);
 				if (!containedStack.isEmpty()) {

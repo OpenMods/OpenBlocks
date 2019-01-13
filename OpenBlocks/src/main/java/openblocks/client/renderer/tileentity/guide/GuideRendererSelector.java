@@ -12,7 +12,7 @@ public class GuideRendererSelector {
 		if (!ShaderHelper.isSupported() || !BufferHelper.isSupported() || !ArraysHelper.isSupported()) {
 			Log.debug("Advanced guide renderer not supported, falling back to legacy renderer.");
 			return new GuideLegacyRenderer(); // advanced renderer not supported :(
-		} else if (Config.useAdvancedRenderer == false) {
+		} else if (!Config.useAdvancedRenderer) {
 			Log.debug("Advanced guide renderer disabled, falling back to legacy renderer.");
 			return new GuideLegacyRenderer();
 		} else {

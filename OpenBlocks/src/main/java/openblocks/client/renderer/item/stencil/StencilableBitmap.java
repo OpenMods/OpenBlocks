@@ -152,7 +152,7 @@ public class StencilableBitmap {
 
 		List<List<MaskWithWeight>> collectedMasks = Lists.newArrayList();
 		for (int i = 0; i < totalPixels; i++)
-			collectedMasks.add(Lists.<MaskWithWeight> newArrayList());
+			collectedMasks.add(Lists.newArrayList());
 
 		for (Rectangle rect : fullySplitMask) {
 			final int index = rect.targetY() * width + rect.targetX();

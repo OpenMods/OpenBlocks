@@ -53,7 +53,7 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 				private boolean isUpdateTriggering(IInventory inventory, OptionalInt maybeSlotNumber) {
 					if (!maybeSlotNumber.isPresent()) return true; // full update, trigger everything
 					final int slotNumber = maybeSlotNumber.get();
-					return inventory.getStackInSlot(slotNumber) != null;
+					return !inventory.getStackInSlot(slotNumber).isEmpty();
 				}
 			});
 
@@ -68,7 +68,7 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 	@Override
 	protected void doWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
 		ItemStack stack = ItemStack.EMPTY;
-		int slotId = 0;
+		int slotId;
 
 		for (slotId = 0; slotId < inventory.getSizeInventory(); slotId++) {
 			stack = inventory.getStackInSlot(slotId);

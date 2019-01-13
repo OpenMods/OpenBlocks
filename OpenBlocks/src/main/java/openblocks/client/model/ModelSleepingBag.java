@@ -8,8 +8,8 @@ public class ModelSleepingBag extends ModelBiped {
 
 	public static final ModelSleepingBag instance = new ModelSleepingBag();
 
-	private ModelRenderer main;
-	private ModelRenderer pillow;
+	private final ModelRenderer main;
+	private final ModelRenderer pillow;
 
 	public ModelSleepingBag() {
 

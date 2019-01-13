@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEntityCannon> {
 
-	private ModelCannon model = new ModelCannon();
+	private final ModelCannon model = new ModelCannon();
 	private static final ResourceLocation texture = OpenBlocks.location("textures/models/cannon.png");
 
 	@Override

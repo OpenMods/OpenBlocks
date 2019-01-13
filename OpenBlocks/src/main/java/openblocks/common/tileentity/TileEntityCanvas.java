@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -313,7 +314,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 			for (int i = 0; i < count; i++) {
 				Item item = paintedBlock.getItemDropped(state, rand, fortune);
-				if (item != null) drops.add(new ItemStack(item, 1, damageDropped));
+				if (item != Items.AIR) drops.add(new ItemStack(item, 1, damageDropped));
 
 			}
 		}

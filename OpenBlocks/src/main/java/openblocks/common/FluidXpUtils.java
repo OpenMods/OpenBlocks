@@ -1,9 +1,9 @@
 package openblocks.common;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -17,9 +17,9 @@ public class FluidXpUtils {
 	public static final int XP_PER_BOTTLE = 8;
 
 	public interface IFluidXpConverter {
-		public int fluidToXp(int fluid);
+		int fluidToXp(int fluid);
 
-		public int xpToFluid(int xp);
+		int xpToFluid(int xp);
 	}
 
 	private static class XpJuice implements IFluidXpConverter {

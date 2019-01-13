@@ -22,7 +22,7 @@ import openmods.config.properties.ConfigurationChange;
 @ApiSingleton
 public class FlimFlamRegistry implements IFlimFlamRegistry {
 
-	public static FlimFlamRegistry instance = new FlimFlamRegistry();
+	public static final FlimFlamRegistry instance = new FlimFlamRegistry();
 
 	private static final List<IFlimFlamDescription> FLIM_FLAMS = Lists.newArrayList();
 

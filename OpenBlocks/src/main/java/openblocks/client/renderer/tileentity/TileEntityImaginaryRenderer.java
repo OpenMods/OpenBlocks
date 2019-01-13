@@ -62,7 +62,7 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 	}
 
 	private interface IVertexElementWriter {
-		public void write(ByteBuffer output, RenderInfo info);
+		void write(ByteBuffer output, RenderInfo info);
 	}
 
 	private static class VertexWriter {
@@ -201,7 +201,7 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 			.expireAfterAccess(1, TimeUnit.SECONDS)
 			.build(new CacheLoader<IBlockState, List<VertexWriter>>() {
 				@Override
-				public List<VertexWriter> load(IBlockState state) throws Exception {
+				public List<VertexWriter> load(IBlockState state) {
 					if (blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
 					IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(state);
 

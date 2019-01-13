@@ -99,7 +99,7 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 
 	@Override
 	public void trigger(BlockPos pos, final int stateId) {
-		GeometryUtils.line3D(this.pos, pos, (IShapeable)(x, y, z) -> {
+		GeometryUtils.line3D(this.pos, pos, (x, y, z) -> {
 			final double dx = x + 0.5;
 			final double dy = y + 0.5;
 			final double dz = z + 0.5;

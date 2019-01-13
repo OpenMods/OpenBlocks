@@ -144,10 +144,8 @@ public class BeepGenerator {
 
 		final float amplitude = Math.max(volume * masterSoundLevel, 2);
 
-		final double sweepDuration = BUFFER_DURATION;
-
 		// see 'chirp' on wiki for explanation of constants
-		final double k = (f1 - f0) / sweepDuration;
+		final double k = (f1 - f0) / BUFFER_DURATION;
 
 		int sampleCount = 0;
 

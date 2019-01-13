@@ -20,8 +20,4 @@ public class SquidBehavior implements ITrophyBehavior {
 
 		return 10;
 	}
-
-	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
-
 }

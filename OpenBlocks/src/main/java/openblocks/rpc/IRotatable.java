@@ -1,5 +1,5 @@
 package openblocks.rpc;
 
 public interface IRotatable {
-	public void rotate(int direction);
+	void rotate(int direction);
 }

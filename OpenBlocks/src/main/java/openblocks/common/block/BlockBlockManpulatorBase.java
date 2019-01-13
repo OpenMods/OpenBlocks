@@ -21,7 +21,7 @@ public class BlockBlockManpulatorBase extends OpenBlock.SixDirections {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), POWERED });
+		return new BlockStateContainer(this, getPropertyOrientation(), POWERED);
 	}
 
 	@Override

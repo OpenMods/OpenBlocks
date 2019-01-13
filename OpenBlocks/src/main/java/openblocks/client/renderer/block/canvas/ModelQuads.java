@@ -30,9 +30,9 @@ class ModelQuads {
 	static {
 		final ImmutableMap.Builder<EnumFacing, List<BakedQuad>> emptySides = ImmutableMap.builder();
 		for (EnumFacing side : EnumFacing.VALUES)
-			emptySides.put(side, ImmutableList.<BakedQuad> of());
+			emptySides.put(side, ImmutableList.of());
 
-		EMPTY = new ModelQuads(ImmutableList.<BakedQuad> of(), emptySides.build()) {
+		EMPTY = new ModelQuads(ImmutableList.of(), emptySides.build()) {
 			@Override
 			public List<BakedQuad> get(@Nullable EnumFacing side) {
 				return ImmutableList.of();
@@ -47,7 +47,7 @@ class ModelQuads {
 
 		public Builder() {
 			for (EnumFacing side : EnumFacing.VALUES)
-				sidedQuads.put(side, Lists.<BakedQuad> newArrayList());
+				sidedQuads.put(side, Lists.newArrayList());
 		}
 
 		public Builder addSidedQuads(EnumFacing side, Collection<BakedQuad> quads) {

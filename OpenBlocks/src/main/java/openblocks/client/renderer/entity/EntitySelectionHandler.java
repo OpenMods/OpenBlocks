@@ -16,7 +16,7 @@ public class EntitySelectionHandler {
 	public interface ISelectAware {}
 
 	public interface ISelectionRenderer<E extends Entity> {
-		public void render(E e, EntityPlayer player, RenderGlobal context, float partialTickTime);
+		void render(E e, EntityPlayer player, RenderGlobal context, float partialTickTime);
 	}
 
 	public static class RegisterSelectionRendererEvent<I extends Entity & ISelectAware> extends Event {

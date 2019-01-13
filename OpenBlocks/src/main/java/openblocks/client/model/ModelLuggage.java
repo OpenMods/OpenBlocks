@@ -7,10 +7,9 @@ import net.minecraft.util.math.MathHelper;
 
 public class ModelLuggage extends ModelBase {
 	// fields
-	ModelRenderer lid;
-	ModelRenderer leg2;
-	ModelRenderer leg1;
-	ModelRenderer body;
+	private final ModelRenderer lid;
+	private final ModelRenderer leg1;
+	private final ModelRenderer body;
 
 	public ModelLuggage() {
 		textureWidth = 128;

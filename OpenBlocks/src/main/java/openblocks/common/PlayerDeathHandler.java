@@ -90,7 +90,7 @@ public class PlayerDeathHandler {
 					for (int z = -size; z <= size; z++)
 						coords.add(new BlockPos(x, y, z));
 
-			Collections.sort(coords, SEARCH_COMPARATOR);
+			coords.sort(SEARCH_COMPARATOR);
 
 			this.coords = ImmutableList.copyOf(coords);
 		}
@@ -182,7 +182,7 @@ public class PlayerDeathHandler {
 		private boolean tryPlaceGrave(World world, final BlockPos gravePos, String gravestoneText, ITextComponent deathMessage) {
 			world.setBlockState(gravePos, OpenBlocks.Blocks.grave.getDefaultState());
 			TileEntity tile = world.getTileEntity(gravePos);
-			if (tile == null || !(tile instanceof TileEntityGrave)) {
+			if (!(tile instanceof TileEntityGrave)) {
 				Log.warn("Failed to place grave @ %s: invalid tile entity: %s(%s)", gravePos, tile, tile != null? tile.getClass() : "?");
 				return false;
 			}

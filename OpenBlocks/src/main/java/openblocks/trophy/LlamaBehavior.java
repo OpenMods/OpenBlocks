@@ -27,13 +27,9 @@ public class LlamaBehavior implements ITrophyBehavior {
 		double dZ = player.posZ - pZ;
 		float f = MathHelper.sqrt(dX * dX + dZ * dZ) * 0.2F;
 		entityllamaspit.shoot(dX, dy + f, dZ, 1.5F, 10.0F);
-		world.playSound((EntityPlayer)null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_LLAMA_SPIT, SoundCategory.NEUTRAL, 1.0F, 1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F);
+		world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_LLAMA_SPIT, SoundCategory.NEUTRAL, 1.0F, 1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F);
 		world.spawnEntity(entityllamaspit);
 
 		return 0;
 	}
-
-	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
-
 }

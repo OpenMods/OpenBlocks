@@ -55,13 +55,13 @@ public class DevNullModel implements IModel {
 
 			if (obj.has("normal")) {
 				final String v = JsonUtils.getString(obj, "normal");
-				newNormal = Optional.<ResourceLocation> of(new ModelResourceLocation(v));
+				newNormal = Optional.of(new ModelResourceLocation(v));
 				changed = true;
 			}
 
 			if (obj.has("overflow")) {
 				final String v = JsonUtils.getString(obj, "overflow");
-				newOverflow = Optional.<ResourceLocation> of(new ModelResourceLocation(v));
+				newOverflow = Optional.of(new ModelResourceLocation(v));
 				changed = true;
 			}
 

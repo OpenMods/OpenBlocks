@@ -12,8 +12,4 @@ public class CaveSpiderBehavior implements ITrophyBehavior {
 		player.addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 3));
 		return 0;
 	}
-
-	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
-
 }

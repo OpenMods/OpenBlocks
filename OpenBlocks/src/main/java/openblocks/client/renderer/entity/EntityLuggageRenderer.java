@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 public class EntityLuggageRenderer extends RenderLiving<EntityLuggage> {
 
-	private static ModelBase luggageModel = new ModelLuggage();
+	private static final ModelBase luggageModel = new ModelLuggage();
 
 	private static final ResourceLocation textureNormal = OpenBlocks.location("textures/models/luggage.png");
 	private static final ResourceLocation textureSpecial = OpenBlocks.location("textures/models/luggage_special.png");

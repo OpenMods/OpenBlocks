@@ -7,11 +7,11 @@ import net.minecraft.world.World;
 
 public interface IElevatorBlock {
 
-	public enum PlayerRotation {
-		NONE, NORTH, SOUTH, EAST, WEST;
+	enum PlayerRotation {
+		NONE, NORTH, SOUTH, EAST, WEST
 	}
 
-	public EnumDyeColor getColor(World world, BlockPos pos, IBlockState state);
+	EnumDyeColor getColor(World world, BlockPos pos, IBlockState state);
 
-	public PlayerRotation getRotation(World world, BlockPos pos, IBlockState state);
+	PlayerRotation getRotation(World world, BlockPos pos, IBlockState state);
 }

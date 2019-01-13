@@ -40,7 +40,7 @@ public class BakedModelCanvas extends BakedModelAdapter {
 			maybeInnerBlock = getProperty(unlistedProperties, InnerBlockState.PROPERTY);
 			maybeCanvasState = getProperty(unlistedProperties, CanvasState.PROPERTY);
 
-			if (maybeCanvasState.isPresent()) maybeCanvasState.get().onRender();
+			maybeCanvasState.ifPresent(CanvasState::onRender);
 		} else {
 			maybeInnerBlock = Optional.empty();
 			maybeCanvasState = Optional.empty();

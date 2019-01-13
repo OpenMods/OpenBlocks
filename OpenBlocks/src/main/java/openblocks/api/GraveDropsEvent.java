@@ -12,12 +12,12 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 public class GraveDropsEvent extends Event {
 
 	public enum Action {
-		STORE, DELETE, DROP;
+		STORE, DELETE, DROP
 	}
 
 	public static class ItemAction {
 		public final EntityItem item;
-		public Action action;
+		public final Action action;
 
 		public ItemAction(EntityItem item, Action action) {
 			Preconditions.checkNotNull(action);

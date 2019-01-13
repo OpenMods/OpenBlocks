@@ -18,7 +18,7 @@ import openmods.gui.logic.ValueCopyAction;
 import openmods.utils.MiscUtils;
 import openmods.utils.TranslationUtils;
 
-public class GuiAutoAnvil extends GuiConfigurableSlots<TileEntityAutoAnvil, ContainerAutoAnvil, TileEntityAutoAnvil.AutoSlots> {
+public class GuiAutoAnvil extends GuiConfigurableSlots<TileEntityAutoAnvil, ContainerAutoAnvil, AutoSlots> {
 
 	public GuiAutoAnvil(ContainerAutoAnvil container) {
 		super(container, 176, 175, "openblocks.gui.autoanvil");

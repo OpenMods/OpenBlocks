@@ -18,7 +18,7 @@ import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityVillageHighlighter extends SyncedTileEntity implements ITickable {
 
-	public static int VALUES_PER_VILLAGE = 7;
+	public static final int VALUES_PER_VILLAGE = 7;
 
 	private SyncableIntArray villageData;
 

@@ -53,7 +53,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	private final IAnimationStateMachine asm;
 
-	public static enum Slots {
+	public enum Slots {
 		paint,
 		reserved, // old output slot, now merged with input
 		dyeCyan,
@@ -62,14 +62,14 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 		dyeBlack
 	}
 
-	public static enum DyeSlot {
+	public enum DyeSlot {
 		cyan,
 		magenta,
 		yellow,
 		black
 	}
 
-	private static EnumMap<Slots, Integer> ALLOWED_COLORS = Maps.newEnumMap(Slots.class);
+	private static final EnumMap<Slots, Integer> ALLOWED_COLORS = Maps.newEnumMap(Slots.class);
 
 	static {
 		ALLOWED_COLORS.put(Slots.dyeBlack, OreDictionary.getOreID("dyeBlack"));
@@ -107,7 +107,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	@StoreOnDrop
 	public SyncableFloat lvlBlack;
 
-	private GenericInventory inventory = new TileEntityInventory(this, "paintmixer", true, 6) {
+	private final GenericInventory inventory = new TileEntityInventory(this, "paintmixer", true, 6) {
 		@Override
 		public boolean isItemValidForSlot(int slotId, @Nonnull ItemStack stack) {
 			Slots[] values = Slots.values();
@@ -121,7 +121,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	public TileEntityPaintMixer() {
 		inventory.addCallback(this);
-		this.asm = OpenMods.proxy.loadAsm(OpenBlocks.location("asms/block/paint_mixer.json"), ImmutableMap.<String, ITimeValue> of());
+		this.asm = OpenMods.proxy.loadAsm(OpenBlocks.location("asms/block/paint_mixer.json"), ImmutableMap.of());
 	}
 
 	@Override
@@ -211,7 +211,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	public boolean tryUseInk(Slots slot, int consume) {
 		ItemStack stack = inventory.getStackInSlot(slot);
-		return isValidForSlot(slot, stack) && inventory.decrStackSize(slot.ordinal(), consume) != null;
+		return isValidForSlot(slot, stack) && !inventory.decrStackSize(slot.ordinal(), consume).isEmpty();
 	}
 
 	private static boolean isValidForSlot(Slots slot, ItemStack stack) {

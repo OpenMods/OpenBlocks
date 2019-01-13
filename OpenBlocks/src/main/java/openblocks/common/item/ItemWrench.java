@@ -38,7 +38,7 @@ public class ItemWrench extends Item {
 	}
 
 	private boolean requiresSneaking(final Block block) {
-		return Iterables.any(sneakOnly, input -> input.isInstance(block));
+		return sneakOnly.stream().anyMatch(input -> input.isInstance(block));
 	}
 
 	@Override

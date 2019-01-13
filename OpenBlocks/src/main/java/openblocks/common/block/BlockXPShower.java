@@ -33,7 +33,7 @@ public class BlockXPShower extends OpenBlock.FourDirections {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), POWERED });
+		return new BlockStateContainer(this, getPropertyOrientation(), POWERED);
 	}
 
 	private static final int MASK_POWERED = 0x8;

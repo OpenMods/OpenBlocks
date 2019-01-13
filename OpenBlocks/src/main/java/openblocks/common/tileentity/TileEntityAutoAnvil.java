@@ -166,7 +166,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	private void repairItem() {
-		final VanillaAnvilLogic helper = new VanillaAnvilLogic(inventory.getStackInSlot(Slots.tool), inventory.getStackInSlot(Slots.modifier), false, Optional.<String> absent());
+		final VanillaAnvilLogic helper = new VanillaAnvilLogic(inventory.getStackInSlot(Slots.tool), inventory.getStackInSlot(Slots.modifier), false, Optional.absent());
 
 		final ItemStack output = helper.getOutputStack();
 		if (!output.isEmpty()) {

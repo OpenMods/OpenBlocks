@@ -26,7 +26,7 @@ public enum GuideShape {
 	public final String unlocalizedName;
 	public final IShapeGenerator generator;
 
-	private GuideShape(IShapeGenerator generator, String name) {
+	GuideShape(IShapeGenerator generator, String name) {
 		this.unlocalizedName = "openblocks.misc.shape." + name;
 		this.generator = generator;
 	}

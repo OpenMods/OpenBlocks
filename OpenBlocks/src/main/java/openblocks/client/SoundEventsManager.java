@@ -129,7 +129,7 @@ public class SoundEventsManager {
 		}
 	}
 
-	private ManualDisplayList notPumpkinOverlay = new ManualDisplayList();
+	private final ManualDisplayList notPumpkinOverlay = new ManualDisplayList();
 	private static final ResourceLocation notPumpkin = OpenBlocks.location("textures/misc/glasses_obsidian.png");
 
 	private void dimWorld(final TextureManager tex, final Minecraft mc) {

@@ -53,7 +53,7 @@ public class MapDataManager {
 
 	@NetworkEventMeta(direction = EventDirection.S2C)
 	public static class MapDataResponseEvent extends NetworkEvent {
-		public Map<Integer, HeightMapData> maps = Maps.newHashMap();
+		public final Map<Integer, HeightMapData> maps = Maps.newHashMap();
 
 		@Override
 		protected void readFromStream(PacketBuffer input) {
@@ -87,7 +87,7 @@ public class MapDataManager {
 
 	private Set<Block> blockBlacklist;
 
-	private Set<Integer> mapsToUpdate = Sets.newHashSet();
+	private final Set<Integer> mapsToUpdate = Sets.newHashSet();
 
 	public static int createNewMap(World world, byte scale) {
 		int id = world.getUniqueDataId("height_map");

@@ -32,9 +32,9 @@ public class SoundIconRegistry {
 	private final static ResourceLocation ICON_FRAME = ob("frame");
 
 	public interface ISoundCategory {
-		public IDrawableIcon getIcon(Iterator<String> path);
+		IDrawableIcon getIcon(Iterator<String> path);
 
-		public void registerIcons(TextureMap registry);
+		void registerIcons(TextureMap registry);
 	}
 
 	public static class ConstantIcon implements ISoundCategory {
@@ -153,7 +153,7 @@ public class SoundIconRegistry {
 
 	private final Map<String, MappedCategory> roots = Maps.newHashMap();
 
-	private Map<ResourceLocation, IDrawableIcon> iconCache = Maps.newConcurrentMap();
+	private final Map<ResourceLocation, IDrawableIcon> iconCache = Maps.newConcurrentMap();
 
 	public static final int DEFAULT_COLOR = 0xFFFFFF;
 

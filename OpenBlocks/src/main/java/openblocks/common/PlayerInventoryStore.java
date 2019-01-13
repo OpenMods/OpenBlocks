@@ -66,14 +66,14 @@ public class PlayerInventoryStore {
 	public static final PlayerInventoryStore instance = new PlayerInventoryStore();
 
 	public interface ExtrasFiller {
-		public void addExtras(NBTTagCompound meta);
+		void addExtras(NBTTagCompound meta);
 	}
 
 	public static class LoadedInventories {
 
 		public final IInventory mainInventory;
 
-		public Map<String, SubInventory> subInventories;
+		public final Map<String, SubInventory> subInventories;
 
 		private LoadedInventories(IInventory mainInventory, Map<String, SubInventory> subInventories) {
 			this.mainInventory = mainInventory;
@@ -158,13 +158,8 @@ public class PlayerInventoryStore {
 		root.setString("Type", type);
 		filler.addExtras(root);
 
-		try {
-			OutputStream stream = new FileOutputStream(dumpFile);
-			try {
-				CompressedStreamTools.writeCompressed(root, stream);
-			} finally {
-				stream.close();
-			}
+		try (OutputStream stream = new FileOutputStream(dumpFile)) {
+			CompressedStreamTools.writeCompressed(root, stream);
 		} catch (IOException e) {
 			Log.warn(e, "Failed to dump data for player %s, file %s", name, dumpFile.getAbsoluteFile());
 		}
@@ -215,13 +210,8 @@ public class PlayerInventoryStore {
 	private static NBTTagCompound loadInventoryTag(World world, String fileId) {
 		File file = world.getSaveHandler().getMapFileFromName(PREFIX + stripFilename(fileId));
 
-		try {
-			InputStream stream = new FileInputStream(file);
-			try {
-				return CompressedStreamTools.readCompressed(stream);
-			} finally {
-				stream.close();
-			}
+		try (InputStream stream = new FileInputStream(file)) {
+			return CompressedStreamTools.readCompressed(stream);
 		} catch (IOException e) {
 			Log.warn(e, "Failed to read data from file %s", file.getAbsoluteFile());
 			return null;
@@ -231,7 +221,7 @@ public class PlayerInventoryStore {
 	public List<String> getMatchedDumps(World world, String prefix) {
 		File saveFolder = getSaveFolder(world);
 		final String actualPrefix = StringUtils.startsWithIgnoreCase(prefix, PREFIX)? prefix : PREFIX + prefix;
-		File[] files = saveFolder.listFiles((FilenameFilter)(dir, name) -> name.startsWith(actualPrefix));
+		File[] files = saveFolder.listFiles((dir, name) -> name.startsWith(actualPrefix));
 
 		List<String> result = Lists.newArrayList();
 		int toCut = PREFIX.length();

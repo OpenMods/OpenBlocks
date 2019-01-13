@@ -118,15 +118,12 @@ public class StencilModelTransformer {
 
 	private final LoadingCache<Key, ModelQuads> cache = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES)
 			.removalListener((RemovalNotification<Key, ModelQuads> notification) -> {
-				final Optional<CanvasState> canvasState = notification.getKey().canvasState;
-				if (canvasState.isPresent())
-					canvasState.get().release();
+				notification.getKey().canvasState.ifPresent(CanvasState::release);
 			})
 			.build(new CacheLoader<Key, ModelQuads>() {
 				@Override
 				public ModelQuads load(Key key) throws Exception {
-					if (key.canvasState.isPresent())
-						key.canvasState.get().acquire();
+					key.canvasState.ifPresent(CanvasState::acquire);
 
 					final LayerRenderInfo layersToRender = renderLayerCache.get(key.innerBlockState, key.renderLayer);
 					if (layersToRender.layers.isEmpty()) return ModelQuads.EMPTY;

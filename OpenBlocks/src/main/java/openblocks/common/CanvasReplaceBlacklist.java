@@ -18,7 +18,7 @@ public class CanvasReplaceBlacklist {
 	private Set<ResourceLocation> idBlacklist = createBlacklist();
 
 	private static Set<ResourceLocation> createBlacklist() {
-		return Arrays.asList(Config.canvasBlacklist).stream().map(ResourceLocation::new).collect(Collectors.toSet());
+		return Arrays.stream(Config.canvasBlacklist).map(ResourceLocation::new).collect(Collectors.toSet());
 	}
 
 	public static final CanvasReplaceBlacklist instance = new CanvasReplaceBlacklist();

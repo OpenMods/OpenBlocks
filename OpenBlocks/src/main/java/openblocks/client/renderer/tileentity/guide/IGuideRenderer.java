@@ -1,6 +1,6 @@
 package openblocks.client.renderer.tileentity.guide;
 
-import com.google.common.base.Supplier;
+import java.util.function.Supplier;
 import net.minecraft.client.renderer.BufferBuilder;
 import openblocks.common.tileentity.TileEntityGuide;
 

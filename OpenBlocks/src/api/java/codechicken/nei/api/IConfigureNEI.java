@@ -2,8 +2,8 @@ package codechicken.nei.api;
 
 public interface IConfigureNEI
 {
-    public void loadConfig();
+    void loadConfig();
     
-    public String getName();
-    public String getVersion();
+    String getName();
+    String getVersion();
 }

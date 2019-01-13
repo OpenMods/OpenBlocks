@@ -38,7 +38,7 @@ public class TileEntityItemDropper extends SyncedTileEntity implements INeighbou
 
 	private boolean redstoneState;
 
-	private GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "itemDropper", false, 9));
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "itemDropper", false, 9));
 
 	private SyncableDouble itemSpeedBase;
 

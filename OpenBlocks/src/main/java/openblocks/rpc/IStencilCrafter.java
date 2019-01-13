@@ -3,13 +3,13 @@ package openblocks.rpc;
 import openmods.utils.TranslationUtils;
 
 public interface IStencilCrafter {
-	public enum Mode {
+	enum Mode {
 		STENCILS("openblocks.gui.drawingtable.stencils"),
 		GLYPHS("openblocks.gui.drawingtable.glyphs");
 
 		public final String name;
 
-		private Mode(final String name) {
+		Mode(final String name) {
 			this.name = name;
 		}
 
@@ -18,11 +18,11 @@ public interface IStencilCrafter {
 		}
 	}
 
-	public void selectionUp();
+	void selectionUp();
 
-	public void selectionDown();
+	void selectionDown();
 
-	public void cycleMode();
+	void cycleMode();
 
-	public void printGlyphs(String text);
+	void printGlyphs(String text);
 }

@@ -21,11 +21,11 @@ public class GuiItemDropper extends BaseGuiContainer<ContainerItemDropper> {
 
 		final int sliderSteps = (int)Config.maxItemDropSpeed * 10;
 		final GuiComponentSlider slider = new GuiComponentSlider(70, 20, 120, 0, Config.maxItemDropSpeed, owner.getItemSpeed(), sliderSteps, true, TranslationUtils.translateToLocal("openblocks.misc.dropper.speed"));
-		slider.setListener(value -> rpc.setItemSpeed(value));
+		slider.setListener(rpc::setItemSpeed);
 		root.addComponent(slider);
 
 		final GuiComponentCheckbox redstoneSwitch = new GuiComponentCheckbox(70, 50, owner.getUseRedstoneStrength());
-		redstoneSwitch.setListener(value -> rpc.setUseRedstoneStrength(value));
+		redstoneSwitch.setListener(rpc::setUseRedstoneStrength);
 		root.addComponent(redstoneSwitch);
 	}
 

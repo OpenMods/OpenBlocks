@@ -126,7 +126,7 @@ public class TankRenderLogic {
 		}
 
 		private static boolean isConnected(GridConnection connection) {
-			return connection != null? connection.isConnected() : false;
+			return connection != null && connection.isConnected();
 		}
 
 		@Override

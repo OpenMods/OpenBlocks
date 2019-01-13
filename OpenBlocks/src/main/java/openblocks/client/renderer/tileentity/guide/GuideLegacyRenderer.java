@@ -1,7 +1,7 @@
 package openblocks.client.renderer.tileentity.guide;
 
-import com.google.common.base.Supplier;
 import java.nio.FloatBuffer;
+import java.util.function.Supplier;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;

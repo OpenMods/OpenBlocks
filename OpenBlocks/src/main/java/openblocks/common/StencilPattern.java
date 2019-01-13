@@ -275,7 +275,7 @@ public enum StencilPattern implements IStencilPattern {
 
 	private final BigInteger bits;
 
-	private StencilPattern(final ResourceLocation id, final String format) {
+	StencilPattern(final ResourceLocation id, final String format) {
 		this.id = id;
 		BigInteger tmp = BigInteger.ZERO;
 		Preconditions.checkState(format.length() == 16 * 16, "Invalid format string length");

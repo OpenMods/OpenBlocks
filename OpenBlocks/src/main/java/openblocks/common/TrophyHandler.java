@@ -96,7 +96,7 @@ public class TrophyHandler {
 		return entity;
 	}
 
-	private static final ResourceLocation mc(String id) {
+	private static ResourceLocation mc(String id) {
 		return new ResourceLocation("minecraft", id);
 	}
 
@@ -204,32 +204,32 @@ public class TrophyHandler {
 		private ITrophyBehavior behavior;
 		public final ResourceLocation id;
 
-		private Trophy(ResourceLocation id) {
+		Trophy(ResourceLocation id) {
 			this.id = id;
 		}
 
-		private Trophy(ResourceLocation id, ITrophyBehavior behavior) {
+		Trophy(ResourceLocation id, ITrophyBehavior behavior) {
 			this(id);
 			this.behavior = behavior;
 		}
 
-		private Trophy(ResourceLocation id, double scale) {
+		Trophy(ResourceLocation id, double scale) {
 			this(id);
 			this.scale = scale;
 		}
 
-		private Trophy(ResourceLocation id, double scale, ITrophyBehavior behavior) {
+		Trophy(ResourceLocation id, double scale, ITrophyBehavior behavior) {
 			this(id);
 			this.scale = scale;
 			this.behavior = behavior;
 		}
 
-		private Trophy(ResourceLocation id, double scale, double verticalOffset) {
+		Trophy(ResourceLocation id, double scale, double verticalOffset) {
 			this(id, scale);
 			this.verticalOffset = verticalOffset;
 		}
 
-		private Trophy(ResourceLocation id, double scale, double verticalOffset, ITrophyBehavior behavior) {
+		Trophy(ResourceLocation id, double scale, double verticalOffset, ITrophyBehavior behavior) {
 			this(id, scale, verticalOffset);
 			this.behavior = behavior;
 		}

@@ -32,7 +32,7 @@ import openmods.OpenMods;
 
 public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnData {
 
-	public static final int THERMAL_HEIGTH_MIN = 70;
+	private static final int THERMAL_HEIGTH_MIN = 70;
 	public static final int THERMAL_HEIGTH_OPT = 110;
 	public static final int THERMAL_HEIGTH_MAX = 136;
 	public static final int THERMAL_STRONG_BONUS_HEIGTH = 100;
@@ -51,9 +51,9 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	public static final int BEEP_RATE_AVG = 4;
 	public static final int BEEP_RATE_MAX = 24;
 
-	private static final DataParameter<Boolean> PROPERTY_DEPLOYED = EntityDataManager.<Boolean> createKey(EntityHangGlider.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> PROPERTY_DEPLOYED = EntityDataManager.createKey(EntityHangGlider.class, DataSerializers.BOOLEAN);
 
-	private static Map<EntityPlayer, EntityHangGlider> gliderMap = new MapMaker().weakKeys().weakValues().makeMap();
+	private static final Map<EntityLivingBase, EntityHangGlider> gliderMap = new MapMaker().weakKeys().weakValues().makeMap();
 
 	private IVarioController varioControl = IVarioController.NULL;
 
@@ -66,7 +66,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		return player.getHeldItem(glider.handHeld) == heldStack;
 	}
 
-	public static boolean isGliderDeployed(Entity player) {
+	public static boolean isGliderDeployed(EntityLivingBase player) {
 		EntityHangGlider glider = gliderMap.get(player);
 		return glider != null && glider.isDeployed();
 	}
@@ -75,27 +75,25 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		return !stack.isEmpty() && stack.getItem() instanceof ItemHangGlider;
 	}
 
-	private static boolean isGliderValid(EntityPlayer player, EntityHangGlider glider) {
+	private static boolean isGliderValid(EntityLivingBase player, EntityHangGlider glider) {
 		if (player == null || player.isDead || glider == null || glider.isDead) return false;
 
 		if (glider.handHeld == null || !isItemHangglider(player.getHeldItem(glider.handHeld))) return false;
 		if (player.world.provider.getDimension() != glider.world.provider.getDimension()) return false;
-		if (player.isElytraFlying() || player.isSpectator()) return false;
+		if (player.isElytraFlying() || ((player instanceof EntityPlayer) && ((EntityPlayer)player).isSpectator())) return false;
 		return true;
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static void updateGliders(World world) {
-		for (Map.Entry<EntityPlayer, EntityHangGlider> e : gliderMap.entrySet()) {
-			EntityPlayer player = e.getKey();
-			EntityHangGlider glider = e.getValue();
+		gliderMap.forEach((player, glider) -> {
 			if (isGliderValid(player, glider)) glider.fixPositions(player, player instanceof EntityPlayerSP);
 			else glider.setDead();
-		}
+		});
 	}
 
 	private EntityPlayer player;
-	private NoiseGeneratorPerlin noiseGen;
+	private final NoiseGeneratorPerlin noiseGen;
 	private int ticksSinceLastVarioUpdate = 0;
 	private double verticalMotionSinceLastVarioUpdate = 0;
 	private double lastMotionY = 0;
@@ -245,7 +243,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	public double getNoise() {
 		double noise = noiseGen.getValue(player.posX / 20f, player.posZ / 20f) / 4d;
-		final boolean strong = (noise > 0.7? true : false);
+		final boolean strong = noise > 0.7;
 		final int bonus = (strong? THERMAL_STRONG_BONUS_HEIGTH : 0);
 		final BlockPos pos = player.getPosition();
 		final float biomeRain = world.getBiomeForCoordsBody(pos).getRainfall();
@@ -277,7 +275,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		}
 	}
 
-	private void fixPositions(EntityPlayer thePlayer, boolean localPlayer) {
+	private void fixPositions(EntityLivingBase thePlayer, boolean localPlayer) {
 		this.lastTickPosX = prevPosX = player.prevPosX;
 		this.lastTickPosY = prevPosY = player.prevPosY;
 		this.lastTickPosZ = prevPosZ = player.prevPosZ;

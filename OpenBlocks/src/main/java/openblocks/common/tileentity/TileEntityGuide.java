@@ -64,7 +64,7 @@ import openperipheral.api.struct.StructField;
 public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile, ITickable {
 
 	private interface IShapeManipulator {
-		public boolean activate(TileEntityGuide te, EntityPlayerMP player);
+		boolean activate(TileEntityGuide te, EntityPlayerMP player);
 	}
 
 	private static IShapeManipulator createHalfAxisIncrementer(final HalfAxis halfAxis) {
@@ -397,7 +397,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		generator.generateShape(-negX.get(), -negY.get(), -negZ.get(), posX.get(), posY.get(), posZ.get(), collector);
 
 		final List<BlockPos> sortedResults = Lists.newArrayList(uniqueResults);
-		Collections.sort(sortedResults, COMPARATOR);
+		sortedResults.sort(COMPARATOR);
 
 		final List<BlockPos> rotatedResult = Lists.newArrayList();
 		final Orientation orientation = getOrientation();

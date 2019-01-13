@@ -176,7 +176,7 @@ public class HeightMapRenderer {
 	private final Map<Integer, MapRenderData> cache = Maps.newHashMap();
 
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() {
 		for (MapRenderData data : cache.values())
 			data.free();
 	}

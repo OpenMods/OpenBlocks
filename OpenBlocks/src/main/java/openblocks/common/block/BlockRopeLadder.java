@@ -68,7 +68,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	@SuppressWarnings("deprecation")
 	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean something) {
 		if (entity instanceof EntityLivingBase) {
-			EnumFacing playerRotation = ((EntityLivingBase)entity).getHorizontalFacing();
+			EnumFacing playerRotation = entity.getHorizontalFacing();
 			if (getFront(state) == playerRotation.getOpposite()) {
 				super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entity, something);
 			}

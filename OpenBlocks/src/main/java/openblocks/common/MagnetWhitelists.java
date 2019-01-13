@@ -70,7 +70,7 @@ public class MagnetWhitelists {
 		}
 
 		public void addClass(Class<? extends T> cls) {
-			tester.addTester(new ClassTester<T>(cls));
+			tester.addTester(new ClassTester<>(cls));
 		}
 
 		@SuppressWarnings("unchecked")
@@ -114,9 +114,9 @@ public class MagnetWhitelists {
 	public void initTesters() {
 		MinecraftForge.EVENT_BUS.post(new EntityRegisterEvent(entityWhitelist));
 
-		entityWhitelist.addTester(new ClassTester<Entity>(EntityItem.class));
-		entityWhitelist.addTester(new ClassTester<Entity>(EntityBoat.class));
-		entityWhitelist.addTester(new ClassTester<Entity>(EntityMinecart.class));
+		entityWhitelist.addTester(new ClassTester<>(EntityItem.class));
+		entityWhitelist.addTester(new ClassTester<>(EntityBoat.class));
+		entityWhitelist.addTester(new ClassTester<>(EntityMinecart.class));
 
 		{
 			final Set<ResourceLocation> allowedEntityLocations = toResourceLocationSet(Config.magnetEntityWhitelist);
@@ -146,17 +146,17 @@ public class MagnetWhitelists {
 		MinecraftForge.EVENT_BUS.post(new TileEntityRegisterEvent(tileEntityWhitelist));
 
 		tileEntityWhitelist
-				.addTester(new ClassTester<TileEntity>(TileEntityBeacon.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityBrewingStand.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityChest.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityCommandBlock.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityDispenser.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityEnchantmentTable.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityEnderChest.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityFurnace.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityHopper.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityNote.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityJukebox.class));
+				.addTester(new ClassTester<>(TileEntityBeacon.class))
+				.addTester(new ClassTester<>(TileEntityBrewingStand.class))
+				.addTester(new ClassTester<>(TileEntityChest.class))
+				.addTester(new ClassTester<>(TileEntityCommandBlock.class))
+				.addTester(new ClassTester<>(TileEntityDispenser.class))
+				.addTester(new ClassTester<>(TileEntityEnchantmentTable.class))
+				.addTester(new ClassTester<>(TileEntityEnderChest.class))
+				.addTester(new ClassTester<>(TileEntityFurnace.class))
+				.addTester(new ClassTester<>(TileEntityHopper.class))
+				.addTester(new ClassTester<>(TileEntityNote.class))
+				.addTester(new ClassTester<>(TileEntityJukebox.class));
 
 		{
 			final Set<ResourceLocation> allowedTileEntityLocations = toResourceLocationSet(Config.magnetTileEntityWhitelist);
@@ -165,7 +165,7 @@ public class MagnetWhitelists {
 	}
 
 	private static ImmutableSet<ResourceLocation> toResourceLocationSet(final String[] names) {
-		return Arrays.asList(names).stream().map(ResourceLocation::new).collect(ImmutableSet.toImmutableSet());
+		return Arrays.stream(names).map(ResourceLocation::new).collect(ImmutableSet.toImmutableSet());
 	}
 
 	public boolean testBlock(World world, BlockPos pos) {
@@ -176,7 +176,7 @@ public class MagnetWhitelists {
 
 		if (block instanceof BlockContainer) {
 			TileEntity te = world.getTileEntity(pos);
-			return (te != null)? tileEntityWhitelist.check(te) : false;
+			return te != null && tileEntityWhitelist.check(te);
 		}
 
 		return blockWhitelist.check(new BlockCoords(blockState, world, pos));

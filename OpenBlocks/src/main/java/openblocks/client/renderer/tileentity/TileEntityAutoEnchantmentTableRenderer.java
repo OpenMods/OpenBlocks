@@ -59,7 +59,7 @@ public class TileEntityAutoEnchantmentTableRenderer extends TileEntitySpecialRen
 
 		float f5 = te.bookSpreadPrev + (te.bookSpread - te.bookSpreadPrev) * partialTicks;
 		GlStateManager.enableCull();
-		modelBook.render((Entity)null, f, f3, f4, f5, 0.0F, 0.0625F);
+		modelBook.render(null, f, f3, f4, f5, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 	}
 }

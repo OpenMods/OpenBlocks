@@ -9,6 +9,6 @@ public interface IPaintableBlock {
 	/**
 	 * 24-bit counterpart of Block.recolorBlock
 	 */
-	public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, int colour);
+	boolean recolorBlock(World world, BlockPos pos, EnumFacing side, int colour);
 
 }

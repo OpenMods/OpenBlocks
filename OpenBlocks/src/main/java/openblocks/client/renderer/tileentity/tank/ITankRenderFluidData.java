@@ -5,13 +5,13 @@ import net.minecraftforge.fluids.FluidStack;
 import openmods.utils.Diagonal;
 
 public interface ITankRenderFluidData {
-	public FluidStack getFluid();
+	FluidStack getFluid();
 
-	public boolean hasFluid();
+	boolean hasFluid();
 
-	public boolean shouldRenderFluidWall(EnumFacing side);
+	boolean shouldRenderFluidWall(EnumFacing side);
 
-	public float getCornerFluidLevel(Diagonal diagonal, float time);
+	float getCornerFluidLevel(Diagonal diagonal, float time);
 
-	public float getCenterFluidLevel(float time);
+	float getCenterFluidLevel(float time);
 }

@@ -52,7 +52,7 @@ public class EntityGoldenEye extends EntitySmoothMove {
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tag) {
-		if (spawningStack != null) {
+		if (!spawningStack.isEmpty()) {
 			NBTTagCompound item = spawningStack.writeToNBT(new NBTTagCompound());
 			tag.setTag(TAG_SPAWNING_ITEM, item);
 		}
@@ -62,9 +62,8 @@ public class EntityGoldenEye extends EntitySmoothMove {
 	public void onUpdate() {
 		if (!world.isRemote && timeToLive-- < 0) {
 			setDead();
-			if (spawningStack != null) {
-				EntityItem dropped = new EntityItem(world, posX, posY, posZ, spawningStack);
-				world.spawnEntity(dropped);
+			if (!spawningStack.isEmpty()) {
+				world.spawnEntity(new EntityItem(world, posX, posY, posZ, spawningStack));
 			}
 			return;
 		}

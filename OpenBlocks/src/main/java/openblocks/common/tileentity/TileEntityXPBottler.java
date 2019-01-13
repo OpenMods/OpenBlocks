@@ -63,12 +63,12 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	private boolean needsTankUpdate;
 
-	public static enum Slots {
+	public enum Slots {
 		input,
 		output
 	}
 
-	public static enum AutoSlots {
+	public enum AutoSlots {
 		input,
 		output,
 		xp

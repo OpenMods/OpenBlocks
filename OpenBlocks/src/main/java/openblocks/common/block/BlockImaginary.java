@@ -154,7 +154,7 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), PROPERTY_TYPE, PROPERTY_SHAPE });
+		return new BlockStateContainer(this, getPropertyOrientation(), PROPERTY_TYPE, PROPERTY_SHAPE);
 	}
 
 	public void setSoundType() {

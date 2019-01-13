@@ -23,8 +23,4 @@ public class MooshroomBehavior implements ITrophyBehavior {
 
 		return 100;
 	}
-
-	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
-
 }

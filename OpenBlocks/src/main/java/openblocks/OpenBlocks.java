@@ -886,7 +886,7 @@ public class OpenBlocks {
 		}
 	}
 
-	private static final String decorateEntityName(String name) {
+	private static String decorateEntityName(String name) {
 		return "openblocks." + name;
 	}
 
@@ -1050,7 +1050,7 @@ public class OpenBlocks {
 					final ResourceLocation bucketLocation = new ResourceLocation(bucketId);
 					final Item item = Item.REGISTRY.getObject(bucketLocation);
 					if (item == null) {
-						Log.warn("Failed to find bucket item %s", item);
+						Log.warn("Failed to find bucket item %s", bucketLocation);
 					} else {
 						tankFillHandler.addFilledBucket(new ItemStack(item));
 					}

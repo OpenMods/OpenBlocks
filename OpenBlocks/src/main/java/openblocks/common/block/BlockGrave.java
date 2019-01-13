@@ -37,7 +37,7 @@ public class BlockGrave extends OpenBlock.FourDirections {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), HAS_BASE });
+		return new BlockStateContainer(this, getPropertyOrientation(), HAS_BASE);
 	}
 
 	@Override

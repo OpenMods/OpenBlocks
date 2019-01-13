@@ -15,7 +15,7 @@ public class DonationUrlManager {
 		return instance;
 	}
 
-	private Map<String, String> donationUrls = new HashMap<>();
+	private final Map<String, String> donationUrls = new HashMap<>();
 
 	public DonationUrlManager() {
 		addUrl(Mods.COMPUTERCRAFT, "http://www.computercraft.info/donate/");

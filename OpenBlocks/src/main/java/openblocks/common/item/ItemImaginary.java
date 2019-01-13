@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -89,7 +88,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		public final boolean isInverted;
 		public final BlockImaginary.Shape shape;
 
-		private PlacementMode(float cost, String name, boolean isInverted, BlockImaginary.Shape shape) {
+		PlacementMode(float cost, String name, boolean isInverted, BlockImaginary.Shape shape) {
 			this.cost = cost;
 			this.name = "openblocks.misc.mode." + name;
 			this.isInverted = isInverted;
@@ -110,11 +109,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	public static float getUses(NBTTagCompound tag) {
-		NBTBase value = tag.getTag(TAG_USES);
-		if (value == null) return 0;
-		if (value instanceof NBTPrimitive) return ((NBTPrimitive)value).getFloat();
-
-		throw new IllegalStateException("Invalid tag type: " + value);
+		return tag.getFloat(TAG_USES);
 	}
 
 	public static float getUses(@Nonnull ItemStack stack) {
@@ -196,9 +191,9 @@ public class ItemImaginary extends ItemOpenBlock {
 	protected void afterBlockPlaced(@Nonnull ItemStack stack, EntityPlayer player, World world, BlockPos pos) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
-		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
+		NBTBase color = tag.getTag(TAG_COLOR);
 		PlacementMode mode = getMode(tag);
-		world.setTileEntity(pos, new TileEntityImaginary(color == null? null : color.getInt(), mode.isInverted, mode.shape));
+		world.setTileEntity(pos, new TileEntityImaginary(color instanceof NBTPrimitive? ((NBTPrimitive)color).getInt() : null, mode.isInverted, mode.shape));
 
 		if (!player.capabilities.isCreativeMode) {
 			float uses = Math.max(getUses(tag) - mode.cost, 0);
@@ -241,8 +236,8 @@ public class ItemImaginary extends ItemOpenBlock {
 
 		result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.uses", getUses(tag)));
 
-		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
-		if (color != null) result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.color", color.getInt()));
+		final NBTBase color = tag.getTag(TAG_COLOR);
+		if (color instanceof NBTPrimitive) result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.color", ((NBTPrimitive)color).getInt()));
 
 		PlacementMode mode = getMode(tag);
 		String translatedMode = TranslationUtils.translateToLocal(mode.name);

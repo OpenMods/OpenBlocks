@@ -1,6 +1,6 @@
 package openblocks.client.renderer.tileentity.guide;
 
-import com.google.common.base.Supplier;
+import java.util.function.Supplier;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -11,10 +11,9 @@ import org.lwjgl.opengl.GL11;
 
 public class GuideAdvancedRenderer implements IGuideRenderer {
 
-	private final MarkerRenderer mr;
+	private final MarkerRenderer mr = new MarkerRenderer();
 
 	public GuideAdvancedRenderer() {
-		this.mr = new MarkerRenderer();
 	}
 
 	@Override
@@ -23,7 +22,7 @@ public class GuideAdvancedRenderer implements IGuideRenderer {
 		renderShape(guide.getShape(), guide.getColor(), scaleDelta);
 		if (scaleDelta < 1.0) renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
 		CoordShape toDelete = guide.getAndDeleteShape();
-		if (toDelete != null && mr != null) mr.deleteShape(toDelete);
+		if (toDelete != null) mr.deleteShape(toDelete);
 	}
 
 	private void renderShape(CoordShape shape, int color, float scale) {

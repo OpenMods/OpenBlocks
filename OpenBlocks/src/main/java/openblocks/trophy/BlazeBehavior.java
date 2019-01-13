@@ -10,8 +10,4 @@ public class BlazeBehavior implements ITrophyBehavior {
 		player.setFire(4);
 		return 0;
 	}
-
-	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
-
 }

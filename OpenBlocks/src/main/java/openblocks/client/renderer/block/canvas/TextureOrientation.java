@@ -30,7 +30,7 @@ public enum TextureOrientation {
 
 	protected abstract Permutation2d setup(Permutation2d input);
 
-	private TextureOrientation() {
+	TextureOrientation() {
 		this.rotator16x16 = setup(Permutation2d.identity(16, 16));
 	}
 

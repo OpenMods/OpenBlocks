@@ -32,7 +32,7 @@ public class ItemCartographer extends Item {
 
 		public final String untranslatedName;
 
-		private AssistantType(String name, String iconName) {
+		AssistantType(String name, String iconName) {
 			this.untranslatedName = "openblocks.assistant_" + name;
 		}
 

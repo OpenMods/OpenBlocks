@@ -28,7 +28,7 @@ public class ModelCartographer extends ModelBase {
 	private final ModelRenderer body;
 	private final ModelRenderer base;
 
-	private DisplayListWrapper eyeList = new DisplayListWrapper() {
+	private final DisplayListWrapper eyeList = new DisplayListWrapper() {
 		private final ItemStack enderEye = new ItemStack(Items.ENDER_EYE);
 
 		@Override

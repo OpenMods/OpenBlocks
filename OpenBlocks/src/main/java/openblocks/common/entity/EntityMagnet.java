@@ -42,19 +42,19 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	public interface IEntityBlockFactory {
-		public EntityBlock create(EntityLivingBase player);
+		EntityBlock create(EntityLivingBase player);
 	}
 
 	public interface IOwner {
-		public boolean isValid(EntityMagnet magnet);
+		boolean isValid(EntityMagnet magnet);
 
-		public Vec3d getTarget();
+		Vec3d getTarget();
 
-		public EntityBlock createByPlayer(IEntityBlockFactory factory);
+		EntityBlock createByPlayer(IEntityBlockFactory factory);
 	}
 
 	private static class EntityPlayerTarget implements IOwner {
-		private WeakReference<EntityLivingBase> owner;
+		private final WeakReference<EntityLivingBase> owner;
 
 		public EntityPlayerTarget(EntityLivingBase owner) {
 			this.owner = new WeakReference<>(owner);
@@ -330,6 +330,6 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	public boolean isValid() {
-		return owner != null? owner.isValid(this) : false;
+		return owner != null && owner.isValid(this);
 	}
 }

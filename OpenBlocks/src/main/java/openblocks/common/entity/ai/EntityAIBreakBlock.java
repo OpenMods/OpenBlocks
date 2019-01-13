@@ -18,11 +18,11 @@ import openmods.fakeplayer.FakePlayerPool;
 
 public class EntityAIBreakBlock extends EntityAIBase {
 
-	private EntityLiving entity;
-	private PathNavigate pathFinder;
+	private final EntityLiving entity;
+	private final PathNavigate pathFinder;
 	private BlockPos blockCoord;
-	private int tickOffset = 0;
-	private Random rand;
+	private int tickOffset;
+	private final Random rand;
 
 	public EntityAIBreakBlock(EntityLiving minime) {
 		this.entity = minime;

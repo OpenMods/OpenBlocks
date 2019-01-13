@@ -11,13 +11,13 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable;
 @Cancelable
 public class GraveSpawnEvent extends PlayerEvent {
 
-	public List<EntityItem> loot;
+	public final List<EntityItem> loot;
 
-	public ITextComponent clickText;
+	public final ITextComponent clickText;
 
-	public String gravestoneText;
+	public final String gravestoneText;
 
-	public BlockPos location;
+	public final BlockPos location;
 
 	public GraveSpawnEvent(EntityPlayer player, BlockPos pos, List<EntityItem> loot, String gravestoneText, ITextComponent clickText) {
 		super(player);

@@ -12,8 +12,4 @@ public class CreeperBehavior implements ITrophyBehavior {
 		tile.getWorld().createExplosion(player, pos.getX(), pos.getY(), pos.getZ(), 2, false);
 		return 0;
 	}
-
-	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
-
 }

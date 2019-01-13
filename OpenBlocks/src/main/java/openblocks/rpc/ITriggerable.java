@@ -1,5 +1,5 @@
 package openblocks.rpc;
 
 public interface ITriggerable {
-	public void trigger();
+	void trigger();
 }

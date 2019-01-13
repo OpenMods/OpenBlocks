@@ -36,7 +36,7 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 		for (EnumFacing enumfacing : EnumFacing.values())
 			renderQuads(vertexBuffer, model.getQuads(state, enumfacing, 0L));
 
-		renderQuads(vertexBuffer, model.getQuads(state, (EnumFacing)null, 0L));
+		renderQuads(vertexBuffer, model.getQuads(state, null, 0L));
 		GL11.glPushMatrix();
 		GL11.glTranslated(-0.5, 0, -0.5);
 		tessellator.draw();

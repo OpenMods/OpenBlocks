@@ -250,7 +250,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	private static GameProfile readOwner(NBTTagCompound tag) {
 		if (tag.hasKey("owner", Constants.NBT.TAG_STRING)) {
 			String ownerName = tag.getString("owner");
-			return TileEntitySkull.updateGameprofile(new GameProfile((UUID)null, ownerName));
+			return TileEntitySkull.updateGameprofile(new GameProfile(null, ownerName));
 		} else if (tag.hasKey("OwnerUUID", Constants.NBT.TAG_STRING)) {
 			final String uuidStr = tag.getString("OwnerUUID");
 			try {

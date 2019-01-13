@@ -46,7 +46,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 
 	private ITextComponent deathMessage;
 
-	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 1));
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 1));
 
 	public TileEntityGrave() {}
 

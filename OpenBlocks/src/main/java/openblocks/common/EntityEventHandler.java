@@ -62,7 +62,7 @@ public class EntityEventHandler {
 			}
 		}
 
-		/**
+		/*
 		 * If the player hasn't been given a manual, we'll give him one! (or
 		 * throw it on the floor..)
 		 */

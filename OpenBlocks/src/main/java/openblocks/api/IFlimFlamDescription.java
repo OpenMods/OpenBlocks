@@ -2,18 +2,18 @@ package openblocks.api;
 
 public interface IFlimFlamDescription {
 
-	public String name();
+	String name();
 
-	public int weight();
+	int weight();
 
-	public int cost();
+	int cost();
 
-	public boolean canApply(int luck);
+	boolean canApply(int luck);
 
-	public boolean isSafe();
+	boolean isSafe();
 
-	public boolean isSilent();
+	boolean isSilent();
 
-	public IFlimFlamAction action();
+	IFlimFlamAction action();
 
 }

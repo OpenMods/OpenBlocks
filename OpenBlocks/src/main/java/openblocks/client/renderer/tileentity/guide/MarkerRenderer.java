@@ -1,9 +1,9 @@
 package openblocks.client.renderer.tileentity.guide;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Supplier;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.function.Supplier;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.vertex.VertexFormat;

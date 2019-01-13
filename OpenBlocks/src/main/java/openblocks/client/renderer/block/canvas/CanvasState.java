@@ -34,7 +34,7 @@ public class CanvasState {
 		}
 	};
 
-	public static final CanvasState EMPTY = new CanvasState(ImmutableMap.<EnumFacing, CanvasSideState> of());
+	public static final CanvasState EMPTY = new CanvasState(ImmutableMap.of());
 
 	public final Map<EnumFacing, CanvasSideState> sideStates;
 

@@ -150,8 +150,7 @@ public class GuiInfoBook extends ComponentGui {
 
 			if (server != null) {
 				World world = server.getWorld(0);
-				File saveFolder = PlayerInventoryStore.getSaveFolder(world);
-				return saveFolder;
+				return PlayerInventoryStore.getSaveFolder(world);
 			}
 		} catch (Throwable t) {
 			Log.warn(t, "Failed to get save folder from local server");

@@ -20,7 +20,4 @@ public class EndermanBehavior implements ITrophyBehavior {
 		world.spawnEntity(e);
 		return 10;
 	}
-
-	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
 }

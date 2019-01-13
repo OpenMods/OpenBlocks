@@ -5,11 +5,11 @@ import openmods.utils.Diagonal;
 
 public interface ITankConnections {
 
-	public VerticalConnection getTopConnection();
+	VerticalConnection getTopConnection();
 
-	public VerticalConnection getBottomConnection();
+	VerticalConnection getBottomConnection();
 
-	public HorizontalConnection getHorizontalConnection(EnumFacing dir);
+	HorizontalConnection getHorizontalConnection(EnumFacing dir);
 
-	public DiagonalConnection getDiagonalConnection(Diagonal dir);
+	DiagonalConnection getDiagonalConnection(Diagonal dir);
 }

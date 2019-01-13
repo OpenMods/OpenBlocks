@@ -7,7 +7,7 @@ import openblocks.common.tileentity.TileEntityCannon;
 
 public class ModelCannon extends ModelBase {
 
-	private double[] keyframes = new double[] {
+	private final double[] keyframes = new double[] {
 			0,
 			0.5,
 			1,
@@ -23,13 +23,13 @@ public class ModelCannon extends ModelBase {
 			0
 	};
 
-	ModelRenderer body;
-	ModelRenderer shooter;
-	ModelRenderer base;
-	ModelRenderer wheel;
+	private final ModelRenderer body;
+	private final ModelRenderer shooter;
+	private final ModelRenderer base;
+	private final ModelRenderer wheel;
 
-	private float deg30 = (float)Math.toRadians(30);
-	private float deg180 = (float)Math.toRadians(180);
+	private static final float deg30 = (float)Math.toRadians(30);
+	private static final float deg180 = (float)Math.toRadians(180);
 
 	public ModelCannon() {
 		textureWidth = 64;

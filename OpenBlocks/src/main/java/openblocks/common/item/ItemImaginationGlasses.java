@@ -122,7 +122,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 		public final String textureName;
 
-		private Type(String name) {
+		Type(String name) {
 			this.textureName = OpenBlocks.location("textures/models/glasses_" + name + ".png").toString();
 		}
 

@@ -27,7 +27,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 
 	private static final int ORB_SPAWN_FREQUENCY = 3;
 
-	private GenericTank bufferTank = new GenericTank(Fluid.BUCKET_VOLUME, FluidXpUtils.getAcceptedFluids());
+	private final GenericTank bufferTank = new GenericTank(Fluid.BUCKET_VOLUME, FluidXpUtils.getAcceptedFluids());
 
 	private SyncableBoolean particleSpawnerActive;
 	private int particleSpawnTimer = 0;

@@ -44,7 +44,7 @@ public class InventoryEvent extends PlayerEvent {
 	public static class Store extends InventoryEvent {
 
 		public Store(EntityPlayer player) {
-			super(player, new HashMap<String, SubInventory>());
+			super(player, new HashMap<>());
 		}
 
 		public SubInventory createSubInventory(String id) {

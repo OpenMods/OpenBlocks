@@ -25,10 +25,9 @@ import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.logic.ValueCopyAction;
 import openmods.utils.MiscUtils;
 import openmods.utils.TranslationUtils;
-import openmods.utils.VanillaEnchantLogic;
 import openmods.utils.VanillaEnchantLogic.Level;
 
-public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAutoEnchantmentTable, ContainerAutoEnchantmentTable, TileEntityAutoEnchantmentTable.AutoSlots> {
+public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAutoEnchantmentTable, ContainerAutoEnchantmentTable, AutoSlots> {
 
 	public GuiAutoEnchantmentTable(ContainerAutoEnchantmentTable container) {
 		super(container, 176, 175, "openblocks.gui.autoenchantmenttable");
@@ -41,10 +40,10 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 
 	private static final ResourceLocation VANILLA_TEXTURE = new ResourceLocation("textures/gui/container/enchanting_table.png");
 
-	private static final Map<VanillaEnchantLogic.Level, Icon> icons = ImmutableMap.of(
-			VanillaEnchantLogic.Level.L1, Icon.createSheetIcon(VANILLA_TEXTURE, 16 * 0, 223, 16, 16),
-			VanillaEnchantLogic.Level.L2, Icon.createSheetIcon(VANILLA_TEXTURE, 16 * 1, 223, 16, 16),
-			VanillaEnchantLogic.Level.L3, Icon.createSheetIcon(VANILLA_TEXTURE, 16 * 2, 223, 16, 16));
+	private static final Map<Level, Icon> icons = ImmutableMap.of(
+			Level.L1, Icon.createSheetIcon(VANILLA_TEXTURE, 16 * 0, 223, 16, 16),
+			Level.L2, Icon.createSheetIcon(VANILLA_TEXTURE, 16 * 1, 223, 16, 16),
+			Level.L3, Icon.createSheetIcon(VANILLA_TEXTURE, 16 * 2, 223, 16, 16));
 
 	private static final Icon LAPIS_SLOT = Icon.createSheetIcon(VANILLA_TEXTURE, 34, 46, 18, 18);
 
@@ -73,11 +72,11 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver(), FluidXpUtils.FLUID_TO_LEVELS));
 		root.addComponent(tankLevel);
 
-		final GuiComponentToggleButton<VanillaEnchantLogic.Level> levelSelect = new GuiComponentToggleButton<>(16, 60, 0xFFFFFF, icons);
+		final GuiComponentToggleButton<Level> levelSelect = new GuiComponentToggleButton<>(16, 60, 0xFFFFFF, icons);
 		levelSelect.setListener((IMouseDownListener)(component, x, y, button) -> {
-			final VanillaEnchantLogic.Level currentValue = te.getSelectedLevelProvider().getValue();
-			final Level[] values = VanillaEnchantLogic.Level.values();
-			final VanillaEnchantLogic.Level nextValue = values[(currentValue.ordinal() + 1) % values.length];
+			final Level currentValue = te.getSelectedLevelProvider().getValue();
+			final Level[] values = Level.values();
+			final Level nextValue = values[(currentValue.ordinal() + 1) % values.length];
 			rpc.changeLevel(nextValue);
 		});
 		addSyncUpdateListener(ValueCopyAction.create(te.getSelectedLevelProvider(), levelSelect));

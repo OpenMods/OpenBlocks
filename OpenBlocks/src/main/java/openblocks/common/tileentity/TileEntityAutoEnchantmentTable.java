@@ -65,13 +65,13 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	public static final int MAX_STORED_LEVELS = 30;
 	public static final int TANK_CAPACITY = FluidXpUtils.getMaxPossibleFluidForLevel(MAX_STORED_LEVELS);
 
-	public static enum Slots {
+	public enum Slots {
 		tool,
 		output,
 		lapis
 	}
 
-	public static enum AutoSlots {
+	public enum AutoSlots {
 		toolInput,
 		lapisInput,
 		output,

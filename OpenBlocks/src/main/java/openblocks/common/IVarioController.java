@@ -2,7 +2,7 @@ package openblocks.common;
 
 public interface IVarioController {
 
-	public static final IVarioController NULL = new IVarioController() {
+	IVarioController NULL = new IVarioController() {
 
 		@Override
 		public void setFrequencies(double toneFrequency, double beepFrequency) {}
@@ -22,13 +22,13 @@ public interface IVarioController {
 		}
 	};
 
-	public void setFrequencies(double toneFrequency, double beepFrequency);
+	void setFrequencies(double toneFrequency, double beepFrequency);
 
-	public void keepAlive();
+	void keepAlive();
 
-	public void kill();
+	void kill();
 
-	public boolean isValid();
+	boolean isValid();
 
-	public void release();
+	void release();
 }

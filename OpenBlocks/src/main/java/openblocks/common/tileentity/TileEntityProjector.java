@@ -105,7 +105,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 
 	public TileEntityProjector() {
 		this.asm = OpenMods.proxy.loadAsm(OpenBlocks.location("asms/block/projector.json"),
-				ImmutableMap.<String, ITimeValue> of("last_change", lastChange));
+				ImmutableMap.of("last_change", lastChange));
 	}
 
 	@Override

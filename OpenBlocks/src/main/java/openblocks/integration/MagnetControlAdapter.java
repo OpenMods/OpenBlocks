@@ -50,7 +50,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 			double y = pos.y + 0.5;
 			double z = pos.z + 0.5;
 
-			y += target.x;
+			y += target.y;
 			switch (side) {
 				case NORTH:
 					x += target.z;
@@ -89,7 +89,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		public EntityBlock createByPlayer(final IEntityBlockFactory factory) {
 			World world = turtle.getWorld();
 
-			if (world instanceof WorldServer) return FakePlayerPool.instance.executeOnPlayer((WorldServer)world, (PlayerUserReturning<EntityBlock>)factory::create);
+			if (world instanceof WorldServer) return FakePlayerPool.instance.executeOnPlayer((WorldServer)world, factory::create);
 			return null;
 		}
 	}

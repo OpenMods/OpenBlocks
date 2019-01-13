@@ -1,10 +1,10 @@
 package openblocks.api;
 
 public class OpenBlocksApi {
-	public static interface ApiProvider {
-		public <T extends IApiInterface> T getApi(Class<T> cls);
+	public interface ApiProvider {
+		<T extends IApiInterface> T getApi(Class<T> cls);
 
-		public <T extends IApiInterface> boolean isApiPresent(Class<T> cls);
+		<T extends IApiInterface> boolean isApiPresent(Class<T> cls);
 	}
 
 	private OpenBlocksApi() {}

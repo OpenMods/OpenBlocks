@@ -2,9 +2,9 @@ package openblocks.common;
 
 public interface IStencilPattern {
 
-	public int width();
+	int width();
 
-	public int height();
+	int height();
 
-	public int mix(int bitIndex, int src, int dst);
+	int mix(int bitIndex, int src, int dst);
 }

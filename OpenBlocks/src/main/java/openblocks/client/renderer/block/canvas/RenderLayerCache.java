@@ -27,9 +27,9 @@ public class RenderLayerCache {
 		}
 	}
 
-	private static final LayerRenderInfo EMPTY = new LayerRenderInfo(ImmutableList.<BlockRenderLayer> of(), false);
+	private static final LayerRenderInfo EMPTY = new LayerRenderInfo(ImmutableList.of(), false);
 
-	private Map<BlockRenderLayer, LayerRenderInfo> baseRenderLayers;
+	private final Map<BlockRenderLayer, LayerRenderInfo> baseRenderLayers;
 
 	private final LoadingCache<Pair<IBlockState, BlockRenderLayer>, LayerRenderInfo> renderLayers = CacheBuilder.newBuilder().build(new CacheLoader<Pair<IBlockState, BlockRenderLayer>, LayerRenderInfo>() {
 		@Override

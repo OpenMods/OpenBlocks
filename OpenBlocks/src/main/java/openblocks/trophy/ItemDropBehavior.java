@@ -34,7 +34,4 @@ public class ItemDropBehavior implements ITrophyBehavior {
 		return minTicks;
 	}
 
-	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
-
 }

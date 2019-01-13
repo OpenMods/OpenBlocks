@@ -107,9 +107,7 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
-		syncMap.addSyncListener(changes -> {
-			inventory.onInventoryChanged(SLOT_INPUT);
-		});
+		syncMap.addSyncListener(changes -> inventory.onInventoryChanged(SLOT_INPUT));
 	}
 
 	@Override

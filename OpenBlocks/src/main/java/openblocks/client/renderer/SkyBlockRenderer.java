@@ -41,7 +41,7 @@ public class SkyBlockRenderer implements IResourceManagerReloadListener {
 		return stencilMask;
 	}
 
-	private static Runnable NULL_HOOK = () -> {};
+	private static final Runnable NULL_HOOK = () -> {};
 
 	private class SkyCapture implements Runnable {
 

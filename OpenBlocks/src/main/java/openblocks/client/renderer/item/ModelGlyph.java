@@ -47,7 +47,7 @@ public class ModelGlyph implements IModel {
 
 		private BakedModel getModel(ItemStack stack) {
 			final int charIndex = ItemGlyph.getCharIndex(stack);
-			if (charIndex >= charIndex && charIndex < charModels.length) {
+			if (charIndex >= 0 && charIndex < charModels.length) {
 				final BakedModel result = charModels[charIndex];
 				if (result != null) return result;
 			}

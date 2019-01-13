@@ -43,7 +43,7 @@ public class BlockTarget extends OpenBlock.FourDirections {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), POWERED });
+		return new BlockStateContainer(this, getPropertyOrientation(), POWERED);
 	}
 
 	private static final int MASK_POWERED = 0x8;
@@ -77,8 +77,8 @@ public class BlockTarget extends OpenBlock.FourDirections {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if (!world.isRemote && entity != null && entity instanceof EntityArrow) {
-			/**
+		if (!world.isRemote && entity instanceof EntityArrow) {
+			/*
 			 * onEntityCollidedWithBlock is called twice when the arrow is hit
 			 * The first is from the raytracing, which is predictive and
 			 * inaccurate The second is from the bounding box collision. We only
@@ -171,7 +171,7 @@ public class BlockTarget extends OpenBlock.FourDirections {
 
 		final List<ItemStack> drops = Lists.newArrayList();
 
-		int failed = FakePlayerPool.instance.executeOnPlayer(world, (PlayerUserReturning<Integer>)fakePlayer -> {
+		int failed = FakePlayerPool.instance.executeOnPlayer(world, fakePlayer -> {
 			int failedCount = 0;
 
 			for (EntityArrow arrow : arrows) {

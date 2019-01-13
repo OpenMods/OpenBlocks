@@ -23,24 +23,21 @@ public class ChangelogBuilder {
 
 	public static class ChangelogSection {
 		public String title;
-		public List<String> lines = Lists.newArrayList();
+		public final List<String> lines = Lists.newArrayList();
 	}
 
 	public static class Changelog {
 		public String version;
-		public List<ChangelogSection> sections = Lists.newArrayList();
+		public final List<ChangelogSection> sections = Lists.newArrayList();
 	}
 
 	public static List<Changelog> readChangeLogs() {
 		try {
 			IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(CHANGELOG);
-			InputStream resourceStream = resource.getInputStream();
-			try {
+			try (InputStream resourceStream = resource.getInputStream()) {
 				Reader reader = new InputStreamReader(resourceStream);
 				Gson gson = new Gson();
 				return gson.fromJson(reader, LIST_TYPE);
-			} finally {
-				resourceStream.close();
 			}
 		} catch (Exception e) {
 			Log.severe(e, "Failed to read changelog");

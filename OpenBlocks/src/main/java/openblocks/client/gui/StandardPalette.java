@@ -8,7 +8,7 @@ public enum StandardPalette {
 	red(0xc88a84),
 	purple(0xc884bf);
 
-	private int color;
+	private final int color;
 
 	StandardPalette(int col) {
 		this.color = col;

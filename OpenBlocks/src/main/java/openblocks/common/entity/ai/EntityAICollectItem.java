@@ -13,9 +13,9 @@ import openmods.utils.ItemUtils;
 
 public class EntityAICollectItem extends EntityAIBase {
 
-	private EntityLuggage luggage = null;
+	private EntityLuggage luggage;
 
-	private PathNavigate pathFinder;
+	private final PathNavigate pathFinder;
 
 	private EntityItem targetItem = null;
 

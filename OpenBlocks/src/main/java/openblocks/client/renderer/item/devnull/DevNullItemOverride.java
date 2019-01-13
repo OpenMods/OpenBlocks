@@ -102,8 +102,8 @@ public class DevNullItemOverride extends ItemOverrideList {
 		public final IBakedModel normal;
 		public final IBakedModel overflow;
 
-		public final float scaleFactor;
-		private Map<TransformType, Matrix4f> transforms;
+		private final float scaleFactor;
+		private final Map<TransformType, Matrix4f> transforms;
 
 		public BakedModelParams(Map<TransformType, Matrix4f> transforms, IBakedModel normal, IBakedModel overflow, float scaleFactor) {
 			this.transforms = transforms;
@@ -118,7 +118,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 	private class ModelFactory extends CacheLoader<ModelKey, Pair<? extends IBakedModel, Matrix4f>> {
 
 		@Override
-		public Pair<? extends IBakedModel, Matrix4f> load(ModelKey key) throws Exception {
+		public Pair<? extends IBakedModel, Matrix4f> load(ModelKey key) {
 			final int depth = key.depth;
 			IBakedModel innerModel = key.innerItem;
 			// should be caught by earlier method
@@ -312,7 +312,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 		final Matrix4f scaleMatrix = is3d? scale3d(scale) : scale2d(scale);
 		wrapTransform(scaleMatrix);
 
-		return appendScaledModelQuads(Lists.<BakedQuad> newArrayList(), model, scaleMatrix, 0);
+		return appendScaledModelQuads(Lists.newArrayList(), model, scaleMatrix, 0);
 	}
 
 	private static List<List<BakedQuad>> prepareScaledFrames(BakedModelParams params, boolean is3d) {
@@ -355,7 +355,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 	}
 
 	public DevNullItemOverride(BakedModelParams gui, BakedModelParams world, TextureAtlasSprite particle, TextureAtlasSprite font, VertexFormat format) {
-		super(ImmutableList.<ItemOverride> of());
+		super(ImmutableList.of());
 
 		this.particle = particle;
 

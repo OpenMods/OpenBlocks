@@ -100,7 +100,7 @@ public class ExplosiveEnchantmentsHandler {
 		}
 	}
 
-	private Map<Entity, JumpInfo> jumpBoosts = new MapMaker().weakKeys().makeMap();
+	private final Map<Entity, JumpInfo> jumpBoosts = new MapMaker().weakKeys().makeMap();
 
 	private static final ItemStack gunpowder = new ItemStack(Items.GUNPOWDER);
 

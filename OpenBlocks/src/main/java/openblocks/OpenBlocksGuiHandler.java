@@ -14,7 +14,7 @@ import openmods.Log;
 
 public class OpenBlocksGuiHandler implements IGuiHandler {
 
-	public static enum GuiId {
+	public enum GuiId {
 		luggage,
 		devNull;
 

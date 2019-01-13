@@ -48,7 +48,7 @@ public class LootHandler {
 		}
 	}
 
-	private static final Map<ResourceLocation, LootInjection> injections = ImmutableMap.<ResourceLocation, LootInjection> of(
+	private static final Map<ResourceLocation, LootInjection> injections = ImmutableMap.of(
 			mc("chests/abandoned_mineshaft"), new TechnicolorGlassesLootInjection(),
 			mc("chests/simple_dungeon"), new TechnicolorGlassesLootInjection());
 

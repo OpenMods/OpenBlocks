@@ -23,7 +23,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	private static final String OWNER_ID_TAG = "OwnerId";
 	private UUID ownerId;
-	private WeakReference<EntityPlayer> cachedOwner = new WeakReference<>(null);
+	private WeakReference<EntityPlayer> cachedOwner;
 	protected double ownerOffsetX;
 	protected double ownerOffsetY;
 	protected double ownerOffsetZ;

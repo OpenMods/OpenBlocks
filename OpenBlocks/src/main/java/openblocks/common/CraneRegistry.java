@@ -13,7 +13,6 @@ public class CraneRegistry {
 	private static final double LENGTH_DELTA = 0.1;
 
 	public static class Data {
-		public boolean isDetected;
 		public boolean isExtending;
 		public double length = MIN_LENGTH;
 
@@ -36,8 +35,8 @@ public class CraneRegistry {
 	}
 
 	// TODO does it need two separate collections?
-	private Map<EntityLivingBase, Data> itemData = new MapMaker().weakKeys().makeMap();
-	private Map<EntityLivingBase, EntityMagnet> magnetOwners = new MapMaker().weakKeys().weakValues().makeMap();
+	private final Map<EntityLivingBase, Data> itemData = new MapMaker().weakKeys().makeMap();
+	private final Map<EntityLivingBase, EntityMagnet> magnetOwners = new MapMaker().weakKeys().weakValues().makeMap();
 
 	public void ensureMagnetExists(EntityLivingBase player) {
 		EntityMagnet magnet = magnetOwners.get(player);

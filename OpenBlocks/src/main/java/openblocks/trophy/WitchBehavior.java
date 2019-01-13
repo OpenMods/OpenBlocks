@@ -14,8 +14,4 @@ public class WitchBehavior implements ITrophyBehavior {
 		player.sendMessage(new TextComponentTranslation("openblocks.misc.get_witched"));
 		return 0;
 	}
-
-	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
-
 }

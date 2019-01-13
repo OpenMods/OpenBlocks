@@ -38,7 +38,7 @@ public class StencilItemOverride extends ItemOverrideList {
 	private final Map<IStencilPattern, IBakedModel> filledModels = Maps.newHashMap();
 
 	public StencilItemOverride(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		super(Collections.<ItemOverride> emptyList());
+		super(Collections.emptyList());
 		this.state = state;
 		this.format = format;
 		this.bakedTextureGetter = bakedTextureGetter;

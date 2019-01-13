@@ -4,9 +4,9 @@ import net.minecraft.advancements.CriteriaTriggers;
 
 public class Criterions {
 
-	public static TriggerDevNullStack devNullStack = new TriggerDevNullStack();
+	public static final TriggerDevNullStack devNullStack = new TriggerDevNullStack();
 
-	public static TriggerBrickDropped brickDropped = new TriggerBrickDropped();
+	public static final TriggerBrickDropped brickDropped = new TriggerBrickDropped();
 
 	public static void init() {
 		CriteriaTriggers.register(devNullStack);

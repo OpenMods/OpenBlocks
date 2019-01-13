@@ -24,7 +24,7 @@ import openmods.state.StateContainer;
 @BookDocumentation(hasVideo = true)
 public class ItemHangGlider extends Item implements IStateItem {
 
-	private static Map<EntityPlayer, EntityHangGlider> spawnedGlidersMap = new MapMaker().weakKeys().weakValues().makeMap();
+	private static final Map<EntityPlayer, EntityHangGlider> spawnedGlidersMap = new MapMaker().weakKeys().weakValues().makeMap();
 
 	public ItemHangGlider() {
 		addPropertyOverride(new ResourceLocation("hidden"), (@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> EntityHangGlider.isHeldStackDeployedGlider(entityIn, stack)? 2 : 0);

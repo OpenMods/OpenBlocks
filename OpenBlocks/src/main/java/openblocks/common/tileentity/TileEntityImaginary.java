@@ -57,7 +57,7 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 	}
 
 	public interface ILegacyCollisionData {
-		public BlockImaginary.Shape readFromNBT(NBTTagCompound tag);
+		BlockImaginary.Shape readFromNBT(NBTTagCompound tag);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -146,11 +146,7 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 		if (what == Property.SOLID && isPencil()) return true;
 
 		final ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-
-		if (helmet == null) return isInverted();
-
 		Item item = helmet.getItem();
-
 		if (item instanceof ItemImaginationGlasses) return ((ItemImaginationGlasses)item).checkBlock(what, helmet, this);
 
 		return isInverted();

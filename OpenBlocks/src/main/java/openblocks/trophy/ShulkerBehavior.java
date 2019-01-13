@@ -12,8 +12,4 @@ public class ShulkerBehavior implements ITrophyBehavior {
 		player.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 100, 1));
 		return 100;
 	}
-
-	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
-
 }

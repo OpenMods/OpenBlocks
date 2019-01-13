@@ -34,8 +34,8 @@ public class ItemPedometer extends Item {
 		player.sendMessage(new TextComponentTranslation(format, args));
 	}
 
-	private SpeedUnit speedUnit = SpeedUnit.M_PER_TICK;
-	private DistanceUnit distanceUnit = DistanceUnit.M;
+	private static final SpeedUnit speedUnit = SpeedUnit.M_PER_TICK;
+	private static final DistanceUnit distanceUnit = DistanceUnit.M;
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {

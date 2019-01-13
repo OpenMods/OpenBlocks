@@ -40,11 +40,11 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private static final int STAGE_CHANGE_TICK = 100;
 	private static final int RISING_TIME = 400;
 	private static final int FALLING_TIME = 10;
-	public static final int MAX_HEIGHT = 5;
+	private static final int MAX_HEIGHT = 5;
 	private static final double STAGE_CHANGE_CHANCE = 0.8;
 	private static final GameProfile MR_GLITCH = new GameProfile(UUID.fromString("d4d119aa-d410-488a-8734-0053577d4a1a"), null);
 
-	public static enum State {
+	public enum State {
 		INERT(0, 0, false) {
 			@Override
 			public State getNextState(TileEntityGoldenEgg target) {
@@ -152,14 +152,14 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 		public abstract State getNextState(TileEntityGoldenEgg target);
 
-		private State(float rotationSpeed, float riseSpeed, boolean specialEffects) {
+		State(float rotationSpeed, float riseSpeed, boolean specialEffects) {
 			this.rotationSpeed = rotationSpeed;
 			this.progressSpeed = riseSpeed;
 			this.specialEffects = specialEffects;
 		}
 	}
 
-	public int tickCounter;
+	private int tickCounter;
 
 	private float rotation;
 	private float progress;
@@ -167,7 +167,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private float rotationSpeed;
 	private float progressSpeed;
 
-	private List<EntityBlock> blocks = Lists.newArrayList();
+	private final List<EntityBlock> blocks = Lists.newArrayList();
 	private SyncableEnum<State> stage;
 
 	private GameProfile owner;
@@ -184,7 +184,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 		return getProgress(partialTickTime) * MAX_HEIGHT;
 	}
 
-	public State tryRandomlyChangeState(int delay, State nextState) {
+	private State tryRandomlyChangeState(int delay, State nextState) {
 		return (tickCounter % delay == 0) && (RANDOM.nextDouble() < STAGE_CHANGE_CHANCE)? nextState : null;
 	}
 
@@ -194,7 +194,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	private void pickUpBlock(final WorldServer world, final BlockPos pos) {
-		FakePlayerPool.instance.executeOnPlayer(world, (PlayerUser)fakePlayer -> {
+		FakePlayerPool.instance.executeOnPlayer(world, fakePlayer -> {
 			EntityBlock block = EntityBlock.create(fakePlayer, world, pos);
 			if (block != null) {
 				block.setHasAirResistance(false);
