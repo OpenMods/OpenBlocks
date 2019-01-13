@@ -20,7 +20,6 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -104,6 +103,9 @@ public class ClientProxy implements IOpenBlocksProxy {
 	@Override
 	public void preInit() {
 		OBJLoader.INSTANCE.addDomain(OpenBlocks.MODID);
+
+		MinecraftForge.EVENT_BUS.register(new FluidTextureRegisterListener(OpenBlocks.Fluids.xpJuice));
+
 		new KeyInputHandler().setup();
 
 		if (Config.flimFlamEnchantmentEnabled) {
@@ -182,10 +184,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Blocks.flag);
 		}
 
-		if (OpenBlocks.Blocks.tank != null) {
-			MinecraftForge.EVENT_BUS.register(new FluidTextureRegisterListener());
-		}
-
 		if (OpenBlocks.Items.glyph != null) {
 			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.glyph);
 			MinecraftForge.EVENT_BUS.register(new GlyphPlacementGridRenderer());
@@ -228,10 +226,16 @@ public class ClientProxy implements IOpenBlocksProxy {
 	public void postInit() {}
 
 	private static class FluidTextureRegisterListener {
+		private final Fluid[] fluidsToRegister;
+
+		public FluidTextureRegisterListener(Fluid... fluidsToRegister) {
+			this.fluidsToRegister = fluidsToRegister;
+		}
+
 		@SubscribeEvent
 		public void onTextureStitch(TextureStitchEvent.Pre evt) {
-			for (Fluid f : FluidRegistry.getRegisteredFluids().values()) {
-				final ResourceLocation fluidTexture = f.getStill();
+			for (final Fluid fluid : fluidsToRegister) {
+				final ResourceLocation fluidTexture = fluid.getStill();
 				if (fluidTexture != null)
 					evt.getMap().registerSprite(fluidTexture);
 			}
