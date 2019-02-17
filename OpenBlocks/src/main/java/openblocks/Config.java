@@ -120,9 +120,6 @@ public class Config {
 	@ConfigProperty(category = "imaginary", name = "fadingSpeed", comment = "Speed of imaginary blocks fading/appearing")
 	public static float imaginaryFadingSpeed = 0.0075f;
 
-	@ConfigProperty(category = "imaginary", name = "numberOfUses", comment = "Number of newly created crayon/pencil uses")
-	public static float imaginaryItemUseCount = 10;
-
 	@OnLineModifiable
 	@ConfigProperty(category = "crane", name = "doCraneCollisionCheck", comment = "Enable collision checking of crane arm")
 	public static boolean doCraneCollisionCheck = false;

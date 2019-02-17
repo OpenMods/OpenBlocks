@@ -126,7 +126,8 @@ import openblocks.common.item.ItemGoldenEye;
 import openblocks.common.item.ItemGuide;
 import openblocks.common.item.ItemHangGlider;
 import openblocks.common.item.ItemHeightMap;
-import openblocks.common.item.ItemImaginary;
+import openblocks.common.item.ItemImaginaryCrayon;
+import openblocks.common.item.ItemImaginaryPencil;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.item.ItemInfoBook;
@@ -168,7 +169,8 @@ import openblocks.common.tileentity.TileEntityGoldenEgg;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityHealBlock;
-import openblocks.common.tileentity.TileEntityImaginary;
+import openblocks.common.tileentity.TileEntityImaginaryCrayon;
+import openblocks.common.tileentity.TileEntityImaginaryPencil;
 import openblocks.common.tileentity.TileEntityItemDropper;
 import openblocks.common.tileentity.TileEntityPaintCan;
 import openblocks.common.tileentity.TileEntityPaintMixer;
@@ -462,8 +464,11 @@ public class OpenBlocks {
 		@RegisterBlock(type = BlockBigButtonWood.class, id = "big_button_wood", tileEntity = TileEntityBigButtonWood.class)
 		public static Block bigButtonWood;
 
-		@RegisterBlock(id = "imaginary", tileEntity = TileEntityImaginary.class, itemBlock = ItemImaginary.class, customItemModels = ItemImaginary.ModelProvider.class, registerDefaultItemModel = false)
-		public static BlockImaginary imaginary;
+		@RegisterBlock(id = "imaginary_crayon", tileEntity = TileEntityImaginaryCrayon.class, itemBlock = ItemImaginaryCrayon.class)
+		public static BlockImaginary imaginaryCrayon;
+
+		@RegisterBlock(id = "imaginary_pencil", tileEntity = TileEntityImaginaryPencil.class, itemBlock = ItemImaginaryPencil.class)
+		public static BlockImaginary imaginaryPencil;
 
 		@RegisterBlock(type = BlockFan.class, id = "fan", tileEntity = TileEntityFan.class)
 		public static Block fan;
@@ -1004,9 +1009,14 @@ public class OpenBlocks {
 
 		startupHelper.init();
 
-		if (Blocks.imaginary != null) {
+		if (Blocks.imaginaryPencil != null) {
 			// delayed to init, since sounds are not loaded in pre-init
-			Blocks.imaginary.setSoundType();
+			Blocks.imaginaryPencil.setSoundType();
+		}
+
+		if (Blocks.imaginaryCrayon != null) {
+			// delayed to init, since sounds are not loaded in pre-init
+			Blocks.imaginaryCrayon.setSoundType();
 		}
 	}
 

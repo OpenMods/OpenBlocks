@@ -12,6 +12,7 @@ import openblocks.common.recipe.EpicEraserRecipe;
 import openblocks.common.recipe.GoldenEyeRechargeRecipe;
 import openblocks.common.recipe.MapCloneRecipe;
 import openblocks.common.recipe.MapResizeRecipe;
+import openblocks.common.recipe.PencilMergeRecipe;
 
 @EventBusSubscriber
 public class CustomRecipesSetup {
@@ -19,13 +20,17 @@ public class CustomRecipesSetup {
 	@SubscribeEvent
 	public static void registerRecipes(RegistryEvent.Register<IRecipe> evt) {
 		final IForgeRegistry<IRecipe> registry = evt.getRegistry();
-		if (OpenBlocks.Blocks.imaginary != null) {
+		if (OpenBlocks.Blocks.imaginaryCrayon != null) {
 			registry.register(new CrayonMergeRecipe().setRegistryName(OpenBlocks.location("crayon_merge")));
 			registry.register(new CrayonMixingRecipe().setRegistryName(OpenBlocks.location("crayon_mix")));
 
 			if (OpenBlocks.Items.crayonGlasses != null) {
 				registry.register(new CrayonGlassesRecipe().setRegistryName(OpenBlocks.location("crayon_glasses")));
 			}
+		}
+
+		if (OpenBlocks.Blocks.imaginaryPencil != null) {
+			registry.register(new PencilMergeRecipe().setRegistryName(OpenBlocks.location("pencil_merge")));
 		}
 
 		if (OpenBlocks.Items.emptyMap != null) {

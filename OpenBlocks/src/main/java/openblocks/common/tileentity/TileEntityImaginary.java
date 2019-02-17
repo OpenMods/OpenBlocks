@@ -1,6 +1,5 @@
 package openblocks.common.tileentity;
 
-import com.google.common.base.Preconditions;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,13 +13,12 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.block.BlockImaginary;
-import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openmods.OpenMods;
 import openmods.api.ICustomPickItem;
 import openmods.tileentity.OpenTileEntity;
 
-public class TileEntityImaginary extends OpenTileEntity implements ICustomPickItem {
+public abstract class TileEntityImaginary extends OpenTileEntity implements ICustomPickItem {
 
 	public enum Property {
 		VISIBLE,
@@ -67,16 +65,13 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 		shape = BlockImaginary.Shape.BLOCK;
 	}
 
-	public TileEntityImaginary(Integer color, boolean isInverted, BlockImaginary.Shape shape) {
-		Preconditions.checkNotNull(shape, "Bad idea! Rejected!");
-		this.color = color;
+	public void setup(boolean isInverted, BlockImaginary.Shape shape) {
 		this.isInverted = isInverted;
 		this.shape = shape;
 	}
 
-	public Integer color;
-	public boolean isInverted;
-	private BlockImaginary.Shape shape;
+	protected boolean isInverted;
+	protected BlockImaginary.Shape shape;
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
@@ -87,14 +82,11 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		tag = super.writeToNBT(tag);
-
 		writeShapeData(tag);
-
 		return tag;
 	}
 
 	private void readShapeData(NBTTagCompound tag) {
-		color = tag.hasKey("Color")? tag.getInteger("Color") : null;
 		isInverted = tag.getBoolean("IsInverted");
 
 		if (tag.hasKey("Type", Constants.NBT.TAG_BYTE)) {
@@ -107,7 +99,6 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 	}
 
 	private NBTTagCompound writeShapeData(NBTTagCompound tag) {
-		if (color != null) tag.setInteger("Color", color);
 		tag.setBoolean("IsInverted", isInverted);
 		tag.setByte("Shape", (byte)shape.ordinal());
 		return tag;
@@ -133,17 +124,13 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 		return pass == 1;
 	}
 
-	public boolean isPencil() {
-		return color == null;
-	}
-
 	public boolean isInverted() {
 		return isInverted;
 	}
 
 	public boolean is(Property what, EntityPlayer player) {
 		if (what == Property.VISIBLE && player.isSpectator()) return true;
-		if (what == Property.SOLID && isPencil()) return true;
+		if (what == Property.SOLID && isAlwaysSolid()) return true;
 
 		final ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 		Item item = helmet.getItem();
@@ -163,21 +150,18 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 
 	@Override
 	@Nonnull
-	public ItemStack getPickBlock(EntityPlayer player) {
-		int dmg = isPencil()? ItemImaginary.DAMAGE_PENCIL : ItemImaginary.DAMAGE_CRAYON;
-		return ItemImaginary.setupValues(new ItemStack(getBlockType(), 1, dmg), color, shape, isInverted);
-	}
+	public abstract ItemStack getPickBlock(EntityPlayer player);
 
 	public BlockImaginary.Shape getShape() {
 		return shape;
-	}
-
-	public BlockImaginary.Type getType() {
-		return isPencil()? BlockImaginary.Type.PENCIL : BlockImaginary.Type.CRAYON;
 	}
 
 	@Override
 	public boolean hasFastRenderer() {
 		return true;
 	}
+
+	public abstract boolean isAlwaysSolid();
+
+	public abstract int getColor();
 }

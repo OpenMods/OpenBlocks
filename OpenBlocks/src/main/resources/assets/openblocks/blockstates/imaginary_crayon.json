@@ -1,0 +1,30 @@
+{
+    "forge_marker" : 1,
+    "defaults": {
+        "textures": {
+            "full_panel": "openblocks:blocks/crayon_panel",
+            "half_panel": "openblocks:blocks/crayon_half_panel",
+            "block": "openblocks:blocks/crayon_block"
+        }
+    },
+    "variants" : {
+        "inventory" : [{
+            "transform": "forge:default-item",
+            "model": "openblocks:crayon"
+        }],
+
+        "orientation": {
+            "xp_yp" : { "y" : 0 },
+            "zp_yp": { "y" : 90 },
+            "xn_yp": { "y" : 180 },
+            "zn_yp": { "y" : 270 }
+        },
+
+        "shape": {
+            "block" : { "model": "openblocks:imaginary_block" },
+            "panel" : { "model": "openblocks:imaginary_panel" },
+            "half_panel" : { "model": "openblocks:imaginary_half" },
+            "stairs" : { "model": "openblocks:imaginary_stairs" }
+        }
+    }
+}

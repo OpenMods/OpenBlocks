@@ -3,17 +3,15 @@ package openblocks.common.recipe;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginary.PlacementMode;
-import openblocks.common.item.ItemImaginaryCrayon;
-import openmods.utils.OptionalInt;
+import openblocks.common.item.ItemImaginaryPencil;
 
-public class CrayonMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+public class PencilMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
 	@Override
 	public String getGroup() {
@@ -22,23 +20,12 @@ public class CrayonMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn) {
-		OptionalInt color = OptionalInt.ABSENT;
 		int count = 0;
 
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			final ItemStack stack = inv.getStackInSlot(i);
-			if (!(stack.getItem() instanceof ItemImaginaryCrayon)) return false;
-
-			final NBTTagCompound tag = stack.getTagCompound();
-			if (tag != null) {
-				final int stackColor = ItemImaginaryCrayon.getColor(tag);
-				if (color.isPresent()) {
-					if (color.get() != stackColor) return false;
-				} else {
-					color = OptionalInt.of(stackColor);
-				}
-			}
-
+			if (stack.isEmpty()) continue;
+			if (!(stack.getItem() instanceof ItemImaginaryPencil)) return false;
 			count++;
 		}
 
@@ -47,17 +34,17 @@ public class CrayonMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
-		int color = 0;
 		float uses = 0;
 
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			final ItemStack stack = inv.getStackInSlot(i);
-			color = ItemImaginaryCrayon.getColor(stack);
+			if (stack.isEmpty()) continue;
+			if (!(stack.getItem() instanceof ItemImaginaryPencil)) return ItemStack.EMPTY;
 			uses += ItemImaginary.getUses(stack);
 		}
 
 		if (uses == 0) return ItemStack.EMPTY;
-		return ItemImaginaryCrayon.setupValues(new ItemStack(OpenBlocks.Blocks.imaginaryCrayon), color, PlacementMode.BLOCK, uses);
+		return ItemImaginaryPencil.setupValues(new ItemStack(OpenBlocks.Blocks.imaginaryPencil), PlacementMode.BLOCK, uses);
 	}
 
 	@Override

@@ -81,7 +81,8 @@ import openblocks.common.tileentity.TileEntityFan;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
-import openblocks.common.tileentity.TileEntityImaginary;
+import openblocks.common.tileentity.TileEntityImaginaryCrayon;
+import openblocks.common.tileentity.TileEntityImaginaryPencil;
 import openblocks.common.tileentity.TileEntityPaintMixer;
 import openblocks.common.tileentity.TileEntityProjector;
 import openblocks.common.tileentity.TileEntitySky;
@@ -187,7 +188,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, new TileEntityBearTrapRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, new TileEntitySprinklerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class, new TileEntityCannonRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class, new TileEntityImaginaryRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginaryCrayon.class, new TileEntityImaginaryRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginaryPencil.class, new TileEntityImaginaryRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class, new TileEntityFanRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVillageHighlighter.class, new TileEntityVillageHighlighterRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoEnchantmentTable.class, new TileEntityAutoEnchantmentTableRenderer());
@@ -250,7 +252,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
 		}
 
-		if (OpenBlocks.Blocks.imaginary != null) {
+		if (OpenBlocks.Blocks.imaginaryPencil != null || OpenBlocks.Blocks.imaginaryCrayon != null) {
 			MinecraftForge.EVENT_BUS.register(new TileEntityImaginaryRenderer.CacheFlushListener());
 		}
 

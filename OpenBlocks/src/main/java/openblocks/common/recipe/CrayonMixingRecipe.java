@@ -12,6 +12,7 @@ import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginary.PlacementMode;
+import openblocks.common.item.ItemImaginaryCrayon;
 import openmods.utils.CustomRecipeBase;
 
 public class CrayonMixingRecipe extends CustomRecipeBase {
@@ -25,8 +26,10 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 		int count = 0;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if (stack.isEmpty()) continue;
-			if (!ItemImaginary.isCrayon(stack))
+			if (stack.isEmpty()) {
+				continue;
+			}
+			if (!(stack.getItem() instanceof ItemImaginaryCrayon))
 				return false;
 			if (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) continue;
 			count++;
@@ -46,9 +49,7 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 
 			final NBTTagCompound tag = stack.getTagCompound();
 			if (tag != null) {
-				final Integer color = ItemImaginary.getColor(tag);
-				if (color == null) return ItemStack.EMPTY;
-
+				final int color = ItemImaginaryCrayon.getColor(tag);
 				count++;
 
 				r += ((color >> 16) & 0xFF);
@@ -72,7 +73,7 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 			if (tmp.getCount() > max.getCount()) max = tmp;
 		}
 
-		return ItemImaginary.setupValues(new ItemStack(Blocks.imaginary), color, max.getElement(), count * 0.9f);
+		return ItemImaginaryCrayon.setupValues(new ItemStack(Blocks.imaginaryCrayon), color, max.getElement(), count * 0.9f);
 	}
 
 	@Override

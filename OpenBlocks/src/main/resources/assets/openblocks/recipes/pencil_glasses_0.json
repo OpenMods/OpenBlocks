@@ -4,7 +4,7 @@
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:imaginary"
+      "item": "openblocks:imaginary_pencil"
     },
     {
       "type": "minecraft:item_exists",
@@ -13,13 +13,8 @@
   ],
   "ingredients": [
     {
-      "type": "minecraft:item_nbt",
-      "item": "openblocks:imaginary",
-      "data": 0,
-      "nbt": {
-        "Uses": 10.0,
-        "Mode": 0
-      }
+      "type": "minecraft:item",
+      "item": "openblocks:imaginary_pencil"
     },
     {
       "type": "minecraft:item",
@@ -27,7 +22,6 @@
     }
   ],
   "result": {
-    "item": "openblocks:pencil_glasses",
-    "data": 0
+    "item": "openblocks:pencil_glasses"
   }
 }

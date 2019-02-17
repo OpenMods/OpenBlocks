@@ -1,20 +1,21 @@
 {
   "type": "forge:ore_shapeless",
-  "group": "openblocks:imaginary",
+  "group": "openblocks:imaginary_pencil",
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:imaginary"
+      "item": "openblocks:imaginary_pencil"
     }
   ],
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "dyeMagenta"
+      "type": "minecraft:item",
+      "item": "minecraft:coal",
+      "data": 1
     },
     {
-      "type": "minecraft:item",
-      "item": "minecraft:paper"
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
     },
     {
       "type": "minecraft:item",
@@ -26,11 +27,9 @@
     }
   ],
   "result": {
-    "item": "openblocks:imaginary",
-    "data": 1,
+    "item": "openblocks:imaginary_pencil",
     "nbt": {
       "Uses": 10.0,
-      "Color": 12801229,
       "Mode": 0
     }
   }

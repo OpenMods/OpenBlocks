@@ -238,16 +238,10 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 		final float g;
 		final float b;
 
-		if (te.isPencil()) {
-			r = 1.0f;
-			g = 1.0f;
-			b = 1.0f;
-		} else {
-			int color = te.color;
-			r = ((color >> 16) & 0xFF) / 255.0f;
-			g = ((color >> 8) & 0xFF) / 255.0f;
-			b = ((color >> 0) & 0xFF) / 255.0f;
-		}
+		int color = te.getColor();
+		r = ((color >> 16) & 0xFF) / 255.0f;
+		g = ((color >> 8) & 0xFF) / 255.0f;
+		b = ((color >> 0) & 0xFF) / 255.0f;
 
 		final float a = te.visibility;
 		final RenderInfo info = new RenderInfo(x, y, z, r, g, b, a);

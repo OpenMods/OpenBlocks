@@ -364,6 +364,9 @@ tile.openblocks.golden_egg.name=Golden Egg
 
 tile.openblocks.digitalfuse.name=Digital Fuse
 
+tile.openblocks.imaginary_crayon.name=Magic Crayon
+tile.openblocks.imaginary_pencil.name=Magic Pencil
+
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking.
 
@@ -409,8 +412,6 @@ item.openblocks.glyph.name=Glyph
 item.openblocks.glyph.with_char='%c' Glyph
 
 item.openblocks.stencil.name=Stencil
-item.openblocks.crayon.name=Magic Crayon
-item.openblocks.pencil.name=Magic Pencil
 item.openblocks.glasses.pencil.name=Pencil Glasses
 item.openblocks.glasses.crayon.name=Crayon Glasses
 item.openblocks.glasses.technicolor.name=Amazing Technicolor Glasses

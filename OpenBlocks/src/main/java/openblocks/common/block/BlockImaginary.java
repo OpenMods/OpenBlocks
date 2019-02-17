@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -32,18 +31,6 @@ import openmods.geometry.Orientation;
 import openmods.utils.BlockUtils;
 
 public class BlockImaginary extends OpenBlock.FourDirections {
-
-	public enum Type implements IStringSerializable {
-		PENCIL, CRAYON;
-
-		private final String name = name().toLowerCase(Locale.ROOT);
-
-		@Override
-		public String getName() {
-			return name;
-		}
-	}
-
 	public enum Shape implements IStringSerializable {
 		BLOCK {
 			@Override
@@ -119,8 +106,6 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 
 	public static final PropertyEnum<Shape> PROPERTY_SHAPE = PropertyEnum.create("shape", Shape.class);
 
-	public static final PropertyEnum<Type> PROPERTY_TYPE = PropertyEnum.create("type", Type.class);
-
 	private static final AxisAlignedBB EMPTY_AABB = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 
 	public static final double PANEL_HEIGHT = 0.1;
@@ -149,12 +134,12 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 
 	public BlockImaginary() {
 		super(IMAGINARY);
-		setDefaultState(getDefaultState().withProperty(PROPERTY_SHAPE, Shape.BLOCK).withProperty(PROPERTY_TYPE, Type.PENCIL));
+		setDefaultState(getDefaultState().withProperty(PROPERTY_SHAPE, Shape.BLOCK));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, getPropertyOrientation(), PROPERTY_TYPE, PROPERTY_SHAPE);
+		return new BlockStateContainer(this, getPropertyOrientation(), PROPERTY_SHAPE);
 	}
 
 	public void setSoundType() {
@@ -237,8 +222,7 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 		TileEntityImaginary te = getTileEntity(worldIn, pos, TileEntityImaginary.class);
 		if (te != null) {
 			final Shape shape = te.getShape();
-			final Type type = te.getType();
-			return state.withProperty(PROPERTY_SHAPE, shape).withProperty(PROPERTY_TYPE, type);
+			return state.withProperty(PROPERTY_SHAPE, shape);
 		}
 
 		return state;

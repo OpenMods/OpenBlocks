@@ -1,16 +1,16 @@
 {
   "type": "forge:ore_shapeless",
-  "group": "openblocks:imaginary",
+  "group": "openblocks:imaginary_crayon",
   "conditions": [
     {
       "type": "minecraft:item_exists",
-      "item": "openblocks:imaginary"
+      "item": "openblocks:imaginary_crayon"
     }
   ],
   "ingredients": [
     {
       "type": "forge:ore_dict",
-      "ore": "dyeLightGray"
+      "ore": "dyeOrange"
     },
     {
       "type": "minecraft:item",
@@ -26,11 +26,10 @@
     }
   ],
   "result": {
-    "item": "openblocks:imaginary",
-    "data": 1,
+    "item": "openblocks:imaginary_crayon",
     "nbt": {
       "Uses": 10.0,
-      "Color": 11250603,
+      "Color": 15435844,
       "Mode": 0
     }
   }

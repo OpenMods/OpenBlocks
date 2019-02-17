@@ -19,6 +19,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
+import openblocks.common.tileentity.TileEntityImaginaryCrayon;
+import openblocks.common.tileentity.TileEntityImaginaryPencil;
 import openmods.colors.ColorMeta;
 import openmods.utils.ItemUtils;
 import openmods.utils.TranslationUtils;
@@ -89,21 +91,19 @@ public class ItemImaginationGlasses extends ItemArmor {
 	public ItemImaginationGlasses(Type type) {
 		super(ArmorMaterial.GOLD, 1, EntityEquipmentSlot.HEAD);
 		this.type = type;
-		setHasSubtypes(true);
 	}
 
 	public enum Type {
 		PENCIL("pencil") {
 			@Override
 			protected boolean checkBlock(Property property, @Nonnull ItemStack stack, TileEntityImaginary te) {
-				return te.isPencil() ^ te.isInverted();
+				return (te instanceof TileEntityImaginaryPencil) ^ te.isInverted();
 			}
 		},
 		CRAYON("crayon") {
 			@Override
 			protected boolean checkBlock(Property property, @Nonnull ItemStack stack, TileEntityImaginary te) {
-				return (!te.isPencil() && getGlassesColor(stack) == te.color)
-						^ te.isInverted();
+				return (te instanceof TileEntityImaginaryCrayon && getGlassesColor(stack) == ((TileEntityImaginaryCrayon)te).getColor()) ^ te.isInverted();
 			}
 		},
 		TECHNICOLOR("technicolor") {
@@ -138,11 +138,5 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 	public boolean checkBlock(Property property, @Nonnull ItemStack stack, TileEntityImaginary te) {
 		return type.checkBlock(property, stack, te);
-	}
-
-	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> result) {
-		if (isInCreativeTab(tab))
-			result.add(new ItemStack(this));
 	}
 }

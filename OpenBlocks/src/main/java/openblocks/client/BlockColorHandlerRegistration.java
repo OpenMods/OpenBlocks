@@ -17,7 +17,7 @@ import openblocks.common.block.BlockPaintCan;
 import openblocks.common.block.BlockPaintMixer;
 import openblocks.common.item.ItemDevNull;
 import openblocks.common.item.ItemGlyph;
-import openblocks.common.item.ItemImaginary;
+import openblocks.common.item.ItemImaginaryCrayon;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
@@ -47,8 +47,8 @@ public class BlockColorHandlerRegistration {
 			blockColors.registerBlockColorHandler(new BlockPaintCan.BlockColorHandler(), OpenBlocks.Blocks.paintCan);
 		}
 
-		if (OpenBlocks.Blocks.imaginary != null) {
-			itemColors.registerItemColorHandler(new ItemImaginary.CrayonColorHandler(), OpenBlocks.Blocks.imaginary);
+		if (OpenBlocks.Blocks.imaginaryCrayon != null) {
+			itemColors.registerItemColorHandler(new ItemImaginaryCrayon.ColorHandler(), OpenBlocks.Blocks.imaginaryCrayon);
 		}
 
 		if (OpenBlocks.Items.devNull != null) {
@@ -76,7 +76,6 @@ public class BlockColorHandlerRegistration {
 				itemColors.registerItemColorHandler(new ItemFixedColorHandler(color), block);
 			}
 		});
-
 	}
 
 	@SubscribeEvent
