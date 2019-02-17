@@ -24,7 +24,6 @@ import openblocks.OpenBlocks.Items;
 import openblocks.client.renderer.entity.EntitySelectionHandler.ISelectAware;
 import openblocks.common.MapDataBuilder;
 import openblocks.common.MapDataBuilder.ChunkJob;
-import openblocks.common.item.ItemCartographer;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openmods.Log;
@@ -253,7 +252,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	@Nonnull
 	public ItemStack toItemStack() {
 		if (Items.cartographer == null) return ItemStack.EMPTY;
-		ItemStack result = ItemCartographer.createStack(Items.cartographer, ItemCartographer.AssistantType.CARTOGRAPHER);
+		final ItemStack result = new ItemStack(Items.cartographer);
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
 		writeOwnDataToNBT(tag);
 		return result;
