@@ -33,23 +33,21 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World world) {
-		boolean gotCrayon = false;
-		boolean gotPaper = false;
+		int crayonCount = 0;
+		int paperCount = 0;
 
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (!stack.isEmpty()) {
 				if (ItemImaginary.isCrayon(stack)) {
-					if (gotCrayon || ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) return false;
-					gotCrayon = true;
+					crayonCount++;
 				} else if (stack.getItem() == Items.PAPER) {
-					if (gotPaper) return false;
-					gotPaper = true;
+					paperCount++;
 				} else return false;
 			}
 		}
 
-		return gotCrayon && gotPaper;
+		return crayonCount == 1 && paperCount == 1;
 	}
 
 	@Override

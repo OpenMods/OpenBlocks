@@ -13,13 +13,9 @@
   ],
   "ingredients": [
     {
-      "type": "minecraft:item_nbt",
+      "type": "minecraft:item",
       "item": "openblocks:imaginary",
-      "data": 0,
-      "nbt": {
-        "Uses": 10.0,
-        "Mode": 0
-      }
+      "data": 0
     },
     {
       "type": "minecraft:item",
