@@ -395,6 +395,6 @@ entity.openblocks.cartographer.name=Kartograph
 entity.openblocks.block.name=Schwebender Block
 entity.openblocks.mini_me.name=Mini-Me
 
-fluid.openblocks.xp_juice=Flüssige Erfahrungspunkte
+fluid.openblocks.xp_juice=Flüssige EP
 
 entity.Villager.audiophile=Audiophil
