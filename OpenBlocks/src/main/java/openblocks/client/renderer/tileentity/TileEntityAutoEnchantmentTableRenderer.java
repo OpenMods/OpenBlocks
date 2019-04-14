@@ -3,7 +3,6 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.client.model.ModelBook;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;

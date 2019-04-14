@@ -27,7 +27,6 @@ import openblocks.common.tileentity.TileEntityTarget;
 import openmods.Log;
 import openmods.block.OpenBlock;
 import openmods.fakeplayer.FakePlayerPool;
-import openmods.fakeplayer.FakePlayerPool.PlayerUserReturning;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Orientation;
 import openmods.utils.BlockNotifyFlags;

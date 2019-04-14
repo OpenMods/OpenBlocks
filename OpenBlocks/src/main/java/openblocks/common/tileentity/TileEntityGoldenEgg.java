@@ -29,7 +29,6 @@ import openmods.api.IBreakAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;
 import openmods.fakeplayer.FakePlayerPool;
-import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 

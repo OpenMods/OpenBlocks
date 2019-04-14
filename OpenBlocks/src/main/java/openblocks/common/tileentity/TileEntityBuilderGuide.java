@@ -15,7 +15,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import openblocks.rpc.IGuideAnimationTrigger;
-import openmods.shapes.IShapeable;
 import openmods.utils.render.GeometryUtils;
 
 public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAnimationTrigger {

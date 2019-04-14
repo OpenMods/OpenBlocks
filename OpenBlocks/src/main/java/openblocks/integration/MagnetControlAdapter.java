@@ -16,7 +16,6 @@ import openblocks.common.entity.EntityMagnet.IEntityBlockFactory;
 import openblocks.common.entity.EntityMagnet.IOwner;
 import openmods.entity.EntityBlock;
 import openmods.fakeplayer.FakePlayerPool;
-import openmods.fakeplayer.FakePlayerPool.PlayerUserReturning;
 import openperipheral.api.adapter.IWorldProvider;
 import openperipheral.api.adapter.method.Alias;
 import openperipheral.api.adapter.method.Arg;

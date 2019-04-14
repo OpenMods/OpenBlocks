@@ -1,6 +1,5 @@
 package openblocks.common.item;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import java.util.Set;
 import net.minecraft.block.Block;

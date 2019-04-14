@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
