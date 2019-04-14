@@ -242,7 +242,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		// some mods may call it on client side, see #834
 		syncMap.tryWrite(tag);
 
-		if (mapItem != null) {
+		if (!mapItem.isEmpty()) {
 			NBTTagCompound mapItem = this.mapItem.writeToNBT(new NBTTagCompound());
 			tag.setTag(TAG_MAP_ITEM, mapItem);
 			tag.setInteger("Dimension", mappingDimension);

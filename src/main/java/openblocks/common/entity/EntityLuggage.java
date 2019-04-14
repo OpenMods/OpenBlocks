@@ -183,7 +183,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		if (OpenBlocks.Items.luggage == null) return ItemStack.EMPTY;
 
 		final ItemStack luggageItem = new ItemStack(OpenBlocks.Items.luggage);
-		NBTTagCompound tag = itemTag != null? (NBTTagCompound)itemTag.copy() : new NBTTagCompound();
+		NBTTagCompound tag = itemTag != null? itemTag.copy() : new NBTTagCompound();
 
 		inventory.writeToNBT(tag);
 		luggageItem.setTagCompound(tag);

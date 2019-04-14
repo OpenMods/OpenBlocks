@@ -230,7 +230,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		if (outputSides) return;
 		final ItemMover mover = new ItemMover(world, pos).breakAfterFirstTry().randomizeSides().setSides(itemOutputs.getValue());
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (inventory.getStackInSlot(i) != null) {
+			if (!inventory.getStackInSlot(i).isEmpty()) {
 				if (mover.pushFromSlot(inventory.getHandler(), i) > 0) break;
 			}
 		}

@@ -211,7 +211,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	public boolean tryUseInk(Slots slot, int consume) {
 		ItemStack stack = inventory.getStackInSlot(slot);
-		return isValidForSlot(slot, stack) && inventory.decrStackSize(slot.ordinal(), consume) != null;
+		return isValidForSlot(slot, stack) && !inventory.decrStackSize(slot.ordinal(), consume).isEmpty();
 	}
 
 	private static boolean isValidForSlot(Slots slot, ItemStack stack) {

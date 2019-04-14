@@ -75,7 +75,7 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 	}
 
 	public boolean hasItem() {
-		return inventory.getStackInSlot(Slots.input) != null;
+		return !inventory.getStackInSlot(Slots.input).isEmpty();
 	}
 
 	public String getDonationUrl() {
