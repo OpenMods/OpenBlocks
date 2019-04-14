@@ -1,5 +1,20 @@
 [
     {
+        "version": "1.8.1",
+        "sections":
+        [
+            {
+                "title": "openblocks.gui.bugfixes",
+                "lines":
+                [
+                    "Fix pencil glasses recipe",
+                    "Fix missing fluid textures",
+                    "Fix block breaker duplicating some types of blocks"
+                ]
+            }
+        ]
+    },
+    {
         "version": "1.8",
         "sections":
         [
