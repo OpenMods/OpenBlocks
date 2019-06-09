@@ -5,7 +5,6 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +27,6 @@ import openmods.api.IValueReceiver;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
 import openmods.gui.misc.IConfigurableGuiSlots;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.ItemMover;
@@ -42,6 +40,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
+import openmods.inventory.ISidedInventoryDelegate;
 import openmods.utils.SidedItemHandlerAdapter;
 import openmods.utils.VanillaAnvilLogic;
 import openmods.utils.bitmap.BitMapUtils;
@@ -50,7 +49,7 @@ import openmods.utils.bitmap.IRpcIntBitMap;
 import openmods.utils.bitmap.IWriteableBitMap;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile, ITickable {
+public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInventoryDelegate, IHasGui, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile, ITickable {
 
 	protected static final int TOTAL_COOLDOWN = 40;
 	public static final int MAX_STORED_LEVELS = 45;
@@ -96,7 +95,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		}
 	});
 
-	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter slotSides = new SidedInventoryAdapter(inventory);
 
 	private final SidedFluidCapabilityWrapper tankCapability = SidedFluidCapabilityWrapper.wrap(tank, xpSides, false, true);
@@ -244,7 +242,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public IInventory getInventory() {
+	public ISidedInventory getInventory() {
 		return slotSides;
 	}
 

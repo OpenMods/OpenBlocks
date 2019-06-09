@@ -30,9 +30,8 @@ import openmods.colors.RGB;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
 import openmods.gamelogic.WorkerLogic;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.IInventoryProvider;
+import openmods.inventory.IInventoryDelegate;
 import openmods.inventory.TileEntityInventory;
 import openmods.sync.SyncMap;
 import openmods.sync.SyncableFlags;
@@ -45,7 +44,7 @@ import openmods.utils.OptionalInt;
 import org.apache.commons.lang3.ArrayUtils;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityPaintMixer extends DroppableTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IColorChanger, ITickable {
+public class TileEntityPaintMixer extends DroppableTileEntity implements IInventoryDelegate, IHasGui, IInventoryCallback, IColorChanger, ITickable {
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack MILK_BUCKET = new ItemStack(Items.MILK_BUCKET);
 	public static final int PROGRESS_TICKS = 300;
@@ -347,7 +346,6 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	}
 
 	@Override
-	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
 	}

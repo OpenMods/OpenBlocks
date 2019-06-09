@@ -24,14 +24,13 @@ import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.UseItemAction;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.IInventoryProvider;
+import openmods.inventory.IInventoryDelegate;
 import openmods.inventory.TileEntityInventory;
 import openmods.utils.OptionalInt;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements IHasGui, IInventoryProvider {
+public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements IHasGui, IInventoryDelegate {
 
 	static final int BUFFER_SIZE = 9;
 
@@ -116,7 +115,6 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 	}
 
 	@Override
-	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
 	}

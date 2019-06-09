@@ -20,16 +20,15 @@ import openmods.fakeplayer.BreakBlockAction;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryDelegate;
 import openmods.utils.InventoryUtils;
 import openmods.utils.ItemUtils;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityBlockBreaker extends TileEntityBlockManipulator {
+public class TileEntityBlockBreaker extends TileEntityBlockManipulator implements IInventoryDelegate {
 
 	// DON'T remove this object, even though it seems unused. Without it Builcraft pipes won't connect. -B
-	@IncludeInterface(IInventory.class)
 	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("blockbreaker", true, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -93,5 +92,10 @@ public class TileEntityBlockBreaker extends TileEntityBlockManipulator {
 	@Override
 	protected int getActionLimit() {
 		return Config.blockBreakerActionLimit;
+	}
+
+	@Override
+	public IInventory getInventory() {
+		return inventory;
 	}
 }

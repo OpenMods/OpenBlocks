@@ -24,16 +24,15 @@ import openmods.fakeplayer.FakePlayerPool;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
 import openmods.geometry.Orientation;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.IInventoryProvider;
+import openmods.inventory.IInventoryDelegate;
 import openmods.inventory.TileEntityInventory;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableDouble;
 import openmods.tileentity.SyncedTileEntity;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityItemDropper extends SyncedTileEntity implements INeighbourAwareTile, IInventoryProvider, IHasGui, IItemDropper {
+public class TileEntityItemDropper extends SyncedTileEntity implements INeighbourAwareTile, IInventoryDelegate, IHasGui, IItemDropper {
 	static final int BUFFER_SIZE = 9;
 
 	private boolean redstoneState;
@@ -125,7 +124,6 @@ public class TileEntityItemDropper extends SyncedTileEntity implements INeighbou
 	}
 
 	@Override
-	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
 	}

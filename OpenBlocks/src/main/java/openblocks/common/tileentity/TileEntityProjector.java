@@ -33,9 +33,8 @@ import openmods.OpenMods;
 import openmods.api.IHasGui;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.IInventoryProvider;
+import openmods.inventory.IInventoryDelegate;
 import openmods.inventory.TileEntityInventory;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
@@ -47,7 +46,7 @@ import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, ISyncListener, IRotatable {
+public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryDelegate, ISyncListener, IRotatable {
 
 	private final GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {
 		@Override
@@ -193,7 +192,6 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
 	}

@@ -31,9 +31,8 @@ import openmods.api.ISurfaceAttachment;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.IInventoryProvider;
+import openmods.inventory.IInventoryDelegate;
 import openmods.inventory.TileEntityInventory;
 import openmods.liquids.GenericFluidCapabilityWrapper;
 import openmods.model.eval.EvalModelState;
@@ -42,7 +41,7 @@ import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAttachment, IInventoryProvider, IHasGui, ITickable, INeighbourAwareTile {
+public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAttachment, IInventoryDelegate, IHasGui, ITickable, INeighbourAwareTile {
 
 	private static final ItemStack BONEMEAL = new ItemStack(Items.DYE, 1, 15);
 
@@ -232,7 +231,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 	}
 
 	@Override
-	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
 	}

@@ -10,7 +10,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,9 +35,8 @@ import openmods.api.INeighbourAwareTile;
 import openmods.api.IValueProvider;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.IInventoryProvider;
+import openmods.inventory.ISidedInventoryDelegate;
 import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
 import openmods.liquids.SidedFluidCapabilityWrapper;
@@ -60,7 +58,7 @@ import openmods.utils.bitmap.IRpcDirectionBitMap;
 import openmods.utils.bitmap.IWriteableBitMap;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, INeighbourAwareTile, ITickable {
+public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedInventoryDelegate, IActivateAwareTile, IHasGui, INeighbourAwareTile, ITickable {
 
 	public static final int TANK_CAPACITY = FluidXpUtils.xpJuiceConverter.xpToFluid(EnchantmentUtils.getExperienceForLevel(5));
 
@@ -77,7 +75,6 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "vacuumhopper", true, 10));
 
-	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter sided = new SidedInventoryAdapter(inventory);
 
 	private final SidedItemHandlerAdapter itemHandlerCapability = new SidedItemHandlerAdapter(inventory.getHandler());
@@ -286,8 +283,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	@Override
-	public IInventory getInventory() {
-		return inventory;
+	public ISidedInventory getInventory() {
+		return sided;
 	}
 
 	@Override

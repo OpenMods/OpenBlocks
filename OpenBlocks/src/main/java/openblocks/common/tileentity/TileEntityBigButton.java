@@ -13,14 +13,13 @@ import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.IInventoryProvider;
+import openmods.inventory.IInventoryDelegate;
 import openmods.inventory.TileEntityInventory;
 import openmods.tileentity.OpenTileEntity;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityBigButton extends OpenTileEntity implements ISurfaceAttachment, IHasGui, IInventoryProvider {
+public class TileEntityBigButton extends OpenTileEntity implements ISurfaceAttachment, IHasGui, IInventoryDelegate {
 
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "bigbutton", true, 8));
 
@@ -66,7 +65,6 @@ public class TileEntityBigButton extends OpenTileEntity implements ISurfaceAttac
 	}
 
 	@Override
-	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
 	}

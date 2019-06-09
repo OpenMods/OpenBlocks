@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,9 +32,8 @@ import openmods.api.IValueReceiver;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
 import openmods.gui.misc.IConfigurableGuiSlots;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.IInventoryProvider;
+import openmods.inventory.ISidedInventoryDelegate;
 import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
 import openmods.liquids.SidedFluidCapabilityWrapper;
@@ -58,7 +56,7 @@ import openmods.utils.bitmap.IRpcIntBitMap;
 import openmods.utils.bitmap.IWriteableBitMap;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, INeighbourAwareTile, ITickable {
+public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements ISidedInventoryDelegate, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, INeighbourAwareTile, ITickable {
 
 	private static final String TAG_SEED = "Seed";
 
@@ -113,7 +111,6 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		}
 	};
 
-	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter slotSides = new SidedInventoryAdapter(inventory);
 
 	private final SidedFluidCapabilityWrapper tankCapability = SidedFluidCapabilityWrapper.wrap(tank, xpSides, false, true);
@@ -396,7 +393,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
-	public IInventory getInventory() {
+	public ISidedInventory getInventory() {
 		return slotSides;
 	}
 

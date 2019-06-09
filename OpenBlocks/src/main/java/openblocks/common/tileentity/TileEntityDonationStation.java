@@ -15,15 +15,14 @@ import openblocks.common.container.ContainerDonationStation;
 import openmods.api.IHasGui;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.IInventoryProvider;
+import openmods.inventory.IInventoryDelegate;
 import openmods.inventory.TileEntityInventory;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ModIdentifier;
 
 @RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityDonationStation extends OpenTileEntity implements IHasGui, IInventoryProvider {
+public class TileEntityDonationStation extends OpenTileEntity implements IHasGui, IInventoryDelegate {
 
 	public enum Slots {
 		input
@@ -49,7 +48,6 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 	}
 
 	@Override
-	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
 	}
