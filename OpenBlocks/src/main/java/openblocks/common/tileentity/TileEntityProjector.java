@@ -71,7 +71,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 					if (stack.getCount() == 1) {
 						Item item = stack.getItem();
 						if (item instanceof ItemHeightMap) {
-							int mapId = stack.getItemDamage();
+							int mapId = ItemHeightMap.getMapId(stack);
 							TileEntityProjector.this.mapId.set(mapId);
 						} else if (item instanceof ItemEmptyMap && world != null) {
 							ItemStack newStack = ItemEmptyMap.upgradeToMap(world, stack);

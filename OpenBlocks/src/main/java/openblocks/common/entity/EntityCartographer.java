@@ -224,7 +224,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 			this.mapItem = new ItemStack(mapItem);
 
 			if (!this.mapItem.isEmpty() && isMapping.get()) {
-				int mapId = this.mapItem.getItemDamage();
+				int mapId = ItemHeightMap.getMapId(this.mapItem);
 				jobs.resumeMapping(world, mapId);
 			}
 			mappingDimension = tag.getInteger("Dimension");
@@ -277,7 +277,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 					isMapping.toggle();
 					mapItem = MapDataBuilder.upgradeToMap(world, mapItem);
 					if (mapItem.getItem() instanceof ItemHeightMap) {
-						int mapId = mapItem.getItemDamage();
+						int mapId = ItemHeightMap.getMapId(mapItem);
 						jobs.startMapping(world, mapId, getNewMapCenterX(), getNewMapCenterZ());
 					}
 				}

@@ -165,10 +165,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 			((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager()).registerReloadListener(SkyBlockRenderer.INSTANCE);
 		}
 
-		if (OpenBlocks.Items.heightMap != null) {
-			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.heightMap);
-		}
-
 		if (OpenBlocks.Blocks.tank != null) {
 			MinecraftForge.EVENT_BUS.register(new FluidTextureRegisterListener());
 		}

@@ -36,7 +36,7 @@ public class MapCloneRecipe extends CustomRecipeBase {
 				emptyMapScale = tag.getByte(ItemEmptyMap.TAG_SCALE);
 			} else if (item instanceof ItemHeightMap) {
 				if (normalMapScale >= 0) return false;
-				int mapId = stack.getItemDamage();
+				int mapId = ItemHeightMap.getMapId(stack);
 				HeightMapData data = MapDataManager.getMapData(world, mapId);
 
 				if (data.isValid()) normalMapScale = data.scale;

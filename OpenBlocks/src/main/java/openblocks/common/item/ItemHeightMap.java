@@ -7,6 +7,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -16,16 +17,16 @@ import openblocks.common.MapDataManager;
 
 public class ItemHeightMap extends Item {
 
+	public static final String TAG_MAP_ID = "MapId";
+
 	public ItemHeightMap() {
-		setHasSubtypes(true);
-		setMaxDamage(0);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
 		if (world == null) return;
-		int mapId = stack.getItemDamage();
+		int mapId = getMapId(stack);
 		HeightMapData data = MapDataManager.getMapData(world, mapId);
 
 		if (data.isValid()) {
@@ -35,6 +36,11 @@ public class ItemHeightMap extends Item {
 		} else if (data.isEmpty()) {
 			MapDataManager.requestMapData(world, mapId);
 		}
+	}
+
+	public static int getMapId(final ItemStack map) {
+		final NBTTagCompound tag = map.getTagCompound();
+		return tag != null ? tag.getInteger(TAG_MAP_ID) : 0;
 	}
 
 	@Override

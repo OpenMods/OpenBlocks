@@ -55,6 +55,8 @@ public class ItemEmptyMap extends Item {
 		byte scale = tag.getByte(TAG_SCALE);
 		int newMapId = MapDataManager.createNewMap(world, scale);
 
-		return new ItemStack(Items.heightMap, 1, newMapId);
+		final ItemStack result = new ItemStack(Items.heightMap);
+		ItemUtils.getItemTag(result).setInteger(ItemHeightMap.TAG_MAP_ID, newMapId);
+		return result;
 	}
 }
