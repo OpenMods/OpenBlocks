@@ -90,11 +90,11 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 		private ItemStack createOutput(int count) {
 			switch (selectedMode.get()) {
 				case GLYPHS: {
-					if (OpenBlocks.Items.glyph != null) { return new ItemStack(OpenBlocks.Items.glyph, count, selectedGlyph.get()); }
+					if (OpenBlocks.Items.glyph != null) { return ItemGlyph.createStack(OpenBlocks.Items.glyph, count, selectedGlyph.get()); }
 					break;
 				}
 				case STENCILS: {
-					if (OpenBlocks.Items.stencil != null) { return new ItemStack(OpenBlocks.Items.stencil, count, selectedPattern.get().ordinal()); }
+					if (OpenBlocks.Items.stencil != null) { return ItemStencil.createItemStack(OpenBlocks.Items.stencil, count, selectedPattern.get()); }
 					break;
 				}
 			}

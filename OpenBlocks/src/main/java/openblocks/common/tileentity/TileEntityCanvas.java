@@ -234,7 +234,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 			final Optional<StencilPattern> stencil = layer.clearAll();
 			if (stencil.isPresent() && OpenBlocks.Items.stencil != null) {
-				ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, stencil.get().ordinal());
+				ItemStack dropStack = ItemStencil.createItemStack(OpenBlocks.Items.stencil, stencil.get());
 				dropStackFromSide(dropStack, side);
 			}
 		}

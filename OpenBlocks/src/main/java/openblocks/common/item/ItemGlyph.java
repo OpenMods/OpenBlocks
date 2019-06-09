@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -21,10 +22,13 @@ import openblocks.Config;
 import openblocks.common.entity.EntityGlyph;
 import openmods.geometry.BlockTextureTransform;
 import openmods.geometry.BlockTextureTransform.TexCoords;
+import openmods.utils.ItemUtils;
 import openmods.utils.TranslationUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class ItemGlyph extends Item {
+
+	private static final String TAG_CHAR_INDEX = "CharIndex";
 
 	@SideOnly(Side.CLIENT)
 	public static class ColorHandler implements IItemColor {
@@ -62,10 +66,6 @@ public class ItemGlyph extends Item {
 		}
 	}
 
-	public ItemGlyph() {
-		setHasSubtypes(true);
-	}
-
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
@@ -84,24 +84,27 @@ public class ItemGlyph extends Item {
 		}
 	}
 
-	// note: no point in storing char as damage, since:
-	// a) only half BMP can fit there (only positive damage is allowed)
-	// b) no plans for full BMP support (texture limitations)
-
 	public static ItemStack createStack(Item item, int size, char ch) {
-		return new ItemStack(item, size, getCharIndex(ch));
+		return createStack(item, size, getCharIndex(ch));
 	}
 
 	public static ItemStack createStack(Item item, char ch) {
 		return createStack(item, 1, ch);
 	}
 
+	public static ItemStack createStack(Item item, int size, int charIndex) {
+		final ItemStack result = new ItemStack(item, size);
+		ItemUtils.getItemTag(result).setInteger(TAG_CHAR_INDEX, charIndex);
+		return result;
+	}
+
 	public static ItemStack createStack(Item item, int charIndex) {
-		return new ItemStack(item, 1, charIndex);
+		return createStack(item, 1, charIndex);
 	}
 
 	public static int getCharIndex(ItemStack item) {
-		return item.getItemDamage();
+		final NBTTagCompound tag = item.getTagCompound();
+		return tag != null? tag.getInteger(TAG_CHAR_INDEX) : 0;
 	}
 
 	@Override

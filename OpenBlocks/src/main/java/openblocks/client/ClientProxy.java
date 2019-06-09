@@ -95,7 +95,6 @@ import openmods.block.OpenBlock;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import openmods.model.MappedModelLoader;
-import openmods.model.ModelUtils;
 import openmods.utils.render.MarkerClassGenerator;
 
 public class ClientProxy implements IOpenBlocksProxy {
@@ -170,7 +169,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 
 		if (OpenBlocks.Items.glyph != null) {
-			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.glyph);
 			MinecraftForge.EVENT_BUS.register(new GlyphPlacementGridRenderer());
 		}
 

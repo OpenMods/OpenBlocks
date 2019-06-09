@@ -34,7 +34,11 @@ public class ItemStencil extends Item {
 	}
 
 	public static ItemStack createItemStack(Item item, StencilPattern stencil) {
-		final ItemStack result = new ItemStack(item);
+		return createItemStack(item, 1, stencil);
+	}
+
+	public static ItemStack createItemStack(Item item, int size, StencilPattern stencil) {
+		final ItemStack result = new ItemStack(item, size);
 		ItemUtils.getItemTag(result).setString(TAG_PATTERN, stencil.id.toString());
 		return result;
 	}

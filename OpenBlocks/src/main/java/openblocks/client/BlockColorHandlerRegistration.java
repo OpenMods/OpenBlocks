@@ -30,7 +30,7 @@ import openmods.colors.ItemFixedColorHandler;
 public class BlockColorHandlerRegistration {
 
 	@SubscribeEvent
-	public static void registerItemColormHandlers(ColorHandlerEvent.Item evt) {
+	public static void registerItemColorHandlers(ColorHandlerEvent.Item evt) {
 		final ItemColors itemColors = evt.getItemColors();
 		final BlockColors blockColors = evt.getBlockColors();
 
