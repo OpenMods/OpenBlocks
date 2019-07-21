@@ -1,6 +1,6 @@
 package openblocks.common.container;
 
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import openblocks.common.tileentity.TileEntityBigButton;
 import openmods.container.ContainerInventoryProvider;

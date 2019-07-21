@@ -6,11 +6,11 @@ import java.util.Random;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -140,7 +140,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		public void handleBookRotation() {
 			this.bookSpreadPrev = this.bookSpread;
 			this.bookRotationPrev = this.bookRotation;
-			EntityPlayer entityplayer = world.getClosestPlayer(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 3.0D, false);
+			PlayerEntity entityplayer = world.getClosestPlayer(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 3.0D, false);
 
 			if (entityplayer != null) {
 				double d0 = entityplayer.posX - (pos.getX() + 0.5F);
@@ -216,7 +216,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return tankCapability.hasHandler(facing);
 
@@ -228,7 +228,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T)tankCapability.getHandler(facing);
 
@@ -374,17 +374,17 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
-	public Object getServerGui(EntityPlayer player) {
+	public Object getServerGui(PlayerEntity player) {
 		return new ContainerAutoEnchantmentTable(player.inventory, this);
 	}
 
 	@Override
-	public Object getClientGui(EntityPlayer player) {
+	public Object getClientGui(PlayerEntity player) {
 		return new GuiAutoEnchantmentTable(new ContainerAutoEnchantmentTable(player.inventory, this));
 	}
 
 	@Override
-	public boolean canOpenGui(EntityPlayer player) {
+	public boolean canOpenGui(PlayerEntity player) {
 		return true;
 	}
 
@@ -398,7 +398,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 		tag.setLong(TAG_SEED, seed);
@@ -406,7 +406,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		seed = tag.getLong(TAG_SEED);
 		inventory.readFromNBT(tag, false);
@@ -428,12 +428,12 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
-	public IValueProvider<Set<EnumFacing>> createAllowedDirectionsProvider(AutoSlots slot) {
+	public IValueProvider<Set<Direction>> createAllowedDirectionsProvider(AutoSlots slot) {
 		return selectSlotMap(slot);
 	}
 
 	@Override
-	public IWriteableBitMap<EnumFacing> createAllowedDirectionsReceiver(AutoSlots slot) {
+	public IWriteableBitMap<Direction> createAllowedDirectionsReceiver(AutoSlots slot) {
 		SyncableSides dirs = selectSlotMap(slot);
 		return BitMapUtils.createRpcAdapter(createRpcProxy(dirs, IRpcDirectionBitMap.class));
 	}

@@ -2,10 +2,10 @@ package openblocks.common;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -40,12 +40,12 @@ public class ElevatorActionHandler {
 		if (world.isAirBlock(pos)) return true;
 
 		if (!Config.irregularBlocksArePassable) return false;
-		final IBlockState blockState = world.getBlockState(pos);
+		final BlockState blockState = world.getBlockState(pos);
 		final AxisAlignedBB aabb = blockState.getCollisionBoundingBox(world, pos);
 		return aabb == null || aabb.getAverageEdgeLength() < 0.7;
 	}
 
-	private static boolean canTeleportPlayer(EntityPlayer entity, World world, BlockPos pos) {
+	private static boolean canTeleportPlayer(PlayerEntity entity, World world, BlockPos pos) {
 		final AxisAlignedBB aabb = entity.getEntityBoundingBox();
 		double height = Math.abs(aabb.maxY - aabb.minY);
 		int blockHeight = Math.max(1, MathHelper.ceil(height));
@@ -56,7 +56,7 @@ public class ElevatorActionHandler {
 		return true;
 	}
 
-	private static ElevatorCheckEvent checkIsElevator(EntityPlayer player, World world, BlockPos pos, IBlockState state) {
+	private static ElevatorCheckEvent checkIsElevator(PlayerEntity player, World world, BlockPos pos, BlockState state) {
 		final ElevatorCheckEvent evt = new ElevatorCheckEvent(world, pos, state, player);
 
 		final Block block = state.getBlock();
@@ -73,9 +73,9 @@ public class ElevatorActionHandler {
 		return evt;
 	}
 
-	private static SearchResult findLevel(EntityPlayer player, World world, EnumDyeColor thisColor, BlockPos pos, EnumFacing searchDirection) {
-		Preconditions.checkArgument(searchDirection == EnumFacing.UP
-				|| searchDirection == EnumFacing.DOWN, "Must be either up or down... for now");
+	private static SearchResult findLevel(PlayerEntity player, World world, DyeColor thisColor, BlockPos pos, Direction searchDirection) {
+		Preconditions.checkArgument(searchDirection == Direction.UP
+				|| searchDirection == Direction.DOWN, "Must be either up or down... for now");
 
 		int blocksInTheWay = 0;
 		BlockPos searchPos = pos;
@@ -84,11 +84,11 @@ public class ElevatorActionHandler {
 			if (!world.isBlockLoaded(searchPos)) break;
 			if (world.isAirBlock(searchPos)) continue;
 
-			final IBlockState blockState = world.getBlockState(searchPos);
+			final BlockState blockState = world.getBlockState(searchPos);
 			final ElevatorCheckEvent elevatorCheckResult = checkIsElevator(player, world, searchPos, blockState);
 
 			if (elevatorCheckResult.isElevator()) {
-				final EnumDyeColor otherColor = elevatorCheckResult.getColor();
+				final DyeColor otherColor = elevatorCheckResult.getColor();
 				if (otherColor == thisColor && canTeleportPlayer(player, world, searchPos.up())) {
 					final PlayerRotation rotation = elevatorCheckResult.getRotation();
 					return new SearchResult(searchPos, rotation);
@@ -114,7 +114,7 @@ public class ElevatorActionHandler {
 		return null;
 	}
 
-	private static void activate(EntityPlayer player, World world, EnumDyeColor color, BlockPos pos, EnumFacing dir) {
+	private static void activate(PlayerEntity player, World world, DyeColor color, BlockPos pos, Direction dir) {
 		SearchResult result = findLevel(player, world, color, pos, dir);
 		if (result != null) {
 			boolean doTeleport = checkXpCost(player, result);
@@ -143,7 +143,7 @@ public class ElevatorActionHandler {
 		}
 	}
 
-	protected static boolean checkXpCost(EntityPlayer player, SearchResult result) {
+	protected static boolean checkXpCost(PlayerEntity player, SearchResult result) {
 		int distance = (int)Math.abs(player.posY - result.getY());
 		if (Config.elevatorXpDrainRatio == 0 || player.capabilities.isCreativeMode) return true;
 
@@ -159,7 +159,7 @@ public class ElevatorActionHandler {
 
 	@SubscribeEvent
 	public void onElevatorEvent(ElevatorActionEvent evt) {
-		final EntityPlayer player = evt.sender;
+		final PlayerEntity player = evt.sender;
 		if (player == null) return;
 
 		final World world = player.world;
@@ -173,16 +173,16 @@ public class ElevatorActionHandler {
 		if (evt.sender != null) {
 			if (evt.sender.isRiding()) return;
 
-			final IBlockState blockState = world.getBlockState(blockPos);
+			final BlockState blockState = world.getBlockState(blockPos);
 			final ElevatorCheckEvent elevatorCheckResult = checkIsElevator(evt.sender, world, blockPos, blockState);
 
 			if (elevatorCheckResult.isElevator()) {
 				switch (evt.type) {
 					case JUMP:
-						activate(evt.sender, world, elevatorCheckResult.getColor(), blockPos, EnumFacing.UP);
+						activate(evt.sender, world, elevatorCheckResult.getColor(), blockPos, Direction.UP);
 						break;
 					case SNEAK:
-						activate(evt.sender, world, elevatorCheckResult.getColor(), blockPos, EnumFacing.DOWN);
+						activate(evt.sender, world, elevatorCheckResult.getColor(), blockPos, Direction.DOWN);
 						break;
 				}
 			}

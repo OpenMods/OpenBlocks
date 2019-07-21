@@ -10,15 +10,15 @@ import javax.annotation.Nullable;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.math.BlockPos;
@@ -95,9 +95,9 @@ public class ItemDevNull extends Item {
 
 	public static class DevNullInventory extends PlayerItemInventory {
 
-		private final EntityPlayer player;
+		private final PlayerEntity player;
 
-		public DevNullInventory(EntityPlayer player, int protectedSlot) {
+		public DevNullInventory(PlayerEntity player, int protectedSlot) {
 			super(player, 1, protectedSlot);
 			this.player = player;
 		}
@@ -116,9 +116,9 @@ public class ItemDevNull extends Item {
 		}
 
 		private void checkStack(@Nonnull ItemStack stack) {
-			if (player instanceof EntityPlayerMP) {
+			if (player instanceof ServerPlayerEntity) {
 				final int depth = getContents(stack).getRight();
-				Criterions.devNullStack.trigger((EntityPlayerMP)player, depth);
+				Criterions.devNullStack.trigger((ServerPlayerEntity)player, depth);
 			}
 		}
 	}
@@ -133,32 +133,32 @@ public class ItemDevNull extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
 
-		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, stack);
+		if (hand != Hand.MAIN_HAND) return ActionResult.newResult(ActionResultType.PASS, stack);
 
 		if (!world.isRemote && (!Config.devNullSneakGui || player.isSneaking())) {
 			player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.devNull.ordinal(), world, player.inventory.currentItem, 0, 0);
 		}
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+		return ActionResult.newResult(ActionResultType.SUCCESS, stack);
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(PlayerEntity player, World world, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
 		final ItemStack containerStack = player.getHeldItem(hand);
 		final ItemInventory inventory = new ItemInventory(containerStack, 1);
 		ItemStack containedStack = inventory.getStackInSlot(0);
-		if (!containedStack.isEmpty() && containedStack.getItem() instanceof ItemBlock) {
+		if (!containedStack.isEmpty() && containedStack.getItem() instanceof BlockItem) {
 			player.setHeldItem(hand, containedStack);
-			EnumActionResult response = containedStack.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+			ActionResultType response = containedStack.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 			containedStack = player.getHeldItem(hand);
 			inventory.setInventorySlotContents(0, containedStack);
 			player.setHeldItem(hand, containerStack);
 			return response;
 		}
-		return EnumActionResult.PASS;
+		return ActionResultType.PASS;
 	}
 
 	private static final IEqualityTester tester = new StackEqualityTesterBuilder().useItem().useDamage().useNBT().build();
@@ -166,7 +166,7 @@ public class ItemDevNull extends Item {
 	@SubscribeEvent
 	public void onItemPickUp(EntityItemPickupEvent evt) {
 
-		final EntityPlayer player = evt.getEntityPlayer();
+		final PlayerEntity player = evt.getEntityPlayer();
 		final ItemStack pickedStack = evt.getItem().getItem();
 
 		if (pickedStack.isEmpty() || player == null) return;

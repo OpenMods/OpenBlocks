@@ -1,6 +1,6 @@
 package openblocks.common.recipe;
 
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
@@ -19,7 +19,7 @@ public class PencilMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inv, World worldIn) {
+	public boolean matches(CraftingInventory inv, World worldIn) {
 		int count = 0;
 
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -33,7 +33,7 @@ public class PencilMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		float uses = 0;
 
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -63,7 +63,7 @@ public class PencilMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+	public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
 		return NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 	}
 

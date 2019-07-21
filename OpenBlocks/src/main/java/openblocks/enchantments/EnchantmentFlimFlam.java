@@ -2,19 +2,19 @@ package openblocks.enchantments;
 
 import javax.annotation.Nonnull;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.SwordItem;
 
 public class EnchantmentFlimFlam extends Enchantment {
 
-	private static final EntityEquipmentSlot[] ALL_ARMOR = new EntityEquipmentSlot[] { EntityEquipmentSlot.FEET, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.MAINHAND };
+	private static final EquipmentSlotType[] ALL_ARMOR = new EquipmentSlotType[] { EquipmentSlotType.FEET, EquipmentSlotType.LEGS, EquipmentSlotType.CHEST, EquipmentSlotType.HEAD, EquipmentSlotType.MAINHAND };
 
 	public EnchantmentFlimFlam() {
-		super(Rarity.RARE, EnumEnchantmentType.ALL, ALL_ARMOR);
+		super(Rarity.RARE, EnchantmentType.ALL, ALL_ARMOR);
 		setName("openblocks.flimflam");
 	}
 
@@ -37,7 +37,7 @@ public class EnchantmentFlimFlam extends Enchantment {
 	@Nonnull
 	public boolean canApplyAtEnchantingTable(ItemStack stack) {
 		final Item item = stack.getItem();
-		return (item instanceof ItemArmor) || (item instanceof ItemSword);
+		return (item instanceof ArmorItem) || (item instanceof SwordItem);
 	}
 
 }

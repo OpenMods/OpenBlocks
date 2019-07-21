@@ -3,9 +3,9 @@ package openblocks.common;
 import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -146,19 +146,19 @@ public class PedometerHandler {
 
 		@SubscribeEvent
 		public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
-			if (!(evt.getObject() instanceof EntityPlayer)) return;
+			if (!(evt.getObject() instanceof PlayerEntity)) return;
 			evt.addCapability(CAPABILITY_KEY, new ICapabilityProvider() {
 
 				private PedometerState state;
 
 				@Override
-				public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+				public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
 					return capability == PEDOMETER_CAPABILITY;
 				}
 
 				@Override
 				@SuppressWarnings("unchecked")
-				public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+				public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
 					if (capability == PEDOMETER_CAPABILITY) {
 						if (state == null)
 							state = new PedometerState();
@@ -175,12 +175,12 @@ public class PedometerHandler {
 	public static void registerCapability() {
 		CapabilityManager.INSTANCE.register(PedometerState.class, new Capability.IStorage<PedometerState>() {
 			@Override
-			public NBTBase writeNBT(Capability<PedometerState> capability, PedometerState instance, EnumFacing side) {
+			public NBTBase writeNBT(Capability<PedometerState> capability, PedometerState instance, Direction side) {
 				return null;
 			}
 
 			@Override
-			public void readNBT(Capability<PedometerState> capability, PedometerState instance, EnumFacing side, NBTBase nbt) {}
+			public void readNBT(Capability<PedometerState> capability, PedometerState instance, Direction side, NBTBase nbt) {}
 
 		}, PedometerState::new);
 
@@ -190,6 +190,6 @@ public class PedometerHandler {
 	public static PedometerState getProperty(Entity entity) {
 		// sanity check: only call comes from ItemPedometer and capability is only registered when that item exists
 		Preconditions.checkState(PEDOMETER_CAPABILITY != null);
-		return entity.getCapability(PEDOMETER_CAPABILITY, EnumFacing.UP);
+		return entity.getCapability(PEDOMETER_CAPABILITY, Direction.UP);
 	}
 }

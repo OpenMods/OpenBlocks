@@ -11,7 +11,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import openblocks.api.IFlimFlamDescription;
@@ -47,7 +47,7 @@ public class CommandFlimFlam implements ICommand {
 		if (params.length != 1 && params.length != 2) throw error("openblocks.misc.command.invalid");
 
 		String playerName = params[0];
-		EntityPlayerMP player = CommandBase.getPlayer(server, sender, playerName);
+		ServerPlayerEntity player = CommandBase.getPlayer(server, sender, playerName);
 
 		String effectName = (params.length > 1)? params[1] : null;
 

@@ -1,8 +1,8 @@
 package openblocks.common.sync;
 
 import com.google.common.base.Optional;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.common.util.Constants;
 import openblocks.client.renderer.block.canvas.CanvasSideState;
@@ -35,12 +35,12 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			stream.writeByte(stencil.ordinal());
 		}
 
-		public void readFromNBT(NBTTagCompound tag) {
+		public void readFromNBT(CompoundNBT tag) {
 			rotation = TextureOrientation.values()[tag.getByte(TAG_ROTATION)];
 			stencil = StencilPattern.valueOf(tag.getString(TAG_STENCIL));
 		}
 
-		public void writeToNBT(NBTTagCompound tag) {
+		public void writeToNBT(CompoundNBT tag) {
 			tag.setByte(TAG_ROTATION, (byte)rotation.ordinal());
 			tag.setString(TAG_STENCIL, stencil.name());
 		}
@@ -73,14 +73,14 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			super.writeToStream(stream);
 		}
 
-		public NBTTagCompound writeToNBT() {
-			final NBTTagCompound nbt = new NBTTagCompound();
+		public CompoundNBT writeToNBT() {
+			final CompoundNBT nbt = new CompoundNBT();
 			nbt.setInteger(TAG_COLOR, color);
 			writeToNBT(nbt);
 			return nbt;
 		}
 
-		public static Layer createFromNBT(NBTTagCompound tag) {
+		public static Layer createFromNBT(CompoundNBT tag) {
 			final Layer layer = new Layer();
 			layer.color = tag.getInteger(TAG_COLOR);
 			layer.readFromNBT(tag);
@@ -111,13 +111,13 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			return Optional.of(cover);
 		}
 
-		public NBTTagCompound writeToNBT() {
-			final NBTTagCompound nbt = new NBTTagCompound();
+		public CompoundNBT writeToNBT() {
+			final CompoundNBT nbt = new CompoundNBT();
 			writeToNBT(nbt);
 			return nbt;
 		}
 
-		public static Cover createFromNBT(NBTTagCompound tag) {
+		public static Cover createFromNBT(CompoundNBT tag) {
 			final Cover cover = new Cover();
 			cover.readFromNBT(tag);
 			return cover;
@@ -157,11 +157,11 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt, String name) {
-		final NBTTagCompound subTag = new NBTTagCompound();
+	public void writeToNBT(CompoundNBT nbt, String name) {
+		final CompoundNBT subTag = new CompoundNBT();
 		subTag.setInteger(TAG_BACKGROUND, backgroundColor);
 
-		final NBTTagList layersTag = new NBTTagList();
+		final ListNBT layersTag = new ListNBT();
 
 		for (Layer layer : layers)
 			layersTag.appendTag(layer.writeToNBT());
@@ -175,11 +175,11 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt, String name) {
-		final NBTTagCompound subTag = nbt.getCompoundTag(name);
+	public void readFromNBT(CompoundNBT nbt, String name) {
+		final CompoundNBT subTag = nbt.getCompoundTag(name);
 
 		this.backgroundColor = subTag.getInteger(TAG_BACKGROUND);
-		final NBTTagList layersTag = subTag.getTagList(TAG_LAYERS, Constants.NBT.TAG_COMPOUND);
+		final ListNBT layersTag = subTag.getTagList(TAG_LAYERS, Constants.NBT.TAG_COMPOUND);
 		layers.clear();
 		for (int i = 0; i < layersTag.tagCount(); i++)
 			layers.push(Layer.createFromNBT(layersTag.getCompoundTagAt(i)));

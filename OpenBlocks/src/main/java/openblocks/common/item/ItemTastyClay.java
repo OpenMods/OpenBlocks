@@ -1,7 +1,7 @@
 package openblocks.common.item;
 
 import javax.annotation.Nonnull;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -16,7 +16,7 @@ public class ItemTastyClay extends ItemFood {
 	}
 
 	@Override
-	protected void onFoodEaten(@Nonnull ItemStack stack, World world, EntityPlayer entity) {
+	protected void onFoodEaten(@Nonnull ItemStack stack, World world, PlayerEntity entity) {
 		if (!world.isRemote) {
 			BowelContents contents = BrickManager.getProperty(entity);
 			if (contents != null) {

@@ -16,9 +16,9 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -54,19 +54,19 @@ public class DevNullModel implements IModel {
 			boolean changed = false;
 
 			if (obj.has("normal")) {
-				final String v = JsonUtils.getString(obj, "normal");
+				final String v = JSONUtils.getString(obj, "normal");
 				newNormal = Optional.of(new ModelResourceLocation(v));
 				changed = true;
 			}
 
 			if (obj.has("overflow")) {
-				final String v = JsonUtils.getString(obj, "overflow");
+				final String v = JSONUtils.getString(obj, "overflow");
 				newOverflow = Optional.of(new ModelResourceLocation(v));
 				changed = true;
 			}
 
 			if (obj.has("scale")) {
-				newScale = JsonUtils.getFloat(obj, "scale");
+				newScale = JSONUtils.getFloat(obj, "scale");
 				changed = true;
 			}
 
@@ -130,7 +130,7 @@ public class DevNullModel implements IModel {
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		final TextureAtlasSprite particle = bakedTextureGetter.apply(this.particle.orElse(TextureMap.LOCATION_MISSING_TEXTURE));
+		final TextureAtlasSprite particle = bakedTextureGetter.apply(this.particle.orElse(AtlasTexture.LOCATION_MISSING_TEXTURE));
 		final TextureAtlasSprite font = bakedTextureGetter.apply(this.font.orElse(DEFAULT_FONT));
 
 		final BakedModelParams bakedGui = this.gui.bake(state, format, bakedTextureGetter);

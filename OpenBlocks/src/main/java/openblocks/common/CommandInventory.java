@@ -12,12 +12,12 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.SyntaxErrorException;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import openblocks.api.InventoryEvent.SubInventory;
 import openblocks.common.PlayerInventoryStore.LoadedInventories;
 import openmods.Log;
@@ -70,7 +70,7 @@ public class CommandInventory implements ICommand {
 			if (args.length != 3) throw new SyntaxErrorException();
 			String playerName = args[1];
 			String id = args[2];
-			EntityPlayerMP player = CommandBase.getPlayer(server, sender, playerName);
+			ServerPlayerEntity player = CommandBase.getPlayer(server, sender, playerName);
 
 			final boolean success;
 			try {
@@ -80,16 +80,16 @@ public class CommandInventory implements ICommand {
 				throw new CommandException("openblocks.misc.cant_restore_player", playerName);
 			}
 
-			if (success) sender.sendMessage(new TextComponentTranslation("openblocks.misc.restored_inventory", playerName));
+			if (success) sender.sendMessage(new TranslationTextComponent("openblocks.misc.restored_inventory", playerName));
 			else throw new CommandException("openblocks.misc.cant_restore_player", playerName);
 
 		} else if (subCommand.equalsIgnoreCase(COMMAND_STORE)) {
 			if (args.length != 2) throw new SyntaxErrorException();
 			String playerName = args[1];
-			EntityPlayerMP player = CommandBase.getPlayer(server, sender, playerName);
+			ServerPlayerEntity player = CommandBase.getPlayer(server, sender, playerName);
 			try {
 				File result = PlayerInventoryStore.instance.storePlayerInventory(player, "command");
-				sender.sendMessage(new TextComponentTranslation(
+				sender.sendMessage(new TranslationTextComponent(
 						"openblocks.misc.stored_inventory",
 						result.getAbsolutePath()));
 			} catch (Exception e) {

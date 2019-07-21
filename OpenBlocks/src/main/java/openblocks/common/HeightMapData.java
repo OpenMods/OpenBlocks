@@ -1,7 +1,7 @@
 package openblocks.common;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.storage.WorldSavedData;
 
@@ -12,13 +12,13 @@ public class HeightMapData extends WorldSavedData {
 		public byte[] heightMap = new byte[64 * 64];
 		public byte[] colorMap = new byte[64 * 64];
 
-		public void readFromNBT(NBTTagCompound tag) {
+		public void readFromNBT(CompoundNBT tag) {
 			alpha = tag.getByte("Alpha");
 			heightMap = tag.getByteArray("Height");
 			colorMap = tag.getByteArray("Color");
 		}
 
-		public void writeToNBT(NBTTagCompound tag) {
+		public void writeToNBT(CompoundNBT tag) {
 			tag.setByte("Alpha", alpha);
 			tag.setByteArray("Height", heightMap);
 			tag.setByteArray("Color", colorMap);
@@ -90,7 +90,7 @@ public class HeightMapData extends WorldSavedData {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		dimension = tag.getInteger("Dimension");
 
 		centerX = tag.getInteger("CenterX");
@@ -98,11 +98,11 @@ public class HeightMapData extends WorldSavedData {
 
 		scale = tag.getByte("Scale");
 
-		NBTTagList layersData = tag.getTagList("Layers", 10);
+		ListNBT layersData = tag.getTagList("Layers", 10);
 		int length = layersData.tagCount();
 		layers = new LayerData[length];
 		for (int i = 0; i < length; i++) {
-			NBTTagCompound layerData = layersData.getCompoundTagAt(i);
+			CompoundNBT layerData = layersData.getCompoundTagAt(i);
 			LayerData layer = new LayerData();
 			layer.readFromNBT(layerData);
 			layers[i] = layer;
@@ -110,16 +110,16 @@ public class HeightMapData extends WorldSavedData {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag.setInteger("Dimension", dimension);
 
 		tag.setInteger("CenterX", centerX);
 		tag.setInteger("CenterZ", centerZ);
 
 		tag.setByte("Scale", scale);
-		NBTTagList result = new NBTTagList();
+		ListNBT result = new ListNBT();
 		for (LayerData data : layers) {
-			NBTTagCompound layerData = new NBTTagCompound();
+			CompoundNBT layerData = new CompoundNBT();
 			data.writeToNBT(layerData);
 			result.appendTag(layerData);
 		}

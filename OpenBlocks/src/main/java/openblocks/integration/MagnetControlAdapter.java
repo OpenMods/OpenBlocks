@@ -4,12 +4,12 @@ import com.google.common.base.Preconditions;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import java.lang.ref.WeakReference;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import openblocks.Config;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMagnet.IEntityBlockFactory;
@@ -44,7 +44,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 			target = new Vec3d(x, y, z);
 		}
 
-		public synchronized Vec3d getTarget(Vec3d pos, EnumFacing side) {
+		public synchronized Vec3d getTarget(Vec3d pos, Direction side) {
 			double x = pos.x + 0.5;
 			double y = pos.y + 0.5;
 			double z = pos.z + 0.5;
@@ -88,7 +88,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		public EntityBlock createByPlayer(final IEntityBlockFactory factory) {
 			World world = turtle.getWorld();
 
-			if (world instanceof WorldServer) return FakePlayerPool.instance.executeOnPlayer((WorldServer)world, factory::create);
+			if (world instanceof ServerWorld) return FakePlayerPool.instance.executeOnPlayer((ServerWorld)world, factory::create);
 			return null;
 		}
 	}
@@ -210,7 +210,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 
 		Vec3d dist = turtlePos.subtract(magnetPos);
 
-		EnumFacing side = turtle.getDirection();
+		Direction side = turtle.getDirection();
 
 		switch (side) {
 			case NORTH:
@@ -227,9 +227,9 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 	}
 
 	private boolean canSpawn(World world) {
-		EnumFacing facing = turtle.getDirection();
+		Direction facing = turtle.getDirection();
 
-		EnumFacing spawnSide = (side == TurtleSide.Left)? facing.rotateYCCW() : facing.rotateY();
+		Direction spawnSide = (side == TurtleSide.Left)? facing.rotateYCCW() : facing.rotateY();
 		BlockPos spawnPos = turtle.getPosition().offset(spawnSide);
 
 		return world.isAirBlock(spawnPos);

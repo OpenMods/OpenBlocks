@@ -1,10 +1,10 @@
 package openblocks.common.recipe;
 
 import javax.annotation.Nonnull;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.HeightMapData;
@@ -21,7 +21,7 @@ public class MapCloneRecipe extends CustomRecipeBase {
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inventory, World world) {
+	public boolean matches(CraftingInventory inventory, World world) {
 		int emptyMapScale = -1;
 		int normalMapScale = -1;
 
@@ -32,7 +32,7 @@ public class MapCloneRecipe extends CustomRecipeBase {
 			Item item = stack.getItem();
 			if (item instanceof ItemEmptyMap) {
 				if (emptyMapScale >= 0) return false;
-				NBTTagCompound tag = ItemUtils.getItemTag(stack);
+				CompoundNBT tag = ItemUtils.getItemTag(stack);
 				emptyMapScale = tag.getByte(ItemEmptyMap.TAG_SCALE);
 			} else if (item instanceof ItemHeightMap) {
 				if (normalMapScale >= 0) return false;
@@ -49,7 +49,7 @@ public class MapCloneRecipe extends CustomRecipeBase {
 
 	@Override
 	@Nonnull
-	public ItemStack getCraftingResult(InventoryCrafting inventory) {
+	public ItemStack getCraftingResult(CraftingInventory inventory) {
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack item = inventory.getStackInSlot(i);
 			if (!item.isEmpty() && (item.getItem() instanceof ItemHeightMap)) {

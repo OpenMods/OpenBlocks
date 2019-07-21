@@ -1,6 +1,6 @@
 package openblocks.client;
 
-import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.common.entity.EntityHangGlider;
 import openmods.renderer.PlayerBodyRenderEvent;
@@ -10,7 +10,7 @@ public class GliderPlayerRenderHandler {
 
 	@SubscribeEvent
 	public void onPlayerBodyRender(PlayerBodyRenderEvent evt) {
-		final AbstractClientPlayer player = evt.player;
+		final AbstractClientPlayerEntity player = evt.player;
 		if (EntityHangGlider.isGliderDeployed(player)) {
 			player.limbSwing = 0f;
 			player.prevLimbSwingAmount = 0f;

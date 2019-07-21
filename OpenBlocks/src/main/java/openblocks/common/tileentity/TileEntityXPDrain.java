@@ -1,11 +1,11 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
@@ -23,8 +23,8 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 	@Override
 	public void update() {
 		if (!world.isRemote) {
-			final List<EntityXPOrb> xpOrbsOnGrid = getXPOrbsOnGrid();
-			final List<EntityPlayer> playersOnGrid = getPlayersOnGrid();
+			final List<ExperienceOrbEntity> xpOrbsOnGrid = getXPOrbsOnGrid();
+			final List<PlayerEntity> playersOnGrid = getPlayersOnGrid();
 
 			if (!xpOrbsOnGrid.isEmpty() || !playersOnGrid.isEmpty()) {
 				final BlockPos down = getPos().down();
@@ -33,13 +33,13 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 					final TileEntity te = world.getTileEntity(down);
 
 					if (te != null && !te.isInvalid()) {
-						final IFluidHandler maybeHandler = CompatibilityUtils.getFluidHandler(te, EnumFacing.UP);
+						final IFluidHandler maybeHandler = CompatibilityUtils.getFluidHandler(te, Direction.UP);
 
 						if (maybeHandler != null) {
-							for (EntityXPOrb orb : xpOrbsOnGrid)
+							for (ExperienceOrbEntity orb : xpOrbsOnGrid)
 								tryConsumeOrb(maybeHandler, orb);
 
-							for (EntityPlayer player : playersOnGrid)
+							for (PlayerEntity player : playersOnGrid)
 								tryDrainPlayer(maybeHandler, player);
 						}
 					}
@@ -48,7 +48,7 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 		}
 	}
 
-	protected void tryDrainPlayer(IFluidHandler tank, EntityPlayer player) {
+	protected void tryDrainPlayer(IFluidHandler tank, PlayerEntity player) {
 		int playerXP = EnchantmentUtils.getPlayerXP(player);
 		if (playerXP <= 0) return;
 
@@ -75,7 +75,7 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 		EnchantmentUtils.addPlayerXP(player, -acceptedXP);
 	}
 
-	protected void tryConsumeOrb(IFluidHandler tank, EntityXPOrb orb) {
+	protected void tryConsumeOrb(IFluidHandler tank, ExperienceOrbEntity orb) {
 		if (!orb.isDead) {
 			int xpAmount = FluidXpUtils.xpJuiceConverter.xpToFluid(orb.getXpValue());
 			FluidStack xpStack = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
@@ -87,12 +87,12 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 		}
 	}
 
-	protected List<EntityPlayer> getPlayersOnGrid() {
-		return world.getEntitiesWithinAABB(EntityPlayer.class, BlockUtils.singleBlock(pos));
+	protected List<PlayerEntity> getPlayersOnGrid() {
+		return world.getEntitiesWithinAABB(PlayerEntity.class, BlockUtils.singleBlock(pos));
 	}
 
-	protected List<EntityXPOrb> getXPOrbsOnGrid() {
-		return world.getEntitiesWithinAABB(EntityXPOrb.class, BlockUtils.aabbOffset(pos, 0, 0, 0, 1, 0.3, 1));
+	protected List<ExperienceOrbEntity> getXPOrbsOnGrid() {
+		return world.getEntitiesWithinAABB(ExperienceOrbEntity.class, BlockUtils.aabbOffset(pos, 0, 0, 0, 1, 0.3, 1));
 	}
 
 }

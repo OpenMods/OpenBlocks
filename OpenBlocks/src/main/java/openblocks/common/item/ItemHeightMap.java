@@ -7,7 +7,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,7 +39,7 @@ public class ItemHeightMap extends Item {
 	}
 
 	public static int getMapId(final ItemStack map) {
-		final NBTTagCompound tag = map.getTagCompound();
+		final CompoundNBT tag = map.getTagCompound();
 		return tag != null ? tag.getInteger(TAG_MAP_ID) : 0;
 	}
 

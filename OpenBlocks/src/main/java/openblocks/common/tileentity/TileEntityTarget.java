@@ -3,9 +3,9 @@ package openblocks.common.tileentity;
 import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Set;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -52,7 +52,7 @@ public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachme
 	private void predictOtherProjectiles() {
 		final List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, getBB().grow(10), target -> EXTRA_PROJECTILE_CLASSES.contains(target.getClass()));
 
-		IBlockState state = null;
+		BlockState state = null;
 
 		for (Entity projectile : projectiles) {
 			RayTraceResult hit = EntityUtils.raytraceEntity(projectile);
@@ -74,7 +74,7 @@ public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachme
 	}
 
 	@Override
-	public EnumFacing getSurfaceDirection() {
-		return EnumFacing.DOWN;
+	public Direction getSurfaceDirection() {
+		return Direction.DOWN;
 	}
 }

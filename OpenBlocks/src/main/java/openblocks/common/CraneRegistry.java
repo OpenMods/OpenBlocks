@@ -3,8 +3,8 @@ package openblocks.common;
 import com.google.common.collect.MapMaker;
 import java.util.Map;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import openblocks.common.entity.EntityMagnet;
 
 public class CraneRegistry {
@@ -21,7 +21,7 @@ public class CraneRegistry {
 		public double prevPosY;
 		public double prevPosZ;
 
-		private Data(EntityLivingBase player) {
+		private Data(LivingEntity player) {
 			prevYaw = player.rotationYaw;
 			prevPosX = player.posX;
 			prevPosY = player.posY;
@@ -35,10 +35,10 @@ public class CraneRegistry {
 	}
 
 	// TODO does it need two separate collections?
-	private final Map<EntityLivingBase, Data> itemData = new MapMaker().weakKeys().makeMap();
-	private final Map<EntityLivingBase, EntityMagnet> magnetOwners = new MapMaker().weakKeys().weakValues().makeMap();
+	private final Map<LivingEntity, Data> itemData = new MapMaker().weakKeys().makeMap();
+	private final Map<LivingEntity, EntityMagnet> magnetOwners = new MapMaker().weakKeys().weakValues().makeMap();
 
-	public void ensureMagnetExists(EntityLivingBase player) {
+	public void ensureMagnetExists(LivingEntity player) {
 		EntityMagnet magnet = magnetOwners.get(player);
 
 		if (magnet == null || magnet.isDead) {
@@ -49,18 +49,18 @@ public class CraneRegistry {
 		}
 	}
 
-	private static EntityMagnet createMagnetForPlayer(EntityLivingBase player) {
+	private static EntityMagnet createMagnetForPlayer(LivingEntity player) {
 		EntityMagnet result = new EntityMagnet.PlayerBound(player.world, player);
 		player.world.spawnEntity(result);
 		return result;
 	}
 
-	public EntityMagnet getMagnetForPlayer(EntityLivingBase player) {
+	public EntityMagnet getMagnetForPlayer(LivingEntity player) {
 		return magnetOwners.get(player);
 	}
 
 	public void bindMagnetToPlayer(Entity owner, EntityMagnet magnet) {
-		if (owner instanceof EntityPlayer) magnetOwners.put((EntityPlayer)owner, magnet);
+		if (owner instanceof PlayerEntity) magnetOwners.put((PlayerEntity)owner, magnet);
 	}
 
 	public static final double ARM_RADIUS = 2.0;
@@ -69,7 +69,7 @@ public class CraneRegistry {
 
 	private CraneRegistry() {}
 
-	public Data getData(EntityLivingBase player, boolean canCreate) {
+	public Data getData(LivingEntity player, boolean canCreate) {
 		Data result = itemData.get(player);
 
 		if (result == null && canCreate) {
@@ -80,7 +80,7 @@ public class CraneRegistry {
 		return result;
 	}
 
-	public double getCraneMagnetDistance(EntityLivingBase player) {
+	public double getCraneMagnetDistance(LivingEntity player) {
 		Data data = getData(player, false);
 		return data != null? data.length : MIN_LENGTH;
 	}

@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -158,7 +158,7 @@ public class CanvasTextureManager {
 
 		if (DEBUG) Log.info("Allocating %s textures", Config.canvasPoolSize);
 
-		final TextureMap map = evt.getMap();
+		final AtlasTexture map = evt.getMap();
 		final EmptyTextureData emptyTexture = new EmptyTextureData();
 		for (int i = 0; i < Config.canvasPoolSize; i++) {
 			final CanvasTexture entry = new CanvasTexture(OpenBlocks.location("canvas-" + i), emptyTexture);

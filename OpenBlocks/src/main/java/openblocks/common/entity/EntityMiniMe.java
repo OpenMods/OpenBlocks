@@ -10,20 +10,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.tileentity.SkullTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -41,7 +41,7 @@ import openmods.network.event.NetworkEventMeta;
 import openmods.utils.io.GameProfileSerializer;
 
 @VisibleForDocumentation
-public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpawnData {
+public class EntityMiniMe extends CreatureEntity implements IEntityAdditionalSpawnData {
 
 	@NetworkEventMeta(direction = EventDirection.S2C)
 	public static class OwnerChangeEvent extends NetworkEvent {
@@ -101,7 +101,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 
 	public EntityMiniMe(World world, GameProfile owner) {
 		this(world);
-		this.owner = owner != null? TileEntitySkull.updateGameprofile(owner) : null;
+		this.owner = owner != null? SkullTileEntity.updateGameprofile(owner) : null;
 	}
 
 	public EntityMiniMe(World world) {
@@ -109,17 +109,17 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		setSize(0.6F, 0.95F);
 		enablePersistence();
 
-		this.tasks.addTask(1, new EntityAISwimming(this));
+		this.tasks.addTask(1, new SwimGoal(this));
 		this.tasks.addTask(2, new EntityAIPickupPlayer(this));
 		this.tasks.addTask(3, new EntityAIBreakBlock(this));
-		this.tasks.addTask(4, new EntityAIWander(this, 1.0D));
-		this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-		this.tasks.addTask(6, new EntityAILookIdle(this));
+		this.tasks.addTask(4, new RandomWalkingGoal(this, 1.0D));
+		this.tasks.addTask(5, new LookAtGoal(this, PlayerEntity.class, 6.0F));
+		this.tasks.addTask(6, new LookRandomlyGoal(this));
 	}
 
 	@Override
-	protected PathNavigate createNavigator(World worldIn) {
-		final PathNavigateGround navigator = new PathNavigateGround(this, worldIn);
+	protected PathNavigator createNavigator(World worldIn) {
+		final GroundPathNavigator navigator = new GroundPathNavigator(this, worldIn);
 		setPathPriority(PathNodeType.WATER, -1.0F);
 		navigator.setCanSwim(true);
 		return navigator;
@@ -164,7 +164,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		if (!world.isRemote) {
 			if (name != null && (owner == null || !name.equalsIgnoreCase(owner.getName()))) {
 				try {
-					this.owner = TileEntitySkull.updateGameprofile(new GameProfile(null, name));
+					this.owner = SkullTileEntity.updateGameprofile(new GameProfile(null, name));
 					propagateOwnerChange();
 				} catch (Exception e) {
 					Log.warn(e, "Failed to change skin to %s", name);
@@ -187,7 +187,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 				final MinecraftProfileTexture skin = map.get(Type.SKIN);
 				return manager.loadSkin(skin, Type.SKIN);
 			} else {
-				UUID uuid = EntityPlayer.getUUID(owner);
+				UUID uuid = PlayerEntity.getUUID(owner);
 				return DefaultPlayerSkin.getDefaultSkin(uuid);
 			}
 		}
@@ -225,11 +225,11 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound tag) {
+	public void writeEntityToNBT(CompoundNBT tag) {
 		super.writeEntityToNBT(tag);
 
 		if (owner != null) {
-			NBTTagCompound ownerTag = new NBTTagCompound();
+			CompoundNBT ownerTag = new CompoundNBT();
 			NBTUtil.writeGameProfile(ownerTag, owner);
 			tag.setTag("Owner", ownerTag);
 		}
@@ -238,7 +238,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound tag) {
+	public void readEntityFromNBT(CompoundNBT tag) {
 		this.owner = readOwner(tag);
 
 		// switched order, to prevent needless profile fetch in setCustomName
@@ -247,10 +247,10 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		this.pickupCooldown = tag.getInteger("pickupCooldown");
 	}
 
-	private static GameProfile readOwner(NBTTagCompound tag) {
+	private static GameProfile readOwner(CompoundNBT tag) {
 		if (tag.hasKey("owner", Constants.NBT.TAG_STRING)) {
 			String ownerName = tag.getString("owner");
-			return TileEntitySkull.updateGameprofile(new GameProfile(null, ownerName));
+			return SkullTileEntity.updateGameprofile(new GameProfile(null, ownerName));
 		} else if (tag.hasKey("OwnerUUID", Constants.NBT.TAG_STRING)) {
 			final String uuidStr = tag.getString("OwnerUUID");
 			try {

@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 
@@ -55,11 +55,11 @@ public class TriggerDevNullStack implements ICriterionTrigger<TriggerDevNullStac
 
 	@Override
 	public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context) {
-		final int depth = JsonUtils.getInt(json, "depth");
+		final int depth = JSONUtils.getInt(json, "depth");
 		return new Instance(depth);
 	}
 
-	public void trigger(EntityPlayerMP player, int depth) {
+	public void trigger(ServerPlayerEntity player, int depth) {
 		final PlayerAdvancements advancements = player.getAdvancements();
 		listeners.get(advancements).stream()
 				.filter((listener) -> listener.getCriterionInstance().test(depth))

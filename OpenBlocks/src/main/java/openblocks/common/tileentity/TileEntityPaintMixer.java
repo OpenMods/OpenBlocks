@@ -4,12 +4,12 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import java.util.EnumMap;
 import javax.annotation.Nonnull;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.model.animation.CapabilityAnimation;
@@ -243,17 +243,17 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	}
 
 	@Override
-	public Object getServerGui(EntityPlayer player) {
+	public Object getServerGui(PlayerEntity player) {
 		return new ContainerPaintMixer(player.inventory, this);
 	}
 
 	@Override
-	public Object getClientGui(EntityPlayer player) {
+	public Object getClientGui(PlayerEntity player) {
 		return new GuiPaintMixer(new ContainerPaintMixer(player.inventory, this));
 	}
 
 	@Override
-	public boolean canOpenGui(EntityPlayer player) {
+	public boolean canOpenGui(PlayerEntity player) {
 		return true;
 	}
 
@@ -351,14 +351,14 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 		return tag;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 	}
@@ -368,7 +368,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing side) {
+	public boolean hasCapability(Capability<?> capability, Direction side) {
 		return capability == CapabilityAnimation.ANIMATION_CAPABILITY ||
 				capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
 				super.hasCapability(capability, side);
@@ -376,7 +376,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+	public <T> T getCapability(Capability<T> capability, Direction side) {
 		if (capability == CapabilityAnimation.ANIMATION_CAPABILITY)
 			return (T)asm;
 

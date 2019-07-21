@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiConfirmOpenLink;
+import net.minecraft.client.gui.screen.ConfirmOpenLinkScreen;
 import openblocks.common.container.ContainerDonationStation;
 import openblocks.common.tileentity.TileEntityDonationStation;
 import openmods.Log;
@@ -42,7 +42,7 @@ public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStatio
 
 			if (Minecraft.getMinecraft().gameSettings.chatLinksPrompt) {
 				displayedURI = uri;
-				mc.displayGuiScreen(new GuiConfirmOpenLink(GuiDonationStation.this, displayedURI.toString(), PROMPT_REPLY_ACTION, false));
+				mc.displayGuiScreen(new ConfirmOpenLinkScreen(GuiDonationStation.this, displayedURI.toString(), PROMPT_REPLY_ACTION, false));
 			} else {
 				openURI(uri);
 			}

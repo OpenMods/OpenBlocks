@@ -3,7 +3,7 @@ package openblocks.client.renderer.tileentity.guide;
 import java.util.function.Supplier;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.shapes.CoordShape;
 import openmods.utils.TextureUtils;
@@ -33,7 +33,7 @@ public class GuideAdvancedRenderer implements IGuideRenderer {
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GlStateManager.disableLighting();
 
-		TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		TextureUtils.bindTextureToClient(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 
 		mr.drawInstanced(shape, color, scale);
 

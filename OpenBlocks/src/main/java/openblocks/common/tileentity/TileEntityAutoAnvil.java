@@ -3,12 +3,12 @@ package openblocks.common.tileentity;
 import com.google.common.base.Optional;
 import java.util.Set;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -203,17 +203,17 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInven
 	}
 
 	@Override
-	public boolean canOpenGui(EntityPlayer player) {
+	public boolean canOpenGui(PlayerEntity player) {
 		return true;
 	}
 
 	@Override
-	public Object getServerGui(EntityPlayer player) {
+	public Object getServerGui(PlayerEntity player) {
 		return new ContainerAutoAnvil(player.inventory, this);
 	}
 
 	@Override
-	public Object getClientGui(EntityPlayer player) {
+	public Object getClientGui(PlayerEntity player) {
 		return new GuiAutoAnvil(new ContainerAutoAnvil(player.inventory, this));
 	}
 
@@ -247,14 +247,14 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInven
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 		return tag;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 	}
@@ -275,12 +275,12 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInven
 	}
 
 	@Override
-	public IValueProvider<Set<EnumFacing>> createAllowedDirectionsProvider(AutoSlots slot) {
+	public IValueProvider<Set<Direction>> createAllowedDirectionsProvider(AutoSlots slot) {
 		return selectSlotMap(slot);
 	}
 
 	@Override
-	public IWriteableBitMap<EnumFacing> createAllowedDirectionsReceiver(AutoSlots slot) {
+	public IWriteableBitMap<Direction> createAllowedDirectionsReceiver(AutoSlots slot) {
 		SyncableSides dirs = selectSlotMap(slot);
 		return BitMapUtils.createRpcAdapter(createRpcProxy(dirs, IRpcDirectionBitMap.class));
 	}
@@ -308,7 +308,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInven
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return tankCapability.hasHandler(facing);
 
@@ -320,7 +320,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInven
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T)tankCapability.getHandler(facing);
 

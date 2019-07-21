@@ -4,7 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
 
@@ -25,13 +25,13 @@ public class BlockBlockManpulatorBase extends OpenBlock.SixDirections {
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public BlockState getStateFromMeta(int meta) {
 		return super.getStateFromMeta(meta)
 				.withProperty(POWERED, (meta & MASK_POWERED) != 0);
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		return super.getMetaFromState(state) | (state.getValue(POWERED)? MASK_POWERED : 0);
 	}
 

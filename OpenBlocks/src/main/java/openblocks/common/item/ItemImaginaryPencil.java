@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import openblocks.OpenBlocks;
@@ -26,7 +26,7 @@ public class ItemImaginaryPencil extends ItemImaginary {
 
 	@Nonnull
 	public static ItemStack setupValues(@Nonnull ItemStack result, PlacementMode mode, float uses) {
-		NBTTagCompound tag = ItemUtils.getItemTag(result);
+		CompoundNBT tag = ItemUtils.getItemTag(result);
 		tag.setInteger(TAG_MODE, mode.ordinal());
 		tag.setFloat(TAG_USES, uses);
 		return result;
@@ -40,7 +40,7 @@ public class ItemImaginaryPencil extends ItemImaginary {
 	}
 
 	@Override
-	protected void configureBlockEntity(TileEntity tileEntity, ItemImaginary.PlacementMode mode, NBTTagCompound tag) {
+	protected void configureBlockEntity(TileEntity tileEntity, ItemImaginary.PlacementMode mode, CompoundNBT tag) {
 		if (tileEntity instanceof TileEntityImaginaryPencil) {
 			((TileEntityImaginaryPencil)tileEntity).setup(mode.isInverted, mode.shape);
 		}

@@ -2,11 +2,11 @@ package openblocks.common.block;
 
 import java.util.Random;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +34,7 @@ public class BlockSponge extends OpenBlock {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour, BlockPos neigbourPos) {
+	public void neighborChanged(BlockState state, World world, BlockPos pos, Block neighbour, BlockPos neigbourPos) {
 		clearupLiquid(world, pos);
 	}
 
@@ -44,7 +44,7 @@ public class BlockSponge extends OpenBlock {
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+	public void breakBlock(World world, BlockPos pos, BlockState state) {
 		if (!Config.spongeBlockUpdate)
 			updateNeigbouringLiquids(world, pos);
 	}
@@ -57,7 +57,7 @@ public class BlockSponge extends OpenBlock {
 				for (int dz = -extendedRange; dz <= extendedRange; dz++) {
 					final BlockPos workPos = pos.add(dx, dy, dz);
 					if (!world.isBlockLoaded(workPos)) continue;
-					final IBlockState state = world.getBlockState(workPos);
+					final BlockState state = world.getBlockState(workPos);
 					Material material = state.getMaterial();
 					if (material.isLiquid()) {
 						state.neighborChanged(world, workPos, this, pos);
@@ -68,13 +68,13 @@ public class BlockSponge extends OpenBlock {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		clearupLiquid(world, pos);
 		world.scheduleUpdate(pos, this, TICK_RATE + world.rand.nextInt(5));
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
+	public void updateTick(World world, BlockPos pos, BlockState state, Random random) {
 		clearupLiquid(world, pos);
 		world.scheduleUpdate(pos, this, TICK_RATE + world.rand.nextInt(5));
 	}
@@ -88,7 +88,7 @@ public class BlockSponge extends OpenBlock {
 				for (int dz = -Config.spongeRange; dz <= Config.spongeRange; dz++) {
 					final BlockPos workPos = pos.add(dx, dy, dz);
 					if (!world.isBlockLoaded(workPos)) continue;
-					final IBlockState state = world.getBlockState(workPos);
+					final BlockState state = world.getBlockState(workPos);
 					Material material = state.getMaterial();
 					if (material.isLiquid()) {
 						hitLava |= material == Material.LAVA;
@@ -101,7 +101,7 @@ public class BlockSponge extends OpenBlock {
 	}
 
 	@Override
-	public boolean eventReceived(IBlockState state, World world, BlockPos pos, int eventId, int eventParam) {
+	public boolean eventReceived(BlockState state, World world, BlockPos pos, int eventId, int eventParam) {
 		if (eventId == EVENT_BURN) {
 			if (world.isRemote) {
 				for (int i = 0; i < 20; i++) {

@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,14 +37,14 @@ public class ItemGuide extends ItemOpenBlock {
 		super(block);
 	}
 
-	private static void addIntInfo(NBTTagCompound tag, String name, String format, List<String> result) {
+	private static void addIntInfo(CompoundNBT tag, String name, String format, List<String> result) {
 		if (tag.hasKey(name)) result.add(TranslationUtils.translateToLocalFormatted(format, tag.getInteger(name)));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
-		NBTTagCompound tag = stack.getTagCompound();
+		CompoundNBT tag = stack.getTagCompound();
 		if (tag != null) {
 			if (tag.hasKey(TAG_NEG_X) && tag.hasKey(TAG_NEG_Y) || tag.hasKey(TAG_NEG_Z) ||
 					tag.hasKey(TAG_POS_X) && tag.hasKey(TAG_POS_Y) || tag.hasKey(TAG_POS_Z)) {

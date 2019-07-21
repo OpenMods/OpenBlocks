@@ -1,6 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -23,7 +23,7 @@ public class TileEntityBearTrapRenderer extends FastTESR<TileEntityBearTrap> {
 
 		final BlockPos pos = te.getPos();
 		final IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
-		IBlockState state = world.getBlockState(pos);
+		BlockState state = world.getBlockState(pos);
 
 		if (state instanceof IExtendedBlockState) {
 			state = state.getBlock().getExtendedState(state, world, pos);

@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class CanvasState {
@@ -36,23 +36,23 @@ public class CanvasState {
 
 	public static final CanvasState EMPTY = new CanvasState(ImmutableMap.of());
 
-	public final Map<EnumFacing, CanvasSideState> sideStates;
+	public final Map<Direction, CanvasSideState> sideStates;
 
-	private CanvasState(Map<EnumFacing, CanvasSideState> sideStates) {
+	private CanvasState(Map<Direction, CanvasSideState> sideStates) {
 		this.sideStates = sideStates;
 	}
 
-	public CanvasState update(EnumFacing side, CanvasSideState sideState) {
+	public CanvasState update(Direction side, CanvasSideState sideState) {
 		final CanvasSideState oldSideState = sideStates.get(side);
 		if (oldSideState != null) oldSideState.release();
 
 		sideState.acquire();
 
-		final ImmutableMap.Builder<EnumFacing, CanvasSideState> builder = ImmutableMap.builder();
+		final ImmutableMap.Builder<Direction, CanvasSideState> builder = ImmutableMap.builder();
 
 		// put new one first, then rest (without old one) - since order is important
 		builder.put(side, sideState);
-		for (Map.Entry<EnumFacing, CanvasSideState> e : sideStates.entrySet())
+		for (Map.Entry<Direction, CanvasSideState> e : sideStates.entrySet())
 			if (e.getKey() != side)
 				builder.put(e);
 
@@ -94,14 +94,14 @@ public class CanvasState {
 	@Override
 	public String toString() {
 		List<String> elements = Lists.newArrayListWithExpectedSize(6);
-		for (Map.Entry<EnumFacing, CanvasSideState> e : sideStates.entrySet())
+		for (Map.Entry<Direction, CanvasSideState> e : sideStates.entrySet())
 			elements.add(e.getKey() + ":" + e.getValue());
 
 		return "[" + Joiner.on(", ").join(elements) + "]";
 	}
 
 	// LRU collection of paint application
-	public Collection<EnumFacing> applicationOrder() {
+	public Collection<Direction> applicationOrder() {
 		return sideStates.keySet();
 	}
 }

@@ -1,7 +1,7 @@
 package openblocks.trophy;
 
 import javax.annotation.Nonnull;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import openblocks.common.tileentity.TileEntityTrophy;
@@ -25,7 +25,7 @@ public class ItemDropBehavior implements ITrophyBehavior {
 	}
 
 	@Override
-	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+	public int executeActivateBehavior(TileEntityTrophy tile, PlayerEntity player) {
 		if (sound != null) {
 			player.playSound(sound, 1.0F, (tile.getWorld().rand.nextFloat() - tile.getWorld().rand.nextFloat()) * 0.2F + 1.0F);
 		}

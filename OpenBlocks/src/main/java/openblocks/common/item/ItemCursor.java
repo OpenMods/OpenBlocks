@@ -2,15 +2,15 @@ package openblocks.common.item;
 
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.Config;
@@ -33,39 +33,39 @@ public class ItemCursor extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(PlayerEntity player, World world, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
 		final ItemStack stack = player.getHeldItem(hand);
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		tag.setInteger("dimension", world.provider.getDimension());
 		NbtUtils.store(tag, pos);
 		tag.setInteger("side", facing.ordinal());
-		return EnumActionResult.SUCCESS;
+		return ActionResultType.SUCCESS;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		final ItemStack heldStack = player.getHeldItem(hand);
 
-		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, heldStack);
+		if (hand != Hand.MAIN_HAND) return ActionResult.newResult(ActionResultType.PASS, heldStack);
 
 		if (!world.isRemote) {
-			NBTTagCompound tag = heldStack.getTagCompound();
+			CompoundNBT tag = heldStack.getTagCompound();
 			if (tag != null && NbtUtils.hasCoordinates(tag) && tag.hasKey("dimension")) {
 				final int dimension = tag.getInteger("dimension");
 
 				final BlockPos pos = NbtUtils.readBlockPos(tag);
 				if (world.provider.getDimension() == dimension && world.isBlockLoaded(pos)) {
-					final EnumFacing side = NbtUtils.readEnum(tag, "side", EnumFacing.UP);
+					final Direction side = NbtUtils.readEnum(tag, "side", Direction.UP);
 					clickBlock(world, player, hand, pos, side);
 				}
 			}
 		}
-		return ActionResult.newResult(EnumActionResult.SUCCESS, heldStack);
+		return ActionResult.newResult(ActionResultType.SUCCESS, heldStack);
 	}
 
-	private static void clickBlock(World world, EntityPlayer player, EnumHand hand, BlockPos pos, EnumFacing side) {
+	private static void clickBlock(World world, PlayerEntity player, Hand hand, BlockPos pos, Direction side) {
 		if (!world.isAirBlock(pos)) {
-			final IBlockState state = world.getBlockState(pos);
+			final BlockState state = world.getBlockState(pos);
 			final double distanceToLinkedBlock = player.getDistanceSq(pos);
 			if (distanceToLinkedBlock < Config.cursorDistanceLimit) {
 				final Block block = state.getBlock();

@@ -7,21 +7,20 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -117,7 +116,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		if (!world.isBlockLoaded(pos)) return null;
 
 		Chunk chunk = world.getChunkFromBlockCoords(pos);
-		TileEntity te = chunk.getTileEntity(pos, EnumCreateEntityType.CHECK);
+		TileEntity te = chunk.getTileEntity(pos, Chunk.CreateEntityType.CHECK);
 		return (te instanceof TileEntityTank)? (TileEntityTank)te : null;
 	}
 
@@ -245,8 +244,8 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return tank;
 	}
 
-	public NBTTagCompound getItemNBT() {
-		NBTTagCompound nbt = new NBTTagCompound();
+	public CompoundNBT getItemNBT() {
+		CompoundNBT nbt = new CompoundNBT();
 		tank.writeToNBT(nbt);
 		return nbt;
 	}
@@ -258,8 +257,8 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
-		NBTTagCompound itemTag = stack.getTagCompound();
+	public void onBlockPlacedBy(BlockState state, LivingEntity placer, @Nonnull ItemStack stack) {
+		CompoundNBT itemTag = stack.getTagCompound();
 
 		if (itemTag != null && itemTag.hasKey(ItemTankBlock.TANK_TAG)) {
 			tank.readFromNBT(itemTag.getCompoundTag(ItemTankBlock.TANK_TAG));
@@ -270,7 +269,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return (neighbor instanceof TileEntityTank && !neighbor.isInvalid())? (TileEntityTank)neighbor : null;
 	}
 
-	private TileEntityTank getTankInDirection(EnumFacing direction) {
+	private TileEntityTank getTankInDirection(Direction direction) {
 		final TileEntity neighbor = getTileInDirection(direction);
 		return getValidTank(neighbor);
 	}
@@ -281,14 +280,14 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (hand == EnumHand.MAIN_HAND) {
+	public boolean onBlockActivated(PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+		if (hand == Hand.MAIN_HAND) {
 			final ItemStack heldItem = player.getHeldItemMainhand();
 			if (!heldItem.isEmpty()) {
 				final FluidActionResult result = tryEmptyItem(player, heldItem.copy());
 				if (result.success) {
 					if (!player.isCreative())
-						player.setHeldItem(EnumHand.MAIN_HAND, result.result);
+						player.setHeldItem(Hand.MAIN_HAND, result.result);
 					return true;
 				}
 			} else
@@ -298,7 +297,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return false;
 	}
 
-	protected boolean tryDrainXp(EntityPlayer player) {
+	protected boolean tryDrainXp(PlayerEntity player) {
 		final FluidStack fluid = tank.getFluid();
 		final Optional<IFluidXpConverter> maybeConverter = FluidXpUtils.getConverter(fluid);
 		if (maybeConverter.isPresent()) {
@@ -321,7 +320,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return false;
 	}
 
-	protected FluidActionResult tryEmptyItem(EntityPlayer player, @Nonnull ItemStack container) {
+	protected FluidActionResult tryEmptyItem(PlayerEntity player, @Nonnull ItemStack container) {
 		// not using FluidUtils.tryEmptyContainer, since it limits stack size to 1
 		final IFluidHandlerItem containerFluidHandler = FluidUtil.getFluidHandler(container);
 		if (containerFluidHandler != null) {
@@ -377,17 +376,17 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		if (world.isRemote) renderLogic.validateConnections(world, getPos());
 	}
 
-	private void tryGetNeighbor(List<TileEntityTank> result, FluidStack fluid, EnumFacing side) {
+	private void tryGetNeighbor(List<TileEntityTank> result, FluidStack fluid, Direction side) {
 		TileEntityTank neighbor = getTankInDirection(side);
 		if (neighbor != null && neighbor.accepts(fluid)) result.add(neighbor);
 	}
 
 	private void tryBalanceNeighbors(FluidStack contents) {
 		List<TileEntityTank> neighbors = Lists.newArrayList();
-		tryGetNeighbor(neighbors, contents, EnumFacing.NORTH);
-		tryGetNeighbor(neighbors, contents, EnumFacing.SOUTH);
-		tryGetNeighbor(neighbors, contents, EnumFacing.EAST);
-		tryGetNeighbor(neighbors, contents, EnumFacing.WEST);
+		tryGetNeighbor(neighbors, contents, Direction.NORTH);
+		tryGetNeighbor(neighbors, contents, Direction.SOUTH);
+		tryGetNeighbor(neighbors, contents, Direction.EAST);
+		tryGetNeighbor(neighbors, contents, Direction.WEST);
 
 		final int count = neighbors.size();
 		if (count == 0) return;
@@ -491,12 +490,12 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	@Override
-	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, IBlockState blockState, int fortune, boolean isSilkTouch) {
+	public void addHarvestDrops(PlayerEntity player, List<ItemStack> drops, BlockState blockState, int fortune, boolean isSilkTouch) {
 		ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
 
 		if (tank.getFluidAmount() > 0) {
-			NBTTagCompound tankTag = getItemNBT();
-			NBTTagCompound itemTag = ItemUtils.getItemTag(stack);
+			CompoundNBT tankTag = getItemNBT();
+			CompoundNBT itemTag = ItemUtils.getItemTag(stack);
 			itemTag.setTag("tank", tankTag);
 		}
 
@@ -514,14 +513,14 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, Direction facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
 				|| super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T)tankCapabilityWrapper;
 

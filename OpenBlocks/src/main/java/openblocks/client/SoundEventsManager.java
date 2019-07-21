@@ -8,10 +8,10 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -81,8 +81,8 @@ public class SoundEventsManager {
 	private final List<SoundEvent> events = Lists.newLinkedList();
 
 	public static boolean isEntityWearingGlasses(Entity e) {
-		if (e instanceof EntityPlayer) {
-			ItemStack helmet = ((EntityPlayer)e).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+		if (e instanceof PlayerEntity) {
+			ItemStack helmet = ((PlayerEntity)e).getItemStackFromSlot(EquipmentSlotType.HEAD);
 			return !helmet.isEmpty() && helmet.getItem() instanceof ItemSonicGlasses;
 		}
 
@@ -231,7 +231,7 @@ public class SoundEventsManager {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GlStateManager.enableTexture2D();
-		TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		TextureUtils.bindTextureToClient(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 		synchronized (events) {
 			for (SoundEvent snd : events) {
 				final double px = snd.sound.getXPosF() - interpX;

@@ -3,14 +3,14 @@ package openblocks.common.item;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -44,7 +44,7 @@ public class ItemStencil extends Item {
 	}
 
 	public static Optional<StencilPattern> getPattern(@Nonnull ItemStack stack) {
-		final NBTTagCompound tag = stack.getTagCompound();
+		final CompoundNBT tag = stack.getTagCompound();
 		if (tag != null) {
 			final String id = tag.getString(TAG_PATTERN);
 			return Optional.ofNullable(StencilPattern.ID_TO_PATTERN.get(new ResourceLocation(id)));
@@ -54,11 +54,11 @@ public class ItemStencil extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(PlayerEntity player, World world, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
 		final ItemStack stack = player.getHeldItem(hand);
 		final Optional<StencilPattern> pattern = getPattern(stack);
 
-		if (!pattern.isPresent()) { return EnumActionResult.FAIL; }
+		if (!pattern.isPresent()) { return ActionResultType.FAIL; }
 
 		if (CanvasReplaceBlacklist.instance.isAllowedToReplace(world, pos)) {
 			BlockCanvas.replaceBlock(world, pos);
@@ -71,11 +71,11 @@ public class ItemStencil extends Item {
 
 			if (canvas.useStencil(facing, pattern.get())) {
 				stack.shrink(1);
-				return EnumActionResult.SUCCESS;
+				return ActionResultType.SUCCESS;
 			}
 		}
 
-		return EnumActionResult.PASS;
+		return ActionResultType.PASS;
 	}
 
 }

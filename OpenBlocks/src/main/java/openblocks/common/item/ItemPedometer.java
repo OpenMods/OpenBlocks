@@ -2,16 +2,16 @@ package openblocks.common.item;
 
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.PedometerHandler;
@@ -30,15 +30,15 @@ public class ItemPedometer extends Item {
 		});
 	}
 
-	private static void send(EntityPlayer player, String format, Object... args) {
-		player.sendMessage(new TextComponentTranslation(format, args));
+	private static void send(PlayerEntity player, String format, Object... args) {
+		player.sendMessage(new TranslationTextComponent(format, args));
 	}
 
 	private static final SpeedUnit speedUnit = SpeedUnit.M_PER_TICK;
 	private static final DistanceUnit distanceUnit = DistanceUnit.M;
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		if (world.isRemote) {
 			if (player.isSneaking()) {
 				PedometerHandler.getProperty(player).reset();
@@ -56,13 +56,13 @@ public class ItemPedometer extends Item {
 			world.playSound(null, player.getPosition(), OpenBlocks.Sounds.ITEM_PEDOMETER_USE, SoundCategory.PLAYERS, 1F, 1F);
 		}
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+		return ActionResult.newResult(ActionResultType.SUCCESS, player.getHeldItem(hand));
 	}
 
-	protected void showPedometerData(EntityPlayer player, PedometerState state) {
+	protected void showPedometerData(PlayerEntity player, PedometerState state) {
 		PedometerData result = state.getData();
 		if (result == null) return;
-		player.sendMessage(new TextComponentString(""));
+		player.sendMessage(new StringTextComponent(""));
 		send(player, "openblocks.misc.pedometer.start_point", String.format("%.1f %.1f %.1f", result.startingPoint.x, result.startingPoint.y, result.startingPoint.z));
 
 		send(player, "openblocks.misc.pedometer.speed", speedUnit.format(result.currentSpeed));

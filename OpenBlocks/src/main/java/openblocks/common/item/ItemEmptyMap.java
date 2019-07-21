@@ -7,7 +7,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,14 +26,14 @@ public class ItemEmptyMap extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> result, ITooltipFlag flag) {
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		result.add(String.format("Scale: 1:%d", 1 << tag.getByte(TAG_SCALE)));
 	}
 
 	@Nonnull
 	public static ItemStack createMap(Item item, int scale) {
 		ItemStack result = new ItemStack(item);
-		NBTTagCompound tag = ItemUtils.getItemTag(result);
+		CompoundNBT tag = ItemUtils.getItemTag(result);
 		tag.setByte(TAG_SCALE, (byte)scale);
 		return result;
 	}
@@ -51,7 +51,7 @@ public class ItemEmptyMap extends Item {
 	public static ItemStack upgradeToMap(World world, ItemStack emptyMap) {
 		if (Items.heightMap == null) return emptyMap;
 
-		NBTTagCompound tag = ItemUtils.getItemTag(emptyMap);
+		CompoundNBT tag = ItemUtils.getItemTag(emptyMap);
 		byte scale = tag.getByte(TAG_SCALE);
 		int newMapId = MapDataManager.createNewMap(world, scale);
 

@@ -1,6 +1,6 @@
 package openblocks.client.renderer.tileentity.tank;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.fluids.FluidStack;
 import openmods.utils.Diagonal;
 
@@ -9,7 +9,7 @@ public interface ITankRenderFluidData {
 
 	boolean hasFluid();
 
-	boolean shouldRenderFluidWall(EnumFacing side);
+	boolean shouldRenderFluidWall(Direction side);
 
 	float getCornerFluidLevel(Diagonal diagonal, float time);
 

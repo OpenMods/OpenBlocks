@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
@@ -14,7 +14,7 @@ public class InventoryEvent extends PlayerEvent {
 
 	protected final Map<String, SubInventory> subInventories;
 
-	protected InventoryEvent(EntityPlayer player, Map<String, SubInventory> subInventories) {
+	protected InventoryEvent(PlayerEntity player, Map<String, SubInventory> subInventories) {
 		super(player);
 		this.subInventories = subInventories;
 	}
@@ -43,7 +43,7 @@ public class InventoryEvent extends PlayerEvent {
 
 	public static class Store extends InventoryEvent {
 
-		public Store(EntityPlayer player) {
+		public Store(PlayerEntity player) {
 			super(player, new HashMap<>());
 		}
 
@@ -58,7 +58,7 @@ public class InventoryEvent extends PlayerEvent {
 
 	public static class Load extends InventoryEvent {
 
-		public Load(EntityPlayer player, Map<String, SubInventory> subInventories) {
+		public Load(PlayerEntity player, Map<String, SubInventory> subInventories) {
 			super(player, ImmutableMap.copyOf(subInventories));
 		}
 

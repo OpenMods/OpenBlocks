@@ -10,20 +10,20 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -108,20 +108,20 @@ public class PlayerDeathHandler {
 	}
 
 	private abstract static class GravePlacementChecker {
-		public boolean canPlace(World world, EntityPlayer player, BlockPos pos) {
+		public boolean canPlace(World world, PlayerEntity player, BlockPos pos) {
 			if (!world.isBlockLoaded(pos)) return false;
 			if (!world.isBlockModifiable(player, pos)) return false;
 
-			IBlockState block = world.getBlockState(pos);
+			BlockState block = world.getBlockState(pos);
 			return checkBlock(world, pos, block);
 		}
 
-		public abstract boolean checkBlock(World world, BlockPos pos, IBlockState state);
+		public abstract boolean checkBlock(World world, BlockPos pos, BlockState state);
 	}
 
 	private static final GravePlacementChecker POLITE = new GravePlacementChecker() {
 		@Override
-		public boolean checkBlock(World world, BlockPos pos, IBlockState state) {
+		public boolean checkBlock(World world, BlockPos pos, BlockState state) {
 			final Block block = state.getBlock();
 			return (block.isAir(state, world, pos) || block.isReplaceable(world, pos));
 		}
@@ -129,7 +129,7 @@ public class PlayerDeathHandler {
 
 	private static final GravePlacementChecker BRUTAL = new GravePlacementChecker() {
 		@Override
-		public boolean checkBlock(World world, BlockPos pos, IBlockState state) {
+		public boolean checkBlock(World world, BlockPos pos, BlockState state) {
 			return state.getBlockHardness(world, pos) >= 0 && world.getTileEntity(pos) == null;
 		}
 	};
@@ -142,13 +142,13 @@ public class PlayerDeathHandler {
 
 		private final BlockPos playerPos;
 
-		private final List<EntityItem> loot;
+		private final List<ItemEntity> loot;
 
 		private final WeakReference<World> world;
 
-		private final WeakReference<EntityPlayer> exPlayer;
+		private final WeakReference<PlayerEntity> exPlayer;
 
-		public GraveCallable(World world, EntityPlayer exPlayer, List<EntityItem> loot) {
+		public GraveCallable(World world, PlayerEntity exPlayer, List<ItemEntity> loot) {
 			this.playerPos = exPlayer.getPosition();
 
 			this.world = new WeakReference<>(world);
@@ -158,7 +158,7 @@ public class PlayerDeathHandler {
 
 			final ITextComponent day = formatDate(world);
 			final ITextComponent deathCause = exPlayer.getCombatTracker().getDeathMessage();
-			this.cause = new TextComponentTranslation("openblocks.misc.grave_msg", deathCause, day);
+			this.cause = new TranslationTextComponent("openblocks.misc.grave_msg", deathCause, day);
 
 			this.loot = ImmutableList.copyOf(loot);
 		}
@@ -166,12 +166,12 @@ public class PlayerDeathHandler {
 		private static ITextComponent formatDate(World world) {
 			final long time = world.getTotalWorldTime();
 			final String day = String.format("%.1f", time / 24000.0);
-			final ITextComponent dayComponent = new TextComponentString(day);
+			final ITextComponent dayComponent = new StringTextComponent(day);
 			dayComponent.getStyle().setColor(TextFormatting.WHITE).setBold(true);
 			return dayComponent;
 		}
 
-		private void setCommonStoreInfo(NBTTagCompound meta, boolean placed) {
+		private void setCommonStoreInfo(CompoundNBT meta, boolean placed) {
 			meta.setString(PlayerInventoryStore.TAG_PLAYER_NAME, stiffId.getName());
 			meta.setString(PlayerInventoryStore.TAG_PLAYER_UUID, stiffId.getId().toString());
 			meta.setTag("PlayerLocation", NbtUtils.store(playerPos));
@@ -207,14 +207,14 @@ public class PlayerDeathHandler {
 		protected IInventory getLoot() {
 			final GenericInventory loot = new GenericInventory("tmpplayer", false, this.loot.size());
 			final IItemHandler handler = loot.getHandler();
-			for (EntityItem entityItem : this.loot) {
+			for (ItemEntity entityItem : this.loot) {
 				ItemStack stack = entityItem.getItem();
 				if (!stack.isEmpty()) ItemHandlerHelper.insertItemStacked(handler, stack, false);
 			}
 			return loot;
 		}
 
-		private boolean trySpawnGrave(EntityPlayer player, World world) {
+		private boolean trySpawnGrave(PlayerEntity player, World world) {
 			final BlockPos location = findLocation(world, player);
 
 			String gravestoneText = stiffId.getName();
@@ -240,13 +240,13 @@ public class PlayerDeathHandler {
 			return tryPlaceGrave(world, evt.location, evt.gravestoneText, evt.clickText);
 		}
 
-		private static boolean canSpawnBase(World world, EntityPlayer player, BlockPos pos) {
+		private static boolean canSpawnBase(World world, PlayerEntity player, BlockPos pos) {
 			return world.isBlockLoaded(pos)
 					&& world.isAirBlock(pos)
 					&& world.isBlockModifiable(player, pos);
 		}
 
-		private BlockPos findLocation(World world, EntityPlayer player, GravePlacementChecker checker) {
+		private BlockPos findLocation(World world, PlayerEntity player, GravePlacementChecker checker) {
 			final int limitedPosY = Math.min(Math.max(playerPos.getY(), Config.minGraveY), Config.maxGraveY);
 			BlockPos searchPos = new BlockPos(playerPos.getX(), limitedPosY, playerPos.getZ());
 			final int searchSize = Config.graveSpawnRange / 2;
@@ -261,7 +261,7 @@ public class PlayerDeathHandler {
 			return null;
 		}
 
-		private BlockPos findLocation(World world, EntityPlayer player) {
+		private BlockPos findLocation(World world, PlayerEntity player) {
 			BlockPos location = findLocation(world, player, POLITE);
 			if (location != null) return location;
 
@@ -284,7 +284,7 @@ public class PlayerDeathHandler {
 
 		@Override
 		public void run() {
-			EntityPlayer player = exPlayer.get();
+			PlayerEntity player = exPlayer.get();
 			if (player == null) {
 				Log.warn("Lost player while placing player %s grave", stiffId);
 				return;
@@ -302,7 +302,7 @@ public class PlayerDeathHandler {
 					backupGrave(world, loot, meta -> setCommonStoreInfo(meta, false));
 				}
 
-				for (EntityItem drop : loot)
+				for (ItemEntity drop : loot)
 					world.spawnEntity(drop);
 			}
 		}
@@ -319,7 +319,7 @@ public class PlayerDeathHandler {
 
 		if (Config.debugGraves) dumpDebugInfo(event);
 
-		final EntityPlayer player = event.getEntityPlayer();
+		final PlayerEntity player = event.getEntityPlayer();
 
 		if (OpenBlocks.Blocks.grave == null) {
 			Log.log(debugLevel(), "OpenBlocks graves disabled, not placing (player '%s')", player);
@@ -336,7 +336,7 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		final List<EntityItem> drops = event.getDrops();
+		final List<ItemEntity> drops = event.getDrops();
 		if (drops.isEmpty()) {
 			Log.log(debugLevel(), "No drops from player '%s', grave will not be spawned'", player);
 			return;
@@ -350,7 +350,7 @@ public class PlayerDeathHandler {
 		}
 
 		final GraveDropsEvent dropsEvent = new GraveDropsEvent(player);
-		for (EntityItem drop : drops)
+		for (ItemEntity drop : drops)
 			dropsEvent.addItem(drop);
 
 		if (MinecraftForge.EVENT_BUS.post(dropsEvent)) {
@@ -358,7 +358,7 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		final List<EntityItem> graveLoot = Lists.newArrayList();
+		final List<ItemEntity> graveLoot = Lists.newArrayList();
 		drops.clear(); // will be rebuilt based from event
 
 		for (GraveDropsEvent.ItemAction entry : dropsEvent.drops) {
@@ -394,15 +394,15 @@ public class PlayerDeathHandler {
 	}
 
 	// TODO: candidate for scripting
-	private static boolean tryConsumeGrave(EntityPlayer player, Iterable<EntityItem> graveLoot) {
+	private static boolean tryConsumeGrave(PlayerEntity player, Iterable<ItemEntity> graveLoot) {
 		if (!Config.requiresGraveInInv || player.capabilities.isCreativeMode) return true;
 
 		final Item graveItem = Item.getItemFromBlock(OpenBlocks.Blocks.grave);
 		if (graveItem == Items.AIR) return true;
 
-		final Iterator<EntityItem> lootIter = graveLoot.iterator();
+		final Iterator<ItemEntity> lootIter = graveLoot.iterator();
 		while (lootIter.hasNext()) {
-			final EntityItem drop = lootIter.next();
+			final ItemEntity drop = lootIter.next();
 			final ItemStack itemStack = drop.getItem();
 			if (itemStack.getItem() == graveItem && !itemStack.isEmpty()) {
 				itemStack.shrink(1);
@@ -423,7 +423,7 @@ public class PlayerDeathHandler {
 		Log.info("Trying to spawn grave for player '%s':'%s'", event.getEntityPlayer(), event.getEntityPlayer().getGameProfile());
 
 		int i = 0;
-		for (EntityItem e : event.getDrops())
+		for (ItemEntity e : event.getDrops())
 			Log.info("\tGrave drop %d: %s -> %s", i++, e.getClass(), e.getItem());
 
 		final ListenerList listeners = event.getListenerList();

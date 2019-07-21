@@ -4,24 +4,24 @@ import com.google.common.base.Strings;
 import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityBat;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.passive.BatEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -58,13 +58,13 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	@Override
 	public void update() {
 		if (!world.isRemote) {
-			if (Config.spawnSkeletons && world.getDifficulty() != EnumDifficulty.PEACEFUL && world.rand.nextDouble() < Config.skeletonSpawnRate) {
+			if (Config.spawnSkeletons && world.getDifficulty() != Difficulty.PEACEFUL && world.rand.nextDouble() < Config.skeletonSpawnRate) {
 
-				List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, getBB().grow(7), input -> input instanceof IMob);
+				List<MobEntity> mobs = world.getEntitiesWithinAABB(MobEntity.class, getBB().grow(7), input -> input instanceof IMob);
 
 				if (mobs.size() < 5) {
 					double chance = world.rand.nextDouble();
-					EntityLiving living = chance < 0.5? new EntitySkeleton(world) : new EntityBat(world);
+					MobEntity living = chance < 0.5? new SkeletonEntity(world) : new BatEntity(world);
 					living.setPositionAndRotation(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, world.rand.nextFloat() * 360, 0);
 					if (living.getCanSpawnHere()) {
 						world.spawnEntity(living);
@@ -92,10 +92,10 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
+	public void onBlockPlacedBy(BlockState state, LivingEntity placer, @Nonnull ItemStack stack) {
 		if (!world.isRemote) {
-			if ((placer instanceof EntityPlayer) && !(placer instanceof FakePlayer)) {
-				EntityPlayer player = (EntityPlayer)placer;
+			if ((placer instanceof PlayerEntity) && !(placer instanceof FakePlayer)) {
+				PlayerEntity player = (PlayerEntity)placer;
 
 				if (stack.hasDisplayName()) setUsername(stack.getDisplayName());
 				else setUsername(player.getGameProfile().getName());
@@ -106,7 +106,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 
@@ -119,7 +119,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 
@@ -142,9 +142,9 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
 		if (player.world.isRemote) return true;
-		if (hand != EnumHand.MAIN_HAND) return false;
+		if (hand != Hand.MAIN_HAND) return false;
 
 		final ItemStack held = player.getHeldItemMainhand();
 		if (!held.isEmpty() && held.getItem().getToolClasses(held).contains("shovel")) {
@@ -156,7 +156,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		return true;
 	}
 
-	protected void robGrave(EntityPlayer player, @Nonnull ItemStack held) {
+	protected void robGrave(PlayerEntity player, @Nonnull ItemStack held) {
 		boolean dropped = false;
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			final ItemStack stack = inventory.getStackInSlot(i);
@@ -175,7 +175,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		}
 	}
 
-	private void ohNoes(EntityPlayer player) {
+	private void ohNoes(PlayerEntity player) {
 		world.playSound(null, player.getPosition(), OpenBlocks.Sounds.BLOCK_GRAVE_ROB, SoundCategory.BLOCKS, 1, 1);
 
 		final WorldInfo worldInfo = world.getWorldInfo();

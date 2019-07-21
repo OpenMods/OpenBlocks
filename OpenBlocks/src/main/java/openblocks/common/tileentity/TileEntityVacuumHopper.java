@@ -7,14 +7,14 @@ import java.util.Map;
 import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -112,7 +112,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 
 			private void updateOutputStates() {
 				ImmutableMap.Builder<String, String> newOutputState = ImmutableMap.builder();
-				for (EnumFacing side : EnumFacing.VALUES) {
+				for (Direction side : Direction.VALUES) {
 					final boolean outputItems = itemOutputs.get(side);
 					final boolean outputXp = xpOutputs.get(side);
 
@@ -132,19 +132,19 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 		});
 	}
 
-	public IReadableBitMap<EnumFacing> getReadableXpOutputs() {
+	public IReadableBitMap<Direction> getReadableXpOutputs() {
 		return xpOutputs;
 	}
 
-	public IWriteableBitMap<EnumFacing> getWriteableXpOutputs() {
+	public IWriteableBitMap<Direction> getWriteableXpOutputs() {
 		return BitMapUtils.createRpcAdapter(createRpcProxy(xpOutputs, IRpcDirectionBitMap.class));
 	}
 
-	public IReadableBitMap<EnumFacing> getReadableItemOutputs() {
+	public IReadableBitMap<Direction> getReadableItemOutputs() {
 		return itemOutputs;
 	}
 
-	public IWriteableBitMap<EnumFacing> getWriteableItemOutputs() {
+	public IWriteableBitMap<Direction> getWriteableItemOutputs() {
 		return BitMapUtils.createRpcAdapter(createRpcProxy(itemOutputs, IRpcDirectionBitMap.class));
 	}
 
@@ -157,12 +157,12 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 
 		if (entity instanceof EntityItemProjectile) return entity.motionY < 0.01;
 
-		if (entity instanceof EntityItem) {
-			ItemStack stack = ((EntityItem)entity).getItem();
+		if (entity instanceof ItemEntity) {
+			ItemStack stack = ((ItemEntity)entity).getItem();
 			return InventoryUtils.canInsertStack(inventory.getHandler(), stack);
 		}
 
-		if (entity instanceof EntityXPOrb) return tank.getSpace() > 0;
+		if (entity instanceof ExperienceOrbEntity) return tank.getSpace() > 0;
 
 		return false;
 	};
@@ -234,23 +234,23 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 	}
 
 	@Override
-	public Object getServerGui(EntityPlayer player) {
+	public Object getServerGui(PlayerEntity player) {
 		return new ContainerVacuumHopper(player.inventory, this);
 	}
 
 	@Override
-	public Object getClientGui(EntityPlayer player) {
+	public Object getClientGui(PlayerEntity player) {
 		return new GuiVacuumHopper(new ContainerVacuumHopper(player.inventory, this));
 	}
 
 	@Override
-	public boolean canOpenGui(EntityPlayer player) {
+	public boolean canOpenGui(PlayerEntity player) {
 		return true;
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote && hand == EnumHand.MAIN_HAND && player.isSneaking()) {
+	public boolean onBlockActivated(PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && hand == Hand.MAIN_HAND && player.isSneaking()) {
 			if (player.getHeldItemMainhand().isEmpty()) {
 				vacuumDisabled.toggle();
 				return true;
@@ -261,15 +261,15 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 
 	public boolean onEntityCollidedWithBlock(Entity entity) {
 		if (!world.isRemote) {
-			if (entity instanceof EntityItem && !entity.isDead) {
-				final EntityItem item = (EntityItem)entity;
+			if (entity instanceof ItemEntity && !entity.isDead) {
+				final ItemEntity item = (ItemEntity)entity;
 				final ItemStack toConsume = item.getItem().copy();
 				final ItemStack leftover = ItemHandlerHelper.insertItem(inventory.getHandler(), toConsume, false);
 				ItemUtils.setEntityItemStack(item, leftover);
 				return true;
-			} else if (entity instanceof EntityXPOrb) {
+			} else if (entity instanceof ExperienceOrbEntity) {
 				if (tank.getSpace() > 0) {
-					EntityXPOrb orb = (EntityXPOrb)entity;
+					ExperienceOrbEntity orb = (ExperienceOrbEntity)entity;
 					int xpAmount = FluidXpUtils.xpJuiceConverter.xpToFluid(orb.getXpValue());
 					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
 					tank.fill(newFluid, true);
@@ -288,14 +288,14 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 		return tag;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 	}
@@ -316,7 +316,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, Direction facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return itemHandlerCapability.hasHandler(facing);
 
@@ -328,7 +328,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T)tankCapability.getHandler(facing);
 

@@ -1,7 +1,7 @@
 package openblocks.common.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 public class EntityMount extends Entity {
@@ -20,10 +20,10 @@ public class EntityMount extends Entity {
 	protected void entityInit() {}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {}
+	protected void readEntityFromNBT(CompoundNBT nbttagcompound) {}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {}
+	protected void writeEntityToNBT(CompoundNBT nbttagcompound) {}
 
 	@Override
 	public void onUpdate() {

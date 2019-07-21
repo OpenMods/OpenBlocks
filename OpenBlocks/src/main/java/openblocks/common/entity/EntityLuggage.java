@@ -4,24 +4,24 @@ import com.google.common.base.Strings;
 import io.netty.buffer.ByteBuf;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.ai.EntityAIFollowOwner;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemNameTag;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.effect.LightningBoltEntity;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.NameTagItem;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.datafix.FixTypes;
@@ -39,7 +39,7 @@ import openmods.inventory.GenericInventory;
 import openmods.utils.InventoryUtils;
 
 @VisibleForDocumentation
-public class EntityLuggage extends EntityTameable implements IEntityAdditionalSpawnData {
+public class EntityLuggage extends TameableEntity implements IEntityAdditionalSpawnData {
 
 	private static final DataParameter<Integer> PROPERTY_INV_SIZE = EntityDataManager.createKey(EntityLuggage.class, DataSerializers.VARINT);
 
@@ -61,7 +61,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	private GenericInventory createInventory(int size) {
 		return new GenericInventory("luggage", false, size) {
 			@Override
-			public boolean isUsableByPlayer(EntityPlayer player) {
+			public boolean isUsableByPlayer(PlayerEntity player) {
 				return !isDead && player.getDistanceSq(EntityLuggage.this) < 64;
 			}
 		};
@@ -71,7 +71,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 
 	public int lastSound = 0;
 
-	private NBTTagCompound itemTag;
+	private CompoundNBT itemTag;
 
 	public EntityLuggage(World world) {
 		super(world);
@@ -81,15 +81,15 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		setTamed(true);
 		enablePersistence();
 		setPathPriority(PathNodeType.WATER, -1.0F);
-		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(2, new EntityAIFollowOwner(this, getAIMoveSpeed(), 10.0F, 2.0F));
+		this.tasks.addTask(1, new SwimGoal(this));
+		this.tasks.addTask(2, new FollowOwnerGoal(this, getAIMoveSpeed(), 10.0F, 2.0F));
 		this.tasks.addTask(3, new EntityAICollectItem(this));
 		getDataManager().register(PROPERTY_INV_SIZE, inventory.getSizeInventory());
 	}
 
 	@Override
-	protected PathNavigate createNavigator(World worldIn) {
-		final PathNavigateGround navigator = new PathNavigateGround(this, worldIn);
+	protected PathNavigator createNavigator(World worldIn) {
+		final GroundPathNavigator navigator = new GroundPathNavigator(this, worldIn);
 		navigator.setCanSwim(true);
 		return navigator;
 	}
@@ -131,17 +131,17 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	@Override
-	public EntityAgeable createChild(EntityAgeable entityageable) {
+	public AgeableEntity createChild(AgeableEntity entityageable) {
 		return null;
 	}
 
 	@Override
-	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if (hand != EnumHand.MAIN_HAND) return true;
+	public boolean processInteract(PlayerEntity player, Hand hand) {
+		if (hand != Hand.MAIN_HAND) return true;
 
 		if (!isDead) {
 			final ItemStack heldItem = player.getHeldItemMainhand();
-			if (heldItem.getItem() instanceof ItemNameTag) return false;
+			if (heldItem.getItem() instanceof NameTagItem) return false;
 
 			if (world.isRemote) {
 				if (player.isSneaking()) spawnPickupParticles();
@@ -163,7 +163,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	@Override
-	public boolean canBeLeashedTo(EntityPlayer player) {
+	public boolean canBeLeashedTo(PlayerEntity player) {
 		return false;
 	}
 
@@ -183,7 +183,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		if (OpenBlocks.Items.luggage == null) return ItemStack.EMPTY;
 
 		final ItemStack luggageItem = new ItemStack(OpenBlocks.Items.luggage);
-		NBTTagCompound tag = itemTag != null? itemTag.copy() : new NBTTagCompound();
+		CompoundNBT tag = itemTag != null? itemTag.copy() : new CompoundNBT();
 
 		inventory.writeToNBT(tag);
 		luggageItem.setTagCompound(tag);
@@ -194,13 +194,13 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	public void restoreFromStack(@Nonnull ItemStack stack) {
-		final NBTTagCompound tag = stack.getTagCompound();
+		final CompoundNBT tag = stack.getTagCompound();
 
 		if (tag != null) {
 			inventory.readFromNBT(tag);
 			if (inventory.getSizeInventory() > SIZE_NORMAL) setSpecial();
 
-			NBTTagCompound tagCopy = tag.copy();
+			CompoundNBT tagCopy = tag.copy();
 			tagCopy.removeTag(GenericInventory.TAG_SIZE);
 			tagCopy.removeTag(GenericInventory.TAG_ITEMS);
 			this.itemTag = tagCopy.hasNoTags()? null : tagCopy;
@@ -218,12 +218,12 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		playSound(OpenBlocks.Sounds.ENTITY_LUGGAGE_WALK, 0.3F, 0.7F + (world.rand.nextFloat() * 0.5f));
 	}
 
-	public void storeItemTag(NBTTagCompound itemTag) {
+	public void storeItemTag(CompoundNBT itemTag) {
 		this.itemTag = itemTag;
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound tag) {
+	public void writeEntityToNBT(CompoundNBT tag) {
 		super.writeEntityToNBT(tag);
 		tag.setBoolean(TAG_SHINY, special);
 		inventory.writeToNBT(tag);
@@ -231,7 +231,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound tag) {
+	public void readEntityFromNBT(CompoundNBT tag) {
 		super.readEntityFromNBT(tag);
 		if (tag.getBoolean(TAG_SHINY)) setSpecial();
 		inventory.readFromNBT(tag);
@@ -239,7 +239,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	@Override
-	public void onStruckByLightning(EntityLightningBolt lightning) {
+	public void onStruckByLightning(LightningBoltEntity lightning) {
 		setSpecial();
 	}
 

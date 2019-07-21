@@ -6,20 +6,20 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 import javax.annotation.Nonnull;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import net.minecraft.world.gen.PerlinNoiseGenerator;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -53,11 +53,11 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	private static final DataParameter<Boolean> PROPERTY_DEPLOYED = EntityDataManager.createKey(EntityHangGlider.class, DataSerializers.BOOLEAN);
 
-	private static final Map<EntityLivingBase, EntityHangGlider> gliderMap = new MapMaker().weakKeys().weakValues().makeMap();
+	private static final Map<LivingEntity, EntityHangGlider> gliderMap = new MapMaker().weakKeys().weakValues().makeMap();
 
 	private IVarioController varioControl = IVarioController.NULL;
 
-	public static boolean isHeldStackDeployedGlider(EntityLivingBase player, @Nonnull ItemStack heldStack) {
+	public static boolean isHeldStackDeployedGlider(LivingEntity player, @Nonnull ItemStack heldStack) {
 		if (player == null) return false;
 
 		EntityHangGlider glider = gliderMap.get(player);
@@ -66,7 +66,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		return player.getHeldItem(glider.handHeld) == heldStack;
 	}
 
-	public static boolean isGliderDeployed(EntityLivingBase player) {
+	public static boolean isGliderDeployed(LivingEntity player) {
 		EntityHangGlider glider = gliderMap.get(player);
 		return glider != null && glider.isDeployed();
 	}
@@ -75,36 +75,36 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		return !stack.isEmpty() && stack.getItem() instanceof ItemHangGlider;
 	}
 
-	private static boolean isGliderValid(EntityLivingBase player, EntityHangGlider glider) {
+	private static boolean isGliderValid(LivingEntity player, EntityHangGlider glider) {
 		if (player == null || player.isDead || glider == null || glider.isDead) return false;
 
 		if (glider.handHeld == null || !isItemHangglider(player.getHeldItem(glider.handHeld))) return false;
 		if (player.world.provider.getDimension() != glider.world.provider.getDimension()) return false;
-		if (player.isElytraFlying() || ((player instanceof EntityPlayer) && ((EntityPlayer)player).isSpectator())) return false;
+		if (player.isElytraFlying() || ((player instanceof PlayerEntity) && ((PlayerEntity)player).isSpectator())) return false;
 		return true;
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static void updateGliders(World world) {
 		gliderMap.forEach((player, glider) -> {
-			if (isGliderValid(player, glider)) glider.fixPositions(player, player instanceof EntityPlayerSP);
+			if (isGliderValid(player, glider)) glider.fixPositions(player, player instanceof ClientPlayerEntity);
 			else glider.setDead();
 		});
 	}
 
-	private EntityPlayer player;
-	private final NoiseGeneratorPerlin noiseGen;
+	private PlayerEntity player;
+	private final PerlinNoiseGenerator noiseGen;
 	private int ticksSinceLastVarioUpdate = 0;
 	private double verticalMotionSinceLastVarioUpdate = 0;
 	private double lastMotionY = 0;
-	private EnumHand handHeld = EnumHand.MAIN_HAND;
+	private Hand handHeld = Hand.MAIN_HAND;
 
 	public EntityHangGlider(World world) {
 		super(world);
-		this.noiseGen = new NoiseGeneratorPerlin(new Random(world.getCurrentDate().get(Calendar.DAY_OF_YEAR)), 2);
+		this.noiseGen = new PerlinNoiseGenerator(new Random(world.getCurrentDate().get(Calendar.DAY_OF_YEAR)), 2);
 	}
 
-	public EntityHangGlider(World world, EntityPlayer player, EnumHand spawnedHand) {
+	public EntityHangGlider(World world, PlayerEntity player, Hand spawnedHand) {
 		this(world);
 		this.player = player;
 		this.handHeld = spawnedHand;
@@ -116,8 +116,8 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 		Entity e = world.getEntityByID(playerId);
 
-		if (e instanceof EntityPlayer) {
-			player = (EntityPlayer)e;
+		if (e instanceof PlayerEntity) {
+			player = (PlayerEntity)e;
 			gliderMap.put(player, this);
 
 			if (OpenMods.proxy.isClientPlayer(player))
@@ -128,7 +128,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		}
 
 		final PacketBuffer buf = new PacketBuffer(data);
-		this.handHeld = buf.readEnumValue(EnumHand.class);
+		this.handHeld = buf.readEnumValue(Hand.class);
 	}
 
 	@Override
@@ -233,11 +233,11 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		}
 	}
 
-	public EntityPlayer getPlayer() {
+	public PlayerEntity getPlayer() {
 		return player;
 	}
 
-	public EnumHand getHandHeld() {
+	public Hand getHandHeld() {
 		return handHeld;
 	}
 
@@ -275,7 +275,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		}
 	}
 
-	private void fixPositions(EntityLivingBase thePlayer, boolean localPlayer) {
+	private void fixPositions(LivingEntity thePlayer, boolean localPlayer) {
 		this.lastTickPosX = prevPosX = player.prevPosX;
 		this.lastTickPosY = prevPosY = player.prevPosY;
 		this.lastTickPosZ = prevPosZ = player.prevPosZ;
@@ -301,13 +301,13 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {}
+	protected void readEntityFromNBT(CompoundNBT nbttagcompound) {}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {}
+	protected void writeEntityToNBT(CompoundNBT nbttagcompound) {}
 
 	@Override
-	public boolean writeToNBTOptional(NBTTagCompound p_70039_1_) {
+	public boolean writeToNBTOptional(CompoundNBT p_70039_1_) {
 		return false;
 	}
 

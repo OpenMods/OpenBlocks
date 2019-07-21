@@ -4,11 +4,11 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -28,7 +28,7 @@ class InnerModelInfo {
 		this.maxTint = maxTint;
 	}
 
-	public static InnerModelInfo create(IBlockState blockState, final IBakedModel baseModel, final Predicate<BlockRenderLayer> shouldCheckLayer) {
+	public static InnerModelInfo create(BlockState blockState, final IBakedModel baseModel, final Predicate<BlockRenderLayer> shouldCheckLayer) {
 		int maxTint = -1;
 
 		final AabbBuilder boundsBuilder = AabbBuilder.create();
@@ -42,7 +42,7 @@ class InnerModelInfo {
 
 					final ModelQuads.Builder builder = ModelQuads.builder();
 
-					for (EnumFacing side : EnumFacing.VALUES) {
+					for (Direction side : Direction.VALUES) {
 						final List<BakedQuad> quads = baseModel.getQuads(blockState, side, 0);
 						builder.addSidedQuads(side, quads);
 						maxTint = processQuads(maxTint, boundsBuilder, quads);

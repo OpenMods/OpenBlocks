@@ -2,13 +2,13 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 import javax.annotation.Nonnull;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ITickable;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.item.ItemTrophyBlock;
@@ -48,8 +48,8 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
+	public boolean onBlockActivated(PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && hand == Hand.MAIN_HAND) {
 			Trophy trophyType = getTrophy();
 			if (trophyType != null) {
 				trophyType.playSound(world, pos);
@@ -60,24 +60,24 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
+	public void onBlockPlacedBy(BlockState state, LivingEntity placer, @Nonnull ItemStack stack) {
 		Trophy trophy = ItemTrophyBlock.getTrophy(stack);
 		if (trophy != null) trophyIndex.set(trophy);
 
 		if (stack.hasTagCompound()) {
-			NBTTagCompound tag = stack.getTagCompound();
+			CompoundNBT tag = stack.getTagCompound();
 			this.cooldown = tag.getInteger(TAG_COOLDOWN);
 		}
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		this.cooldown = tag.getInteger(TAG_COOLDOWN);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		tag.setInteger("cooldown", cooldown);
 		return tag;
@@ -94,7 +94,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 		if (trophy != null) {
 			ItemStack stack = trophy.getItemStack();
 			if (!stack.isEmpty()) {
-				NBTTagCompound tag = ItemUtils.getItemTag(stack);
+				CompoundNBT tag = ItemUtils.getItemTag(stack);
 				tag.setInteger(TAG_COOLDOWN, cooldown);
 				return stack;
 			}
@@ -104,14 +104,14 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
-	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, IBlockState blockState, int fortune, boolean isSilkTouch) {
+	public void addHarvestDrops(PlayerEntity player, List<ItemStack> drops, BlockState blockState, int fortune, boolean isSilkTouch) {
 		ItemStack stack = getAsItem();
 		if (!stack.isEmpty()) drops.add(stack);
 	}
 
 	@Override
 	@Nonnull
-	public ItemStack getPickBlock(EntityPlayer player) {
+	public ItemStack getPickBlock(PlayerEntity player) {
 		final Trophy trophy = getTrophy();
 		return trophy != null? trophy.getItemStack() : ItemStack.EMPTY;
 	}

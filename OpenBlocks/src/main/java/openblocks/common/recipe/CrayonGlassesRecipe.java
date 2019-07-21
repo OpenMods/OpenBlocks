@@ -1,8 +1,8 @@
 package openblocks.common.recipe;
 
 import javax.annotation.Nonnull;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
@@ -31,7 +31,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inv, World world) {
+	public boolean matches(CraftingInventory inv, World world) {
 		int crayonCount = 0;
 		int paperCount = 0;
 
@@ -51,7 +51,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 
 	@Override
 	@Nonnull
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack.getItem() instanceof ItemImaginaryCrayon) {

@@ -4,19 +4,19 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -82,18 +82,18 @@ public class ItemPaintBrush extends Item {
 	@Nonnull
 	public static ItemStack createStackWithColor(int color) {
 		ItemStack stack = new ItemStack(OpenBlocks.Items.paintBrush);
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		tag.setInteger(TAG_COLOR, color);
 		return stack;
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (hand != EnumHand.MAIN_HAND) return EnumActionResult.PASS;
+	public ActionResultType onItemUse(PlayerEntity player, World world, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+		if (hand != Hand.MAIN_HAND) return ActionResultType.PASS;
 
 		final ItemStack stack = player.getHeldItem(hand);
 		final Integer color = getColorFromStack(stack);
-		if (stack.getItemDamage() > MAX_USES || color == null) return EnumActionResult.FAIL;
+		if (stack.getItemDamage() > MAX_USES || color == null) return ActionResultType.FAIL;
 
 		final int solidColor = 0xFF000000 | color;
 
@@ -111,26 +111,26 @@ public class ItemPaintBrush extends Item {
 			world.playSound(null, player.getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.PLAYERS, 0.1F, 0.8F);
 
 			if (!player.capabilities.isCreativeMode) {
-				if (stack.attemptDamageItem(1, player.getRNG(), player instanceof EntityPlayerMP? (EntityPlayerMP)player : null)) {
-					final NBTTagCompound tag = ItemUtils.getItemTag(stack);
+				if (stack.attemptDamageItem(1, player.getRNG(), player instanceof ServerPlayerEntity? (ServerPlayerEntity)player : null)) {
+					final CompoundNBT tag = ItemUtils.getItemTag(stack);
 					tag.removeTag(TAG_COLOR);
 					stack.setItemDamage(0);
 				}
 			}
 
-			return EnumActionResult.SUCCESS;
+			return ActionResultType.SUCCESS;
 		}
 
-		return EnumActionResult.FAIL;
+		return ActionResultType.FAIL;
 	}
 
-	private static boolean tryRecolorBlock(EntityPlayer player, World world, BlockPos pos, EnumFacing facing, int color) {
-		if (player.isSneaking()) return tryRecolorBlock(world, pos, color, EnumFacing.VALUES);
+	private static boolean tryRecolorBlock(PlayerEntity player, World world, BlockPos pos, Direction facing, int color) {
+		if (player.isSneaking()) return tryRecolorBlock(world, pos, color, Direction.VALUES);
 		return tryRecolorBlock(world, pos, color, facing);
 	}
 
-	private static boolean tryRecolorBlock(World world, BlockPos pos, int rgb, EnumFacing... sides) {
-		IBlockState state = world.getBlockState(pos);
+	private static boolean tryRecolorBlock(World world, BlockPos pos, int rgb, Direction... sides) {
+		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 
 		// first try RGB color...
@@ -138,7 +138,7 @@ public class ItemPaintBrush extends Item {
 			IPaintableBlock paintableBlock = (IPaintableBlock)block;
 
 			boolean result = false;
-			for (EnumFacing dir : sides)
+			for (Direction dir : sides)
 				result |= paintableBlock.recolorBlock(world, pos, dir, rgb);
 
 			return result;
@@ -149,7 +149,7 @@ public class ItemPaintBrush extends Item {
 		if (nearest != null) {
 
 			boolean result = false;
-			for (EnumFacing dir : sides)
+			for (Direction dir : sides)
 				result |= block.recolorBlock(world, pos, dir, nearest.vanillaEnum);
 
 			return result;
@@ -159,20 +159,20 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
-	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
+	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
 		return false;
 	}
 
 	public static Integer getColorFromStack(@Nonnull ItemStack stack) {
 		if (stack.hasTagCompound()) {
-			NBTTagCompound tag = stack.getTagCompound();
+			CompoundNBT tag = stack.getTagCompound();
 			if (tag.hasKey(TAG_COLOR)) { return tag.getInteger(TAG_COLOR); }
 		}
 		return null;
 	}
 
 	public static void setColor(@Nonnull ItemStack stack, int color) {
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		tag.setInteger(TAG_COLOR, color);
 	}
 }

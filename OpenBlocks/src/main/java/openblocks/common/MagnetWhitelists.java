@@ -4,31 +4,31 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
 import java.util.Set;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockFence;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockJukebox.TileEntityJukebox;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ContainerBlock;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.FenceGateBlock;
+import net.minecraft.block.JukeboxBlock.TileEntityJukebox;
+import net.minecraft.block.SandBlock;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.item.BoatEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.DispenserTileEntity;
+import net.minecraft.tileentity.EnderChestTileEntity;
+import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBeacon;
-import net.minecraft.tileentity.TileEntityBrewingStand;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.tileentity.TileEntityCommandBlock;
-import net.minecraft.tileentity.TileEntityDispenser;
-import net.minecraft.tileentity.TileEntityEnchantmentTable;
-import net.minecraft.tileentity.TileEntityEnderChest;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.tileentity.TileEntityHopper;
+import net.minecraft.tileentity.BeaconTileEntity;
+import net.minecraft.tileentity.BrewingStandTileEntity;
+import net.minecraft.tileentity.CommandBlockTileEntity;
+import net.minecraft.tileentity.EnchantingTableTileEntity;
+import net.minecraft.tileentity.HopperTileEntity;
 import net.minecraft.tileentity.TileEntityNote;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -46,10 +46,10 @@ public class MagnetWhitelists {
 	public final static MagnetWhitelists instance = new MagnetWhitelists();
 
 	public static class BlockCoords extends BlockPos {
-		public final IBlockState blockState;
+		public final BlockState blockState;
 		public final World world;
 
-		BlockCoords(IBlockState blockState, World world, Vec3i pos) {
+		BlockCoords(BlockState blockState, World world, Vec3i pos) {
 			super(pos);
 			this.blockState = blockState;
 			this.world = world;
@@ -114,9 +114,9 @@ public class MagnetWhitelists {
 	public void initTesters() {
 		MinecraftForge.EVENT_BUS.post(new EntityRegisterEvent(entityWhitelist));
 
-		entityWhitelist.addTester(new ClassTester<>(EntityItem.class));
-		entityWhitelist.addTester(new ClassTester<>(EntityBoat.class));
-		entityWhitelist.addTester(new ClassTester<>(EntityMinecart.class));
+		entityWhitelist.addTester(new ClassTester<>(ItemEntity.class));
+		entityWhitelist.addTester(new ClassTester<>(BoatEntity.class));
+		entityWhitelist.addTester(new ClassTester<>(AbstractMinecartEntity.class));
 
 		{
 			final Set<ResourceLocation> allowedEntityLocations = toResourceLocationSet(Config.magnetEntityWhitelist);
@@ -130,12 +130,12 @@ public class MagnetWhitelists {
 			return (hardness < 0)? Result.REJECT : Result.CONTINUE;
 		});
 
-		blockWhitelist.addTester(o -> o.blockState.getRenderType() == EnumBlockRenderType.MODEL? Result.ACCEPT : Result.CONTINUE);
+		blockWhitelist.addTester(o -> o.blockState.getRenderType() == BlockRenderType.MODEL? Result.ACCEPT : Result.CONTINUE);
 
-		blockWhitelist.addTester(createBlockClassTester(BlockSand.class));
-		blockWhitelist.addTester(createBlockClassTester(BlockStairs.class));
-		blockWhitelist.addTester(createBlockClassTester(BlockFence.class));
-		blockWhitelist.addTester(createBlockClassTester(BlockFenceGate.class));
+		blockWhitelist.addTester(createBlockClassTester(SandBlock.class));
+		blockWhitelist.addTester(createBlockClassTester(StairsBlock.class));
+		blockWhitelist.addTester(createBlockClassTester(FenceBlock.class));
+		blockWhitelist.addTester(createBlockClassTester(FenceGateBlock.class));
 		blockWhitelist.addTester(createBlockIdentityTester(Blocks.CACTUS));
 
 		{
@@ -146,15 +146,15 @@ public class MagnetWhitelists {
 		MinecraftForge.EVENT_BUS.post(new TileEntityRegisterEvent(tileEntityWhitelist));
 
 		tileEntityWhitelist
-				.addTester(new ClassTester<>(TileEntityBeacon.class))
-				.addTester(new ClassTester<>(TileEntityBrewingStand.class))
-				.addTester(new ClassTester<>(TileEntityChest.class))
-				.addTester(new ClassTester<>(TileEntityCommandBlock.class))
-				.addTester(new ClassTester<>(TileEntityDispenser.class))
-				.addTester(new ClassTester<>(TileEntityEnchantmentTable.class))
-				.addTester(new ClassTester<>(TileEntityEnderChest.class))
-				.addTester(new ClassTester<>(TileEntityFurnace.class))
-				.addTester(new ClassTester<>(TileEntityHopper.class))
+				.addTester(new ClassTester<>(BeaconTileEntity.class))
+				.addTester(new ClassTester<>(BrewingStandTileEntity.class))
+				.addTester(new ClassTester<>(ChestTileEntity.class))
+				.addTester(new ClassTester<>(CommandBlockTileEntity.class))
+				.addTester(new ClassTester<>(DispenserTileEntity.class))
+				.addTester(new ClassTester<>(EnchantingTableTileEntity.class))
+				.addTester(new ClassTester<>(EnderChestTileEntity.class))
+				.addTester(new ClassTester<>(FurnaceTileEntity.class))
+				.addTester(new ClassTester<>(HopperTileEntity.class))
 				.addTester(new ClassTester<>(TileEntityNote.class))
 				.addTester(new ClassTester<>(TileEntityJukebox.class));
 
@@ -169,12 +169,12 @@ public class MagnetWhitelists {
 	}
 
 	public boolean testBlock(World world, BlockPos pos) {
-		final IBlockState blockState = world.getBlockState(pos);
+		final BlockState blockState = world.getBlockState(pos);
 		final Block block = blockState.getBlock();
 
 		if (blockState.getBlock().isAir(blockState, world, pos)) return false;
 
-		if (block instanceof BlockContainer) {
+		if (block instanceof ContainerBlock) {
 			TileEntity te = world.getTileEntity(pos);
 			return te != null && tileEntityWhitelist.check(te);
 		}

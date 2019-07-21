@@ -2,13 +2,13 @@ package openblocks.client.renderer.block.canvas;
 
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 public class StencilTextureProjection {
 
-	private final EnumFacing side;
+	private final Direction side;
 
-	public StencilTextureProjection(EnumFacing side) {
+	public StencilTextureProjection(Direction side) {
 		this.side = side;
 	}
 

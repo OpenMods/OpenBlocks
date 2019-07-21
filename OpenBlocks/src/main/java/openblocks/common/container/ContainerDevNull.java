@@ -1,17 +1,17 @@
 package openblocks.common.container;
 
 import javax.annotation.Nonnull;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ClickType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import openmods.container.ContainerBase;
 
 public class ContainerDevNull extends ContainerBase<Void> {
 
-	private final InventoryPlayer playerInventory;
+	private final PlayerInventory playerInventory;
 
 	private final int protectedSlotIndex;
 
@@ -19,7 +19,7 @@ public class ContainerDevNull extends ContainerBase<Void> {
 
 	public ContainerDevNull(IInventory playerInventory, IInventory ownerInventory, int selectedIndex) {
 		super(playerInventory, ownerInventory, null);
-		this.playerInventory = (InventoryPlayer)playerInventory;
+		this.playerInventory = (PlayerInventory)playerInventory;
 		addInventoryGrid(80, 22, 1);
 		addPlayerInventorySlots(55);
 
@@ -37,7 +37,7 @@ public class ContainerDevNull extends ContainerBase<Void> {
 
 	@Override
 	@Nonnull
-	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player) {
+	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, PlayerEntity player) {
 		if (slotId == protectedSlotNumber) return ItemStack.EMPTY;
 		if (clickType == ClickType.SWAP && dragType == protectedSlotIndex) return ItemStack.EMPTY;
 		return super.slotClick(slotId, dragType, clickType, player);
@@ -55,7 +55,7 @@ public class ContainerDevNull extends ContainerBase<Void> {
 		for (int slot = 0; slot < 9; slot++) {
 			addSlotToContainer(new RestrictedSlot(playerInventory, slot, offsetX + slot * 18, offsetY + 58) {
 				@Override
-				public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
+				public boolean canTakeStack(PlayerEntity par1EntityPlayer) {
 					return slotNumber != protectedSlotNumber;
 				}
 

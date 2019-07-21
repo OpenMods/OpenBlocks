@@ -1,8 +1,8 @@
 package openblocks.trophy;
 
 import net.minecraft.block.BlockSnow;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityTrophy;
@@ -11,7 +11,7 @@ import openmods.utils.CollectionUtils;
 public class SnowmanBehavior implements ITrophyBehavior {
 
 	@Override
-	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+	public int executeActivateBehavior(TileEntityTrophy tile, PlayerEntity player) {
 		final BlockPos base = tile.getPos();
 		final World world = tile.getWorld();
 

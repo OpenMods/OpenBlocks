@@ -1,7 +1,7 @@
 package openblocks.client.renderer.tileentity;
 
 import java.util.List;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -10,15 +10,15 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import openblocks.OpenBlocks.Blocks;
@@ -55,18 +55,18 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 
 	private void renderStaticPart(double x, double y, double z) {
 		final BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
-		IBlockState state = Blocks.trophy.getDefaultState();
+		BlockState state = Blocks.trophy.getDefaultState();
 
 		IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(state);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		final BufferBuilder wr = tessellator.getBuffer();
-		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 
 		wr.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 		wr.setTranslation(x, y, z);
 
-		for (EnumFacing face : EnumFacing.values())
+		for (Direction face : Direction.values())
 			renderQuads(wr, model.getQuads(state, face, 0));
 
 		renderQuads(wr, model.getQuads(state, null, 0));
@@ -91,14 +91,14 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 			GL11.glScaled(ratio, ratio, ratio);
 			World renderWorld = RenderUtils.getRenderWorld();
 			if (renderWorld != null) {
-				Render<Entity> renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
+				EntityRenderer<Entity> renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
 				// yeah we don't care about fonts, but we do care that the
 				// renderManager is available
 				if (renderer != null && renderer.getFontRendererFromRenderManager() != null) {
 
 					final boolean blurLast;
 					final boolean mipmapLast;
-					final AbstractTexture blocksTexture = getBlockTexture();
+					final Texture blocksTexture = getBlockTexture();
 					if (blocksTexture != null) {
 						blurLast = blocksTexture.blurLast;
 						mipmapLast = blocksTexture.mipmapLast;
@@ -133,12 +133,12 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 		}
 	}
 
-	private AbstractTexture getBlockTexture() {
+	private Texture getBlockTexture() {
 		final TextureManager texturemanager = rendererDispatcher.renderEngine;
 		if (texturemanager != null) {
-			final ITextureObject texture = texturemanager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			if (texture instanceof AbstractTexture)
-				return (AbstractTexture)texture;
+			final ITextureObject texture = texturemanager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+			if (texture instanceof Texture)
+				return (Texture)texture;
 		}
 
 		return null;

@@ -2,14 +2,14 @@ package openblocks.common.block;
 
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFence;
+import net.minecraft.block.FenceBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -82,17 +82,17 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(BlockState state, IBlockAccess world, BlockPos pos, Direction side) {
 		return false;
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(BlockState state, IBlockAccess world, BlockPos pos) {
 		return NULL_AABB;
 	}
 
@@ -101,10 +101,10 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	private static final AxisAlignedBB WE_AABB = new AxisAlignedBB(0.5 - (5.0 / 16.0), 0.0, 0.5 - (1.0 / 16.0), 0.5 + (5.0 / 16.0), 0.0 + 1.0, 0.5 + (1.0 / 16.0));
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
 		TileEntityFlag flag = getTileEntity(source, pos, TileEntityFlag.class);
 		if (flag != null) {
-			EnumFacing onSurface = flag.getOrientation().down();
+			Direction onSurface = flag.getOrientation().down();
 			switch (onSurface) {
 				case EAST:
 				case WEST:
@@ -120,33 +120,33 @@ public class BlockFlag extends OpenBlock.SixDirections {
 		return MIDDLE_AABB;
 	}
 
-	private boolean isFlagOnGround(IBlockState state) {
-		return state.getValue(getPropertyOrientation()).down() == EnumFacing.DOWN;
+	private boolean isFlagOnGround(BlockState state) {
+		return state.getValue(getPropertyOrientation()).down() == Direction.DOWN;
 	}
 
 	private boolean isBaseSolidForFlag(World world, BlockPos pos) {
-		final IBlockState belowState = world.getBlockState(pos.down());
+		final BlockState belowState = world.getBlockState(pos.down());
 		final Block belowBlock = belowState.getBlock();
-		if (belowBlock instanceof BlockFence) return true;
+		if (belowBlock instanceof FenceBlock) return true;
 		if (belowBlock instanceof BlockFlag && isFlagOnGround(belowState)) return true;
 
 		return false;
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
-		if (side == EnumFacing.DOWN) return false;
-		if (side == EnumFacing.UP && isBaseSolidForFlag(world, pos)) return true;
+	public boolean canPlaceBlockOnSide(World world, BlockPos pos, Direction side) {
+		if (side == Direction.DOWN) return false;
+		if (side == Direction.UP && isBaseSolidForFlag(world, pos)) return true;
 
 		return isNeighborBlockSolid(world, pos, side.getOpposite());
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos neigbour) {
+	public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos neigbour) {
 		super.neighborChanged(state, world, pos, block, neigbour);
 
 		final Orientation orientation = getOrientation(state);
-		final EnumFacing down = orientation.down();
+		final Direction down = orientation.down();
 
 		if (isNeighborBlockSolid(world, pos, down)) return;
 		if (isFlagOnGround(state) && isBaseSolidForFlag(world, pos)) return;
@@ -165,7 +165,7 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	}
 
 	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public BlockState getExtendedState(BlockState state, IBlockAccess world, BlockPos pos) {
 		final TileEntityFlag te = getTileEntity(world, pos, TileEntityFlag.class);
 
 		return (te != null)
@@ -174,7 +174,7 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-		return face == EnumFacing.DOWN? BlockFaceShape.MIDDLE_POLE_THIN : BlockFaceShape.UNDEFINED;
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
+		return face == Direction.DOWN? BlockFaceShape.MIDDLE_POLE_THIN : BlockFaceShape.UNDEFINED;
 	}
 }

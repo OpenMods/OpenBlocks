@@ -3,10 +3,11 @@ package openblocks;
 import com.google.common.collect.Lists;
 import java.util.List;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatBase;
@@ -15,7 +16,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.DataFixer;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
@@ -799,7 +800,7 @@ public class OpenBlocks {
 				if (OpenBlocks.Blocks.limeFlag != null) {
 					return new ItemStack(OpenBlocks.Blocks.limeFlag);
 				} else {
-					return new ItemStack(net.minecraft.init.Blocks.SPONGE);
+					return new ItemStack(net.minecraft.block.Blocks.SPONGE);
 				}
 			}
 
@@ -814,7 +815,7 @@ public class OpenBlocks {
 		};
 	}
 
-	public static final StatBase brickStat = new StatBasic("openblocks.dropped", new TextComponentTranslation("stat.openblocks.bricksDropped"), StatBase.simpleStatType).registerStat();
+	public static final StatBase brickStat = new StatBasic("openblocks.dropped", new TranslationTextComponent("stat.openblocks.bricksDropped"), StatBase.simpleStatType).registerStat();
 
 	private final ModStartupHelper startupHelper = new ModStartupHelper("openblocks") {
 
@@ -938,7 +939,7 @@ public class OpenBlocks {
 		EntityRegistry.registerModEntity(location("glyph"), EntityGlyph.class, decorateEntityName("glyph"), ENTITY_GLYPH_ID, OpenBlocks.instance, 160, Integer.MAX_VALUE, false);
 
 		final DataFixer dataFixer = FMLCommonHandler.instance().getDataFixer();
-		EntityLiving.registerFixesMob(dataFixer, EntityMiniMe.class);
+		MobEntity.registerFixesMob(dataFixer, EntityMiniMe.class);
 		EntityLuggage.registerFixes(dataFixer);
 		ItemLuggage.registerFixes(dataFixer);
 		EntityBlock.registerFixes(dataFixer, EntityMountedBlock.class);
@@ -1098,7 +1099,7 @@ public class OpenBlocks {
 	}
 
 	private static void registerOreDictionary() {
-		OreDictionary.registerOre("craftingTableWood", new ItemStack(net.minecraft.init.Blocks.CRAFTING_TABLE));
-		OreDictionary.registerOre("chestWood", new ItemStack(net.minecraft.init.Blocks.CHEST));
+		OreDictionary.registerOre("craftingTableWood", new ItemStack(net.minecraft.block.Blocks.CRAFTING_TABLE));
+		OreDictionary.registerOre("chestWood", new ItemStack(net.minecraft.block.Blocks.CHEST));
 	}
 }

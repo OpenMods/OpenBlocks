@@ -1,14 +1,14 @@
 package openblocks.common.block;
 
 import javax.annotation.Nonnull;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -47,7 +47,7 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public BlockState getExtendedState(BlockState state, IBlockAccess world, BlockPos pos) {
 		final IExtendedBlockState oldState = (IExtendedBlockState)state;
 		final TileEntityTank te = getTileEntity(world, pos, TileEntityTank.class);
 		if (te == null) return state;
@@ -56,12 +56,12 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public int getLightValue(BlockState state, IBlockAccess world, BlockPos pos) {
 		if (!Config.tanksEmitLight) return 0;
 
 		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);
@@ -70,16 +70,16 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	@Nonnull
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, World world, BlockPos pos, PlayerEntity player) {
 		ItemStack result = new ItemStack(this);
 		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);
 		if (tile != null) {
 			IFluidTank tank = tile.getTank();
 			if (tank.getFluidAmount() > 0) {
-				NBTTagCompound tankTag = tile.getItemNBT();
+				CompoundNBT tankTag = tile.getItemNBT();
 				if (tankTag.hasKey("Amount")) tankTag.setInteger("Amount", tank.getCapacity());
 
-				NBTTagCompound nbt = ItemUtils.getItemTag(result);
+				CompoundNBT nbt = ItemUtils.getItemTag(result);
 				nbt.setTag("tank", tankTag);
 			}
 		}
@@ -87,12 +87,12 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean hasComparatorInputOverride(IBlockState state) {
+	public boolean hasComparatorInputOverride(BlockState state) {
 		return true;
 	}
 
 	@Override
-	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
+	public int getComparatorInputOverride(BlockState state, World world, BlockPos pos) {
 		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);
 		double value = tile.getFluidRatio() * 15;
 		if (value == 0) return 0;

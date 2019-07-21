@@ -6,14 +6,14 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 import openblocks.Config;
@@ -32,9 +32,9 @@ public class ItemCraneControl extends Item implements IStateItem {
 		setMaxStackSize(1);
 	}
 
-	private static final Map<EntityLivingBase, Long> debouncerTime = new MapMaker().weakKeys().makeMap();
+	private static final Map<LivingEntity, Long> debouncerTime = new MapMaker().weakKeys().makeMap();
 
-	private static boolean hasClicked(EntityLivingBase entity) {
+	private static boolean hasClicked(LivingEntity entity) {
 		long currentTime = OpenMods.proxy.getTicks(entity.world);
 		Long lastClick = debouncerTime.get(entity);
 		if (lastClick == null || currentTime - lastClick > 5) {
@@ -46,9 +46,9 @@ public class ItemCraneControl extends Item implements IStateItem {
 	}
 
 	@Override
-	public boolean onEntitySwing(EntityLivingBase entityLiving, @Nonnull ItemStack stack) {
-		if (entityLiving instanceof EntityPlayer && hasClicked(entityLiving)) {
-			final EntityPlayer player = (EntityPlayer)entityLiving;
+	public boolean onEntitySwing(LivingEntity entityLiving, @Nonnull ItemStack stack) {
+		if (entityLiving instanceof PlayerEntity && hasClicked(entityLiving)) {
+			final PlayerEntity player = (PlayerEntity)entityLiving;
 			final EntityMagnet magnet = CraneRegistry.instance.getMagnetForPlayer(player);
 			if (magnet != null) magnet.toggleMagnet();
 
@@ -57,12 +57,12 @@ public class ItemCraneControl extends Item implements IStateItem {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(@Nonnull ItemStack stack, EntityPlayer player, Entity entity) {
+	public boolean onLeftClickEntity(@Nonnull ItemStack stack, PlayerEntity player, Entity entity) {
 		return true;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		CraneRegistry.Data data = CraneRegistry.instance.getData(player, false);
 
 		if (data != null) {
@@ -70,12 +70,12 @@ public class ItemCraneControl extends Item implements IStateItem {
 		}
 
 		player.setActiveHand(hand);
-		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+		return ActionResult.newResult(ActionResultType.SUCCESS, player.getHeldItem(hand));
 	}
 
 	@Override
-	public void onUsingTick(@Nonnull ItemStack stack, EntityLivingBase player, int count) {
-		if (player instanceof EntityPlayerMP
+	public void onUsingTick(@Nonnull ItemStack stack, LivingEntity player, int count) {
+		if (player instanceof ServerPlayerEntity
 				&& ItemCraneBackpack.isWearingCrane(player)) {
 			CraneRegistry.Data data = CraneRegistry.instance.getData(player, true);
 			data.updateLength();
@@ -119,7 +119,7 @@ public class ItemCraneControl extends Item implements IStateItem {
 	}
 
 	@Override
-	public State getState(@Nonnull ItemStack stack, World world, EntityLivingBase entity) {
+	public State getState(@Nonnull ItemStack stack, World world, LivingEntity entity) {
 		if (entity != null && ItemCraneBackpack.isWearingCrane(entity)) {
 			CraneRegistry.Data data = CraneRegistry.instance.getData(entity, false);
 			if (data != null) {

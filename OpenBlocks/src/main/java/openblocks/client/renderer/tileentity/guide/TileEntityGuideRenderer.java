@@ -7,10 +7,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -40,7 +40,7 @@ public class TileEntityGuideRenderer<T extends TileEntityGuide> extends TileEnti
 	public void onModelBake(ModelBakeEvent evt) {
 		final IModel model = ModelLoaderRegistry.getModelOrMissing(MARKER_MODEL_LOCATION);
 
-		final TextureMap textureMapBlocks = Minecraft.getMinecraft().getTextureMapBlocks();
+		final AtlasTexture textureMapBlocks = Minecraft.getMinecraft().getTextureMapBlocks();
 		final IBakedModel bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM,
 				input -> textureMapBlocks.getAtlasSprite(input.toString()));
 
@@ -50,7 +50,7 @@ public class TileEntityGuideRenderer<T extends TileEntityGuide> extends TileEnti
 			BufferBuilder vertexBuffer = tessellator.getBuffer();
 			vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
 
-			for (EnumFacing enumfacing : EnumFacing.values())
+			for (Direction enumfacing : Direction.values())
 				renderQuads(vertexBuffer, bakedModel.getQuads(null, enumfacing, 0L));
 
 			renderQuads(vertexBuffer, bakedModel.getQuads(null, null, 0L));

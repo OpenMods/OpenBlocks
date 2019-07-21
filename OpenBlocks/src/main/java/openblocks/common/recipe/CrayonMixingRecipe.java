@@ -4,9 +4,9 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import java.util.Iterator;
 import javax.annotation.Nonnull;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
@@ -22,7 +22,7 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inv, World world) {
+	public boolean matches(CraftingInventory inv, World world) {
 		int count = 0;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
@@ -39,7 +39,7 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 
 	@Override
 	@Nonnull
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		int count = 0;
 		float r = 0, g = 0, b = 0;
 		Multiset<ItemImaginary.PlacementMode> modes = HashMultiset.create();
@@ -47,7 +47,7 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack.isEmpty() || (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST)) continue;
 
-			final NBTTagCompound tag = stack.getTagCompound();
+			final CompoundNBT tag = stack.getTagCompound();
 			if (tag != null) {
 				final int color = ItemImaginaryCrayon.getColor(tag);
 				count++;

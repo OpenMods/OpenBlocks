@@ -2,7 +2,7 @@ package openblocks.client.renderer;
 
 import com.google.common.collect.Queues;
 import java.util.Queue;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -20,7 +20,7 @@ public class TextureUploader {
 
 	@SubscribeEvent
 	public void onRenderEnd(RenderWorldLastEvent evt) {
-		TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		TextureUtils.bindTextureToClient(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 
 		Runnable t;
 		while ((t = texturesToUpload.poll()) != null)

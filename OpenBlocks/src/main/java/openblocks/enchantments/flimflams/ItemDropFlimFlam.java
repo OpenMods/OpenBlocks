@@ -1,8 +1,8 @@
 package openblocks.enchantments.flimflams;
 
 import java.util.Random;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import openblocks.api.IFlimFlamAction;
 
@@ -11,7 +11,7 @@ public class ItemDropFlimFlam implements IFlimFlamAction {
 	private static final Random random = new Random();
 
 	@Override
-	public boolean execute(EntityPlayerMP target) {
+	public boolean execute(ServerPlayerEntity target) {
 		boolean dropped = false;
 
 		for (int i = 0; i < 4; i++)
@@ -22,8 +22,8 @@ public class ItemDropFlimFlam implements IFlimFlamAction {
 		return dropped;
 	}
 
-	protected boolean tryDropStack(EntityPlayerMP target, int slot) {
-		final InventoryPlayer inv = target.inventory;
+	protected boolean tryDropStack(ServerPlayerEntity target, int slot) {
+		final PlayerInventory inv = target.inventory;
 		ItemStack stack = inv.getStackInSlot(slot);
 		if (stack.isEmpty() || random.nextFloat() > 0.5f) return false;
 

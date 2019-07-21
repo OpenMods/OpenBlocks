@@ -1,11 +1,11 @@
 package openblocks.common.entity;
 
 import javax.annotation.Nonnull;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.datafix.FixTypes;
@@ -19,7 +19,7 @@ import net.minecraft.world.World;
  * enough as it is
  *
  */
-public class EntityItemProjectile extends EntityItem {
+public class EntityItemProjectile extends ItemEntity {
 
 	public EntityItemProjectile(World world, double x, double y, double z) {
 		super(world, x, y, z);
@@ -84,7 +84,7 @@ public class EntityItemProjectile extends EntityItem {
 		// Keep ground friction
 		if (this.onGround) {
 			BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
-			IBlockState underState = this.world.getBlockState(underPos);
+			BlockState underState = this.world.getBlockState(underPos);
 			f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.98F;
 		}
 

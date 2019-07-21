@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
@@ -23,7 +23,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 
 	public static Trophy getTrophy(@Nonnull ItemStack stack) {
 		if (stack.hasTagCompound()) {
-			NBTTagCompound tag = stack.getTagCompound();
+			CompoundNBT tag = stack.getTagCompound();
 			if (tag.hasKey(TAG_ENTITY_ID, Constants.NBT.TAG_STRING)) {
 				ResourceLocation id = new ResourceLocation(tag.getString(TAG_ENTITY_ID));
 				return Trophy.ENTITY_TO_TROPHY.get(id);
@@ -41,7 +41,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 	}
 
 	public static ItemStack putMetadata(@Nonnull ItemStack stack, Trophy trophy) {
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		tag.setString(TAG_ENTITY_ID, trophy.id.toString());
 		return stack;
 	}

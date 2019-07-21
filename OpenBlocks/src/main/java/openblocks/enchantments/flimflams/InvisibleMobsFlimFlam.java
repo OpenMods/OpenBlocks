@@ -2,10 +2,10 @@ package openblocks.enchantments.flimflams;
 
 import java.util.List;
 import java.util.Random;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.potion.Effects;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamAction;
@@ -17,16 +17,16 @@ public class InvisibleMobsFlimFlam implements IFlimFlamAction {
 	private static final Random random = new Random();
 
 	@Override
-	public boolean execute(EntityPlayerMP target) {
+	public boolean execute(ServerPlayerEntity target) {
 		final World world = target.world;
 
 		AxisAlignedBB around = target.getEntityBoundingBox().grow(20);
-		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, around, WorldUtils.NON_PLAYER);
+		List<MobEntity> mobs = world.getEntitiesWithinAABB(MobEntity.class, around, WorldUtils.NON_PLAYER);
 
 		if (mobs.isEmpty()) return false;
 
-		for (EntityLiving e : mobs) {
-			if (random.nextFloat() < 0.3) e.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, MIN_10, 1));
+		for (MobEntity e : mobs) {
+			if (random.nextFloat() < 0.3) e.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, MIN_10, 1));
 		}
 
 		return true;

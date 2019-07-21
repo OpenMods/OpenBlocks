@@ -2,7 +2,7 @@ package openblocks.client.renderer.tileentity;
 
 import java.util.List;
 import java.util.Random;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -11,10 +11,10 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -28,12 +28,12 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 
 	private static final Random RANDOM = new Random(432L);
 
-	private static void renderEgg(IBakedModel model, IBlockState state) {
+	private static void renderEgg(IBakedModel model, BlockState state) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexBuffer = tessellator.getBuffer();
 
 		vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
-		for (EnumFacing enumfacing : EnumFacing.values())
+		for (Direction enumfacing : Direction.values())
 			renderQuads(vertexBuffer, model.getQuads(state, enumfacing, 0L));
 
 		renderQuads(vertexBuffer, model.getQuads(state, null, 0L));
@@ -64,12 +64,12 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 		GL11.glTranslatef(0, offset, 0);
 		GL11.glRotatef(rotation, 0, 1, 0);
 
-		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 
 		if (blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
 		BlockPos pos = egg.getPos();
 		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(egg.getWorld(), pos);
-		IBlockState blockState = world.getBlockState(pos);
+		BlockState blockState = world.getBlockState(pos);
 
 		IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(blockState);
 
@@ -84,7 +84,7 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 		GL11.glPopMatrix();
 	}
 
-	private static void renderPhantom(IBakedModel model, IBlockState state, float rotation, float progress, float partialTicks) {
+	private static void renderPhantom(IBakedModel model, BlockState state, float rotation, float progress, float partialTicks) {
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);

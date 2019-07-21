@@ -2,7 +2,7 @@ package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -64,7 +64,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEnti
 	}
 
 	private static boolean playerHasCursor() {
-		EntityPlayer player = OpenMods.proxy.getThePlayer();
+		PlayerEntity player = OpenMods.proxy.getThePlayer();
 		if (player == null) return false;
 		ItemStack held = player.getHeldItemMainhand();
 		return held.getItem() == OpenBlocks.Items.pointer;

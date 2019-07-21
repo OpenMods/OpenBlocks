@@ -2,9 +2,9 @@ package openblocks.enchantments.flimflams;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.network.play.server.SPacketSoundEffect;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.network.play.server.SPlaySoundEffectPacket;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import openblocks.OpenBlocks;
@@ -29,9 +29,9 @@ public class SoundFlimFlam implements IFlimFlamAction {
 			SoundEvents.ENTITY_CREEPER_PRIMED);
 
 	@Override
-	public boolean execute(EntityPlayerMP target) {
+	public boolean execute(ServerPlayerEntity target) {
 		SoundEvent sound = CollectionUtils.getRandom(sounds);
-		target.connection.sendPacket(new SPacketSoundEffect(sound, SoundCategory.MASTER, target.posX, target.posY, target.posZ, 1, 1));
+		target.connection.sendPacket(new SPlaySoundEffectPacket(sound, SoundCategory.MASTER, target.posX, target.posY, target.posZ, 1, 1));
 		return true;
 	}
 

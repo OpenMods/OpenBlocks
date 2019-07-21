@@ -1,17 +1,17 @@
 package openblocks.enchantments.flimflams;
 
-import net.minecraft.entity.item.EntityEnderPearl;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.item.EnderPearlEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamAction;
 
 public class TeleportFlimFlam implements IFlimFlamAction {
 
 	@Override
-	public boolean execute(EntityPlayerMP target) {
+	public boolean execute(ServerPlayerEntity target) {
 		final World world = target.world;
 
-		EntityEnderPearl e = new EntityEnderPearl(world, target);
+		EnderPearlEntity e = new EnderPearlEntity(world, target);
 		e.setPosition(target.posX, target.posY + 1, target.posZ);
 		e.motionX = world.rand.nextGaussian();
 		e.motionY = 0.5;

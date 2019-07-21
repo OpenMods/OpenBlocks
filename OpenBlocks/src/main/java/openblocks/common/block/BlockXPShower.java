@@ -1,13 +1,13 @@
 package openblocks.common.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -39,34 +39,34 @@ public class BlockXPShower extends OpenBlock.FourDirections {
 	private static final int MASK_POWERED = 0x8;
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public BlockState getStateFromMeta(int meta) {
 		return super.getStateFromMeta(meta)
 				.withProperty(POWERED, (meta & MASK_POWERED) != 0);
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		return super.getMetaFromState(state) | (state.getValue(POWERED)? MASK_POWERED : 0);
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
 		Orientation orientation = getOrientation(source, pos);
 		return BlockSpaceTransform.instance.mapBlockToWorld(orientation, AABB);
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
+	public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, Direction side) {
 		switch (side) {
 			case NORTH:
 			case SOUTH:
@@ -79,26 +79,26 @@ public class BlockXPShower extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neigbourPos) {
+	public void neighborChanged(BlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neigbourPos) {
 		updateRedstone(world, blockPos, state);
 		super.neighborChanged(state, world, blockPos, neighbour, neigbourPos);
 	}
 
 	@Override
-	protected boolean onBlockAddedNextTick(World world, BlockPos blockPos, IBlockState state) {
+	protected boolean onBlockAddedNextTick(World world, BlockPos blockPos, BlockState state) {
 		updateRedstone(world, blockPos, state);
 		return super.onBlockAddedNextTick(world, blockPos, state);
 	}
 
-	private static void updateRedstone(World world, BlockPos blockPos, IBlockState state) {
+	private static void updateRedstone(World world, BlockPos blockPos, BlockState state) {
 		if (world.isRemote) return;
 		boolean isPowered = world.isBlockIndirectlyGettingPowered(blockPos) > 0;
-		final IBlockState newState = state.withProperty(POWERED, isPowered);
+		final BlockState newState = state.withProperty(POWERED, isPowered);
 		if (state != newState) world.setBlockState(blockPos, newState, BlockNotifyFlags.ALL);
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 }

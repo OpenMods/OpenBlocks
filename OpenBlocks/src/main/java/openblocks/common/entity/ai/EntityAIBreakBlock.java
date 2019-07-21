@@ -2,29 +2,29 @@ package openblocks.common.entity.ai;
 
 import java.util.Random;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.FlowerBlock;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import openmods.OpenMods;
 import openmods.fakeplayer.BreakBlockAction;
 import openmods.fakeplayer.FakePlayerPool;
 
-public class EntityAIBreakBlock extends EntityAIBase {
+public class EntityAIBreakBlock extends Goal {
 
-	private final EntityLiving entity;
-	private final PathNavigate pathFinder;
+	private final MobEntity entity;
+	private final PathNavigator pathFinder;
 	private BlockPos blockCoord;
 	private int tickOffset;
 	private final Random rand;
 
-	public EntityAIBreakBlock(EntityLiving minime) {
+	public EntityAIBreakBlock(MobEntity minime) {
 		this.entity = minime;
 		this.pathFinder = minime.getNavigator();
 		setMutexBits(3);
@@ -79,9 +79,9 @@ public class EntityAIBreakBlock extends EntityAIBase {
 	public void updateTask() {
 		super.updateTask();
 		final World world = entity.world;
-		if ((world instanceof WorldServer) && blockCoord != null && canHarvestBlock(blockCoord)) {
+		if ((world instanceof ServerWorld) && blockCoord != null && canHarvestBlock(blockCoord)) {
 			if (entity.getDistanceSqToCenter(blockCoord) < 1.0) {
-				FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new BreakBlockAction(world, blockCoord).setStackToUse(ItemStack.EMPTY));
+				FakePlayerPool.instance.executeOnPlayer((ServerWorld)world, new BreakBlockAction(world, blockCoord).setStackToUse(ItemStack.EMPTY));
 				blockCoord = null;
 			}
 		}
@@ -89,6 +89,6 @@ public class EntityAIBreakBlock extends EntityAIBase {
 
 	public boolean canHarvestBlock(BlockPos coord) {
 		final Block block = entity.world.getBlockState(coord).getBlock();
-		return block instanceof BlockFlower || block == Blocks.TORCH;
+		return block instanceof FlowerBlock || block == Blocks.TORCH;
 	}
 }

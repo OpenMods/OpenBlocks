@@ -1,11 +1,11 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -33,17 +33,17 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 	public TileEntityDonationStation() {}
 
 	@Override
-	public Object getServerGui(EntityPlayer player) {
+	public Object getServerGui(PlayerEntity player) {
 		return new ContainerDonationStation(player.inventory, this);
 	}
 
 	@Override
-	public Object getClientGui(EntityPlayer player) {
+	public Object getClientGui(PlayerEntity player) {
 		return new GuiDonationStation(new ContainerDonationStation(player.inventory, this));
 	}
 
 	@Override
-	public boolean canOpenGui(EntityPlayer player) {
+	public boolean canOpenGui(PlayerEntity player) {
 		return true;
 	}
 
@@ -53,14 +53,14 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 		return tag;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 	}
@@ -92,14 +92,14 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, Direction facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
 				super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, Direction facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return (T)inventory.getHandler();
 

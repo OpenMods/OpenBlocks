@@ -5,14 +5,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.utils.TranslationUtils;
 
-public class ItemInvertedSkyBlock extends ItemBlock {
+public class ItemInvertedSkyBlock extends BlockItem {
 
 	public ItemInvertedSkyBlock(Block block) {
 		super(block);

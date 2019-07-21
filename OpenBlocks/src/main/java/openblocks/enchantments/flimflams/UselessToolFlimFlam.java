@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Random;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import openblocks.api.IFlimFlamAction;
@@ -103,7 +103,7 @@ public class UselessToolFlimFlam implements IFlimFlamAction {
 	}
 
 	@Override
-	public boolean execute(EntityPlayerMP target) {
+	public boolean execute(ServerPlayerEntity target) {
 		Item tool = selectTool();
 		ItemStack dropped = new ItemStack(tool);
 		List<EnchantmentData> enchantments = EnchantmentHelper.getEnchantmentDatas(30, dropped, true);

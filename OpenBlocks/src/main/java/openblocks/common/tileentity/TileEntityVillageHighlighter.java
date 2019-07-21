@@ -3,7 +3,7 @@ package openblocks.common.tileentity;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
 import java.util.List;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -60,7 +60,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	}
 
 	private boolean isEnabled() {
-		final IBlockState state = world.getBlockState(pos);
+		final BlockState state = world.getBlockState(pos);
 		return state.getBlock() instanceof BlockVillageHighlighter && state.getValue(BlockVillageHighlighter.POWERED);
 	}
 

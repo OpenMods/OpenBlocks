@@ -1,12 +1,12 @@
 package openblocks.common.tileentity;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import openblocks.common.block.BlockBlockManpulatorBase;
 import openmods.api.INeighbourAwareTile;
 import openmods.tileentity.OpenTileEntity;
@@ -27,7 +27,7 @@ public abstract class TileEntityBlockManipulator extends OpenTileEntity implemen
 		final boolean checkForWork = actionCount > 0;
 		actionCount = 0;
 		if (checkForWork) {
-			final IBlockState blockState = world.getBlockState(getPos());
+			final BlockState blockState = world.getBlockState(getPos());
 			if (blockState.getBlock() == getBlockType() &&
 					blockState.getValue(BlockBlockManpulatorBase.POWERED))
 				triggerBlockAction(blockState);
@@ -40,11 +40,11 @@ public abstract class TileEntityBlockManipulator extends OpenTileEntity implemen
 			return;
 
 		if (!world.isRemote) {
-			final IBlockState state = world.getBlockState(getPos());
+			final BlockState state = world.getBlockState(getPos());
 			if (state.getBlock() == getBlockType()) {
 				final boolean isPowered = world.isBlockIndirectlyGettingPowered(getPos()) > 0;
 
-				final IBlockState newState = state.withProperty(BlockBlockManpulatorBase.POWERED, isPowered);
+				final BlockState newState = state.withProperty(BlockBlockManpulatorBase.POWERED, isPowered);
 				if (newState != state) {
 					world.setBlockState(getPos(), newState, BlockNotifyFlags.SEND_TO_CLIENTS);
 					playSoundAtBlock(isPowered? SoundEvents.BLOCK_PISTON_EXTEND : SoundEvents.BLOCK_PISTON_CONTRACT, 0.5F, world.rand.nextFloat() * 0.15F + 0.6F);
@@ -57,16 +57,16 @@ public abstract class TileEntityBlockManipulator extends OpenTileEntity implemen
 	}
 
 	protected void triggerBlockAction() {
-		final IBlockState state = world.getBlockState(getPos());
+		final BlockState state = world.getBlockState(getPos());
 		triggerBlockAction(state);
 	}
 
-	protected void triggerBlockAction(IBlockState state) {
-		final EnumFacing direction = getFront(state);
+	protected void triggerBlockAction(BlockState state) {
+		final Direction direction = getFront(state);
 		final BlockPos target = pos.offset(direction);
 
 		if (world.isBlockLoaded(target)) {
-			final IBlockState targetState = world.getBlockState(target);
+			final BlockState targetState = world.getBlockState(target);
 			if (canWork(targetState, target, direction)) {
 				sendBlockEvent(EVENT_ACTIVATE, 0);
 				actionCount++;
@@ -85,20 +85,20 @@ public abstract class TileEntityBlockManipulator extends OpenTileEntity implemen
 	}
 
 	private void doWork() {
-		if (world instanceof WorldServer) {
-			final EnumFacing direction = getFront();
+		if (world instanceof ServerWorld) {
+			final Direction direction = getFront();
 			final BlockPos target = pos.offset(direction);
 
 			if (world.isBlockLoaded(target)) {
-				final IBlockState targetState = world.getBlockState(target);
+				final BlockState targetState = world.getBlockState(target);
 				if (canWork(targetState, target, direction))
 					doWork(targetState, target, direction);
 			}
 		}
 	}
 
-	protected abstract boolean canWork(IBlockState targetState, BlockPos target, EnumFacing direction);
+	protected abstract boolean canWork(BlockState targetState, BlockPos target, Direction direction);
 
-	protected abstract void doWork(IBlockState targetState, BlockPos target, EnumFacing direction);
+	protected abstract void doWork(BlockState targetState, BlockPos target, Direction direction);
 
 }

@@ -1,6 +1,6 @@
 package openblocks.common.container;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import openblocks.common.entity.EntityLuggage;
 import openmods.container.ContainerBase;
@@ -14,7 +14,7 @@ public class ContainerLuggage extends ContainerBase<EntityLuggage> {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
+	public boolean canInteractWith(PlayerEntity entityplayer) {
 		return inventory.isUsableByPlayer(entityplayer) && !getOwner().isDead;
 	}
 }

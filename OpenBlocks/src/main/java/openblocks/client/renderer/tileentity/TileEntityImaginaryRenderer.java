@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -19,8 +19,8 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.client.renderer.vertex.VertexFormatElement.EnumUsage;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.client.renderer.vertex.VertexFormatElement.Usage;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -86,7 +86,7 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 
 		for (int i = 0; i < format.getElementCount(); i++) {
 			VertexFormatElement vfe = format.getElement(i);
-			if (vfe.getUsage() != EnumUsage.PADDING)
+			if (vfe.getUsage() != Usage.PADDING)
 				builder.put(vfe, format.getOffset(i));
 		}
 
@@ -197,17 +197,17 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 		}
 	}
 
-	private static final LoadingCache<IBlockState, List<VertexWriter>> MODEL_CACHE = CacheBuilder.newBuilder()
+	private static final LoadingCache<BlockState, List<VertexWriter>> MODEL_CACHE = CacheBuilder.newBuilder()
 			.expireAfterAccess(1, TimeUnit.SECONDS)
-			.build(new CacheLoader<IBlockState, List<VertexWriter>>() {
+			.build(new CacheLoader<BlockState, List<VertexWriter>>() {
 				@Override
-				public List<VertexWriter> load(IBlockState state) {
+				public List<VertexWriter> load(BlockState state) {
 					if (blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
 					IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(state);
 
 					final List<VertexWriter> vertexWriters = Lists.newArrayList();
 
-					for (EnumFacing side : EnumFacing.VALUES)
+					for (Direction side : Direction.VALUES)
 						addQuads(model.getQuads(state, side, 0), vertexWriters);
 
 					addQuads(model.getQuads(state, null, 0), vertexWriters);
@@ -248,7 +248,7 @@ public class TileEntityImaginaryRenderer extends FastTESR<TileEntityImaginary> {
 
 		BlockPos pos = te.getPos();
 		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
-		IBlockState state = world.getBlockState(pos).getActualState(world, pos);
+		BlockState state = world.getBlockState(pos).getActualState(world, pos);
 
 		if (state.getBlock() instanceof BlockImaginary) {
 			final List<VertexWriter> vertexWriters = MODEL_CACHE.getUnchecked(state);

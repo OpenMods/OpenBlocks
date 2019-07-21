@@ -13,17 +13,17 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
 import javax.vecmath.Matrix4f;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.model.IModel;
@@ -71,11 +71,11 @@ public class PathModel implements IModel {
 		return textures.getTextures();
 	}
 
-	private static final Predicate<EnumFacing> ALL_SIDES = Predicates.alwaysTrue();
+	private static final Predicate<Direction> ALL_SIDES = Predicates.alwaysTrue();
 
-	private static final Predicate<EnumFacing> GENERAL = input -> input != EnumFacing.DOWN;
+	private static final Predicate<Direction> GENERAL = input -> input != Direction.DOWN;
 
-	private static final Predicate<EnumFacing> ONLY_BOTTOM = input -> input == EnumFacing.DOWN;
+	private static final Predicate<Direction> ONLY_BOTTOM = input -> input == Direction.DOWN;
 
 	private class Baked implements IBakedModel {
 
@@ -100,7 +100,7 @@ public class PathModel implements IModel {
 			this.itemQuads = ImmutableList.copyOf(createQuads(inventorySeed, ALL_SIDES));
 		}
 
-		private List<BakedQuad> createQuads(long seed, Predicate<EnumFacing> shouldInclude) {
+		private List<BakedQuad> createQuads(long seed, Predicate<Direction> shouldInclude) {
 			rand.setSeed(seed);
 
 			final List<AxisAlignedBB> boundingBoxes = Lists.newArrayList();
@@ -130,13 +130,13 @@ public class PathModel implements IModel {
 			return result;
 		}
 
-		private void addBox(final List<BakedQuad> output, AxisAlignedBB aabb, final TextureAtlasSprite texture, final Predicate<EnumFacing> shouldInclude) {
+		private void addBox(final List<BakedQuad> output, AxisAlignedBB aabb, final TextureAtlasSprite texture, final Predicate<Direction> shouldInclude) {
 
 			RenderUtils.renderCube(new IQuadSink() {
 				private UnpackedBakedQuad.Builder currentQuad = null;
 
 				@Override
-				public void addVertex(EnumFacing side, int vertex, double x, double y, double z) {
+				public void addVertex(Direction side, int vertex, double x, double y, double z) {
 					if (!shouldInclude.apply(side)) return;
 
 					if (currentQuad == null) {
@@ -180,7 +180,7 @@ public class PathModel implements IModel {
 					}
 				}
 
-				private double selectV(EnumFacing side, double x, double y, double z) {
+				private double selectV(Direction side, double x, double y, double z) {
 					switch (side) {
 						case UP:
 						case DOWN:
@@ -198,7 +198,7 @@ public class PathModel implements IModel {
 					}
 				}
 
-				private double selectU(EnumFacing side, double x, double y, double z) {
+				private double selectU(Direction side, double x, double y, double z) {
 					switch (side) {
 						case NORTH:
 						case SOUTH:
@@ -217,13 +217,13 @@ public class PathModel implements IModel {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		public List<BakedQuad> getQuads(BlockState state, Direction side, long rand) {
 			if (state == null && rand == 0) return itemQuads;
 
 			if (side == null)
 				return createQuads(rand, GENERAL);
 
-			if (side == EnumFacing.DOWN)
+			if (side == Direction.DOWN)
 				return createQuads(rand, ONLY_BOTTOM);
 
 			return ImmutableList.of();
@@ -282,7 +282,7 @@ public class PathModel implements IModel {
 			}
 		}
 
-		final TextureAtlasSprite missing = bakedTextureGetter.apply(TextureMap.LOCATION_MISSING_TEXTURE);
+		final TextureAtlasSprite missing = bakedTextureGetter.apply(AtlasTexture.LOCATION_MISSING_TEXTURE);
 		final TextureAtlasSprite particle = maybeParticle.orElse(missing);
 
 		if (textures.isEmpty()) textures.add(missing);

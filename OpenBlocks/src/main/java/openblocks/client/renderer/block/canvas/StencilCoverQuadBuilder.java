@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 
@@ -49,7 +49,7 @@ public class StencilCoverQuadBuilder {
 		}
 	}
 
-	private void add(TextureAtlasSprite texture, TextureOrientation rotation, EnumFacing face, float x, float y, float z, Vector3f right, Vector3f down) {
+	private void add(TextureAtlasSprite texture, TextureOrientation rotation, Direction face, float x, float y, float z, Vector3f right, Vector3f down) {
 		final Vertex[] vertices = new Vertex[] {
 				new Vertex(x, y, z, 0, 0), // top left
 				new Vertex(x + down.x, y + down.y, z + down.z, 0, 1), // bottom left
@@ -77,7 +77,7 @@ public class StencilCoverQuadBuilder {
 		quads.add(builderCw.build());
 	}
 
-	private UnpackedBakedQuad.Builder createQuadBuilder(TextureAtlasSprite sprite, EnumFacing face) {
+	private UnpackedBakedQuad.Builder createQuadBuilder(TextureAtlasSprite sprite, Direction face) {
 		final UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
 		builder.setApplyDiffuseLighting(true);
 		builder.setQuadOrientation(face);
@@ -86,7 +86,7 @@ public class StencilCoverQuadBuilder {
 		return builder;
 	}
 
-	private void addQuad(final UnpackedBakedQuad.Builder builder, EnumFacing face, TextureAtlasSprite sprite, Vertex position, Vertex texture) {
+	private void addQuad(final UnpackedBakedQuad.Builder builder, Direction face, TextureAtlasSprite sprite, Vertex position, Vertex texture) {
 		for (int e = 0; e < format.getElementCount(); e++) {
 			final VertexFormatElement el = format.getElement(e);
 			switch (el.getUsage()) {
@@ -120,25 +120,25 @@ public class StencilCoverQuadBuilder {
 
 	private static final Vector3f NORMAL_DOWN = new Vector3f(0, -1, 0);
 
-	public void add(EnumFacing side, TextureAtlasSprite texture, TextureOrientation rotation) {
+	public void add(Direction side, TextureAtlasSprite texture, TextureOrientation rotation) {
 		switch (side) {
 			case NORTH:
-				add(texture, rotation, EnumFacing.NORTH, 1, 1, (float)bounds.minZ, NORMAL_WEST, NORMAL_DOWN);
+				add(texture, rotation, Direction.NORTH, 1, 1, (float)bounds.minZ, NORMAL_WEST, NORMAL_DOWN);
 				break;
 			case SOUTH:
-				add(texture, rotation, EnumFacing.SOUTH, 0, 1, (float)bounds.maxZ, NORMAL_EAST, NORMAL_DOWN);
+				add(texture, rotation, Direction.SOUTH, 0, 1, (float)bounds.maxZ, NORMAL_EAST, NORMAL_DOWN);
 				break;
 			case EAST:
-				add(texture, rotation, EnumFacing.EAST, (float)bounds.maxX, 1, 1, NORMAL_NORTH, NORMAL_DOWN);
+				add(texture, rotation, Direction.EAST, (float)bounds.maxX, 1, 1, NORMAL_NORTH, NORMAL_DOWN);
 				break;
 			case WEST:
-				add(texture, rotation, EnumFacing.WEST, (float)bounds.minX, 1, 0, NORMAL_SOUTH, NORMAL_DOWN);
+				add(texture, rotation, Direction.WEST, (float)bounds.minX, 1, 0, NORMAL_SOUTH, NORMAL_DOWN);
 				break;
 			case UP:
-				add(texture, rotation, EnumFacing.UP, 0, (float)bounds.maxY, 0, NORMAL_EAST, NORMAL_SOUTH);
+				add(texture, rotation, Direction.UP, 0, (float)bounds.maxY, 0, NORMAL_EAST, NORMAL_SOUTH);
 				break;
 			case DOWN:
-				add(texture, rotation, EnumFacing.DOWN, 0, (float)bounds.minY, 1, NORMAL_EAST, NORMAL_NORTH);
+				add(texture, rotation, Direction.DOWN, 0, (float)bounds.minY, 1, NORMAL_EAST, NORMAL_NORTH);
 				break;
 			default:
 				throw new AssertionError(side);

@@ -1,8 +1,8 @@
 package openblocks.trophy;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityLlamaSpit;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.LlamaSpitEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -12,14 +12,14 @@ import openblocks.common.tileentity.TileEntityTrophy;
 public class LlamaBehavior implements ITrophyBehavior {
 
 	@Override
-	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+	public int executeActivateBehavior(TileEntityTrophy tile, PlayerEntity player) {
 		final BlockPos pos = tile.getPos();
 		final double pX = pos.getX() + 0.5;
 		final double pY = pos.getY() + 1;
 		final double pZ = pos.getZ() + 0.5;
 		final World world = tile.getWorld();
 
-		EntityLlamaSpit entityllamaspit = new EntityLlamaSpit(player.world);
+		LlamaSpitEntity entityllamaspit = new LlamaSpitEntity(player.world);
 		entityllamaspit.setPosition(pX, pY, pZ);
 
 		double dX = player.posX - pX;

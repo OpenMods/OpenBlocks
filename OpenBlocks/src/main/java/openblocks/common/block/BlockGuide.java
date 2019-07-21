@@ -1,14 +1,14 @@
 package openblocks.common.block;
 
 import java.util.Random;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -50,23 +50,23 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+	public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
 		return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+	public AxisAlignedBB getSelectedBoundingBox(BlockState state, World world, BlockPos pos) {
 		return selection != null? selection : super.getSelectedBoundingBox(state, world, pos);
 	}
 
@@ -78,11 +78,11 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 		return null;
 	}
 
-	protected boolean areButtonsActive(EntityPlayer player) {
+	protected boolean areButtonsActive(PlayerEntity player) {
 		return true;
 	}
 
-	protected boolean onItemUse(EntityPlayerMP player, TileEntityGuide guide, int side, float hitX, float hitY, float hitZ) {
+	protected boolean onItemUse(ServerPlayerEntity player, TileEntityGuide guide, int side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -101,8 +101,8 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (hand != EnumHand.MAIN_HAND) return false;
+	public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+		if (hand != Hand.MAIN_HAND) return false;
 
 		if (world.isRemote) {
 			if (areButtonsActive(player)) {
@@ -114,11 +114,11 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 				}
 			}
 			return true;
-		} else if (player instanceof EntityPlayerMP) {
+		} else if (player instanceof ServerPlayerEntity) {
 			final ItemStack heldStack = player.getHeldItemMainhand();
 			if (!heldStack.isEmpty()) {
 				TileEntityGuide guide = getTileEntity(world, pos, TileEntityGuide.class);
-				if (guide.onItemUse((EntityPlayerMP)player, heldStack, side, hitX, hitY, hitZ)) return true;
+				if (guide.onItemUse((ServerPlayerEntity)player, heldStack, side, hitX, hitY, hitZ)) return true;
 			}
 		}
 
@@ -127,7 +127,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random rand) {
 		final float x = pos.getX() + 0.5f;
 		final float y = pos.getY() + 0.7f;
 		final float z = pos.getZ() + 0.5f;

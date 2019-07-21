@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -42,12 +42,12 @@ public class ItemPaintCan extends ItemOpenBlock {
 	}
 
 	public static int getColorFromStack(@Nonnull ItemStack stack) {
-		NBTTagCompound tag = stack.getTagCompound();
+		CompoundNBT tag = stack.getTagCompound();
 		return tag != null? tag.getInteger(TAG_COLOR) : COLOR_WHITE;
 	}
 
 	public static int getAmountFromStack(@Nonnull ItemStack stack) {
-		NBTTagCompound tag = stack.getTagCompound();
+		CompoundNBT tag = stack.getTagCompound();
 		return tag != null? tag.getInteger(TAG_AMOUNT) : 0;
 	}
 
@@ -67,7 +67,7 @@ public class ItemPaintCan extends ItemOpenBlock {
 	}
 
 	public static void setColorAndAmount(ItemStack stack, final int color, final int amount) {
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		tag.setInteger(TAG_COLOR, color);
 		tag.setInteger(TAG_AMOUNT, amount);
 	}

@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
@@ -36,10 +36,10 @@ public class ElevatorBlockRules {
 	}
 
 	private static class ElevatorOverride {
-		public final EnumDyeColor color;
+		public final DyeColor color;
 		public final PlayerRotation rotation;
 
-		public ElevatorOverride(EnumDyeColor color, PlayerRotation rotation) {
+		public ElevatorOverride(DyeColor color, PlayerRotation rotation) {
 			this.color = color;
 			this.rotation = rotation;
 		}
@@ -56,7 +56,7 @@ public class ElevatorBlockRules {
 
 	private Map<Block, Action> rules;
 
-	private Map<IBlockState, ElevatorOverride> overrides;
+	private Map<BlockState, ElevatorOverride> overrides;
 
 	private Map<Block, Action> getRules() {
 		if (rules == null) {
@@ -90,7 +90,7 @@ public class ElevatorBlockRules {
 		else Log.warn("Can't find block %s", entry);
 	}
 
-	private Map<IBlockState, ElevatorOverride> getOverrides() {
+	private Map<BlockState, ElevatorOverride> getOverrides() {
 		if (overrides == null) {
 			overrides = Maps.newIdentityHashMap();
 			for (String entry : Config.elevatorOverrides) {
@@ -105,28 +105,28 @@ public class ElevatorBlockRules {
 		return overrides;
 	}
 
-	private static void tryAddOverride(Map<IBlockState, ElevatorOverride> overrides, String entry) throws Exception {
+	private static void tryAddOverride(Map<BlockState, ElevatorOverride> overrides, String entry) throws Exception {
 		final List<String> parts = Splitter.on(';').splitToList(entry);
 		if (parts.size() == 0) return;
 
 		Preconditions.checkState(parts.size() == 1 || parts.size() == 2, "Each entry be either 'blockState' or 'blockState=color'");
 
-		final List<IBlockState> blockStates = parseBlockDesc(parts.get(0));
+		final List<BlockState> blockStates = parseBlockDesc(parts.get(0));
 
-		final EnumDyeColor color;
+		final DyeColor color;
 		if (parts.size() == 2) {
 			final ColorMeta colorMeta = ColorMeta.fromName(parts.get(1));
 			color = colorMeta.vanillaEnum;
 		} else {
-			color = EnumDyeColor.WHITE;
+			color = DyeColor.WHITE;
 		}
 
-		for (IBlockState state : blockStates)
+		for (BlockState state : blockStates)
 			overrides.put(state, new ElevatorOverride(color, PlayerRotation.NONE));
 
 	}
 
-	private static List<IBlockState> parseBlockDesc(String blockDesc) throws Exception {
+	private static List<BlockState> parseBlockDesc(String blockDesc) throws Exception {
 		final List<String> blockDescParts = Splitter.on('#').splitToList(blockDesc);
 
 		final String blockId = blockDescParts.get(0);
@@ -150,11 +150,11 @@ public class ElevatorBlockRules {
 		if (evt.check("dropblock", "overrides")) overrides = null;
 	}
 
-	private static boolean isPassable(IBlockState state) {
+	private static boolean isPassable(BlockState state) {
 		return Config.elevatorIgnoreHalfBlocks && !state.isNormalCube();
 	}
 
-	public Action getActionForBlock(IBlockState state) {
+	public Action getActionForBlock(BlockState state) {
 		Action action = getRules().get(state.getBlock());
 		if (action != null) return action;
 
@@ -162,7 +162,7 @@ public class ElevatorBlockRules {
 	}
 
 	public void configureEvent(ElevatorCheckEvent evt) {
-		final Map<IBlockState, ElevatorOverride> overrides = getOverrides();
+		final Map<BlockState, ElevatorOverride> overrides = getOverrides();
 		final ElevatorOverride elevatorOverride = overrides.get(evt.getState());
 		if (elevatorOverride != null) {
 			evt.setColor(elevatorOverride.color);

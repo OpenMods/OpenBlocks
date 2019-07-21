@@ -2,16 +2,16 @@ package openblocks.client.renderer.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
 import openmods.renderer.DisplayListWrapper;
 import org.lwjgl.opengl.GL11;
 
-public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
+public class EntityHangGliderRenderer extends EntityRenderer<EntityHangGlider> {
 
 	private static final float QUAD_HALF_SIZE = 2.4f;
 	private static final float ONGROUND_ROTATION = 90f;
@@ -43,13 +43,13 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 
 	private static final ResourceLocation texture = OpenBlocks.location("textures/models/hang_glider.png");
 
-	public EntityHangGliderRenderer(RenderManager renderManager) {
+	public EntityHangGliderRenderer(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 
 	@Override
 	public void doRender(EntityHangGlider glider, double x, double y, double z, float f, float f1) {
-		final EntityPlayer owner = glider.getPlayer();
+		final PlayerEntity owner = glider.getPlayer();
 		if (owner == null) return;
 
 		final Minecraft minecraft = Minecraft.getMinecraft();

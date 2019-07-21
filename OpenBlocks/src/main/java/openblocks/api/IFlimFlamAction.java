@@ -1,7 +1,7 @@
 package openblocks.api;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 public interface IFlimFlamAction {
-	boolean execute(EntityPlayerMP target);
+	boolean execute(ServerPlayerEntity target);
 }

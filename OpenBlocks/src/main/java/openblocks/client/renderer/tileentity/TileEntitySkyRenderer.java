@@ -3,14 +3,14 @@ package openblocks.client.renderer.tileentity;
 import com.google.common.collect.Maps;
 import java.util.Map;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
@@ -40,7 +40,7 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 	public void render(TileEntitySky te, double x, double y, double z, float partialTickTime, int destroyStage, float alpha) {
 		BlockPos pos = te.getPos();
 		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
-		IBlockState state = world.getBlockState(pos).getActualState(world, pos);
+		BlockState state = world.getBlockState(pos).getActualState(world, pos);
 
 		final Block block = state.getBlock();
 		if (!(block instanceof BlockSky) || !((BlockSky)block).isActive(state)) return;
@@ -136,9 +136,9 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 		GlStateManager.enableFog();
 	}
 
-	private final Map<IBlockState, CachedRenderer> renderers = Maps.newHashMap();
+	private final Map<BlockState, CachedRenderer> renderers = Maps.newHashMap();
 
-	private static CachedRenderer createRenderer(IBlockState state) {
+	private static CachedRenderer createRenderer(BlockState state) {
 		final BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
 		final IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(state);
 
@@ -152,8 +152,8 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 		return new CachedRendererFactory().createRenderer(tessellator);
 	}
 
-	private void renderModel(double x, double y, double z, BlockPos pos, IBlockAccess world, IBlockState state) {
-		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+	private void renderModel(double x, double y, double z, BlockPos pos, IBlockAccess world, BlockState state) {
+		bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 		final CachedRenderer renderer = renderers.computeIfAbsent(state, TileEntitySkyRenderer::createRenderer);
 
 		GL11.glPushMatrix();

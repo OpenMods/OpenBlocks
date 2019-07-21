@@ -7,18 +7,18 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -69,22 +69,22 @@ public abstract class ItemImaginary extends ItemOpenBlock {
 		SHAPE_TO_MODE = shapeToModeBuilder.build();
 	}
 
-	public static float getUses(NBTTagCompound tag) {
+	public static float getUses(CompoundNBT tag) {
 		return tag.getFloat(TAG_USES);
 	}
 
 	public static float getUses(@Nonnull ItemStack stack) {
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		return getUses(tag);
 	}
 
-	public static PlacementMode getMode(NBTTagCompound tag) {
+	public static PlacementMode getMode(CompoundNBT tag) {
 		int value = tag.getByte(TAG_MODE);
 		return PlacementMode.VALUES[value];
 	}
 
 	public static PlacementMode getMode(@Nonnull ItemStack stack) {
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		return getMode(tag);
 	}
 
@@ -92,15 +92,15 @@ public abstract class ItemImaginary extends ItemOpenBlock {
 		super(block);
 		setMaxStackSize(1);
 
-		addPropertyOverride(new ResourceLocation("mode"), (@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> {
-			NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		addPropertyOverride(new ResourceLocation("mode"), (@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) -> {
+			CompoundNBT tag = ItemUtils.getItemTag(stack);
 			return tag.getByte(TAG_MODE);
 		});
 	}
 
 	@Override
-	protected void afterBlockPlaced(@Nonnull ItemStack stack, EntityPlayer player, World world, BlockPos pos) {
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+	protected void afterBlockPlaced(@Nonnull ItemStack stack, PlayerEntity player, World world, BlockPos pos) {
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 
 		PlacementMode mode = getMode(tag);
 		final TileEntity tileEntity = world.getTileEntity(pos);
@@ -114,19 +114,19 @@ public abstract class ItemImaginary extends ItemOpenBlock {
 		}
 	}
 
-	protected abstract void configureBlockEntity(final TileEntity tileEntity, final PlacementMode mode, NBTTagCompound tag);
+	protected abstract void configureBlockEntity(final TileEntity tileEntity, final PlacementMode mode, CompoundNBT tag);
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(PlayerEntity player, World world, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
 		final ItemStack stack = player.getHeldItem(hand);
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		float uses = getUses(tag);
 		if (uses <= 0) {
 			stack.setCount(0);
-			return EnumActionResult.FAIL;
+			return ActionResultType.FAIL;
 		}
 
-		if (uses < getMode(tag).cost) return EnumActionResult.FAIL;
+		if (uses < getMode(tag).cost) return ActionResultType.FAIL;
 
 		return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 	}
@@ -134,7 +134,7 @@ public abstract class ItemImaginary extends ItemOpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, List<String> result, ITooltipFlag flagIn) {
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 
 		result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.uses", getUses(tag)));
 
@@ -151,23 +151,23 @@ public abstract class ItemImaginary extends ItemOpenBlock {
 	@Override
 	@Nonnull
 	public ItemStack getContainerItem(@Nonnull ItemStack stack) {
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		float uses = getUses(tag) - CRAFTING_COST;
 		if (uses <= 0) return ItemStack.EMPTY;
 
 		ItemStack copy = stack.copy();
-		NBTTagCompound copyTag = ItemUtils.getItemTag(copy);
+		CompoundNBT copyTag = ItemUtils.getItemTag(copy);
 		copyTag.setFloat(TAG_USES, uses);
 		return copy;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
 
-		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, stack);
+		if (hand != Hand.MAIN_HAND) return ActionResult.newResult(ActionResultType.PASS, stack);
 
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		if (getUses(tag) <= 0) {
 			stack.setCount(0);
 		} else if (player.isSneaking()) {
@@ -177,11 +177,11 @@ public abstract class ItemImaginary extends ItemOpenBlock {
 
 			if (world.isRemote) {
 				PlacementMode mode = PlacementMode.VALUES[modeId];
-				TextComponentTranslation modeName = new TextComponentTranslation(mode.name);
-				player.sendMessage(new TextComponentTranslation("openblocks.misc.mode", modeName));
+				TranslationTextComponent modeName = new TranslationTextComponent(mode.name);
+				player.sendMessage(new TranslationTextComponent("openblocks.misc.mode", modeName));
 			}
 		}
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+		return ActionResult.newResult(ActionResultType.SUCCESS, stack);
 	}
 }

@@ -1,17 +1,17 @@
 package openblocks.trophy;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.text.TranslationTextComponent;
 import openblocks.common.tileentity.TileEntityTrophy;
 
 public class WitchBehavior implements ITrophyBehavior {
 
 	@Override
-	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 70, 1));
-		player.sendMessage(new TextComponentTranslation("openblocks.misc.get_witched"));
+	public int executeActivateBehavior(TileEntityTrophy tile, PlayerEntity player) {
+		player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 70, 1));
+		player.sendMessage(new TranslationTextComponent("openblocks.misc.get_witched"));
 		return 0;
 	}
 }

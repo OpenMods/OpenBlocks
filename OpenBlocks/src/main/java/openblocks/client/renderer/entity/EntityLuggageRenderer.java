@@ -2,8 +2,8 @@ package openblocks.client.renderer.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
@@ -11,7 +11,7 @@ import openblocks.client.model.ModelLuggage;
 import openblocks.common.entity.EntityLuggage;
 import org.lwjgl.opengl.GL11;
 
-public class EntityLuggageRenderer extends RenderLiving<EntityLuggage> {
+public class EntityLuggageRenderer extends MobRenderer<EntityLuggage> {
 
 	private static final ModelBase luggageModel = new ModelLuggage();
 
@@ -49,7 +49,7 @@ public class EntityLuggageRenderer extends RenderLiving<EntityLuggage> {
 		}
 	}
 
-	public EntityLuggageRenderer(RenderManager renderManager) {
+	public EntityLuggageRenderer(EntityRendererManager renderManager) {
 		super(renderManager, luggageModel, 0.5F);
 		addLayer(new LayerCharge());
 	}

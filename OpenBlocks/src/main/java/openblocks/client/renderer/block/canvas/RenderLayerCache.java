@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -31,10 +31,10 @@ public class RenderLayerCache {
 
 	private final Map<BlockRenderLayer, LayerRenderInfo> baseRenderLayers;
 
-	private final LoadingCache<Pair<IBlockState, BlockRenderLayer>, LayerRenderInfo> renderLayers = CacheBuilder.newBuilder().build(new CacheLoader<Pair<IBlockState, BlockRenderLayer>, LayerRenderInfo>() {
+	private final LoadingCache<Pair<BlockState, BlockRenderLayer>, LayerRenderInfo> renderLayers = CacheBuilder.newBuilder().build(new CacheLoader<Pair<BlockState, BlockRenderLayer>, LayerRenderInfo>() {
 		@Override
-		public LayerRenderInfo load(Pair<IBlockState, BlockRenderLayer> key) {
-			final IBlockState state = key.getLeft();
+		public LayerRenderInfo load(Pair<BlockState, BlockRenderLayer> key) {
+			final BlockState state = key.getLeft();
 			final Block block = state.getBlock();
 
 			return getLayerRenderInfo(key.getRight(), input -> block.canRenderInLayer(state, input));
@@ -75,7 +75,7 @@ public class RenderLayerCache {
 		if (canRender.apply(layer)) output.add(layer);
 	}
 
-	public LayerRenderInfo get(Optional<IBlockState> state, BlockRenderLayer renderLayer) {
+	public LayerRenderInfo get(Optional<BlockState> state, BlockRenderLayer renderLayer) {
 		return state.isPresent()
 				? renderLayers.getUnchecked(Pair.of(state.get(), renderLayer))
 				: baseRenderLayers.get(renderLayer);

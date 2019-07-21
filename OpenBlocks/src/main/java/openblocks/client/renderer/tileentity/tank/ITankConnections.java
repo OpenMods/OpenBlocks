@@ -1,6 +1,6 @@
 package openblocks.client.renderer.tileentity.tank;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import openmods.utils.Diagonal;
 
 public interface ITankConnections {
@@ -9,7 +9,7 @@ public interface ITankConnections {
 
 	VerticalConnection getBottomConnection();
 
-	HorizontalConnection getHorizontalConnection(EnumFacing dir);
+	HorizontalConnection getHorizontalConnection(Direction dir);
 
 	DiagonalConnection getDiagonalConnection(Diagonal dir);
 }

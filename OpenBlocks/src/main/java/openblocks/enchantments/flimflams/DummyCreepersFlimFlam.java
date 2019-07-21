@@ -1,8 +1,8 @@
 package openblocks.enchantments.flimflams;
 
 import java.util.Random;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.monster.CreeperEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
 import openblocks.api.IFlimFlamAction;
@@ -12,14 +12,14 @@ public class DummyCreepersFlimFlam implements IFlimFlamAction {
 
 	private static final Random random = new Random();
 
-	private static final FieldAccess<Integer> EXPLOSION_RADIUS = FieldAccess.create(EntityCreeper.class, "explosionRadius", "field_82226_g");
-	private static final FieldAccess<DataParameter<Boolean>> POWERED_DATA_PARAMETER = FieldAccess.create(EntityCreeper.class, "POWERED", "field_184714_b");
+	private static final FieldAccess<Integer> EXPLOSION_RADIUS = FieldAccess.create(CreeperEntity.class, "explosionRadius", "field_82226_g");
+	private static final FieldAccess<DataParameter<Boolean>> POWERED_DATA_PARAMETER = FieldAccess.create(CreeperEntity.class, "POWERED", "field_184714_b");
 
 	@Override
-	public boolean execute(EntityPlayerMP target) {
+	public boolean execute(ServerPlayerEntity target) {
 
 		for (int i = 0; i < 15; i++) {
-			EntityCreeper creeper = new EntityCreeper(target.world);
+			CreeperEntity creeper = new CreeperEntity(target.world);
 			EXPLOSION_RADIUS.set(creeper, 0);
 			EntityDataManager watcher = creeper.getDataManager();
 			watcher.set(POWERED_DATA_PARAMETER.get(null), true);

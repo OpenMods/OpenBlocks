@@ -3,25 +3,25 @@ package openblocks.client.renderer.entity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import openblocks.common.entity.EntityGlyph;
 
-public class EntityGlyphRenderer extends Render<EntityGlyph> {
+public class EntityGlyphRenderer extends EntityRenderer<EntityGlyph> {
 
 	private final RenderItem itemRenderer;
 
-	public EntityGlyphRenderer(RenderManager renderManager, RenderItem itemRenderer) {
+	public EntityGlyphRenderer(EntityRendererManager renderManager, RenderItem itemRenderer) {
 		super(renderManager);
 		this.itemRenderer = itemRenderer;
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGlyph entity) {
-		return TextureMap.LOCATION_BLOCKS_TEXTURE;
+		return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
 	}
 
 	@Override

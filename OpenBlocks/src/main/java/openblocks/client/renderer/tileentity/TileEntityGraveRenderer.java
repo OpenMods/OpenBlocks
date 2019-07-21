@@ -1,6 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -27,7 +27,7 @@ public class TileEntityGraveRenderer extends TileEntitySpecialRenderer<TileEntit
 
 			final BlockPos pos = target.getPos();
 			final IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(target.getWorld(), pos);
-			final IBlockState state = world.getBlockState(pos).getActualState(world, pos);
+			final BlockState state = world.getBlockState(pos).getActualState(world, pos);
 
 			if (state.getBlock() instanceof BlockGrave) {
 				final Hitbox box = selectBox(state.getValue(BlockGrave.HAS_BASE));

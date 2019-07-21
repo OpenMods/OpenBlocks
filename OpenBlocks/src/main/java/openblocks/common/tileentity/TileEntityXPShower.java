@@ -1,9 +1,9 @@
 package openblocks.common.tileentity;
 
 import java.util.Optional;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -58,7 +58,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 				final IFluidXpConverter converter = maybeConverter.get();
 				final int xpInTank = converter.fluidToXp(tankContents.amount);
 				// Note: following never returns 0!
-				final int xpInOrb = EntityXPOrb.getXPSplit(xpInTank);
+				final int xpInOrb = ExperienceOrbEntity.getXPSplit(xpInTank);
 				final int toDrain = converter.xpToFluid(xpInOrb);
 
 				if (toDrain > 0 && toDrain <= tankContents.amount) {
@@ -76,7 +76,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 	}
 
 	private boolean isPowered() {
-		final IBlockState state = world.getBlockState(pos);
+		final BlockState state = world.getBlockState(pos);
 		return state.getBlock() instanceof BlockXPShower && state.getValue(BlockXPShower.POWERED);
 	}
 
@@ -97,13 +97,13 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void readFromNBT(CompoundNBT nbt) {
 		super.readFromNBT(nbt);
 		bufferTank.readFromNBT(nbt);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		bufferTank.writeToNBT(tag);
 		return tag;

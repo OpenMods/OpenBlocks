@@ -3,11 +3,11 @@ package openblocks.common.item;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
@@ -24,11 +24,11 @@ public class ItemSlimalyzer extends Item {
 	private static final String TAG_ACTIVE = "Active";
 
 	public ItemSlimalyzer() {
-		addPropertyOverride(new ResourceLocation("active"), (ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> isActive(stack)? 2 : 0);
+		addPropertyOverride(new ResourceLocation("active"), (ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) -> isActive(stack)? 2 : 0);
 	}
 
 	private static boolean isActive(ItemStack stack) {
-		final NBTTagCompound itemTag = stack.getTagCompound();
+		final CompoundNBT itemTag = stack.getTagCompound();
 		return itemTag != null && itemTag.getBoolean(TAG_ACTIVE);
 	}
 
@@ -58,7 +58,7 @@ public class ItemSlimalyzer extends Item {
 	}
 
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
+	public boolean onEntityItemUpdate(ItemEntity entityItem) {
 		final World world = entityItem.world;
 
 		if (!world.isRemote) {

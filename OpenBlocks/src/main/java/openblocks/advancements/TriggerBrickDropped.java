@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 
@@ -50,7 +50,7 @@ public class TriggerBrickDropped implements ICriterionTrigger<TriggerBrickDroppe
 		return INSTANCE;
 	}
 
-	public void trigger(EntityPlayerMP player) {
+	public void trigger(ServerPlayerEntity player) {
 		final PlayerAdvancements advancements = player.getAdvancements();
 		listeners.get(advancements).forEach((listener) -> listener.grantCriterion(advancements));
 	}

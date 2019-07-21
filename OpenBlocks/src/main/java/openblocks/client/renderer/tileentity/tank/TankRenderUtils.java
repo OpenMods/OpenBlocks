@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
+import net.minecraft.world.chunk.Chunk.CreateEntityType;
 import net.minecraftforge.fluids.FluidStack;
 import openmods.utils.Diagonal;
 
@@ -63,7 +63,7 @@ public class TankRenderUtils {
 	public static TileEntity getTileEntitySafe(World world, BlockPos pos) {
 		if (world.isBlockLoaded(pos)) {
 			Chunk chunk = world.getChunkFromBlockCoords(pos);
-			return chunk.getTileEntity(pos, EnumCreateEntityType.CHECK);
+			return chunk.getTileEntity(pos, CreateEntityType.CHECK);
 		}
 
 		return null;

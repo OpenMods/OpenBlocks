@@ -11,9 +11,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,14 +37,14 @@ public class ModelCartographer extends ModelBase {
 
 			final List<BakedQuad> quads = Lists.newArrayList();
 
-			quads.addAll(model.getQuads(null, EnumFacing.WEST, 0));
-			quads.addAll(model.getQuads(null, EnumFacing.EAST, 0));
+			quads.addAll(model.getQuads(null, Direction.WEST, 0));
+			quads.addAll(model.getQuads(null, Direction.EAST, 0));
 
-			quads.addAll(model.getQuads(null, EnumFacing.NORTH, 0));
-			quads.addAll(model.getQuads(null, EnumFacing.SOUTH, 0));
+			quads.addAll(model.getQuads(null, Direction.NORTH, 0));
+			quads.addAll(model.getQuads(null, Direction.SOUTH, 0));
 
-			quads.addAll(model.getQuads(null, EnumFacing.UP, 0));
-			quads.addAll(model.getQuads(null, EnumFacing.DOWN, 0));
+			quads.addAll(model.getQuads(null, Direction.UP, 0));
+			quads.addAll(model.getQuads(null, Direction.DOWN, 0));
 
 			quads.addAll(model.getQuads(null, null, 0));
 
@@ -52,7 +52,7 @@ public class ModelCartographer extends ModelBase {
 			final AabbBuilder horizontalBoundsBuilder = AabbBuilder.create();
 
 			for (BakedQuad quad : quads) {
-				if (quad.getFace() == EnumFacing.EAST || quad.getFace() == EnumFacing.WEST)
+				if (quad.getFace() == Direction.EAST || quad.getFace() == Direction.WEST)
 					addQuad(quad, horizontalBoundsBuilder);
 				addQuad(quad, allBoundsBuilder);
 			}

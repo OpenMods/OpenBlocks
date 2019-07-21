@@ -2,13 +2,13 @@ package openblocks.common.block;
 
 import java.util.Random;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -48,29 +48,29 @@ public class BlockSky extends OpenBlock {
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public BlockState getStateFromMeta(int meta) {
 		return getDefaultState()
 				.withProperty(POWERED, (meta & MASK_POWERED) != 0);
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		return state.getValue(POWERED)? MASK_POWERED : 0;
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neigbourPos) {
+	public void neighborChanged(BlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neigbourPos) {
 		updatePowerState(state, world, blockPos);
 		super.neighborChanged(state, world, blockPos, neighbour, neigbourPos);
 	}
 
 	@Override
-	protected boolean onBlockAddedNextTick(World world, BlockPos blockPos, IBlockState state) {
+	protected boolean onBlockAddedNextTick(World world, BlockPos blockPos, BlockState state) {
 		updatePowerState(state, world, blockPos);
 		return super.onBlockAddedNextTick(world, blockPos, state);
 	}
 
-	private void updatePowerState(IBlockState state, World world, BlockPos pos) {
+	private void updatePowerState(BlockState state, World world, BlockPos pos) {
 		if (!world.isRemote) {
 			final boolean isPowered = world.isBlockIndirectlyGettingPowered(pos) > 0;
 			final boolean isActive = state.getValue(POWERED);
@@ -80,30 +80,30 @@ public class BlockSky extends OpenBlock {
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
+	public void updateTick(World world, BlockPos pos, BlockState state, Random random) {
 		final boolean isPowered = world.isBlockIndirectlyGettingPowered(pos) > 0;
 
 		world.setBlockState(pos, state.withProperty(POWERED, isPowered));
 	}
 
-	public boolean isActive(IBlockState state) {
+	public boolean isActive(BlockState state) {
 		boolean isPowered = state.getValue(POWERED);
 		return isPowered ^ isInverted();
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+	public AxisAlignedBB getSelectedBoundingBox(BlockState state, World world, BlockPos pos) {
 		return isActive(state)? EMPTY : super.getSelectedBoundingBox(state, world, pos);
 	}
 
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return isActive(state)? EnumBlockRenderType.ENTITYBLOCK_ANIMATED : EnumBlockRenderType.MODEL;
+	public BlockRenderType getRenderType(BlockState state) {
+		return isActive(state)? BlockRenderType.ENTITYBLOCK_ANIMATED : BlockRenderType.MODEL;
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 }

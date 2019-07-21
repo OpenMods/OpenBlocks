@@ -8,8 +8,8 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 import java.util.function.Function;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -118,7 +118,7 @@ public class StencilTextureManager {
 			this.background = background;
 		}
 
-		public void allocate(TextureMap textureMap) {
+		public void allocate(AtlasTexture textureMap) {
 			final int mipmapLevels = textureMap.getMipmapLevels();
 
 			freeLocations.clear();

@@ -5,12 +5,12 @@ import com.google.common.collect.Sets;
 import java.util.Map;
 import java.util.Set;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootEntry;
-import net.minecraft.world.storage.loot.LootEntryTable;
+import net.minecraft.world.storage.loot.ILootGenerator;
+import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.LootTables;
 import net.minecraft.world.storage.loot.RandomValueRange;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -56,7 +56,7 @@ public class LootHandler {
 		final Set<ResourceLocation> alreadyRegistered = Sets.newHashSet();
 		for (LootInjection injection : injections.values())
 			if (injection.canInject() && alreadyRegistered.add(injection.location))
-				LootTableList.register(injection.location);
+				LootTables.register(injection.location);
 	}
 
 	@SubscribeEvent
@@ -68,11 +68,11 @@ public class LootHandler {
 	}
 
 	private static LootPool createPool(ResourceLocation injectionEntry) {
-		return new LootPool(new LootEntry[] { loadEntry(injectionEntry) }, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(0, 1), "openmods_inject_pool");
+		return new LootPool(new ILootGenerator[] { loadEntry(injectionEntry) }, new ILootCondition[0], new RandomValueRange(1), new RandomValueRange(0, 1), "openmods_inject_pool");
 	}
 
-	private static LootEntry loadEntry(ResourceLocation injectionEntry) {
-		return new LootEntryTable(injectionEntry, 1, 0, new LootCondition[0], "openmods_inject_entry");
+	private static ILootGenerator loadEntry(ResourceLocation injectionEntry) {
+		return new TableLootEntry(injectionEntry, 1, 0, new ILootCondition[0], "openmods_inject_entry");
 	}
 
 }

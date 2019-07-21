@@ -1,6 +1,6 @@
 package openblocks.client.renderer.tileentity.tank;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import openmods.utils.Diagonal;
 
@@ -15,11 +15,11 @@ public class DoubledCoords {
 		this.z = z;
 	}
 
-	public DoubledCoords(int baseX, int baseY, int baseZ, EnumFacing dir) {
+	public DoubledCoords(int baseX, int baseY, int baseZ, Direction dir) {
 		this(2 * baseX + dir.getFrontOffsetX(), 2 * baseY + dir.getFrontOffsetY(), 2 * baseZ + dir.getFrontOffsetZ());
 	}
 
-	public DoubledCoords(BlockPos pos, EnumFacing dir) {
+	public DoubledCoords(BlockPos pos, Direction dir) {
 		this(pos.getX(), pos.getY(), pos.getZ(), dir);
 	}
 
@@ -31,13 +31,13 @@ public class DoubledCoords {
 		this(pos.getX(), pos.getY(), pos.getZ(), dir);
 	}
 
-	public boolean isSameAs(int baseX, int baseY, int baseZ, EnumFacing dir) {
+	public boolean isSameAs(int baseX, int baseY, int baseZ, Direction dir) {
 		return (x == 2 * baseX + dir.getFrontOffsetX()) &&
 				(y == 2 * baseY + dir.getFrontOffsetY()) &&
 				(z == 2 * baseZ + dir.getFrontOffsetZ());
 	}
 
-	public boolean isSameAs(BlockPos pos, EnumFacing dir) {
+	public boolean isSameAs(BlockPos pos, Direction dir) {
 		return isSameAs(pos.getX(), pos.getY(), pos.getZ(), dir);
 	}
 

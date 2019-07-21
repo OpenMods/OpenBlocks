@@ -1,6 +1,6 @@
 package openblocks.common;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -28,7 +28,7 @@ public class ServerTickHandler {
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent evt) {
 		if (evt.phase == Phase.START) {
-			if (evt.player instanceof EntityPlayerMP) FlimFlamEnchantmentsHandler.deliverKarma((EntityPlayerMP)evt.player);
+			if (evt.player instanceof ServerPlayerEntity) FlimFlamEnchantmentsHandler.deliverKarma((ServerPlayerEntity)evt.player);
 		}
 	}
 }

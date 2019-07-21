@@ -1,16 +1,16 @@
 package openblocks.common.entity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityXPOrbNoFly extends EntityXPOrb {
+public class EntityXPOrbNoFly extends ExperienceOrbEntity {
 
 	public EntityXPOrbNoFly(World world) {
 		super(world);
@@ -68,7 +68,7 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 
 		if (this.onGround) {
 			BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
-			IBlockState underState = this.world.getBlockState(underPos);
+			BlockState underState = this.world.getBlockState(underPos);
 			f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.98F;
 		} else {
 			f = 0.98F;

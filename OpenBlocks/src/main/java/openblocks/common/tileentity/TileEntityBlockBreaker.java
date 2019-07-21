@@ -2,15 +2,15 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -39,22 +39,22 @@ public class TileEntityBlockBreaker extends TileEntityBlockManipulator implement
 	public TileEntityBlockBreaker() {}
 
 	@Override
-	protected boolean canWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
+	protected boolean canWork(BlockState targetState, BlockPos target, Direction direction) {
 		final Block block = targetState.getBlock();
 		return !block.isAir(targetState, world, target) && block != Blocks.BEDROCK && targetState.getBlockHardness(world, target) > -1.0F;
 	}
 
 	@Override
-	protected void doWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
-		final List<EntityItem> drops = FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new BreakBlockAction(world, target).findEffectiveTool());
+	protected void doWork(BlockState targetState, BlockPos target, Direction direction) {
+		final List<ItemEntity> drops = FakePlayerPool.instance.executeOnPlayer((ServerWorld)world, new BreakBlockAction(world, target).findEffectiveTool());
 
 		if (drops.isEmpty()) return;
 
-		final EnumFacing dropSide = direction.getOpposite();
+		final Direction dropSide = direction.getOpposite();
 		final IItemHandler targetInventory = InventoryUtils.tryGetHandler(world, pos.offset(dropSide), direction);
 		if (targetInventory == null) return;
 
-		for (EntityItem drop : drops) {
+		for (ItemEntity drop : drops) {
 			ItemStack stack = drop.getItem();
 			final ItemStack leftovers = ItemHandlerHelper.insertItem(targetInventory, stack, false);
 			ItemUtils.setEntityItemStack(drop, leftovers);
@@ -62,7 +62,7 @@ public class TileEntityBlockBreaker extends TileEntityBlockManipulator implement
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 
@@ -70,19 +70,19 @@ public class TileEntityBlockBreaker extends TileEntityBlockManipulator implement
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, Direction facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, Direction facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return (T)inventory.getHandler();
 

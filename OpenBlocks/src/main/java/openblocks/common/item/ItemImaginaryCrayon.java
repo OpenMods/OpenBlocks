@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
@@ -37,12 +37,12 @@ public class ItemImaginaryCrayon extends ItemImaginary {
 
 	private static final String TAG_COLOR = "Color";
 
-	public static int getColor(NBTTagCompound tag) {
+	public static int getColor(CompoundNBT tag) {
 		return tag.getInteger(TAG_COLOR);
 	}
 
 	public static int getColor(@Nonnull ItemStack stack) {
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		return getColor(tag);
 	}
 
@@ -57,7 +57,7 @@ public class ItemImaginaryCrayon extends ItemImaginary {
 
 	@Nonnull
 	public static ItemStack setupValues(@Nonnull ItemStack result, int color, PlacementMode mode, float uses) {
-		NBTTagCompound tag = ItemUtils.getItemTag(result);
+		CompoundNBT tag = ItemUtils.getItemTag(result);
 		tag.setInteger(TAG_COLOR, color);
 		tag.setInteger(TAG_MODE, mode.ordinal());
 		tag.setFloat(TAG_USES, uses);
@@ -80,7 +80,7 @@ public class ItemImaginaryCrayon extends ItemImaginary {
 	}
 
 	@Override
-	protected void configureBlockEntity(TileEntity tileEntity, PlacementMode mode, NBTTagCompound tag) {
+	protected void configureBlockEntity(TileEntity tileEntity, PlacementMode mode, CompoundNBT tag) {
 		if (tileEntity instanceof TileEntityImaginaryCrayon) {
 			((TileEntityImaginaryCrayon)tileEntity).setup(mode.isInverted, mode.shape, tag.getInteger(TAG_COLOR));
 		}

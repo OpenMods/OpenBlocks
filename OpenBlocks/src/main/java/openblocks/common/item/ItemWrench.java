@@ -2,16 +2,16 @@ package openblocks.common.item;
 
 import com.google.common.collect.Sets;
 import java.util.Set;
+import net.minecraft.block.AbstractButtonBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockLever;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.block.LeverBlock;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -26,13 +26,13 @@ public class ItemWrench extends Item {
 	public ItemWrench() {
 		setMaxStackSize(1);
 
-		sneakOnly.add(BlockLever.class);
-		sneakOnly.add(BlockButton.class);
-		sneakOnly.add(BlockChest.class);
+		sneakOnly.add(LeverBlock.class);
+		sneakOnly.add(AbstractButtonBlock.class);
+		sneakOnly.add(ChestBlock.class);
 	}
 
 	@Override
-	public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
+	public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, PlayerEntity player) {
 		return true;
 	}
 
@@ -41,18 +41,18 @@ public class ItemWrench extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public ActionResultType onItemUseFirst(PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, Hand hand) {
 		final Block block = world.getBlockState(pos).getBlock();
 
-		if (requiresSneaking(block) && !player.isSneaking()) return EnumActionResult.FAIL;
+		if (requiresSneaking(block) && !player.isSneaking()) return ActionResultType.FAIL;
 
-		final EnumFacing[] rotations = block.getValidRotations(world, pos);
+		final Direction[] rotations = block.getValidRotations(world, pos);
 		if (ArrayUtils.contains(rotations, side)) {
-			if (world.isRemote) return EnumActionResult.PASS;
-			if (block.rotateBlock(world, pos, side)) return EnumActionResult.SUCCESS;
+			if (world.isRemote) return ActionResultType.PASS;
+			if (block.rotateBlock(world, pos, side)) return ActionResultType.SUCCESS;
 		}
 
-		return EnumActionResult.FAIL;
+		return ActionResultType.FAIL;
 	}
 
 }

@@ -1,10 +1,10 @@
 package openblocks.common.recipe;
 
 import javax.annotation.Nonnull;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
@@ -38,7 +38,7 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inventory, World world) {
+	public boolean matches(CraftingInventory inventory, World world) {
 		for (int i = 0; i < 3; i++) {
 			ItemStack left = inventory.getStackInRowAndColumn(0, i);
 
@@ -50,7 +50,7 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 			ItemStack middle = inventory.getStackInRowAndColumn(1, i);
 
 			if (!middle.isEmpty() && middle.getItem() instanceof ItemEmptyMap) {
-				NBTTagCompound tag = ItemUtils.getItemTag(middle);
+				CompoundNBT tag = ItemUtils.getItemTag(middle);
 				int scale = tag.getByte(ItemEmptyMap.TAG_SCALE);
 				return scale < ItemEmptyMap.MAX_SCALE;
 			}
@@ -61,14 +61,14 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 
 	@Override
 	@Nonnull
-	public ItemStack getCraftingResult(InventoryCrafting inventory) {
+	public ItemStack getCraftingResult(CraftingInventory inventory) {
 		for (int i = 0; i < 3; i++) {
 			ItemStack middle = inventory.getStackInRowAndColumn(1, i);
 
 			if (!middle.isEmpty() && middle.getItem() instanceof ItemEmptyMap) {
 				ItemStack result = middle.copy();
 				result.setCount(1);
-				NBTTagCompound tag = ItemUtils.getItemTag(result);
+				CompoundNBT tag = ItemUtils.getItemTag(result);
 				byte currentScale = tag.getByte(ItemEmptyMap.TAG_SCALE);
 				tag.setByte(ItemEmptyMap.TAG_SCALE, (byte)Math.min(currentScale + 1, ItemEmptyMap.MAX_SCALE));
 				return result;

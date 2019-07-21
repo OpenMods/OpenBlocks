@@ -4,9 +4,9 @@ import com.google.common.collect.Sets;
 import java.util.Set;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -66,9 +66,9 @@ public class EntityEventHandler {
 		 * If the player hasn't been given a manual, we'll give him one! (or
 		 * throw it on the floor..)
 		 */
-		if (Config.spamInfoBook && !event.getWorld().isRemote && entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)entity;
-			NBTTagCompound persistTag = PlayerUtils.getModPlayerPersistTag(player, "OpenBlocks");
+		if (Config.spamInfoBook && !event.getWorld().isRemote && entity instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)entity;
+			CompoundNBT persistTag = PlayerUtils.getModPlayerPersistTag(player, "OpenBlocks");
 
 			boolean shouldGiveManual = OpenBlocks.Items.infoBook != null && !persistTag.getBoolean(GIVEN_MANUAL_TAG);
 			if (shouldGiveManual) {

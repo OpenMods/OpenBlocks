@@ -1,16 +1,16 @@
 package openblocks.common.tileentity;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.Config;
@@ -42,7 +42,7 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 				public void onInventoryChanged(IInventory inventory, OptionalInt slotNumber) {
 					markUpdated();
 					if (!skipActionOnInventoryUpdate && !world.isRemote && isUpdateTriggering(inventory, slotNumber)) {
-						final IBlockState blockState = world.getBlockState(getPos());
+						final BlockState blockState = world.getBlockState(getPos());
 						if (blockState.getBlock() instanceof BlockBlockPlacer &&
 								blockState.getValue(BlockBlockManpulatorBase.POWERED))
 							triggerBlockAction(blockState);
@@ -57,7 +57,7 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 			});
 
 	@Override
-	protected boolean canWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
+	protected boolean canWork(BlockState targetState, BlockPos target, Direction direction) {
 		if (inventory.isEmpty()) return false;
 
 		final Block block = targetState.getBlock();
@@ -65,7 +65,7 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 	}
 
 	@Override
-	protected void doWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
+	protected void doWork(BlockState targetState, BlockPos target, Direction direction) {
 		ItemStack stack = ItemStack.EMPTY;
 		int slotId;
 
@@ -81,13 +81,13 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 		// * 2, since some blocks may take into account player height, so distance must be greater than that
 		final BlockPos playerPos = target.offset(direction, 2);
 
-		final ItemStack result = FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new UseItemAction(
+		final ItemStack result = FakePlayerPool.instance.executeOnPlayer((ServerWorld)world, new UseItemAction(
 				stack,
 				new Vec3d(playerPos),
 				new Vec3d(target),
 				new Vec3d(target).addVector(0.5, 0.5, 0.5),
 				direction.getOpposite(),
-				EnumHand.MAIN_HAND));
+				Hand.MAIN_HAND));
 
 		if (!ItemStack.areItemStacksEqual(result, stack)) {
 			skipActionOnInventoryUpdate = true;
@@ -100,17 +100,17 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 	}
 
 	@Override
-	public Object getServerGui(EntityPlayer player) {
+	public Object getServerGui(PlayerEntity player) {
 		return new ContainerBlockPlacer(player.inventory, this);
 	}
 
 	@Override
-	public Object getClientGui(EntityPlayer player) {
+	public Object getClientGui(PlayerEntity player) {
 		return new GuiBlockPlacer(new ContainerBlockPlacer(player.inventory, this));
 	}
 
 	@Override
-	public boolean canOpenGui(EntityPlayer player) {
+	public boolean canOpenGui(PlayerEntity player) {
 		return true;
 	}
 
@@ -120,26 +120,26 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 		return tag;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, Direction facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, Direction facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return (T)inventory.getHandler();
 

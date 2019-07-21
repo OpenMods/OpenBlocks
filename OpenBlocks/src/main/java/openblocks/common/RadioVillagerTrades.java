@@ -1,9 +1,9 @@
 package openblocks.common;
 
-import net.minecraft.entity.passive.EntityVillager.EmeraldForItems;
-import net.minecraft.entity.passive.EntityVillager.ListItemForEmeralds;
-import net.minecraft.entity.passive.EntityVillager.PriceInfo;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.merchant.villager.VillagerEntity.EmeraldForItems;
+import net.minecraft.entity.merchant.villager.VillagerEntity.ListItemForEmeralds;
+import net.minecraft.entity.merchant.villager.VillagerEntity.PriceInfo;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;

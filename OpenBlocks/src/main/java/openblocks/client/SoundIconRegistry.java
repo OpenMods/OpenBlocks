@@ -8,7 +8,7 @@ import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraft.util.ResourceLocation;
@@ -34,7 +34,7 @@ public class SoundIconRegistry {
 	public interface ISoundCategory {
 		IDrawableIcon getIcon(Iterator<String> path);
 
-		void registerIcons(TextureMap registry);
+		void registerIcons(AtlasTexture registry);
 	}
 
 	public static class ConstantIcon implements ISoundCategory {
@@ -45,7 +45,7 @@ public class SoundIconRegistry {
 		}
 
 		@Override
-		public void registerIcons(TextureMap registry) {
+		public void registerIcons(AtlasTexture registry) {
 			icon.registerIcons(registry);
 		}
 
@@ -79,7 +79,7 @@ public class SoundIconRegistry {
 		}
 
 		@Override
-		public void registerIcons(TextureMap registry) {
+		public void registerIcons(AtlasTexture registry) {
 			if (defaultIcon != null) defaultIcon.registerIcons(registry);
 
 			for (ISoundCategory cat : subCategories.values())
@@ -140,7 +140,7 @@ public class SoundIconRegistry {
 		}
 
 		@Override
-		public void registerIcons(TextureMap registry) {
+		public void registerIcons(AtlasTexture registry) {
 			child.registerIcons(registry);
 		}
 
@@ -159,7 +159,7 @@ public class SoundIconRegistry {
 
 	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent evt) {
-		final TextureMap map = evt.getMap();
+		final AtlasTexture map = evt.getMap();
 		genericIcon.registerIcons(map);
 		unknownIcon.registerIcons(map);
 		defaultRoot.registerIcons(map);

@@ -1,11 +1,11 @@
 package openblocks.common.block;
 
 import java.util.Random;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -20,14 +20,14 @@ public class BlockBuilderGuide extends BlockGuide {
 	public BlockBuilderGuide() {}
 
 	@Override
-	protected boolean areButtonsActive(EntityPlayer player) {
+	protected boolean areButtonsActive(PlayerEntity player) {
 		final ItemStack heldItem = player.getHeldItemMainhand();
-		return heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemBlock);
+		return heldItem.isEmpty() || !(heldItem.getItem() instanceof BlockItem);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random rand) {
 		super.randomDisplayTick(state, world, pos, rand);
 
 		final float x = pos.getX() + 0.5f;

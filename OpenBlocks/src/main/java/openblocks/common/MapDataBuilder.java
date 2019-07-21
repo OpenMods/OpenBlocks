@@ -11,15 +11,15 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkProvider;
 import openblocks.common.HeightMapData.LayerData;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
@@ -40,8 +40,8 @@ public class MapDataBuilder {
 		public byte liquidColor;
 		public int liquidHeight;
 
-		private static IBlockState getValidBlock(IBlockAccess world, Chunk chunk, BlockPos pos) {
-			final IBlockState blockState = chunk.getBlockState(pos);
+		private static BlockState getValidBlock(IBlockAccess world, Chunk chunk, BlockPos pos) {
+			final BlockState blockState = chunk.getBlockState(pos);
 			final Block block = blockState.getBlock();
 
 			if (block.isAir(blockState, world, pos)) return null;
@@ -63,15 +63,15 @@ public class MapDataBuilder {
 
 			for (int x = startX; x < startX + size; x++)
 				for (int z = startZ; z < startZ + size; z++) {
-					IBlockState blockLiquid = null;
+					BlockState blockLiquid = null;
 					BlockPos heightLiquid = null;
 
-					IBlockState blockSolid = null;
+					BlockState blockSolid = null;
 					BlockPos heightSolid = null;
 
 					for (int y = 255; y >= 0; y--) {
 						final BlockPos pos = new BlockPos(x, y, z);
-						IBlockState blockState = getValidBlock(world, chunk, pos);
+						BlockState blockState = getValidBlock(world, chunk, pos);
 
 						if (blockState != null) {
 							if (blockState.getMaterial().isLiquid()) {
@@ -253,7 +253,7 @@ public class MapDataBuilder {
 			distances.add(new JobDistance(dx * dx + dz * dz, job));
 		}
 
-		IChunkProvider provider = world.getChunkProvider();
+		AbstractChunkProvider provider = world.getChunkProvider();
 		while (!distances.isEmpty()) {
 			JobDistance dist = distances.poll();
 			ChunkJob job = dist.job;

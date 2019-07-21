@@ -2,16 +2,16 @@ package openblocks.common.block;
 
 import java.util.Random;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
@@ -41,30 +41,30 @@ public class BlockGrave extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public BlockState getStateFromMeta(int meta) {
 		return super.getStateFromMeta(meta)
 				.withProperty(HAS_BASE, (meta & MASK_HAS_BASE) != 0);
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		return super.getMetaFromState(state) | (state.getValue(HAS_BASE)? MASK_HAS_BASE : 0);
 	}
 
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.2, 1.0);
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
 		return AABB;
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
@@ -79,7 +79,7 @@ public class BlockGrave extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
+	public boolean canEntityDestroy(BlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
 		return false;
 	}
 
@@ -88,13 +88,13 @@ public class BlockGrave extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+	public void breakBlock(World world, BlockPos pos, BlockState state) {
 		super.breakBlock(world, pos, state);
 		Log.log(debugLevel(), "Grave @ (%s) dimension = %d destroyed", pos, world.provider.getDimension());
 	}
 
 	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest) {
 		Log.log(debugLevel(), "Grave @ (%s) dimension = %d destroyed by player %s", pos, world.provider.getDimension(), player);
 		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
@@ -106,15 +106,15 @@ public class BlockGrave extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public BlockState getStateForPlacement(World world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
 		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer)
 				.withProperty(HAS_BASE, hasBase(world, pos));
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neighbourPos) {
+	public void neighborChanged(BlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neighbourPos) {
 		if (neighbourPos.equals(blockPos.down())) {
-			final IBlockState newState = state.withProperty(HAS_BASE, hasBase(world, blockPos));
+			final BlockState newState = state.withProperty(HAS_BASE, hasBase(world, blockPos));
 			if (newState != state)
 				world.setBlockState(blockPos, newState, BlockNotifyFlags.SEND_TO_CLIENTS);
 			super.neighborChanged(newState, world, blockPos, neighbour, neighbourPos);
@@ -124,13 +124,13 @@ public class BlockGrave extends OpenBlock.FourDirections {
 	}
 
 	protected boolean hasBase(IBlockAccess world, BlockPos pos) {
-		final IBlockState block = world.getBlockState(pos.down());
+		final BlockState block = world.getBlockState(pos.down());
 		final Material material = block.getMaterial();
 		return material == Material.GRASS || material == Material.GROUND;
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-		return face == EnumFacing.DOWN? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
+		return face == Direction.DOWN? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
 	}
 }

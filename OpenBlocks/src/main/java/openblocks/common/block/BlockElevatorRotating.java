@@ -2,13 +2,13 @@ package openblocks.common.block;
 
 import java.util.Set;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks.Blocks;
@@ -67,7 +67,7 @@ public class BlockElevatorRotating extends OpenBlock.FourDirections implements I
 	}
 
 	@Override
-	public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor colour) {
+	public boolean recolorBlock(World world, BlockPos pos, Direction side, DyeColor colour) {
 		final ColorMeta newColor = ColorMeta.fromVanillaEnum(colour);
 
 		if (newColor != color) {
@@ -82,8 +82,8 @@ public class BlockElevatorRotating extends OpenBlock.FourDirections implements I
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (hand == EnumHand.MAIN_HAND) {
+	public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+		if (hand == Hand.MAIN_HAND) {
 			final ItemStack heldItem = player.getHeldItemMainhand();
 			if (!heldItem.isEmpty()) {
 				Set<ColorMeta> metas = ColorMeta.fromStack(heldItem);
@@ -91,7 +91,7 @@ public class BlockElevatorRotating extends OpenBlock.FourDirections implements I
 					final ColorMeta meta = CollectionUtils.getRandom(metas);
 					final Block newBlock = colorToBlock(meta);
 					if (newBlock != null) {
-						final IBlockState newState = newBlock.getDefaultState()
+						final BlockState newState = newBlock.getDefaultState()
 								.withProperty(getPropertyOrientation(), state.getValue(getPropertyOrientation()));
 						return world.setBlockState(pos, newState);
 					}
@@ -102,14 +102,14 @@ public class BlockElevatorRotating extends OpenBlock.FourDirections implements I
 	}
 
 	@Override
-	public EnumDyeColor getColor(World world, BlockPos pos, IBlockState state) {
+	public DyeColor getColor(World world, BlockPos pos, BlockState state) {
 		return color.vanillaEnum;
 	}
 
 	@Override
-	public PlayerRotation getRotation(World world, BlockPos pos, IBlockState state) {
+	public PlayerRotation getRotation(World world, BlockPos pos, BlockState state) {
 		final Orientation orientation = getOrientation(world, pos);
-		final EnumFacing rot = orientation.north();
+		final Direction rot = orientation.north();
 		switch (rot) {
 			case NORTH:
 				return PlayerRotation.NORTH;

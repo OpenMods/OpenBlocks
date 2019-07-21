@@ -1,15 +1,15 @@
 package openblocks.common.item;
 
 import javax.annotation.Nonnull;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.Config;
@@ -29,20 +29,20 @@ public class ItemSpongeOnAStick extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(PlayerEntity player, World world, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
 		final ItemStack stack = player.getHeldItem(hand);
-		return soakUp(world, pos, player, stack)? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
+		return soakUp(world, pos, player, stack)? ActionResultType.SUCCESS : ActionResultType.FAIL;
 
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
 		boolean result = soakUp(world, player.getPosition(), player, stack);
-		return ActionResult.newResult(result? EnumActionResult.SUCCESS : EnumActionResult.FAIL, stack);
+		return ActionResult.newResult(result? ActionResultType.SUCCESS : ActionResultType.FAIL, stack);
 	}
 
-	private static boolean soakUp(World world, BlockPos pos, EntityPlayer player, @Nonnull ItemStack stack) {
+	private static boolean soakUp(World world, BlockPos pos, PlayerEntity player, @Nonnull ItemStack stack) {
 		boolean absorbedAnything = false;
 		boolean hitLava = false;
 		int damage = stack.getItemDamage();

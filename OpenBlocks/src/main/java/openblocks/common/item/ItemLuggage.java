@@ -2,13 +2,13 @@ package openblocks.common.item;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.datafix.FixTypes;
@@ -27,7 +27,7 @@ public class ItemLuggage extends Item {
 	public ItemLuggage() {
 		setMaxStackSize(1);
 
-		addPropertyOverride(new ResourceLocation("inventory"), (@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> getInventorySize(stack));
+		addPropertyOverride(new ResourceLocation("inventory"), (@Nonnull ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) -> getInventorySize(stack));
 	}
 
 	@Override
@@ -36,10 +36,10 @@ public class ItemLuggage extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
 
-		if (hand != EnumHand.MAIN_HAND) return ActionResult.newResult(EnumActionResult.PASS, stack);
+		if (hand != Hand.MAIN_HAND) return ActionResult.newResult(ActionResultType.PASS, stack);
 
 		if (!world.isRemote) {
 			Vec3d vec3 = new Vec3d(player.posX, player.posY, player.posZ);
@@ -55,7 +55,7 @@ public class ItemLuggage extends Item {
 
 		}
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+		return ActionResult.newResult(ActionResultType.SUCCESS, stack);
 	}
 
 	private static int getInventorySize(@Nonnull ItemStack stack) {

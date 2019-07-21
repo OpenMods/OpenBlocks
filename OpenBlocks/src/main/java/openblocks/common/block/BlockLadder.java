@@ -1,16 +1,16 @@
 package openblocks.common.block;
 
-import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.TrapDoorBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation(hasVideo = true)
-public class BlockLadder extends BlockTrapDoor {
+public class BlockLadder extends TrapDoorBlock {
 
 	public BlockLadder() {
 		super(Material.WOOD);
@@ -20,8 +20,8 @@ public class BlockLadder extends BlockTrapDoor {
 
 	// NOTE vanilla's ladder provides similar capability, but only when bottom block is actual ladder, so this is still useful
 	@Override
-	public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
-		return world.getBlockState(pos).getValue(BlockTrapDoor.OPEN);
+	public boolean isLadder(BlockState state, IBlockAccess world, BlockPos pos, LivingEntity entity) {
+		return world.getBlockState(pos).getValue(TrapDoorBlock.OPEN);
 	}
 
 }

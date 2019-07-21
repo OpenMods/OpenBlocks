@@ -5,13 +5,13 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.client.gui.GuiItemDropper;
@@ -66,7 +66,7 @@ public class TileEntityItemDropper extends SyncedTileEntity implements INeighbou
 	private static final Vector3f DROP_V = new Vector3f(0.0f, -1.0f, 0.0f);
 
 	private void dropItem(float speedMultiplier) {
-		if (!(world instanceof WorldServer)) return;
+		if (!(world instanceof ServerWorld)) return;
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
@@ -95,7 +95,7 @@ public class TileEntityItemDropper extends SyncedTileEntity implements INeighbou
 			final double worldDropZ = pos.getZ() + worldDrop.z;
 
 			final DropItemAction action = new DropItemAction(dropped, worldDropX, worldDropY, worldDropZ, worldVel.x, worldVel.y, worldVel.z);
-			FakePlayerPool.instance.executeOnPlayer((WorldServer)world, action);
+			FakePlayerPool.instance.executeOnPlayer((ServerWorld)world, action);
 
 			break;
 		}
@@ -109,17 +109,17 @@ public class TileEntityItemDropper extends SyncedTileEntity implements INeighbou
 	}
 
 	@Override
-	public Object getServerGui(EntityPlayer player) {
+	public Object getServerGui(PlayerEntity player) {
 		return new ContainerItemDropper(player.inventory, this);
 	}
 
 	@Override
-	public Object getClientGui(EntityPlayer player) {
+	public Object getClientGui(PlayerEntity player) {
 		return new GuiItemDropper(new ContainerItemDropper(player.inventory, this));
 	}
 
 	@Override
-	public boolean canOpenGui(EntityPlayer player) {
+	public boolean canOpenGui(PlayerEntity player) {
 		return true;
 	}
 
@@ -129,14 +129,14 @@ public class TileEntityItemDropper extends SyncedTileEntity implements INeighbou
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 		return tag;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 	}
@@ -166,14 +166,14 @@ public class TileEntityItemDropper extends SyncedTileEntity implements INeighbou
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, Direction facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
 				super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, Direction facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return (T)inventory.getHandler();
 

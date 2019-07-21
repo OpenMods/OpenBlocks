@@ -1,10 +1,10 @@
 package openblocks.client.gui;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openmods.gui.SyncedGuiContainer;
@@ -35,7 +35,7 @@ public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
 
 		GuiComponentTabWrapper tabs = new GuiComponentTabWrapper(0, 0, main);
 
-		final IBlockState state = te.getWorld().getBlockState(te.getPos());
+		final BlockState state = te.getWorld().getBlockState(te.getPos());
 		{
 			GuiComponentTab itemTab = new GuiComponentTab(StandardPalette.lightblue.getColor(), new ItemStack(Blocks.CHEST), 100, 100);
 			final GuiComponentSideSelector sideSelector = new GuiComponentSideSelector(15, 15, 40.0, state, te, false);
@@ -58,7 +58,7 @@ public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
 		return tabs;
 	}
 
-	private static void wireSideSelector(final GuiComponentSideSelector sideSelector, final IReadableBitMap<EnumFacing> readableSides, final IWriteableBitMap<EnumFacing> writeableSides) {
+	private static void wireSideSelector(final GuiComponentSideSelector sideSelector, final IReadableBitMap<Direction> readableSides, final IWriteableBitMap<Direction> writeableSides) {
 		sideSelector.setListener((side, currentState) -> writeableSides.toggle(side));
 	}
 }

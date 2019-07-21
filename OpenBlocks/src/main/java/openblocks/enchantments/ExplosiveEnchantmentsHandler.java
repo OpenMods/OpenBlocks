@@ -11,12 +11,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -32,7 +32,7 @@ public class ExplosiveEnchantmentsHandler {
 
 	private static final double VERTICAL_FACTOR = 5;
 
-	private final List<EntityEquipmentSlot> protectionParts = Lists.newArrayList(EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.HEAD);
+	private final List<EquipmentSlotType> protectionParts = Lists.newArrayList(EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.HEAD);
 
 	private static final Set<String> ALLOWED_DAMAGE_SOURCE = ImmutableSet.of("arrow", "player", "mob");
 
@@ -104,7 +104,7 @@ public class ExplosiveEnchantmentsHandler {
 
 	private static final ItemStack gunpowder = new ItemStack(Items.GUNPOWDER);
 
-	private static void useItems(EntityPlayer player, @Nonnull ItemStack resource, EntityEquipmentSlot armorSlot, int gunpowderAmout) {
+	private static void useItems(PlayerEntity player, @Nonnull ItemStack resource, EquipmentSlotType armorSlot, int gunpowderAmout) {
 		if (player.capabilities.isCreativeMode) return;
 
 		ItemStack armor = player.getItemStackFromSlot(armorSlot);
@@ -113,11 +113,11 @@ public class ExplosiveEnchantmentsHandler {
 		resource.shrink(gunpowderAmout);
 	}
 
-	private static EnchantmentLevel tryUseEnchantment(EntityPlayer player, EntityEquipmentSlot slot) {
+	private static EnchantmentLevel tryUseEnchantment(PlayerEntity player, EquipmentSlotType slot) {
 		ItemStack armor = player.getItemStackFromSlot(slot);
-		if (armor.isEmpty() || !(armor.getItem() instanceof ItemArmor)) return null;
+		if (armor.isEmpty() || !(armor.getItem() instanceof ArmorItem)) return null;
 
-		final InventoryPlayer inventory = player.inventory;
+		final PlayerInventory inventory = player.inventory;
 		int explosiveLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.explosive, armor);
 		if (explosiveLevel <= 0 || explosiveLevel > LEVELS.length) return null;
 		EnchantmentLevel level = LEVELS[explosiveLevel - 1];
@@ -132,8 +132,8 @@ public class ExplosiveEnchantmentsHandler {
 		return null;
 	}
 
-	private EnchantmentLevel tryUseUpperArmor(EntityPlayer player) {
-		for (EntityEquipmentSlot armorPart : protectionParts) {
+	private EnchantmentLevel tryUseUpperArmor(PlayerEntity player) {
+		for (EquipmentSlotType armorPart : protectionParts) {
 			EnchantmentLevel result = tryUseEnchantment(player, armorPart);
 			if (result != null) return result;
 		}
@@ -144,10 +144,10 @@ public class ExplosiveEnchantmentsHandler {
 	@SubscribeEvent
 	public void onFall(LivingFallEvent evt) {
 		final Entity e = evt.getEntityLiving();
-		if (evt.getDistance() > 4 && !e.isSneaking() && e instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)e;
+		if (evt.getDistance() > 4 && !e.isSneaking() && e instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)e;
 
-			EnchantmentLevel level = tryUseEnchantment(player, EntityEquipmentSlot.FEET);
+			EnchantmentLevel level = tryUseEnchantment(player, EquipmentSlotType.FEET);
 			if (level == null) return;
 			JumpInfo boost = new JumpInfo(level, evt.getDistance());
 			level.createJumpExplosion(player);
@@ -185,8 +185,8 @@ public class ExplosiveEnchantmentsHandler {
 	@SubscribeEvent
 	public void onDamage(LivingAttackEvent e) {
 		final Entity victim = e.getEntity();
-		if (victim instanceof EntityPlayerMP && checkSource(e.getSource())) {
-			EnchantmentLevel level = tryUseUpperArmor(((EntityPlayer)victim));
+		if (victim instanceof ServerPlayerEntity && checkSource(e.getSource())) {
+			EnchantmentLevel level = tryUseUpperArmor(((PlayerEntity)victim));
 
 			if (level != null) level.createArmorExplosion(victim);
 		}

@@ -9,9 +9,9 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -132,7 +132,7 @@ public class GlyphPlacementGridRenderer {
 	public void onHighlightDraw(DrawBlockHighlightEvent evt) {
 		final RayTraceResult target = evt.getTarget();
 		if (target != null && target.typeOfHit == Type.BLOCK) {
-			final EntityPlayer player = evt.getPlayer();
+			final PlayerEntity player = evt.getPlayer();
 			if (player.getHeldItemMainhand().getItem() instanceof ItemGlyph)
 				drawGrid(player, target, evt.getPartialTicks());
 		}
@@ -145,8 +145,8 @@ public class GlyphPlacementGridRenderer {
 		return selector * Math.floor(v * 16 - MARKER_SIZE_PX / 2) / 16;
 	}
 
-	private void drawGrid(EntityPlayer player, RayTraceResult target, float partialTicks) {
-		final EnumFacing side = target.sideHit;
+	private void drawGrid(PlayerEntity player, RayTraceResult target, float partialTicks) {
+		final Direction side = target.sideHit;
 		if (side.getAxis() == Axis.Y) return; // TODO
 		final BlockPos pos = target.getBlockPos();
 		final Vec3d posD = new Vec3d(pos);

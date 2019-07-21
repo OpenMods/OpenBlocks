@@ -5,13 +5,13 @@ import java.lang.ref.WeakReference;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -23,20 +23,20 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	private static final String OWNER_ID_TAG = "OwnerId";
 	private UUID ownerId;
-	private WeakReference<EntityPlayer> cachedOwner;
+	private WeakReference<PlayerEntity> cachedOwner;
 	protected double ownerOffsetX;
 	protected double ownerOffsetY;
 	protected double ownerOffsetZ;
 
-	public EntityAssistant(World world, EntityPlayer owner) {
+	public EntityAssistant(World world, PlayerEntity owner) {
 		super(world);
 		this.cachedOwner = new WeakReference<>(owner);
 
 		if (owner != null) this.ownerId = owner.getGameProfile().getId();
 	}
 
-	public EntityPlayer findOwner() {
-		EntityPlayer owner = cachedOwner.get();
+	public PlayerEntity findOwner() {
+		PlayerEntity owner = cachedOwner.get();
 		if (owner == null && ownerId != null) {
 			owner = world.getPlayerEntityByUUID(ownerId);
 			if (owner != null) cachedOwner = new WeakReference<>(owner);
@@ -46,9 +46,9 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tag) {
+	protected void readEntityFromNBT(CompoundNBT tag) {
 		if (tag.hasKey(OWNER_ID_TAG, Constants.NBT.TAG_COMPOUND)) {
-			NBTTagCompound ownerTag = tag.getCompoundTag(OWNER_ID_TAG);
+			CompoundNBT ownerTag = tag.getCompoundTag(OWNER_ID_TAG);
 			ownerId = NbtUtils.readUuid(ownerTag);
 		} else {
 			ownerId = null;
@@ -56,14 +56,14 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tag) {
+	protected void writeEntityToNBT(CompoundNBT tag) {
 		if (ownerId != null) tag.setTag(OWNER_ID_TAG, NbtUtils.store(ownerId));
 	}
 
 	@Override
 	public void onUpdate() {
 		if (!world.isRemote) {
-			EntityPlayer owner = findOwner();
+			PlayerEntity owner = findOwner();
 
 			if (owner != null) smoother.setTarget(
 					owner.posX + ownerOffsetX,
@@ -90,8 +90,8 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 	public abstract ItemStack toItemStack();
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistance(player) < 3) { return true; }
+	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+		if (player instanceof ServerPlayerEntity && player.isSneaking() && getDistance(player) < 3) { return true; }
 		return false;
 	}
 

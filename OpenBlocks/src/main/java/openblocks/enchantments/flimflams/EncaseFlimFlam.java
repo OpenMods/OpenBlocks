@@ -1,7 +1,7 @@
 package openblocks.enchantments.flimflams;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import openblocks.api.IFlimFlamAction;
@@ -9,7 +9,7 @@ import openblocks.api.IFlimFlamAction;
 public class EncaseFlimFlam implements IFlimFlamAction {
 
 	@Override
-	public boolean execute(EntityPlayerMP target) {
+	public boolean execute(ServerPlayerEntity target) {
 
 		int playerX = MathHelper.floor(target.posX);
 		int playerY = MathHelper.floor(target.getEntityBoundingBox().minY) - 1;

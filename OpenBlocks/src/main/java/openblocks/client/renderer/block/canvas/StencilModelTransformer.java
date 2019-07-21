@@ -17,15 +17,15 @@ import java.util.function.Function;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import openblocks.client.renderer.block.canvas.CanvasSideState.OrientedTexture;
@@ -39,13 +39,13 @@ public class StencilModelTransformer {
 	private static final double COVER_DELTA = 0.01;
 
 	private static class Key {
-		public final Optional<IBlockState> innerBlockState;
+		public final Optional<BlockState> innerBlockState;
 		public final Optional<CanvasState> canvasState;
 		public final BlockRenderLayer renderLayer;
 
 		private final int hash;
 
-		public Key(Optional<IBlockState> innerBlockState, Optional<CanvasState> canvasState, BlockRenderLayer renderLayer) {
+		public Key(Optional<BlockState> innerBlockState, Optional<CanvasState> canvasState, BlockRenderLayer renderLayer) {
 			this.innerBlockState = innerBlockState;
 			this.canvasState = canvasState;
 			this.renderLayer = renderLayer;
@@ -102,10 +102,10 @@ public class StencilModelTransformer {
 		this.vertexFormat = vertexFormat;
 	}
 
-	private final LoadingCache<IBlockState, InnerModelInfo> innerModelCache = CacheBuilder.newBuilder().build(new CacheLoader<IBlockState, InnerModelInfo>() {
+	private final LoadingCache<BlockState, InnerModelInfo> innerModelCache = CacheBuilder.newBuilder().build(new CacheLoader<BlockState, InnerModelInfo>() {
 		@Override
-		public InnerModelInfo load(final IBlockState blockState) {
-			if (blockState.getRenderType() != EnumBlockRenderType.MODEL)
+		public InnerModelInfo load(final BlockState blockState) {
+			if (blockState.getRenderType() != BlockRenderType.MODEL)
 				return baseModel;
 
 			final IBakedModel innerModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(blockState);
@@ -147,7 +147,7 @@ public class StencilModelTransformer {
 
 					for (BlockRenderLayer layer : layersToRender.layers) {
 						final ModelQuads layerQuads = innerModel.layers.get(layer);
-						for (EnumFacing side : EnumFacing.VALUES)
+						for (Direction side : Direction.VALUES)
 							builder.addSidedQuads(side, prepareQuads(layerQuads.get(side), canvasState.sideStates, faceClassifier));
 
 						builder.addGeneralQuads(prepareQuads(layerQuads.get(null), canvasState.sideStates, faceClassifier));
@@ -160,7 +160,7 @@ public class StencilModelTransformer {
 				}
 			});
 
-	private List<BakedQuad> prepareQuads(List<BakedQuad> baseQuads, Map<EnumFacing, CanvasSideState> sides, FaceClassifier faceClassifier) {
+	private List<BakedQuad> prepareQuads(List<BakedQuad> baseQuads, Map<Direction, CanvasSideState> sides, FaceClassifier faceClassifier) {
 		final List<BakedQuad> result = Lists.newArrayListWithExpectedSize(baseQuads.size());
 		for (BakedQuad input : baseQuads)
 			result.addAll(prepareQuad(input, sides, faceClassifier));
@@ -168,7 +168,7 @@ public class StencilModelTransformer {
 		return result;
 	}
 
-	private List<BakedQuad> prepareQuad(BakedQuad input, Map<EnumFacing, CanvasSideState> sides, FaceClassifier faceClassifier) {
+	private List<BakedQuad> prepareQuad(BakedQuad input, Map<Direction, CanvasSideState> sides, FaceClassifier faceClassifier) {
 		final Vector3f pos[] = new Vector3f[4];
 
 		final VertexFormat format = input.getFormat();
@@ -190,7 +190,7 @@ public class StencilModelTransformer {
 		buffer.rewind();
 
 		final Vector3f quadNormal = calculateNormal(pos);
-		final Optional<EnumFacing> face = faceClassifier.classify(quadNormal);
+		final Optional<Direction> face = faceClassifier.classify(quadNormal);
 		if (!face.isPresent()) return ImmutableList.of(input); // not painted face - return unpainted quad
 
 		final List<BakedQuad> quads = Lists.newArrayList();
@@ -208,7 +208,7 @@ public class StencilModelTransformer {
 		return quads;
 	}
 
-	private static BakedQuad retextureQuad(BakedQuad original, ByteBuffer contents, EnumFacing side, TextureAtlasSprite texture, TextureOrientation orientation, Vector3f[] positions) {
+	private static BakedQuad retextureQuad(BakedQuad original, ByteBuffer contents, Direction side, TextureAtlasSprite texture, TextureOrientation orientation, Vector3f[] positions) {
 		final VertexFormat format = original.getFormat();
 		final int vertexSize = format.getNextOffset();
 		final int firstTextureOffset = format.getUvOffsetById(0);
@@ -255,10 +255,10 @@ public class StencilModelTransformer {
 		return a;
 	}
 
-	private List<BakedQuad> addStencilCovers(AxisAlignedBB bounds, Map<EnumFacing, CanvasSideState> sides) {
+	private List<BakedQuad> addStencilCovers(AxisAlignedBB bounds, Map<Direction, CanvasSideState> sides) {
 		final StencilCoverQuadBuilder builder = new StencilCoverQuadBuilder(bounds, vertexFormat, NO_TINT);
 
-		for (Map.Entry<EnumFacing, CanvasSideState> e : sides.entrySet()) {
+		for (Map.Entry<Direction, CanvasSideState> e : sides.entrySet()) {
 			final CanvasSideState state = e.getValue();
 			final Optional<OrientedTexture> maybeCoverTextureInfo = state.getCoverTexture();
 			if (maybeCoverTextureInfo.isPresent()) {
@@ -270,7 +270,7 @@ public class StencilModelTransformer {
 		return builder.build();
 	}
 
-	public ModelQuads getQuads(Optional<IBlockState> innerBlock, Optional<CanvasState> canvasState, BlockRenderLayer renderLayer) {
+	public ModelQuads getQuads(Optional<BlockState> innerBlock, Optional<CanvasState> canvasState, BlockRenderLayer renderLayer) {
 		final Key key = new Key(innerBlock, canvasState, renderLayer);
 		return cache.getUnchecked(key);
 	}

@@ -1,7 +1,7 @@
 package openblocks.common;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
@@ -10,7 +10,7 @@ import openblocks.common.item.ItemLuggage;
 
 public class LuggageDropHandler {
 
-	private static boolean shouldPreventDespawn(EntityItem entity) {
+	private static boolean shouldPreventDespawn(ItemEntity entity) {
 		ItemStack stack = entity.getItem();
 		return !stack.isEmpty() && stack.getItem() instanceof ItemLuggage && stack.hasTagCompound();
 	}
@@ -18,7 +18,7 @@ public class LuggageDropHandler {
 	@SubscribeEvent
 	public void onItemDrop(EntityJoinWorldEvent evt) {
 		final Entity entity = evt.getEntity();
-		if (entity instanceof EntityItem && shouldPreventDespawn((EntityItem)entity)) {
+		if (entity instanceof ItemEntity && shouldPreventDespawn((ItemEntity)entity)) {
 			entity.setEntityInvulnerable(true);
 		}
 	}

@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import javax.annotation.Nonnull;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.tileentity.SkullTileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,7 +51,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
+			public void onServerTick(TileEntityGoldenEgg target, ServerWorld world) {
 				target.tickCounter++;
 			}
 		},
@@ -62,7 +62,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
+			public void onServerTick(TileEntityGoldenEgg target, ServerWorld world) {
 				target.tickCounter++;
 			}
 		},
@@ -73,7 +73,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
+			public void onServerTick(TileEntityGoldenEgg target, ServerWorld world) {
 				target.tickCounter++;
 			}
 		},
@@ -84,7 +84,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
+			public void onServerTick(TileEntityGoldenEgg target, ServerWorld world) {
 				target.tickCounter++;
 			}
 		},
@@ -95,7 +95,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
+			public void onServerTick(TileEntityGoldenEgg target, ServerWorld world) {
 				target.tickCounter--;
 				if (Config.eggCanPickBlocks && RANDOM.nextInt(6) == 0) {
 					final BlockPos pos = target.getPos();
@@ -118,7 +118,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
+			public void onServerTick(TileEntityGoldenEgg target, ServerWorld world) {
 				target.tickCounter--;
 			}
 
@@ -147,7 +147,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 		public void onEntry(TileEntityGoldenEgg target) {}
 
-		public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {}
+		public void onServerTick(TileEntityGoldenEgg target, ServerWorld world) {}
 
 		public abstract State getNextState(TileEntityGoldenEgg target);
 
@@ -192,7 +192,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 		stage = SyncableEnum.create(State.INERT);
 	}
 
-	private void pickUpBlock(final WorldServer world, final BlockPos pos) {
+	private void pickUpBlock(final ServerWorld world, final BlockPos pos) {
 		FakePlayerPool.instance.executeOnPlayer(world, fakePlayer -> {
 			EntityBlock block = EntityBlock.create(fakePlayer, world, pos);
 			if (block != null) {
@@ -238,7 +238,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			progressSpeed = (1 - SPEED_CHANGE_RATE) * progressSpeed + SPEED_CHANGE_RATE * state.progressSpeed;
 			progress += progressSpeed;
 		} else {
-			if (world instanceof WorldServer) state.onServerTick(this, (WorldServer)world);
+			if (world instanceof ServerWorld) state.onServerTick(this, (ServerWorld)world);
 
 			State nextState = state.getNextState(this);
 			if (nextState != null) {
@@ -250,11 +250,11 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public CompoundNBT writeToNBT(CompoundNBT nbt) {
 		nbt = super.writeToNBT(nbt);
 
 		if (owner != null) {
-			NBTTagCompound ownerTag = new NBTTagCompound();
+			CompoundNBT ownerTag = new CompoundNBT();
 			NBTUtil.writeGameProfile(ownerTag, owner);
 			nbt.setTag("Owner", ownerTag);
 		}
@@ -263,13 +263,13 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void readFromNBT(CompoundNBT nbt) {
 		super.readFromNBT(nbt);
 
 		if (nbt.hasKey("owner", Constants.NBT.TAG_STRING)) {
 			String ownerName = nbt.getString("owner");
 
-			this.owner = TileEntitySkull.updateGameprofile(new GameProfile(null, ownerName));
+			this.owner = SkullTileEntity.updateGameprofile(new GameProfile(null, ownerName));
 		} else if (nbt.hasKey("OwnerUUID", Constants.NBT.TAG_STRING)) {
 			final String uuidStr = nbt.getString("OwnerUUID");
 			try {
@@ -290,9 +290,9 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
-		if (!world.isRemote && placer instanceof EntityPlayer) {
-			this.owner = ((EntityPlayer)placer).getGameProfile();
+	public void onBlockPlacedBy(BlockState state, LivingEntity placer, @Nonnull ItemStack stack) {
+		if (!world.isRemote && placer instanceof PlayerEntity) {
+			this.owner = ((PlayerEntity)placer).getGameProfile();
 		}
 	}
 

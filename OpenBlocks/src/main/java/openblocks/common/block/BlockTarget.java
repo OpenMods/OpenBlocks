@@ -3,25 +3,25 @@ package openblocks.common.block;
 import com.google.common.collect.Lists;
 import java.util.List;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Items;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.item.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTarget;
 import openmods.Log;
@@ -48,13 +48,13 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	private static final int MASK_POWERED = 0x8;
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public BlockState getStateFromMeta(int meta) {
 		return super.getStateFromMeta(meta)
 				.withProperty(POWERED, (meta & MASK_POWERED) != 0);
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		return super.getMetaFromState(state) | (state.getValue(POWERED)? MASK_POWERED : 0);
 	}
 
@@ -65,18 +65,18 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if (!world.isRemote && entity instanceof EntityArrow) {
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
+		if (!world.isRemote && entity instanceof AbstractArrowEntity) {
 			/*
 			 * onEntityCollidedWithBlock is called twice when the arrow is hit
 			 * The first is from the raytracing, which is predictive and
@@ -92,12 +92,12 @@ public class BlockTarget extends OpenBlock.FourDirections {
 		}
 	}
 
-	public void onTargetHit(World world, BlockPos pos, IBlockState state, Vec3d entityPosition) {
+	public void onTargetHit(World world, BlockPos pos, BlockState state, Vec3d entityPosition) {
 		if (world.isRemote) return;
 
 		if (!state.getValue(POWERED)) return;
 
-		EnumFacing opposite = getFront(state).getOpposite();
+		Direction opposite = getFront(state).getOpposite();
 
 		double centerX = pos.getX() + 0.5 + (opposite.getFrontOffsetX() * 0.5);
 		double centerY = pos.getY() + 0.55 + (opposite.getFrontOffsetY() * 0.45);
@@ -112,19 +112,19 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public int getWeakPower(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
 		final TileEntityTarget tile = getTileEntity(blockAccess, pos, TileEntityTarget.class);
 		return tile != null? tile.getRedstoneStrength() : 0;
 	}
 
 	@Override
-	public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public int getStrongPower(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
 		// TODO Side-aware?
 		return getWeakPower(blockState, blockAccess, pos, side);
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
 		if (state.getValue(POWERED)) {
 			final Orientation orientation = state.getValue(propertyOrientation);
 			return BlockSpaceTransform.instance.mapBlockToWorld(orientation, DEPLOYED_AABB);
@@ -134,47 +134,47 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+	public boolean canPlaceBlockOnSide(World world, BlockPos pos, Direction side) {
 		return isOnTopOfSolidBlock(world, pos, side);
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neigbourPos) {
+	public void neighborChanged(BlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neigbourPos) {
 		updateRedstone(world, blockPos, state);
 		super.neighborChanged(state, world, blockPos, neighbour, neigbourPos);
 	}
 
 	@Override
-	protected boolean onBlockAddedNextTick(World world, BlockPos blockPos, IBlockState state) {
+	protected boolean onBlockAddedNextTick(World world, BlockPos blockPos, BlockState state) {
 		updateRedstone(world, blockPos, state);
 		return super.onBlockAddedNextTick(world, blockPos, state);
 	}
 
-	private static void updateRedstone(World world, BlockPos blockPos, IBlockState state) {
-		if (!(world instanceof WorldServer)) return;
+	private static void updateRedstone(World world, BlockPos blockPos, BlockState state) {
+		if (!(world instanceof ServerWorld)) return;
 
 		boolean isPowered = world.isBlockIndirectlyGettingPowered(blockPos) > 0;
 
-		IBlockState newState = state.withProperty(POWERED, isPowered);
+		BlockState newState = state.withProperty(POWERED, isPowered);
 		if (state != newState) {
-			dropArrowsAsItems((WorldServer)world, blockPos);
+			dropArrowsAsItems((ServerWorld)world, blockPos);
 			BlockUtils.playSoundAtPos(world, blockPos, isPowered? OpenBlocks.Sounds.BLOCK_TARGET_OPEN : OpenBlocks.Sounds.BLOCK_TARGET_CLOSE, SoundCategory.BLOCKS, 0.5f, 1.0f);
 			world.setBlockState(blockPos, newState, BlockNotifyFlags.ALL);
 		}
 	}
 
-	private static void dropArrowsAsItems(WorldServer world, BlockPos pos) {
+	private static void dropArrowsAsItems(ServerWorld world, BlockPos pos) {
 		final AxisAlignedBB aabb = BlockUtils.aabbOffset(pos, -0.2, -0.2, -0.2, +1.2, +1.2, +1.2);
 
-		final List<EntityArrow> arrows = world.getEntitiesWithinAABB(EntityArrow.class, aabb);
+		final List<AbstractArrowEntity> arrows = world.getEntitiesWithinAABB(AbstractArrowEntity.class, aabb);
 
 		final List<ItemStack> drops = Lists.newArrayList();
 
 		int failed = FakePlayerPool.instance.executeOnPlayer(world, fakePlayer -> {
 			int failedCount = 0;
 
-			for (EntityArrow arrow : arrows) {
-				if (arrow.pickupStatus == EntityArrow.PickupStatus.CREATIVE_ONLY) {
+			for (AbstractArrowEntity arrow : arrows) {
+				if (arrow.pickupStatus == AbstractArrowEntity.PickupStatus.CREATIVE_ONLY) {
 					arrow.setDead();
 				} else {
 					try {
@@ -205,7 +205,7 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 }

@@ -9,8 +9,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -179,14 +179,14 @@ public class ItemTankBlock extends ItemOpenBlock {
 		}
 
 		@Override
-		public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		public boolean hasCapability(Capability<?> capability, Direction facing) {
 			return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY ||
 					capability == ItemTextureCapability.CAPABILITY;
 		}
 
 		@Override
 		@SuppressWarnings("unchecked")
-		public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		public <T> T getCapability(Capability<T> capability, Direction facing) {
 			if (capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
 				return (T)fluidHandler;
 
@@ -198,7 +198,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
 		return new CapabilityProvider(new FluidHandler(stack), new ItemTexture(stack));
 	}
 
@@ -250,7 +250,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 	private static FluidTank readTank(@Nonnull ItemStack stack) {
 		FluidTank tank = new FluidTank(TileEntityTank.getTankCapacity());
 
-		final NBTTagCompound itemTag = stack.getTagCompound();
+		final CompoundNBT itemTag = stack.getTagCompound();
 		if (itemTag != null && itemTag.hasKey(TANK_TAG)) {
 			tank.readFromNBT(itemTag.getCompoundTag(TANK_TAG));
 			return tank;
@@ -261,9 +261,9 @@ public class ItemTankBlock extends ItemOpenBlock {
 
 	private static void saveTank(@Nonnull ItemStack container, FluidTank tank) {
 		if (tank.getFluidAmount() > 0) {
-			NBTTagCompound itemTag = ItemUtils.getItemTag(container);
+			CompoundNBT itemTag = ItemUtils.getItemTag(container);
 
-			NBTTagCompound tankTag = new NBTTagCompound();
+			CompoundNBT tankTag = new CompoundNBT();
 			tank.writeToNBT(tankTag);
 			itemTag.setTag(TANK_TAG, tankTag);
 		} else {

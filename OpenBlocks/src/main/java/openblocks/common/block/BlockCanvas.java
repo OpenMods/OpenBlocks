@@ -6,6 +6,8 @@ import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -13,16 +15,14 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockProperties;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -115,10 +115,10 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 		}
 
 		@Override
-		public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+		public int colorMultiplier(BlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
 			if (state instanceof IExtendedBlockState) {
 				final IExtendedBlockState extendedState = (IExtendedBlockState)state;
-				final IBlockState innerState = extendedState.getValue(InnerBlockState.PROPERTY);
+				final BlockState innerState = extendedState.getValue(InnerBlockState.PROPERTY);
 				if (innerState != null) return blockColors.colorMultiplier(innerState, worldIn, pos, tintIndex);
 			}
 
@@ -131,7 +131,7 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	public static boolean replaceBlock(World world, BlockPos pos) {
-		final IBlockState state = world.getBlockState(pos);
+		final BlockState state = world.getBlockState(pos);
 		if (state.getBlock() instanceof BlockCanvas) return true;
 
 		final Block toReplace = state.isOpaqueCube()? OpenBlocks.Blocks.canvas : OpenBlocks.Blocks.canvasGlass;
@@ -146,13 +146,13 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
-	public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, int color) {
+	public boolean recolorBlock(World world, BlockPos pos, Direction side, int color) {
 		final TileEntityCanvas te = getTileEntity(world, pos, TileEntityCanvas.class);
 		return te != null && te.applyPaint(0xFF000000 | color, side);
 	}
 
 	@Override
-	public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor colour) {
+	public boolean recolorBlock(World world, BlockPos pos, Direction side, DyeColor colour) {
 		ColorMeta color = ColorMeta.fromVanillaEnum(colour);
 		return recolorBlock(world, pos, side, color.rgb);
 	}
@@ -165,17 +165,17 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		return state.getValue(MATERIAL).ordinal();
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public BlockState getStateFromMeta(int meta) {
 		return super.getStateFromMeta(meta).withProperty(MATERIAL, CanvasMaterial.ID_TO_VALUE[meta]);
 	}
 
 	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public BlockState getExtendedState(BlockState state, IBlockAccess world, BlockPos pos) {
 		final IExtendedBlockState extendedState = (IExtendedBlockState)super.getExtendedState(state, world, pos);
 		final TileEntityCanvas te = getTileEntity(world, pos, TileEntityCanvas.class);
 
@@ -194,43 +194,43 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
-	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+	public boolean canRenderInLayer(BlockState state, BlockRenderLayer layer) {
 		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullBlock(IBlockState state) {
+	public boolean isFullBlock(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean canProvidePower(IBlockState state) {
+	public boolean canProvidePower(BlockState state) {
 		return true;
 	}
 
 	@Override
-	public boolean hasComparatorInputOverride(IBlockState state) {
+	public boolean hasComparatorInputOverride(BlockState state) {
 		return true;
 	}
 
 	private interface IBlockPropertyGetter<T> {
-		T get(IBlockState state, IBlockAccess world, BlockPos pos);
+		T get(BlockState state, IBlockAccess world, BlockPos pos);
 	}
 
-	private static <T> T getPaintedBlockProperty(IBlockAccess world, @Nullable IBlockState state, BlockPos pos, IBlockPropertyGetter<T> getter, IBlockPropertyGetter<T> defaultValue) {
+	private static <T> T getPaintedBlockProperty(IBlockAccess world, @Nullable BlockState state, BlockPos pos, IBlockPropertyGetter<T> getter, IBlockPropertyGetter<T> defaultValue) {
 		final TileEntity te = world.getTileEntity(pos);
 		if (te instanceof TileEntityCanvas) {
-			final IBlockState paintedBlockState = ((TileEntityCanvas)te).getPaintedBlockState();
+			final BlockState paintedBlockState = ((TileEntityCanvas)te).getPaintedBlockState();
 			if (paintedBlockState != Blocks.AIR.getDefaultState()) {
 				final World actualWorld = te.getWorld();
 				final TileEntityCanvas.UnpackingBlockAccess fakedWorldAccess = new TileEntityCanvas.UnpackingBlockAccess(actualWorld);
@@ -247,19 +247,19 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 		return defaultValue.get(state, world, pos);
 	}
 
-	private static <T> T getPaintedBlockProperty(IBlockAccess world, IBlockState state, BlockPos pos, IBlockPropertyGetter<T> getter, final T defaultValue) {
+	private static <T> T getPaintedBlockProperty(IBlockAccess world, BlockState state, BlockPos pos, IBlockPropertyGetter<T> getter, final T defaultValue) {
 		return getPaintedBlockProperty(world, state, pos, getter, (IBlockPropertyGetter<T>)(state1, world1, pos1) -> defaultValue);
 	}
 
 	private interface IWorldBlockPropertyGetter<T> {
-		T get(IBlockState state, World world, BlockPos pos);
+		T get(BlockState state, World world, BlockPos pos);
 	}
 
 	// NOTE is possible, every user of this method should be migrated to IBlockAccess version, once API changed
-	private static <T> T getPaintedBlockProperty(World world, IBlockState state, BlockPos pos, IWorldBlockPropertyGetter<T> getter, IWorldBlockPropertyGetter<T> defaultValue) {
+	private static <T> T getPaintedBlockProperty(World world, BlockState state, BlockPos pos, IWorldBlockPropertyGetter<T> getter, IWorldBlockPropertyGetter<T> defaultValue) {
 		final TileEntity te = world.getTileEntity(pos);
 		if (te instanceof TileEntityCanvas) {
-			final IBlockState paintedBlockState = ((TileEntityCanvas)te).getPaintedBlockState();
+			final BlockState paintedBlockState = ((TileEntityCanvas)te).getPaintedBlockState();
 			if (paintedBlockState != Blocks.AIR.getDefaultState()) {
 				try {
 					return getter.get(paintedBlockState, world, pos);
@@ -272,50 +272,50 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 		return defaultValue.get(state, world, pos);
 	}
 
-	private static <T> T getPaintedBlockProperty(World world, IBlockState state, BlockPos pos, IWorldBlockPropertyGetter<T> getter, final T defaultValue) {
+	private static <T> T getPaintedBlockProperty(World world, BlockState state, BlockPos pos, IWorldBlockPropertyGetter<T> getter, final T defaultValue) {
 		return getPaintedBlockProperty(world, state, pos, getter, (IWorldBlockPropertyGetter<T>)(state1, world1, pos1) -> defaultValue);
 	}
 
 	@Override
-	public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public int getLightOpacity(BlockState state, IBlockAccess world, BlockPos pos) {
 		return getPaintedBlockProperty(world, state, pos, IBlockProperties::getLightOpacity, this.lightOpacity);
 	}
 
 	@Override
-	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public int getLightValue(BlockState state, IBlockAccess world, BlockPos pos) {
 		return getPaintedBlockProperty(world, state, pos, IBlockProperties::getLightValue, this.lightValue);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public int getPackedLightmapCoords(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public int getPackedLightmapCoords(BlockState state, IBlockAccess source, BlockPos pos) {
 		return getPaintedBlockProperty(source, state, pos,
 				(IBlockPropertyGetter<Integer>)IBlockProperties::getPackedLightmapCoords,
 				(IBlockPropertyGetter<Integer>)BlockCanvas.super::getPackedLightmapCoords);
 	}
 
 	@Override
-	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, final EnumFacing side) {
+	public int getWeakPower(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, final Direction side) {
 		return getPaintedBlockProperty(blockAccess, blockState, pos, (state, world, pos1) -> state.getWeakPower(world, pos1, side), 0);
 	}
 
 	@Override
-	public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, final EnumFacing side) {
+	public int getStrongPower(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, final Direction side) {
 		return getPaintedBlockProperty(blockAccess, blockState, pos, (state, world, pos1) -> state.getStrongPower(world, pos1, side), 0);
 	}
 
 	@Override
-	public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
 		return getPaintedBlockProperty(worldIn, blockState, pos, (IWorldBlockPropertyGetter<Integer>)IBlockProperties::getComparatorInputOverride, 0);
 	}
 
 	@Override
-	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+	public float getBlockHardness(BlockState blockState, World worldIn, BlockPos pos) {
 		return getPaintedBlockProperty(worldIn, blockState, pos, (IWorldBlockPropertyGetter<Float>)IBlockProperties::getBlockHardness, this.blockHardness);
 	}
 
 	@Override
-	public float getPlayerRelativeBlockHardness(IBlockState state, final EntityPlayer player, World worldIn, BlockPos pos) {
+	public float getPlayerRelativeBlockHardness(BlockState state, final PlayerEntity player, World worldIn, BlockPos pos) {
 		return getPaintedBlockProperty(worldIn, state, pos,
 				(IWorldBlockPropertyGetter<Float>)(state1, world, pos1) -> state1.getPlayerRelativeBlockHardness(player, world, pos1),
 				(IWorldBlockPropertyGetter<Float>)(state12, world, pos12) -> BlockCanvas.super.getPlayerRelativeBlockHardness(state12, player, world, pos12));
@@ -323,23 +323,23 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getSelectedBoundingBox(BlockState state, World worldIn, BlockPos pos) {
 		return getPaintedBlockProperty(worldIn, state, pos, (IWorldBlockPropertyGetter<AxisAlignedBB>)IBlockProperties::getSelectedBoundingBox, (IWorldBlockPropertyGetter<AxisAlignedBB>)(state1, world, pos1) -> FULL_BLOCK_AABB.offset(pos1));
 	}
 
 	@Override
 	@Nullable
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(BlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return getPaintedBlockProperty(worldIn, blockState, pos, IBlockProperties::getCollisionBoundingBox, FULL_BLOCK_AABB);
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
 		return getPaintedBlockProperty(source, state, pos, IBlockProperties::getBoundingBox, FULL_BLOCK_AABB);
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, final AxisAlignedBB entityBox, final List<AxisAlignedBB> collidingBoxes, final @Nullable Entity entityIn, final boolean p_185477_7_) {
+	public void addCollisionBoxToList(BlockState state, World worldIn, BlockPos pos, final AxisAlignedBB entityBox, final List<AxisAlignedBB> collidingBoxes, final @Nullable Entity entityIn, final boolean p_185477_7_) {
 		getPaintedBlockProperty(worldIn, state, pos, (IWorldBlockPropertyGetter<Void>)(state1, world, pos1) -> {
 			state1.addCollisionBoxToList(world, pos1, entityBox, collidingBoxes, entityIn, p_185477_7_);
 			return null;
@@ -351,23 +351,23 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 
 	@Override
 	@Nullable
-	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, final Vec3d start, final Vec3d end) {
+	public RayTraceResult collisionRayTrace(BlockState blockState, World worldIn, BlockPos pos, final Vec3d start, final Vec3d end) {
 		return getPaintedBlockProperty(worldIn, blockState, pos, (IWorldBlockPropertyGetter<RayTraceResult>)(state, world, pos1) -> state.collisionRayTrace(world, pos1, start, end), (IWorldBlockPropertyGetter<RayTraceResult>)(state, world, pos1) -> rayTrace(pos1, start, end, FULL_BLOCK_AABB));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, final EnumFacing side) {
+	public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, final Direction side) {
 		return getPaintedBlockProperty(blockAccess, blockState, pos, (state, world, pos1) -> state.shouldSideBeRendered(world, pos1, side), true);
 	}
 
 	@Override
-	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, final EnumFacing face) {
+	public boolean doesSideBlockRendering(BlockState state, IBlockAccess world, BlockPos pos, final Direction face) {
 		return getPaintedBlockProperty(world, state, pos, (state1, world1, pos1) -> state1.doesSideBlockRendering(world1, pos1, face), Boolean.TRUE);
 	}
 
 	@Override
-	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, final EnumFacing side) {
+	public boolean isSideSolid(BlockState base_state, IBlockAccess world, BlockPos pos, final Direction side) {
 		return getPaintedBlockProperty(world, base_state, pos, (state, world1, pos1) -> state.isSideSolid(world1, pos1, side), Boolean.TRUE);
 	}
 
@@ -377,12 +377,12 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
-	public boolean canSustainLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public boolean canSustainLeaves(BlockState state, IBlockAccess world, BlockPos pos) {
 		return getPaintedBlockProperty(world, state, pos, (state1, world1, pos1) -> state1.getBlock().canSustainLeaves(state1, world1, pos1), Boolean.FALSE);
 	}
 
 	@Override
-	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, final EnumFacing direction, final IPlantable plantable) {
+	public boolean canSustainPlant(BlockState state, IBlockAccess world, BlockPos pos, final Direction direction, final IPlantable plantable) {
 		return getPaintedBlockProperty(world, state, pos, (state1, world1, pos1) -> state1.getBlock().canSustainPlant(state1, world1, pos1, direction, plantable), Boolean.FALSE);
 	}
 
@@ -397,17 +397,17 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, BlockPos pos, final EnumFacing face) {
+	public int getFlammability(IBlockAccess world, BlockPos pos, final Direction face) {
 		return getPaintedBlockProperty(world, null, pos, (IBlockPropertyGetter<Integer>)(state, world1, pos1) -> state.getBlock().getFlammability(world1, pos1, face), (IBlockPropertyGetter<Integer>)(state, world1, pos1) -> BlockCanvas.super.getFlammability(world1, pos1, face));
 	}
 
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, final EnumFacing face) {
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, final Direction face) {
 		return getPaintedBlockProperty(world, null, pos, (state, world1, pos1) -> state.getBlock().getFireSpreadSpeed(world1, pos1, face), 200);
 	}
 
 	@Override
-	public boolean isFlammable(IBlockAccess world, BlockPos pos, final EnumFacing face) {
+	public boolean isFlammable(IBlockAccess world, BlockPos pos, final Direction face) {
 		return getPaintedBlockProperty(world, null, pos, (state, world1, pos1) -> state.getBlock().isFlammable(world1, pos1, face), Boolean.TRUE);
 	}
 
@@ -417,7 +417,7 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
-	public boolean isFireSource(World world, BlockPos pos, final EnumFacing side) {
+	public boolean isFireSource(World world, BlockPos pos, final Direction side) {
 		return getPaintedBlockProperty(world, null, pos, (IWorldBlockPropertyGetter<Boolean>)(state, world1, pos1) -> state.getBlock().isFireSource(world1, pos1, side), Boolean.FALSE);
 	}
 
@@ -461,17 +461,17 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
-	public SoundType getSoundType(IBlockState state, World worldIn, BlockPos pos, Entity entity) {
+	public SoundType getSoundType(BlockState state, World worldIn, BlockPos pos, Entity entity) {
 		return getPaintedBlockProperty(worldIn, state, pos, (IWorldBlockPropertyGetter<SoundType>)(innerState, world, pos1) -> innerState.getBlock().getSoundType(state, world, pos1, entity), blockSoundType);
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
 		return getPaintedBlockProperty(worldIn, state, pos, (state1, world, pos1) -> state1.getBlockFaceShape(world, pos1, face), BlockFaceShape.SOLID);
 	}
 
 	@Override
-	public Material getMaterial(IBlockState state) {
+	public Material getMaterial(BlockState state) {
 		return state.getValue(MATERIAL).material;
 	}
 }

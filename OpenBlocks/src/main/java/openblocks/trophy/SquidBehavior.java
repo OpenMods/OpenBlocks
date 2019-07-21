@@ -1,8 +1,8 @@
 package openblocks.trophy;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -11,7 +11,7 @@ import openblocks.common.tileentity.TileEntityTrophy;
 public class SquidBehavior implements ITrophyBehavior {
 
 	@Override
-	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+	public int executeActivateBehavior(TileEntityTrophy tile, PlayerEntity player) {
 		final BlockPos base = tile.getPos().up();
 		final World world = tile.getWorld();
 

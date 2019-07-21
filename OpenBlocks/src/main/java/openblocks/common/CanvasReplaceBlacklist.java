@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBed;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.DoorBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,7 +23,7 @@ public class CanvasReplaceBlacklist {
 
 	public static final CanvasReplaceBlacklist instance = new CanvasReplaceBlacklist();
 
-	public boolean isAllowedToReplace(IBlockState state) {
+	public boolean isAllowedToReplace(BlockState state) {
 		final Block block = state.getBlock();
 		if (block.hasTileEntity(state)) return false;
 
@@ -34,8 +34,8 @@ public class CanvasReplaceBlacklist {
 
 	private static boolean filterVanillaBlocks(Block block) {
 		// two-part blocks do not work nice with canvas
-		return block instanceof BlockDoor ||
-				block instanceof BlockBed;
+		return block instanceof DoorBlock ||
+				block instanceof BedBlock;
 	}
 
 	@SubscribeEvent

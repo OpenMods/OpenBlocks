@@ -1,8 +1,8 @@
 package openblocks.client.gui;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import openblocks.common.FluidXpUtils;
 import openblocks.common.container.ContainerAutoAnvil;

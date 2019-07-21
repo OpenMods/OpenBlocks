@@ -16,15 +16,15 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -63,7 +63,7 @@ import openperipheral.api.struct.StructField;
 public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile, ITickable {
 
 	private interface IShapeManipulator {
-		boolean activate(TileEntityGuide te, EntityPlayerMP player);
+		boolean activate(TileEntityGuide te, ServerPlayerEntity player);
 	}
 
 	private static IShapeManipulator createHalfAxisIncrementer(final HalfAxis halfAxis) {
@@ -82,7 +82,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return (te, player) -> {
 			final World world = te.getWorld();
 			final BlockPos pos = te.getPos();
-			final IBlockState state = world.getBlockState(pos);
+			final BlockState state = world.getBlockState(pos);
 			final Block block = state.getBlock();
 			if (block instanceof OpenBlock) {
 				final IProperty<Orientation> orientationProperty = ((OpenBlock)block).propertyOrientation;
@@ -314,7 +314,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		sync();
 	}
 
-	private boolean incrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
+	private boolean incrementHalfAxis(HalfAxis axis, ServerPlayerEntity player) {
 		final SyncableVarInt v = axisDimensions.get(axis);
 		v.modify(+1);
 		afterDimensionsChange(player);
@@ -322,7 +322,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	}
 
-	private boolean decrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
+	private boolean decrementHalfAxis(HalfAxis axis, ServerPlayerEntity player) {
 		final SyncableVarInt v = axisDimensions.get(axis);
 		if (v.get() > 0) {
 			v.modify(-1);
@@ -332,7 +332,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return false;
 	}
 
-	private boolean copyHalfAxis(HalfAxis from, HalfAxis to, EntityPlayerMP player) {
+	private boolean copyHalfAxis(HalfAxis from, HalfAxis to, ServerPlayerEntity player) {
 		final SyncableVarInt fromV = axisDimensions.get(from);
 		final SyncableVarInt toV = axisDimensions.get(to);
 		toV.set(fromV.get());
@@ -340,26 +340,26 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return true;
 	}
 
-	private void incrementMode(EntityPlayer player) {
+	private void incrementMode(PlayerEntity player) {
 		incrementMode();
 
 		displayModeChange(player);
 		displayBlockCount(player);
 	}
 
-	private void decrementMode(EntityPlayer player) {
+	private void decrementMode(PlayerEntity player) {
 		decrementMode();
 
 		displayModeChange(player);
 		displayBlockCount(player);
 	}
 
-	private void displayModeChange(EntityPlayer player) {
-		player.sendMessage(new TextComponentTranslation("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
+	private void displayModeChange(PlayerEntity player) {
+		player.sendMessage(new TranslationTextComponent("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
 	}
 
-	private void displayBlockCount(EntityPlayer player) {
-		player.sendMessage(new TextComponentTranslation("openblocks.misc.total_blocks", shape.size()));
+	private void displayBlockCount(PlayerEntity player) {
+		player.sendMessage(new TranslationTextComponent("openblocks.misc.total_blocks", shape.size()));
 	}
 
 	public boolean shouldRender() {
@@ -504,14 +504,14 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return shape;
 	}
 
-	private void notifyPlayer(EntityPlayer player) {
-		player.sendMessage(new TextComponentTranslation("openblocks.misc.change_box_size",
+	private void notifyPlayer(PlayerEntity player) {
+		player.sendMessage(new TranslationTextComponent("openblocks.misc.change_box_size",
 				-negX.get(), -negY.get(), -negZ.get(),
 				+posX.get(), +posY.get(), +posZ.get()));
 		displayBlockCount(player);
 	}
 
-	private void afterDimensionsChange(EntityPlayer player) {
+	private void afterDimensionsChange(PlayerEntity player) {
 		recreateShape();
 
 		sync();
@@ -556,7 +556,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return shape;
 	}
 
-	public boolean onItemUse(EntityPlayerMP player, @Nonnull ItemStack heldStack, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ServerPlayerEntity player, @Nonnull ItemStack heldStack, Direction side, float hitX, float hitY, float hitZ) {
 		Set<ColorMeta> colors = ColorMeta.fromStack(heldStack);
 		if (!colors.isEmpty()) {
 			ColorMeta selected = CollectionUtils.getRandom(colors);
@@ -568,11 +568,11 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return false;
 	}
 
-	public void onCommand(EntityPlayer sender, String commandId) {
-		if (sender instanceof EntityPlayerMP) {
+	public void onCommand(PlayerEntity sender, String commandId) {
+		if (sender instanceof ServerPlayerEntity) {
 			final IShapeManipulator command = COMMANDS.get(commandId);
 			if (command != null) {
-				command.activate(this, (EntityPlayerMP)sender);
+				command.activate(this, (ServerPlayerEntity)sender);
 			} else {
 				Log.info("Player %s tried to send invalid command '%s' to guide %s", sender, commandId, this);
 			}

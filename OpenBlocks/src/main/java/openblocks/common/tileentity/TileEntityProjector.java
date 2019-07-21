@@ -3,13 +3,13 @@ package openblocks.common.tileentity;
 import com.google.common.collect.ImmutableMap;
 import java.util.Set;
 import javax.annotation.Nonnull;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.model.animation.Animation;
@@ -82,8 +82,8 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 
 					final boolean isActive = TileEntityProjector.this.mapId() >= 0;
 					final BlockPos pos = getPos();
-					final IBlockState oldState = world.getBlockState(pos);
-					final IBlockState newState = oldState.withProperty(BlockProjector.ACTIVE, isActive);
+					final BlockState oldState = world.getBlockState(pos);
+					final BlockState newState = oldState.withProperty(BlockProjector.ACTIVE, isActive);
 
 					if (oldState != newState) {
 						world.setBlockState(pos, newState, BlockNotifyFlags.ALL);
@@ -129,30 +129,30 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 		return tag;
 	}
 
 	@Override
-	public Object getServerGui(EntityPlayer player) {
+	public Object getServerGui(PlayerEntity player) {
 		return new ContainerProjector(player.inventory, this);
 	}
 
 	@Override
-	public Object getClientGui(EntityPlayer player) {
+	public Object getClientGui(PlayerEntity player) {
 		return new GuiProjector(new ContainerProjector(player.inventory, this));
 	}
 
 	@Override
-	public boolean canOpenGui(EntityPlayer player) {
+	public boolean canOpenGui(PlayerEntity player) {
 		return true;
 	}
 
@@ -197,7 +197,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing side) {
+	public boolean hasCapability(Capability<?> capability, Direction side) {
 		return capability == CapabilityAnimation.ANIMATION_CAPABILITY ||
 				capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
 				super.hasCapability(capability, side);
@@ -205,7 +205,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+	public <T> T getCapability(Capability<T> capability, Direction side) {
 		if (capability == CapabilityAnimation.ANIMATION_CAPABILITY)
 			return (T)asm;
 
@@ -229,7 +229,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 
 	private void updateAsmState() {
 		if (asm != null && world != null && world.isRemote) {
-			final IBlockState state = world.getBlockState(this.pos);
+			final BlockState state = world.getBlockState(this.pos);
 			if (state.getValue(BlockProjector.ACTIVE)) {
 				if (asm.currentState().equals("default")) {
 					updateLastChangeTime();

@@ -1,9 +1,9 @@
 package openblocks.enchantments.flimflams;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamAction;
@@ -11,23 +11,23 @@ import openblocks.api.IFlimFlamAction;
 public class SkyblockFlimFlam implements IFlimFlamAction {
 
 	@Override
-	public boolean execute(EntityPlayerMP target) {
+	public boolean execute(ServerPlayerEntity target) {
 		final World world = target.world;
 		if (world.provider.isNether() || world.provider.doesWaterVaporize()) return false;
 
 		BlockPos trapCenter = new BlockPos(target.posX, Math.min(target.posY + 150, 250), target.posZ);
 
 		BlockPos[] blocks = new BlockPos[5];
-		blocks[0] = trapCenter.offset(EnumFacing.DOWN);
-		blocks[1] = trapCenter.offset(EnumFacing.EAST);
-		blocks[2] = trapCenter.offset(EnumFacing.NORTH);
-		blocks[3] = trapCenter.offset(EnumFacing.SOUTH);
-		blocks[4] = trapCenter.offset(EnumFacing.WEST);
+		blocks[0] = trapCenter.offset(Direction.DOWN);
+		blocks[1] = trapCenter.offset(Direction.EAST);
+		blocks[2] = trapCenter.offset(Direction.NORTH);
+		blocks[3] = trapCenter.offset(Direction.SOUTH);
+		blocks[4] = trapCenter.offset(Direction.WEST);
 
 		for (BlockPos pos : blocks)
 			if (!world.isAirBlock(pos)) return false;
 
-		final IBlockState state = Blocks.ICE.getDefaultState();
+		final BlockState state = Blocks.ICE.getDefaultState();
 
 		for (BlockPos pos : blocks)
 			if (!world.setBlockState(pos, state)) return false;

@@ -2,17 +2,17 @@ package openblocks.common.entity.ai;
 
 import com.mojang.authlib.GameProfile;
 import java.util.List;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.world.World;
 import openblocks.common.entity.EntityMiniMe;
 
-public class EntityAIPickupPlayer extends EntityAIBase {
+public class EntityAIPickupPlayer extends Goal {
 
 	private final EntityMiniMe minime;
-	private final PathNavigate pathFinder;
-	private EntityPlayer targetPlayer;
+	private final PathNavigator pathFinder;
+	private PlayerEntity targetPlayer;
 
 	public EntityAIPickupPlayer(EntityMiniMe entity) {
 		this.minime = entity;
@@ -26,8 +26,8 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 		if (!pathFinder.noPath()) return false;
 
 		if (!minime.world.isRemote) {
-			List<EntityPlayer> players = minime.world.getEntitiesWithinAABB(EntityPlayer.class, minime.getEntityBoundingBox().grow(10));
-			for (EntityPlayer player : players) {
+			List<PlayerEntity> players = minime.world.getEntitiesWithinAABB(PlayerEntity.class, minime.getEntityBoundingBox().grow(10));
+			for (PlayerEntity player : players) {
 				if (canRidePlayer(player)) {
 					targetPlayer = player;
 					return true;
@@ -68,7 +68,7 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 		}
 	}
 
-	private boolean canRidePlayer(EntityPlayer player) {
+	private boolean canRidePlayer(PlayerEntity player) {
 		final GameProfile owner = minime.getOwner();
 		return owner != null && player != null &&
 				player.getGameProfile().getId().equals(owner.getId()) &&

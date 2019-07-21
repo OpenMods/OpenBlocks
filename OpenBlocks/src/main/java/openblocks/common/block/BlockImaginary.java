@@ -4,17 +4,17 @@ import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.Nullable;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -152,12 +152,12 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+	public AxisAlignedBB getSelectedBoundingBox(BlockState state, World world, BlockPos pos) {
 		TileEntityImaginary te = getTileEntity(world, pos, TileEntityImaginary.class);
 		if (te != null && te.is(Property.SELECTABLE)) {
 			final Orientation orientation = state.getValue(getPropertyOrientation());
@@ -168,12 +168,12 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(BlockState state, IBlockAccess world, BlockPos pos) {
 		return NULL_AABB;
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean something) {
+	public void addCollisionBoxToList(BlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean something) {
 		TileEntityImaginary te = getTileEntity(world, pos, TileEntityImaginary.class);
 		if (te != null && te.is(Property.SOLID, entity)) {
 			final Orientation orientation = state.getValue(getPropertyOrientation());
@@ -182,12 +182,12 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
 		return EMPTY_AABB;
 	}
 
 	@Override
-	public RayTraceResult collisionRayTrace(IBlockState blockState, World world, BlockPos pos, Vec3d start, Vec3d end) {
+	public RayTraceResult collisionRayTrace(BlockState blockState, World world, BlockPos pos, Vec3d start, Vec3d end) {
 		TileEntityImaginary te = getTileEntity(world, pos, TileEntityImaginary.class);
 		if (world.isRemote) {
 			if (te == null || !te.is(Property.SELECTABLE)) return null;
@@ -198,17 +198,17 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullBlock(IBlockState state) {
+	public boolean isFullBlock(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, BlockState state, int fortune) {
 		return Lists.newArrayList();
 	}
 
@@ -218,7 +218,7 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
 		TileEntityImaginary te = getTileEntity(worldIn, pos, TileEntityImaginary.class);
 		if (te != null) {
 			final Shape shape = te.getShape();
@@ -229,7 +229,7 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 }

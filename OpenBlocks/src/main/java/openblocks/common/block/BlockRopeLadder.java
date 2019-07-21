@@ -4,17 +4,17 @@ import java.util.List;
 import java.util.Random;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -39,7 +39,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
+	public boolean isLadder(BlockState state, IBlockAccess world, BlockPos pos, LivingEntity entity) {
 		return true;
 	}
 
@@ -49,12 +49,12 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 
@@ -66,9 +66,9 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean something) {
-		if (entity instanceof EntityLivingBase) {
-			EnumFacing playerRotation = entity.getHorizontalFacing();
+	public void addCollisionBoxToList(BlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean something) {
+		if (entity instanceof LivingEntity) {
+			Direction playerRotation = entity.getHorizontalFacing();
 			if (getFront(state) == playerRotation.getOpposite()) {
 				super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entity, something);
 			}
@@ -80,7 +80,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0, 0.0, 15.0f / 16.0f, 1.0, 1.0, 1.0);
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
 		final Orientation orientation = getOrientation(source, pos);
 		return BlockSpaceTransform.instance.mapBlockToWorld(orientation, AABB);
 	}
@@ -91,8 +91,8 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour, BlockPos neigbourPos) {
-		final EnumFacing dir = getBack(state);
+	public void neighborChanged(BlockState state, World world, BlockPos pos, Block neighbour, BlockPos neigbourPos) {
+		final Direction dir = getBack(state);
 
 		if (world.isAirBlock(pos.offset(dir))) {
 			if (world.getBlockState(pos.up()).getBlock() != this) world.destroyBlock(pos, true);
@@ -100,14 +100,14 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public boolean canBlockBePlaced(World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ, int itemMetadata, EntityPlayer player) {
-		if (side == EnumFacing.DOWN) {
-			final IBlockState maybeLadder = world.getBlockState(pos.up());
+	public boolean canBlockBePlaced(World world, BlockPos pos, Hand hand, Direction side, float hitX, float hitY, float hitZ, int itemMetadata, PlayerEntity player) {
+		if (side == Direction.DOWN) {
+			final BlockState maybeLadder = world.getBlockState(pos.up());
 			return maybeLadder.getBlock() == this;
 		}
 
 		for (Orientation o : getRotationMode().getValidDirections()) {
-			final EnumFacing placeDir = getRotationMode().getFront(o).getOpposite();
+			final Direction placeDir = getRotationMode().getFront(o).getOpposite();
 			if (!world.isAirBlock(pos.offset(placeDir))) return true;
 		}
 
@@ -115,7 +115,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+	public void breakBlock(World world, BlockPos pos, BlockState state) {
 		pos = pos.down();
 
 		if (pos.getY() > 0) {
@@ -127,7 +127,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public BlockState getStateForPlacement(World world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
 		Orientation orientation = calculateOrientationAfterPlace(pos, facing, placer);
 		if (orientation == null) orientation = findValidBlock(world, pos);
 		if (orientation == null) orientation = tryCloneState(world, pos, facing);
@@ -136,9 +136,9 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 		return getStateFromMeta(meta).withProperty(propertyOrientation, orientation);
 	}
 
-	private Orientation tryCloneState(World world, BlockPos pos, EnumFacing facing) {
-		if (facing == EnumFacing.DOWN) {
-			final IBlockState maybeLadder = world.getBlockState(pos.up());
+	private Orientation tryCloneState(World world, BlockPos pos, Direction facing) {
+		if (facing == Direction.DOWN) {
+			final BlockState maybeLadder = world.getBlockState(pos.up());
 			if (maybeLadder.getBlock() == this)
 				return maybeLadder.getValue(getPropertyOrientation());
 		}
@@ -148,7 +148,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 
 	private Orientation findValidBlock(World world, BlockPos pos) {
 		for (Orientation o : getRotationMode().getValidDirections()) {
-			final EnumFacing placeDir = getRotationMode().getFront(o).getOpposite();
+			final Direction placeDir = getRotationMode().getFront(o).getOpposite();
 			if (!world.isAirBlock(pos.offset(placeDir))) return o;
 		}
 
@@ -156,18 +156,18 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		super.onBlockPlacedBy(world, pos, state, placer, stack);
 
-		if (placer instanceof EntityPlayer) {
-			final EntityPlayer player = (EntityPlayer)placer;
+		if (placer instanceof PlayerEntity) {
+			final PlayerEntity player = (PlayerEntity)placer;
 			final Orientation orientation = getOrientation(state);
 
 			BlockPos placePos = pos.down();
 			while (placePos.getY() > 0 && (Config.infiniteLadder || stack.getCount() > 1)) {
 				final BlockManipulator manipulator = new BlockManipulator(world, player, placePos);
 
-				if (world.isAirBlock(placePos) && manipulator.place(state, orientation.north(), EnumHand.MAIN_HAND)) {
+				if (world.isAirBlock(placePos) && manipulator.place(state, orientation.north(), Hand.MAIN_HAND)) {
 					if (!Config.infiniteLadder) stack.shrink(1);
 				} else return;
 
@@ -177,7 +177,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
 		return face == getOrientation(state).south()? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
 	}
 

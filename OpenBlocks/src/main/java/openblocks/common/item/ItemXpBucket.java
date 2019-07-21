@@ -2,11 +2,11 @@ package openblocks.common.item;
 
 import javax.annotation.Nullable;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -28,13 +28,13 @@ public class ItemXpBucket extends Item {
 		}
 
 		@Override
-		public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+		public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
 			return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
 		}
 
 		@Override
 		@SuppressWarnings("unchecked")
-		public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+		public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
 			if (capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
 				return (T)fluidHandler;
 
@@ -48,7 +48,7 @@ public class ItemXpBucket extends Item {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
 		return new CapabilityProvider(stack);
 	}
 

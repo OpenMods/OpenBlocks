@@ -3,15 +3,15 @@ package openblocks.client.renderer.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityMagnet;
 import org.lwjgl.opengl.GL11;
 
-public class EntityMagnetRenderer extends Render<EntityMagnet> {
+public class EntityMagnetRenderer extends EntityRenderer<EntityMagnet> {
 
 	private final static ResourceLocation texture = OpenBlocks.location("textures/models/magnet.png");
 
@@ -40,7 +40,7 @@ public class EntityMagnetRenderer extends Render<EntityMagnet> {
 		}
 	};
 
-	public EntityMagnetRenderer(RenderManager renderManager) {
+	public EntityMagnetRenderer(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 

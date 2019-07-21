@@ -2,11 +2,11 @@ package openblocks.common.entity;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityHanging;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.HangingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -16,7 +16,7 @@ import openblocks.OpenBlocks.Items;
 import openblocks.OpenBlocks.Sounds;
 import openblocks.common.item.ItemGlyph;
 
-public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawnData {
+public class EntityGlyph extends HangingEntity implements IEntityAdditionalSpawnData {
 
 	private static final String TAG_CHAR_INDEX = "CharIndex";
 
@@ -36,7 +36,7 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 		super(world);
 	}
 
-	public EntityGlyph(World world, BlockPos pos, EnumFacing facing, int charIndex, byte offsetX, byte offsetY) {
+	public EntityGlyph(World world, BlockPos pos, Direction facing, int charIndex, byte offsetX, byte offsetY) {
 		super(world, pos);
 		setCharIndex(charIndex);
 		this.offsetX = offsetX;
@@ -46,10 +46,10 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 
 	@Override
 	public void setPosition(double x, double y, double z) {
-		final EnumFacing normal = this.facingDirection;
+		final Direction normal = this.facingDirection;
 		if (normal != null) {
-			final EnumFacing left = normal.rotateY();
-			if (left.getAxis() == EnumFacing.Axis.Z) {
+			final Direction left = normal.rotateY();
+			if (left.getAxis() == Direction.Axis.Z) {
 				z -= (offsetX - 8) / 16.0;
 			} else {
 				x -= (offsetX - 8) / 16.0;
@@ -64,7 +64,7 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 
 	@Override
 	protected void updateBoundingBox() {
-		final EnumFacing normal = this.facingDirection;
+		final Direction normal = this.facingDirection;
 		if (normal != null) {
 			double centerX = this.hangingPosition.getX() + (8.0 / 16.0);
 			double centerY = this.hangingPosition.getY() + (8.0 / 16.0);
@@ -74,10 +74,10 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 			centerX -= normal.getFrontOffsetX() * (16 - DEPTH) / 16 / 2;
 			centerZ -= normal.getFrontOffsetZ() * (16 - DEPTH) / 16 / 2;
 
-			final EnumFacing left = normal.rotateY();
+			final Direction left = normal.rotateY();
 			centerY += (offsetY - 8) / 16.0;
 
-			if (left.getAxis() == EnumFacing.Axis.Z) {
+			if (left.getAxis() == Direction.Axis.Z) {
 				centerZ += (offsetX - 8) / 16.0;
 			} else {
 				centerX += (offsetX - 8) / 16.0;
@@ -91,7 +91,7 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 			final double halfSizeY = getHeightPixels() / 16.0 / 2.0;
 			final double halfSizeZ;
 
-			if (normal.getAxis() == EnumFacing.Axis.Z) {
+			if (normal.getAxis() == Direction.Axis.Z) {
 				halfSizeX = getWidthPixels() / 16.0 / 2.0;
 				halfSizeZ = DEPTH / 16 / 2;
 			} else {
@@ -124,7 +124,7 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(CompoundNBT compound) {
 		super.writeEntityToNBT(compound);
 		compound.setInteger(TAG_CHAR_INDEX, charIndex);
 		compound.setByte(TAG_OFFSET_X, offsetX);
@@ -132,7 +132,7 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(CompoundNBT compound) {
 		setCharIndex((char)compound.getInteger(TAG_CHAR_INDEX));
 		offsetX = compound.getByte(TAG_OFFSET_X);
 		offsetY = compound.getByte(TAG_OFFSET_Y);
@@ -166,7 +166,7 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 		offsetX = buffer.readByte();
 		offsetY = buffer.readByte();
 
-		updateFacingWithBoundingBox(EnumFacing.VALUES[facing]);
+		updateFacingWithBoundingBox(Direction.VALUES[facing]);
 	}
 
 	public ItemStack getStack() {
@@ -178,8 +178,8 @@ public class EntityGlyph extends EntityHanging implements IEntityAdditionalSpawn
 		if (world.getGameRules().getBoolean("doEntityDrops")) {
 			playSound(Sounds.ENTITY_GLYPH_BREAK, 1.0F, 1.0F);
 
-			if (brokenEntity instanceof EntityPlayer) {
-				final EntityPlayer entityplayer = (EntityPlayer)brokenEntity;
+			if (brokenEntity instanceof PlayerEntity) {
+				final PlayerEntity entityplayer = (PlayerEntity)brokenEntity;
 				if (entityplayer.capabilities.isCreativeMode) return;
 			}
 

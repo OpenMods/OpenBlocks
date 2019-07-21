@@ -1,9 +1,9 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ITickable;
 import openmods.OpenMods;
 import openmods.tileentity.OpenTileEntity;
@@ -16,8 +16,8 @@ public class TileEntityHealBlock extends OpenTileEntity implements ITickable {
 		if (world.isRemote) return;
 
 		if (OpenMods.proxy.getTicks(world) % 20 == 0) {
-			List<EntityPlayer> playersOnTop = world.getEntitiesWithinAABB(EntityPlayer.class, BlockUtils.expandAround(pos, 1, 2, 1));
-			for (EntityPlayer player : playersOnTop) {
+			List<PlayerEntity> playersOnTop = world.getEntitiesWithinAABB(PlayerEntity.class, BlockUtils.expandAround(pos, 1, 2, 1));
+			for (PlayerEntity player : playersOnTop) {
 				if (!player.capabilities.isCreativeMode) {
 					/*
 					 * TODO: the potion effects are set to 1 tick only to give
@@ -28,8 +28,8 @@ public class TileEntityHealBlock extends OpenTileEntity implements ITickable {
 					 * someone else should ultimately decide if it should be
 					 * done (you know who you are)
 					 */
-					player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 1, 10));
-					player.addPotionEffect(new PotionEffect(MobEffects.SATURATION, 1));
+					player.addPotionEffect(new EffectInstance(Effects.REGENERATION, 1, 10));
+					player.addPotionEffect(new EffectInstance(Effects.SATURATION, 1));
 				}
 			}
 		}

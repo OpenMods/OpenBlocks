@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -25,9 +25,9 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.SimpleModelFontRenderer;
@@ -55,7 +55,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, long rand) {
 			return quads;
 		}
 
@@ -225,7 +225,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 	}
 
 	private static List<BakedQuad> appendScaledModelQuads(List<BakedQuad> output, IBakedModel model, Matrix4f transform, int tintDelta) {
-		for (EnumFacing side : EnumFacing.VALUES)
+		for (Direction side : Direction.VALUES)
 			for (BakedQuad quad : model.getQuads(null, side, 0))
 				output.add(rescaleQuad(quad, transform, tintDelta));
 
@@ -243,7 +243,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 		}
 	}
 
-	private static IBakedModel getItemModel(@Nonnull ItemStack stack, World world, EntityLivingBase entity) {
+	private static IBakedModel getItemModel(@Nonnull ItemStack stack, World world, LivingEntity entity) {
 		final IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack);
 		return model.getOverrides().handleItemState(model, stack, world, entity);
 	}
@@ -403,7 +403,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 		final List<BakedQuad> frameQuads = framesQuads.get(depth);
 		if (transformType == TransformType.GUI) {
 			for (BakedQuad q : frameQuads)
-				if (q.getFace() == EnumFacing.SOUTH)
+				if (q.getFace() == Direction.SOUTH)
 					output.add(q);
 		} else {
 			output.addAll(frameQuads);
@@ -415,7 +415,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 	}
 
 	@Override
-	public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+	public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, LivingEntity entity) {
 		final Pair<ItemStack, Integer> r = ItemDevNull.getContents(stack);
 		final int depth = Math.max(1, r.getRight());
 

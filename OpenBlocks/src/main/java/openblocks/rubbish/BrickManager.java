@@ -3,14 +3,14 @@ package openblocks.rubbish;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.MinecraftForge;
@@ -42,19 +42,19 @@ public class BrickManager {
 
 	@Nullable
 	public static BowelContents getProperty(Entity entity) {
-		return CAPABILITY != null? entity.getCapability(CAPABILITY, EnumFacing.UP) : null;
+		return CAPABILITY != null? entity.getCapability(CAPABILITY, Direction.UP) : null;
 	}
 
 	public static void registerCapability() {
 		CapabilityManager.INSTANCE.register(BowelContents.class, new Capability.IStorage<BowelContents>() {
 			@Override
-			public NBTBase writeNBT(Capability<BowelContents> capability, BowelContents instance, EnumFacing side) {
-				return new NBTTagInt(instance.brickCount);
+			public NBTBase writeNBT(Capability<BowelContents> capability, BowelContents instance, Direction side) {
+				return new IntNBT(instance.brickCount);
 			}
 
 			@Override
-			public void readNBT(Capability<BowelContents> capability, BowelContents instance, EnumFacing side, NBTBase nbt) {
-				instance.brickCount = ((NBTTagInt)nbt).getInt();
+			public void readNBT(Capability<BowelContents> capability, BowelContents instance, Direction side, NBTBase nbt) {
+				instance.brickCount = ((IntNBT)nbt).getInt();
 			}
 
 		}, BowelContents::new);
@@ -66,30 +66,30 @@ public class BrickManager {
 
 		@SubscribeEvent
 		public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
-			if (evt.getObject() instanceof EntityPlayerMP) {
-				evt.addCapability(CAPABILITY_KEY, new ICapabilitySerializable<NBTTagInt>() {
+			if (evt.getObject() instanceof ServerPlayerEntity) {
+				evt.addCapability(CAPABILITY_KEY, new ICapabilitySerializable<IntNBT>() {
 
 					private final BowelContents state = new BowelContents();
 
 					@Override
-					public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+					public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
 						return capability == CAPABILITY;
 					}
 
 					@Override
 					@SuppressWarnings("unchecked")
-					public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+					public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
 						if (capability == CAPABILITY) return (T)state;
 						return null;
 					}
 
 					@Override
-					public NBTTagInt serializeNBT() {
-						return new NBTTagInt(state.brickCount);
+					public IntNBT serializeNBT() {
+						return new IntNBT(state.brickCount);
 					}
 
 					@Override
-					public void deserializeNBT(NBTTagInt nbt) {
+					public void deserializeNBT(IntNBT nbt) {
 						state.brickCount = nbt.getInt();
 					}
 				});
@@ -105,13 +105,13 @@ public class BrickManager {
 
 		if (tag != null) {
 			for (int i = 0; i < Math.min(tag.brickCount, 16); i++) {
-				EntityItem entityItem = createBrick(evt.getEntity());
+				ItemEntity entityItem = createBrick(evt.getEntity());
 				evt.getDrops().add(entityItem);
 			}
 		}
 	}
 
-	private static boolean tryDecrementBrick(EntityPlayer player) {
+	private static boolean tryDecrementBrick(PlayerEntity player) {
 		if (player.capabilities.isCreativeMode) return true;
 
 		BowelContents tag = getProperty(player);
@@ -125,12 +125,12 @@ public class BrickManager {
 
 	@SubscribeEvent
 	public void onPlayerScared(PlayerActionEvent evt) {
-		if (evt.type == Type.BOO && evt.sender instanceof EntityPlayerMP) {
-			final EntityPlayerMP player = (EntityPlayerMP)evt.sender;
+		if (evt.type == Type.BOO && evt.sender instanceof ServerPlayerEntity) {
+			final ServerPlayerEntity player = (ServerPlayerEntity)evt.sender;
 			player.world.playSound(null, player.getPosition(), OpenBlocks.Sounds.PLAYER_WHOOPS, SoundCategory.PLAYERS, 1, 1);
 
 			if (tryDecrementBrick(player)) {
-				EntityItem drop = createBrick(player);
+				ItemEntity drop = createBrick(player);
 				drop.setDefaultPickupDelay();
 				player.world.spawnEntity(drop);
 				Criterions.brickDropped.trigger(player);
@@ -139,9 +139,9 @@ public class BrickManager {
 		}
 	}
 
-	private static EntityItem createBrick(Entity dropper) {
+	private static ItemEntity createBrick(Entity dropper) {
 		ItemStack brick = new ItemStack(Items.BRICK);
-		EntityItem drop = ItemUtils.createDrop(dropper, brick);
+		ItemEntity drop = ItemUtils.createDrop(dropper, brick);
 		double rotation = Math.toRadians(dropper.rotationYaw) - Math.PI / 2;
 		double dx = Math.cos(rotation);
 		double dz = Math.sin(rotation);

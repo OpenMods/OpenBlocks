@@ -5,7 +5,7 @@ import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -16,7 +16,7 @@ public class EntitySelectionHandler {
 	public interface ISelectAware {}
 
 	public interface ISelectionRenderer<E extends Entity> {
-		void render(E e, EntityPlayer player, RenderGlobal context, float partialTickTime);
+		void render(E e, PlayerEntity player, RenderGlobal context, float partialTickTime);
 	}
 
 	public static class RegisterSelectionRendererEvent<I extends Entity & ISelectAware> extends Event {

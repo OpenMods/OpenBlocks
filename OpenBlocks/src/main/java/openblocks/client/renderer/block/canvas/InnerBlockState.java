@@ -1,25 +1,25 @@
 package openblocks.client.renderer.block.canvas;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class InnerBlockState {
 
-	public static final IUnlistedProperty<IBlockState> PROPERTY = new IUnlistedProperty<IBlockState>() {
+	public static final IUnlistedProperty<BlockState> PROPERTY = new IUnlistedProperty<BlockState>() {
 
 		@Override
-		public String valueToString(IBlockState value) {
+		public String valueToString(BlockState value) {
 			return value.toString();
 		}
 
 		@Override
-		public boolean isValid(IBlockState value) {
+		public boolean isValid(BlockState value) {
 			return true;
 		}
 
 		@Override
-		public Class<IBlockState> getType() {
-			return IBlockState.class;
+		public Class<BlockState> getType() {
+			return BlockState.class;
 		}
 
 		@Override

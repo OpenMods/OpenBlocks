@@ -9,32 +9,32 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 class ModelQuads {
 	private final List<BakedQuad> generalQuads;
 
-	private final Map<EnumFacing, List<BakedQuad>> sidedQuads;
+	private final Map<Direction, List<BakedQuad>> sidedQuads;
 
-	private ModelQuads(List<BakedQuad> generalQuads, Map<EnumFacing, List<BakedQuad>> sidedQuads) {
+	private ModelQuads(List<BakedQuad> generalQuads, Map<Direction, List<BakedQuad>> sidedQuads) {
 		this.generalQuads = generalQuads;
 		this.sidedQuads = sidedQuads;
 	}
 
-	public List<BakedQuad> get(@Nullable EnumFacing side) {
+	public List<BakedQuad> get(@Nullable Direction side) {
 		return side != null? sidedQuads.get(side) : generalQuads;
 	}
 
 	public static final ModelQuads EMPTY;
 
 	static {
-		final ImmutableMap.Builder<EnumFacing, List<BakedQuad>> emptySides = ImmutableMap.builder();
-		for (EnumFacing side : EnumFacing.VALUES)
+		final ImmutableMap.Builder<Direction, List<BakedQuad>> emptySides = ImmutableMap.builder();
+		for (Direction side : Direction.VALUES)
 			emptySides.put(side, ImmutableList.of());
 
 		EMPTY = new ModelQuads(ImmutableList.of(), emptySides.build()) {
 			@Override
-			public List<BakedQuad> get(@Nullable EnumFacing side) {
+			public List<BakedQuad> get(@Nullable Direction side) {
 				return ImmutableList.of();
 			}
 		};
@@ -43,14 +43,14 @@ class ModelQuads {
 	public static class Builder {
 		private final List<BakedQuad> generalQuads = Lists.newArrayList();
 
-		private final Map<EnumFacing, List<BakedQuad>> sidedQuads = Maps.newHashMap();
+		private final Map<Direction, List<BakedQuad>> sidedQuads = Maps.newHashMap();
 
 		public Builder() {
-			for (EnumFacing side : EnumFacing.VALUES)
+			for (Direction side : Direction.VALUES)
 				sidedQuads.put(side, Lists.newArrayList());
 		}
 
-		public Builder addSidedQuads(EnumFacing side, Collection<BakedQuad> quads) {
+		public Builder addSidedQuads(Direction side, Collection<BakedQuad> quads) {
 			sidedQuads.get(side).addAll(quads);
 			return this;
 		}
@@ -63,15 +63,15 @@ class ModelQuads {
 		public Builder merge(ModelQuads other) {
 			generalQuads.addAll(other.generalQuads);
 
-			for (EnumFacing side : EnumFacing.VALUES)
+			for (Direction side : Direction.VALUES)
 				sidedQuads.get(side).addAll(other.get(side));
 
 			return this;
 		}
 
 		public ModelQuads build() {
-			final ImmutableMap.Builder<EnumFacing, List<BakedQuad>> sides = ImmutableMap.builder();
-			for (EnumFacing side : EnumFacing.VALUES)
+			final ImmutableMap.Builder<Direction, List<BakedQuad>> sides = ImmutableMap.builder();
+			for (Direction side : Direction.VALUES)
 				sides.put(side, ImmutableList.copyOf(sidedQuads.get(side)));
 
 			return new ModelQuads(ImmutableList.copyOf(generalQuads), sides.build());

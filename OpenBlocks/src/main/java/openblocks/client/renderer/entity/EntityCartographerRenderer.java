@@ -5,13 +5,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.OpenBlocks;
@@ -23,7 +23,7 @@ import openmods.renderer.DisplayListWrapper;
 import openmods.utils.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
 
-public class EntityCartographerRenderer extends Render<EntityCartographer> {
+public class EntityCartographerRenderer extends EntityRenderer<EntityCartographer> {
 
 	private static final double Z_FIGHTER = 0.0001;
 
@@ -80,13 +80,13 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 		private ResourceLocation mapTextureLocation;
 
 		@Override
-		public void render(EntityCartographer e, EntityPlayer player, RenderGlobal context, float partialTickTime) {
+		public void render(EntityCartographer e, PlayerEntity player, RenderGlobal context, float partialTickTime) {
 			if (RANDOM.nextFloat() < 0.1f) return;
 			GL11.glPushMatrix();
 
 			RenderUtils.translateToPlayer(e, partialTickTime);
 
-			EnumFacing side = player.getHorizontalFacing().getOpposite();
+			Direction side = player.getHorizontalFacing().getOpposite();
 
 			switch (side) {
 				case EAST:
@@ -197,7 +197,7 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 		}
 	}
 
-	public EntityCartographerRenderer(RenderManager renderManager) {
+	public EntityCartographerRenderer(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 
@@ -209,7 +209,7 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 		bindTexture(TEXTURE);
 		MODEL.renderBase(cartographer.eyeYaw);
 
-		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 		MODEL.renderEye(cartographer.eyeYaw, cartographer.eyePitch);
 		cartographer.updateEye();
 

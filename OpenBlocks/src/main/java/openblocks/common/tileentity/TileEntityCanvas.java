@@ -8,14 +8,14 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -60,7 +60,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		}
 
 		@Override
-		public IBlockState getBlockState(BlockPos pos) {
+		public BlockState getBlockState(BlockPos pos) {
 			final TileEntity te = original.getTileEntity(pos);
 			if (te instanceof TileEntityCanvas) return ((TileEntityCanvas)te).getPaintedBlockState();
 
@@ -69,7 +69,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 		@Override
 		public boolean isAirBlock(BlockPos pos) {
-			final IBlockState state = getBlockState(pos);
+			final BlockState state = getBlockState(pos);
 			return state.getBlock().isAir(state, this, pos);
 		}
 
@@ -79,7 +79,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		}
 
 		@Override
-		public int getStrongPower(BlockPos pos, EnumFacing direction) {
+		public int getStrongPower(BlockPos pos, Direction direction) {
 			return original.getStrongPower(pos, direction);
 		}
 
@@ -89,11 +89,11 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		}
 
 		@Override
-		public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
+		public boolean isSideSolid(BlockPos pos, Direction side, boolean _default) {
 			final Chunk chunk = original.getChunkFromBlockCoords(pos);
 			if (chunk == null || chunk.isEmpty()) return _default;
 
-			final IBlockState state = getBlockState(pos);
+			final BlockState state = getBlockState(pos);
 			return state.isSideSolid(this, pos, side);
 		}
 
@@ -101,13 +101,13 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	private SyncableBlockState paintedBlockState;
 
-	private IBlockState rawPaintedBlockState;
+	private BlockState rawPaintedBlockState;
 
 	private int prevLightValue;
 
 	private int prevLightOpacity;
 
-	private IBlockState actualPaintedBlockState;
+	private BlockState actualPaintedBlockState;
 
 	@SuppressWarnings("unused")
 	private SyncableBlockLayers stencilsUp;
@@ -127,7 +127,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	@SuppressWarnings("unused")
 	private SyncableBlockLayers stencilsSouth;
 
-	private Map<EnumFacing, SyncableBlockLayers> allSides;
+	private Map<Direction, SyncableBlockLayers> allSides;
 
 	private CanvasState canvasState = CanvasState.EMPTY;
 
@@ -143,7 +143,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 				stateChanged = true;
 			}
 
-			for (Map.Entry<EnumFacing, SyncableBlockLayers> e : allSides.entrySet()) {
+			for (Map.Entry<Direction, SyncableBlockLayers> e : allSides.entrySet()) {
 				final SyncableBlockLayers side = e.getValue();
 				if (changes.contains(side)) {
 					canvasState = canvasState.update(e.getKey(), side.convertToState());
@@ -156,7 +156,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		});
 	}
 
-	private SyncableBlockLayers createLayer(EnumFacing facing) {
+	private SyncableBlockLayers createLayer(Direction facing) {
 		SyncableBlockLayers result = new SyncableBlockLayers();
 		allSides.put(facing, result);
 		return result;
@@ -164,23 +164,23 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	@Override
 	protected void createSyncedFields() {
-		allSides = Maps.newEnumMap(EnumFacing.class);
+		allSides = Maps.newEnumMap(Direction.class);
 
-		stencilsUp = createLayer(EnumFacing.UP);
-		stencilsDown = createLayer(EnumFacing.DOWN);
-		stencilsEast = createLayer(EnumFacing.EAST);
-		stencilsWest = createLayer(EnumFacing.WEST);
-		stencilsNorth = createLayer(EnumFacing.NORTH);
-		stencilsSouth = createLayer(EnumFacing.SOUTH);
+		stencilsUp = createLayer(Direction.UP);
+		stencilsDown = createLayer(Direction.DOWN);
+		stencilsEast = createLayer(Direction.EAST);
+		stencilsWest = createLayer(Direction.WEST);
+		stencilsNorth = createLayer(Direction.NORTH);
+		stencilsSouth = createLayer(Direction.SOUTH);
 
 		paintedBlockState = new SyncableBlockState();
 	}
 
-	public SyncableBlockLayers getLayersForSide(EnumFacing side) {
+	public SyncableBlockLayers getLayersForSide(Direction side) {
 		return allSides.get(side);
 	}
 
-	public IBlockState getPaintedBlockState() {
+	public BlockState getPaintedBlockState() {
 		if (rawPaintedBlockState == null) {
 			rawPaintedBlockState = paintedBlockState.getValue();
 		}
@@ -188,9 +188,9 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return rawPaintedBlockState;
 	}
 
-	public IBlockState getActualPaintedBlockState() {
+	public BlockState getActualPaintedBlockState() {
 		if (actualPaintedBlockState == null) {
-			final IBlockState rawBlockState = getPaintedBlockState();
+			final BlockState rawBlockState = getPaintedBlockState();
 			try {
 				actualPaintedBlockState = rawBlockState.getActualState(new UnpackingBlockAccess(getWorld()), getPos());
 			} catch (Exception e) {
@@ -203,16 +203,16 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	private boolean isBlockUnpainted() {
-		for (EnumFacing side : EnumFacing.VALUES)
+		for (Direction side : Direction.VALUES)
 			if (!allSides.get(side).isEmpty()) return false;
 
 		return true;
 	}
 
-	public boolean applyPaint(int color, EnumFacing... sides) {
+	public boolean applyPaint(int color, Direction... sides) {
 		boolean hasChanged = false;
 
-		for (EnumFacing side : sides) {
+		for (Direction side : sides) {
 			SyncableBlockLayers layers = getLayersForSide(side);
 			layers.applyPaint(color);
 
@@ -223,13 +223,13 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return hasChanged;
 	}
 
-	private void dropStackFromSide(@Nonnull ItemStack stack, EnumFacing side) {
+	private void dropStackFromSide(@Nonnull ItemStack stack, Direction side) {
 		if (world.isRemote) return;
 		BlockUtils.dropItemStackInWorld(world, pos.offset(side), stack);
 	}
 
-	public void removePaint(EnumFacing... sides) {
-		for (EnumFacing side : sides) {
+	public void removePaint(Direction... sides) {
+		for (Direction side : sides) {
 			SyncableBlockLayers layer = getLayersForSide(side);
 
 			final Optional<StencilPattern> stencil = layer.clearAll();
@@ -240,14 +240,14 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		}
 
 		if (isBlockUnpainted() && !paintedBlockState.isAir()) {
-			final IBlockState state = paintedBlockState.getValue();
+			final BlockState state = paintedBlockState.getValue();
 			world.setBlockState(pos, state);
 		}
 
 		trySync();
 	}
 
-	public boolean useStencil(EnumFacing side, StencilPattern stencil) {
+	public boolean useStencil(Direction side, StencilPattern stencil) {
 		SyncableBlockLayers layer = getLayersForSide(side);
 		layer.putStencil(stencil);
 
@@ -256,8 +256,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (hand != EnumHand.MAIN_HAND) return false;
+	public boolean onBlockActivated(PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+		if (hand != Hand.MAIN_HAND) return false;
 
 		final ItemStack held = player.getHeldItemMainhand();
 		final Item heldItem = held.getItem();
@@ -302,9 +302,9 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, IBlockState blockState, int fortune, boolean isSilkHarvest) {
+	public void addHarvestDrops(PlayerEntity player, List<ItemStack> drops, BlockState blockState, int fortune, boolean isSilkHarvest) {
 		if (!paintedBlockState.isAir()) {
-			final IBlockState state = this.paintedBlockState.getValue();
+			final BlockState state = this.paintedBlockState.getValue();
 			final Block paintedBlock = state.getBlock();
 
 			final Random rand = world.rand;
@@ -320,7 +320,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		}
 	}
 
-	public void setPaintedBlock(IBlockState state) {
+	public void setPaintedBlock(BlockState state) {
 		paintedBlockState.setValue(state);
 		onPaintedBlockUpdate();
 	}
@@ -333,7 +333,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	@SuppressWarnings("deprecation")
 	private void updateLight() {
-		final IBlockState paintedBlockStatek = getPaintedBlockState();
+		final BlockState paintedBlockStatek = getPaintedBlockState();
 		final Block paintedBlock = paintedBlockStatek.getBlock();
 		final int newLightValue = paintedBlock.getLightValue(paintedBlockStatek);
 		final int newLightOpacity = paintedBlock.getLightOpacity(paintedBlockStatek);

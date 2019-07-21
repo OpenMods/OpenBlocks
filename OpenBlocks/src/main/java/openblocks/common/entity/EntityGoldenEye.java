@@ -2,9 +2,9 @@ package openblocks.common.entity;
 
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.datafix.FixTypes;
@@ -43,17 +43,17 @@ public class EntityGoldenEye extends EntitySmoothMove {
 	protected void entityInit() {}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tag) {
+	protected void readEntityFromNBT(CompoundNBT tag) {
 		if (tag.hasKey(TAG_SPAWNING_ITEM)) {
-			NBTTagCompound item = tag.getCompoundTag(TAG_SPAWNING_ITEM);
+			CompoundNBT item = tag.getCompoundTag(TAG_SPAWNING_ITEM);
 			spawningStack = new ItemStack(item);
 		}
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tag) {
+	protected void writeEntityToNBT(CompoundNBT tag) {
 		if (!spawningStack.isEmpty()) {
-			NBTTagCompound item = spawningStack.writeToNBT(new NBTTagCompound());
+			CompoundNBT item = spawningStack.writeToNBT(new CompoundNBT());
 			tag.setTag(TAG_SPAWNING_ITEM, item);
 		}
 	}
@@ -63,7 +63,7 @@ public class EntityGoldenEye extends EntitySmoothMove {
 		if (!world.isRemote && timeToLive-- < 0) {
 			setDead();
 			if (!spawningStack.isEmpty()) {
-				world.spawnEntity(new EntityItem(world, posX, posY, posZ, spawningStack));
+				world.spawnEntity(new ItemEntity(world, posX, posY, posZ, spawningStack));
 			}
 			return;
 		}

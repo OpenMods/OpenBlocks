@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.math.BlockPos;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.shapes.CoordShape;
@@ -56,7 +56,7 @@ public class GuideLegacyRenderer implements IGuideRenderer {
 		if (shape == null || !markerDisplayList.isPresent()) return;
 
 		final int displayList = markerDisplayList.get();
-		TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		TextureUtils.bindTextureToClient(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GlStateManager.disableLighting();

@@ -1,9 +1,9 @@
 package openblocks.common.recipe;
 
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -21,7 +21,7 @@ public class CrayonMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inv, World worldIn) {
+	public boolean matches(CraftingInventory inv, World worldIn) {
 		OptionalInt color = OptionalInt.ABSENT;
 		int count = 0;
 
@@ -29,7 +29,7 @@ public class CrayonMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impleme
 			final ItemStack stack = inv.getStackInSlot(i);
 			if (!(stack.getItem() instanceof ItemImaginaryCrayon)) return false;
 
-			final NBTTagCompound tag = stack.getTagCompound();
+			final CompoundNBT tag = stack.getTagCompound();
 			if (tag != null) {
 				final int stackColor = ItemImaginaryCrayon.getColor(tag);
 				if (color.isPresent()) {
@@ -46,7 +46,7 @@ public class CrayonMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		int color = 0;
 		float uses = 0;
 
@@ -76,7 +76,7 @@ public class CrayonMergeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+	public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
 		return NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 	}
 

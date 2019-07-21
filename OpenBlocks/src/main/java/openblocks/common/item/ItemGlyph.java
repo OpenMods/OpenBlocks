@@ -5,14 +5,14 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityHanging;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.HangingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -103,7 +103,7 @@ public class ItemGlyph extends Item {
 	}
 
 	public static int getCharIndex(ItemStack item) {
-		final NBTTagCompound tag = item.getTagCompound();
+		final CompoundNBT tag = item.getTagCompound();
 		return tag != null? tag.getInteger(TAG_CHAR_INDEX) : 0;
 	}
 
@@ -124,15 +124,15 @@ public class ItemGlyph extends Item {
 	private final BlockTextureTransform transform = BlockTextureTransform.builder().build();
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
 		BlockPos blockpos = pos.offset(facing);
 
-		if (facing != EnumFacing.DOWN && facing != EnumFacing.UP && player.canPlayerEdit(blockpos, facing, stack)) {
+		if (facing != Direction.DOWN && facing != Direction.UP && player.canPlayerEdit(blockpos, facing, stack)) {
 			final TexCoords localHit = transform.worldVecToTextureCoords(facing, hitX, hitY, hitZ);
 			final byte xOffset = (byte)(localHit.u * 16);
 			final byte yOffset = (byte)(16 - localHit.v * 16);
-			final EntityHanging entityhanging = new EntityGlyph(worldIn, blockpos, facing, getCharIndex(stack), xOffset, yOffset);
+			final HangingEntity entityhanging = new EntityGlyph(worldIn, blockpos, facing, getCharIndex(stack), xOffset, yOffset);
 
 			if (entityhanging.onValidSurface()) {
 				if (!worldIn.isRemote) {
@@ -143,10 +143,10 @@ public class ItemGlyph extends Item {
 				stack.shrink(1);
 			}
 
-			return EnumActionResult.SUCCESS;
+			return ActionResultType.SUCCESS;
 		}
 
-		return EnumActionResult.FAIL;
+		return ActionResultType.FAIL;
 	}
 
 }

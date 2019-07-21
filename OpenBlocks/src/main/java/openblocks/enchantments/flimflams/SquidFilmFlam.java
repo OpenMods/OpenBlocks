@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Random;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.passive.SquidEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import openblocks.api.IFlimFlamAction;
 
 public class SquidFilmFlam implements IFlimFlamAction {
@@ -21,10 +21,10 @@ public class SquidFilmFlam implements IFlimFlamAction {
 			"???");
 
 	@Override
-	public boolean execute(EntityPlayerMP target) {
+	public boolean execute(ServerPlayerEntity target) {
 		if (target.isBeingRidden()) return false;
 
-		EntitySquid squid = new EntitySquid(target.world);
+		SquidEntity squid = new SquidEntity(target.world);
 		squid.move(MoverType.SELF, target.posX, target.getEntityBoundingBox().minY, target.posZ);
 
 		int selected = random.nextInt(names.size());

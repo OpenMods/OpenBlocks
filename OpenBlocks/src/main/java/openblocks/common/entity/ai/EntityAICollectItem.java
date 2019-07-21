@@ -1,23 +1,23 @@
 package openblocks.common.entity.ai;
 
 import java.util.List;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraftforge.items.ItemHandlerHelper;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityLuggage;
 import openmods.utils.ItemUtils;
 
-public class EntityAICollectItem extends EntityAIBase {
+public class EntityAICollectItem extends Goal {
 
 	private EntityLuggage luggage;
 
-	private final PathNavigate pathFinder;
+	private final PathNavigator pathFinder;
 
-	private EntityItem targetItem = null;
+	private ItemEntity targetItem = null;
 
 	public EntityAICollectItem(EntityLuggage luggage) {
 		this.luggage = luggage;
@@ -30,10 +30,10 @@ public class EntityAICollectItem extends EntityAIBase {
 		if (!pathFinder.noPath()) return false;
 
 		if (luggage.world != null) {
-			List<EntityItem> items = luggage.world.getEntitiesWithinAABB(EntityItem.class, luggage.getEntityBoundingBox().grow(10));
-			EntityItem closest = null;
+			List<ItemEntity> items = luggage.world.getEntitiesWithinAABB(ItemEntity.class, luggage.getEntityBoundingBox().grow(10));
+			ItemEntity closest = null;
 			double closestDistance = Double.MAX_VALUE;
-			for (EntityItem item : items) {
+			for (ItemEntity item : items) {
 				if (!item.isDead && item.onGround) {
 					double dist = item.getDistance(luggage);
 					if (dist < closestDistance
@@ -80,7 +80,7 @@ public class EntityAICollectItem extends EntityAIBase {
 				final ItemStack leftovers = ItemHandlerHelper.insertItem(luggage.getChestInventory().getHandler(), toConsume, false);
 				if (leftovers.getCount() < toConsume.getCount()) {
 					if (luggage.lastSound > 15) {
-						boolean isFood = toConsume.getItemUseAction() == EnumAction.EAT;
+						boolean isFood = toConsume.getItemUseAction() == UseAction.EAT;
 						luggage.playSound(isFood? OpenBlocks.Sounds.ENTITY_LUGGAGE_EAT_FOOD : OpenBlocks.Sounds.ENTITY_LUGGAGE_EAT_ITEM,
 								0.5f, 1.0f + (luggage.world.rand.nextFloat() * 0.2f));
 						luggage.lastSound = 0;

@@ -2,11 +2,11 @@ package openblocks.common.tileentity;
 
 import com.google.common.collect.Lists;
 import java.util.List;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.GuiDrawingTable;
@@ -174,7 +174,7 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 			}
 
 			final ItemStack drop = ItemGlyph.createStack(OpenBlocks.Items.glyph, glyph);
-			final EntityItem entityitem = new EntityItem(getWorld(), dropX, dropY, dropZ, drop);
+			final ItemEntity entityitem = new ItemEntity(getWorld(), dropX, dropY, dropZ, drop);
 			entityitem.setDefaultPickupDelay();
 			getWorld().spawnEntity(entityitem);
 		}
@@ -201,17 +201,17 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 	}
 
 	@Override
-	public Object getServerGui(EntityPlayer player) {
+	public Object getServerGui(PlayerEntity player) {
 		return new ContainerDrawingTable(player.inventory, this);
 	}
 
 	@Override
-	public Object getClientGui(EntityPlayer player) {
+	public Object getClientGui(PlayerEntity player) {
 		return new GuiDrawingTable(new ContainerDrawingTable(player.inventory, this));
 	}
 
 	@Override
-	public boolean canOpenGui(EntityPlayer player) {
+	public boolean canOpenGui(PlayerEntity player) {
 		return true;
 	}
 
@@ -221,14 +221,14 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+	public CompoundNBT writeToNBT(CompoundNBT tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 		return tag;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
+	public void readFromNBT(CompoundNBT tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 	}

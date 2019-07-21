@@ -3,8 +3,8 @@ package openblocks.api;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import java.util.List;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
@@ -16,10 +16,10 @@ public class GraveDropsEvent extends Event {
 	}
 
 	public static class ItemAction {
-		public final EntityItem item;
+		public final ItemEntity item;
 		public final Action action;
 
-		public ItemAction(EntityItem item, Action action) {
+		public ItemAction(ItemEntity item, Action action) {
 			Preconditions.checkNotNull(action);
 			Preconditions.checkNotNull(item);
 			this.item = item;
@@ -27,19 +27,19 @@ public class GraveDropsEvent extends Event {
 		}
 	}
 
-	public final EntityPlayer player;
+	public final PlayerEntity player;
 
 	public final List<ItemAction> drops = Lists.newArrayList();
 
-	public GraveDropsEvent(EntityPlayer player) {
+	public GraveDropsEvent(PlayerEntity player) {
 		this.player = player;
 	}
 
-	public void addItem(EntityItem stack) {
+	public void addItem(ItemEntity stack) {
 		drops.add(new ItemAction(stack, Action.STORE));
 	}
 
-	public void addItem(EntityItem stack, Action action) {
+	public void addItem(ItemEntity stack, Action action) {
 		drops.add(new ItemAction(stack, action));
 	}
 }

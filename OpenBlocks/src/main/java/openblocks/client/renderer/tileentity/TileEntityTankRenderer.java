@@ -2,7 +2,7 @@ package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.animation.FastTESR;
 import net.minecraftforge.fluids.FluidStack;
@@ -61,35 +61,35 @@ public class TileEntityTankRenderer extends FastTESR<TileEntityTank> {
 
 		final double vHeight = vMax - vMin;
 
-		if (data.shouldRenderFluidWall(EnumFacing.NORTH) && (nw > 0 || ne > 0)) {
+		if (data.shouldRenderFluidWall(Direction.NORTH) && (nw > 0 || ne > 0)) {
 			addVertex(wr, 1, 0, 0, uMax, vMin, r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 1, ne, 0, uMax, vMin + (vHeight * ne), r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 0, nw, 0, uMin, vMin + (vHeight * nw), r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 0, 0, 0, uMin, vMin, r, g, b, a, skyLight, blockLight);
 		}
 
-		if (data.shouldRenderFluidWall(EnumFacing.SOUTH) && (se > 0 || sw > 0)) {
+		if (data.shouldRenderFluidWall(Direction.SOUTH) && (se > 0 || sw > 0)) {
 			addVertex(wr, 1, 0, 1, uMin, vMin, r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 1, se, 1, uMin, vMin + (vHeight * se), r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 0, sw, 1, uMax, vMin + (vHeight * sw), r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 0, 0, 1, uMax, vMin, r, g, b, a, skyLight, blockLight);
 		}
 
-		if (data.shouldRenderFluidWall(EnumFacing.EAST) && (ne > 0 || se > 0)) {
+		if (data.shouldRenderFluidWall(Direction.EAST) && (ne > 0 || se > 0)) {
 			addVertex(wr, 1, 0, 0, uMin, vMin, r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 1, ne, 0, uMin, vMin + (vHeight * ne), r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 1, se, 1, uMax, vMin + (vHeight * se), r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 1, 0, 1, uMax, vMin, r, g, b, a, skyLight, blockLight);
 		}
 
-		if (data.shouldRenderFluidWall(EnumFacing.WEST) && (sw > 0 || nw > 0)) {
+		if (data.shouldRenderFluidWall(Direction.WEST) && (sw > 0 || nw > 0)) {
 			addVertex(wr, 0, 0, 1, uMin, vMin, r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 0, sw, 1, uMin, vMin + (vHeight * sw), r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 0, nw, 0, uMax, vMin + (vHeight * nw), r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 0, 0, 0, uMax, vMin, r, g, b, a, skyLight, blockLight);
 		}
 
-		if (data.shouldRenderFluidWall(EnumFacing.UP)) {
+		if (data.shouldRenderFluidWall(Direction.UP)) {
 			final double uMid = (uMax + uMin) / 2;
 			final double vMid = (vMax + vMin) / 2;
 
@@ -105,7 +105,7 @@ public class TileEntityTankRenderer extends FastTESR<TileEntityTank> {
 
 		}
 
-		if (data.shouldRenderFluidWall(EnumFacing.DOWN)) {
+		if (data.shouldRenderFluidWall(Direction.DOWN)) {
 			addVertex(wr, 1, 0, 0, uMax, vMin, r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 1, 0, 1, uMin, vMin, r, g, b, a, skyLight, blockLight);
 			addVertex(wr, 0, 0, 1, uMin, vMax, r, g, b, a, skyLight, blockLight);

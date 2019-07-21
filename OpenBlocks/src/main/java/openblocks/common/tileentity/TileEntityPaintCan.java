@@ -1,11 +1,11 @@
 package openblocks.common.tileentity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
@@ -30,8 +30,8 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote && hand == EnumHand.MAIN_HAND && amount.get() > 0) {
+	public boolean onBlockActivated(PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && hand == Hand.MAIN_HAND && amount.get() > 0) {
 			final ItemStack heldStack = player.getHeldItemMainhand();
 			if (!heldStack.isEmpty() && heldStack.getItem() instanceof ItemPaintBrush) {
 				ItemPaintBrush.setColor(heldStack, color.get());

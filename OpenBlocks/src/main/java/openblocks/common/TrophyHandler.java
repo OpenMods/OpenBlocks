@@ -11,12 +11,12 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.passive.OcelotEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -117,7 +117,7 @@ public class TrophyHandler {
 				Entity entity = super.createEntity();
 
 				try {
-					((EntityOcelot)entity).setTamed(true);
+					((OcelotEntity)entity).setTamed(true);
 				} catch (ClassCastException e) {
 					Log.warn("Invalid cat entity class: %s", entity.getClass());
 				}
@@ -261,20 +261,20 @@ public class TrophyHandler {
 			if (world == null) return;
 
 			Entity e = getEntity();
-			if (e instanceof EntityLiving) {
+			if (e instanceof MobEntity) {
 				e.posX = pos.getX();
 				e.posY = pos.getY();
 				e.posZ = pos.getZ();
 
 				synchronized (e) {
 					e.world = world;
-					((EntityLiving)e).playLivingSound();
+					((MobEntity)e).playLivingSound();
 					e.world = null;
 				}
 			}
 		}
 
-		public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+		public int executeActivateBehavior(TileEntityTrophy tile, PlayerEntity player) {
 			if (behavior != null) return behavior.executeActivateBehavior(tile, player);
 			return 0;
 		}
@@ -325,7 +325,7 @@ public class TrophyHandler {
 					if (mobTrophy != null) {
 						final ItemStack dropStack = mobTrophy.getItemStack();
 						if (!dropStack.isEmpty()) {
-							final EntityItem drop = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, dropStack);
+							final ItemEntity drop = new ItemEntity(entity.world, entity.posX, entity.posY, entity.posZ, dropStack);
 							drop.setDefaultPickupDelay();
 							event.getDrops().add(drop);
 						}

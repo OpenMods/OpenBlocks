@@ -1,16 +1,16 @@
 package openblocks.common.tileentity;
 
 import javax.annotation.Nonnull;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
@@ -110,7 +110,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 	@Nonnull
 	private ItemStack findStack() {
-		for (EnumFacing direction : EnumFacing.VALUES) {
+		for (Direction direction : Direction.VALUES) {
 			final IItemHandler inventory = InventoryUtils.tryGetHandler(world, pos.offset(direction), direction.getOpposite());
 			if (inventory != null) {
 				for (int i = 0; i < inventory.getSlots(); i++) {
@@ -128,7 +128,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		rpc.trigger();
 
 		// projectileOrigin is not used here, it's used for the calculations below.
-		EntityItem item = new EntityItemProjectile(world, pos.getX() + 0.5, pos.getY(), pos.getZ(), stack);
+		ItemEntity item = new EntityItemProjectile(world, pos.getX() + 0.5, pos.getY(), pos.getZ(), stack);
 		item.setDefaultPickupDelay();
 
 		// Now that we generate vectors instead of eular angles, this should be revised.
@@ -238,13 +238,13 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	@Override
-	public void onPointingStart(ItemStack itemStack, EntityPlayer player) {
-		player.sendMessage(new TextComponentTranslation("openblocks.misc.selected_cannon"));
+	public void onPointingStart(ItemStack itemStack, PlayerEntity player) {
+		player.sendMessage(new TranslationTextComponent("openblocks.misc.selected_cannon"));
 	}
 
 	@Override
-	public void onPointingEnd(ItemStack itemStack, EntityPlayer player, BlockPos pos) {
-		player.sendMessage(new TextComponentTranslation("openblocks.misc.pointed_cannon", pos.getX(), pos.getY(), pos.getZ()));
+	public void onPointingEnd(ItemStack itemStack, PlayerEntity player, BlockPos pos) {
+		player.sendMessage(new TranslationTextComponent("openblocks.misc.pointed_cannon", pos.getX(), pos.getY(), pos.getZ()));
 		setTarget(pos);
 	}
 
@@ -338,7 +338,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	@Override
-	public EnumFacing getSurfaceDirection() {
-		return EnumFacing.DOWN;
+	public Direction getSurfaceDirection() {
+		return Direction.DOWN;
 	}
 }

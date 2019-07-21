@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -21,7 +21,7 @@ public class Icons {
 	public interface IDrawableIcon {
 		void draw(double alpha, double scale);
 
-		void registerIcons(TextureMap registry);
+		void registerIcons(AtlasTexture registry);
 	}
 
 	public static class SingleIcon implements IDrawableIcon {
@@ -57,7 +57,7 @@ public class Icons {
 		}
 
 		@Override
-		public void registerIcons(TextureMap registry) {}
+		public void registerIcons(AtlasTexture registry) {}
 	}
 
 	private static class LoadableSingleIcon extends SingleIcon {
@@ -69,7 +69,7 @@ public class Icons {
 		}
 
 		@Override
-		public void registerIcons(TextureMap registry) {
+		public void registerIcons(AtlasTexture registry) {
 			icon = registry.registerSprite(iconId);
 		}
 	}
@@ -95,7 +95,7 @@ public class Icons {
 		}
 
 		@Override
-		public void registerIcons(TextureMap registry) {
+		public void registerIcons(AtlasTexture registry) {
 			front.registerIcons(registry);
 			back.registerIcons(registry);
 		}

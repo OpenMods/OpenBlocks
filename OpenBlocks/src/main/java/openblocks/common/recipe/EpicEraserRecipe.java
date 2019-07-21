@@ -1,9 +1,9 @@
 package openblocks.common.recipe;
 
 import javax.annotation.Nonnull;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import openblocks.OpenBlocks;
@@ -19,10 +19,10 @@ public class EpicEraserRecipe extends CustomRecipeBase {
 	}
 
 	private static boolean hasLore(ItemStack itemStack) {
-		final NBTTagCompound itemTag = itemStack.getTagCompound();
+		final CompoundNBT itemTag = itemStack.getTagCompound();
 		if (itemTag != null) {
 			if (itemTag.hasKey("display", Constants.NBT.TAG_COMPOUND)) {
-				final NBTTagCompound displayTag = itemTag.getCompoundTag("display");
+				final CompoundNBT displayTag = itemTag.getCompoundTag("display");
 				return displayTag.hasKey(LoreFlimFlam.TAG_NAME, Constants.NBT.TAG_LIST) ||
 						displayTag.hasKey("Lore", Constants.NBT.TAG_LIST);
 			}
@@ -32,7 +32,7 @@ public class EpicEraserRecipe extends CustomRecipeBase {
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inv, World world) {
+	public boolean matches(CraftingInventory inv, World world) {
 		boolean eraserFound = false;
 		boolean loreItemFound = false;
 
@@ -53,7 +53,7 @@ public class EpicEraserRecipe extends CustomRecipeBase {
 
 	@Override
 	@Nonnull
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		ItemStack targetItem = ItemStack.EMPTY;
 		boolean eraserFound = false;
 
@@ -72,8 +72,8 @@ public class EpicEraserRecipe extends CustomRecipeBase {
 		if (!eraserFound || targetItem.isEmpty()) return ItemStack.EMPTY;
 
 		final ItemStack result = targetItem.copy();
-		final NBTTagCompound itemTag = result.getTagCompound();
-		final NBTTagCompound displayTag = itemTag.getCompoundTag("display");
+		final CompoundNBT itemTag = result.getTagCompound();
+		final CompoundNBT displayTag = itemTag.getCompoundTag("display");
 		displayTag.removeTag("Lore");
 		displayTag.removeTag(LoreFlimFlam.TAG_NAME);
 

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Random;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -37,12 +37,12 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	protected static class PickTargetPredicate implements Predicate<Entity> {
 		@Override
 		public boolean apply(@Nullable Entity entity) {
-			return (entity instanceof EntityLivingBase) || MagnetWhitelists.instance.entityWhitelist.check(entity);
+			return (entity instanceof LivingEntity) || MagnetWhitelists.instance.entityWhitelist.check(entity);
 		}
 	}
 
 	public interface IEntityBlockFactory {
-		EntityBlock create(EntityLivingBase player);
+		EntityBlock create(LivingEntity player);
 	}
 
 	public interface IOwner {
@@ -54,15 +54,15 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	private static class EntityPlayerTarget implements IOwner {
-		private final WeakReference<EntityLivingBase> owner;
+		private final WeakReference<LivingEntity> owner;
 
-		public EntityPlayerTarget(EntityLivingBase owner) {
+		public EntityPlayerTarget(LivingEntity owner) {
 			this.owner = new WeakReference<>(owner);
 		}
 
 		@Override
 		public boolean isValid(EntityMagnet magnet) {
-			EntityLivingBase player = owner.get();
+			LivingEntity player = owner.get();
 			if (player == null || player.isDead) return false;
 			if (magnet.world != player.world) return false;
 			return ItemCraneBackpack.isWearingCrane(player);
@@ -70,7 +70,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		@Override
 		public Vec3d getTarget() {
-			EntityLivingBase player = owner.get();
+			LivingEntity player = owner.get();
 			if (player == null) return null;
 
 			double posX = player.posX + CraneRegistry.ARM_RADIUS * MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI / 180);
@@ -84,7 +84,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		@Override
 		public EntityBlock createByPlayer(IEntityBlockFactory factory) {
-			EntityLivingBase player = owner.get();
+			LivingEntity player = owner.get();
 			if (player == null) return null;
 
 			return factory.create(player);
@@ -99,7 +99,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 			owner = new WeakReference<>(null);
 		}
 
-		public PlayerBound(World world, EntityLivingBase owner) {
+		public PlayerBound(World world, LivingEntity owner) {
 			super(world, new EntityPlayerTarget(owner), false);
 			this.owner = new WeakReference<>(owner);
 			CraneRegistry.instance.bindMagnetToPlayer(owner, this);
@@ -121,7 +121,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		@Override
 		public void onEntityLoaded(Entity entity) {
-			if (entity instanceof EntityPlayer) {
+			if (entity instanceof PlayerEntity) {
 				owner = new WeakReference<>(entity);
 				CraneRegistry.instance.bindMagnetToPlayer(entity, this);
 			}
@@ -172,10 +172,10 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	protected void entityInit() {}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tag) {}
+	protected void readEntityFromNBT(CompoundNBT tag) {}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tag) {}
+	protected void writeEntityToNBT(CompoundNBT tag) {}
 
 	@Override
 	public void writeSpawnData(ByteBuf data) {

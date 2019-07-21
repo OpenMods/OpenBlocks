@@ -17,14 +17,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
@@ -65,7 +65,7 @@ public class PlayerInventoryStore {
 	public static final PlayerInventoryStore instance = new PlayerInventoryStore();
 
 	public interface ExtrasFiller {
-		void addExtras(NBTTagCompound meta);
+		void addExtras(CompoundNBT meta);
 	}
 
 	public static class LoadedInventories {
@@ -96,7 +96,7 @@ public class PlayerInventoryStore {
 		return StringUtils.removeEndIgnoreCase(StringUtils.removeStartIgnoreCase(name, PREFIX), ".dat");
 	}
 
-	public File storePlayerInventory(final EntityPlayer player, String type) {
+	public File storePlayerInventory(final PlayerEntity player, String type) {
 		final InventoryEvent.Store evt = new InventoryEvent.Store(player);
 		MinecraftForge.EVENT_BUS.post(evt);
 
@@ -113,15 +113,15 @@ public class PlayerInventoryStore {
 
 			meta.setTag(TAG_LOCATION, NbtUtils.store(x, y, z));
 
-			NBTTagCompound subInventories = new NBTTagCompound();
+			CompoundNBT subInventories = new CompoundNBT();
 
 			for (Map.Entry<String, SubInventory> e : subs.entrySet()) {
-				NBTTagList subInventory = new NBTTagList();
+				ListNBT subInventory = new ListNBT();
 
 				for (Map.Entry<Integer, ItemStack> ie : e.getValue().asMap().entrySet()) {
 					ItemStack stack = ie.getValue();
 					if (!stack.isEmpty()) {
-						NBTTagCompound stacktag = new NBTTagCompound();
+						CompoundNBT stacktag = new CompoundNBT();
 						stack.writeToNBT(stacktag);
 						stacktag.setInteger(TAG_SLOT, ie.getKey());
 						subInventory.appendTag(stacktag);
@@ -145,10 +145,10 @@ public class PlayerInventoryStore {
 		String playerName = matcher.replaceAll("_");
 		File dumpFile = getNewDumpFile(now, playerName, world, type);
 
-		NBTTagCompound root = new NBTTagCompound();
+		CompoundNBT root = new CompoundNBT();
 
 		{
-			final NBTTagCompound invData = new NBTTagCompound();
+			final CompoundNBT invData = new CompoundNBT();
 			copy.writeToNBT(invData);
 			root.setTag(TAG_INVENTORY, invData);
 		}
@@ -166,23 +166,23 @@ public class PlayerInventoryStore {
 		return dumpFile;
 	}
 
-	private static IInventory loadInventory(NBTTagCompound rootTag) {
+	private static IInventory loadInventory(CompoundNBT rootTag) {
 		if (!rootTag.hasKey(TAG_INVENTORY, Constants.NBT.TAG_COMPOUND)) {
 			Log.debug("No main inventory found");
 			return null;
 		}
 
-		NBTTagCompound invTag = rootTag.getCompoundTag(TAG_INVENTORY);
+		CompoundNBT invTag = rootTag.getCompoundTag(TAG_INVENTORY);
 		GenericInventory result = new GenericInventory("tmp", false, 0);
 		result.readFromNBT(invTag);
 		return result;
 	}
 
-	private static SubInventory loadSubInventory(NBTTagList subTag) {
+	private static SubInventory loadSubInventory(ListNBT subTag) {
 		SubInventory result = new SubInventory();
 
 		for (int i = 0; i < subTag.tagCount(); i++) {
-			NBTTagCompound itemTag = subTag.getCompoundTagAt(i);
+			CompoundNBT itemTag = subTag.getCompoundTagAt(i);
 
 			if (!itemTag.hasNoTags()) {
 				int slot = itemTag.getInteger(TAG_SLOT);
@@ -194,11 +194,11 @@ public class PlayerInventoryStore {
 		return result;
 	}
 
-	private static Map<String, SubInventory> loadSubInventories(NBTTagCompound subsTag) {
+	private static Map<String, SubInventory> loadSubInventories(CompoundNBT subsTag) {
 		Map<String, SubInventory> result = Maps.newHashMap();
 
 		for (String key : subsTag.getKeySet()) {
-			NBTTagList subTag = subsTag.getTagList(key, Constants.NBT.TAG_COMPOUND);
+			ListNBT subTag = subsTag.getTagList(key, Constants.NBT.TAG_COMPOUND);
 			final SubInventory sub = loadSubInventory(subTag);
 			result.put(key, sub);
 		}
@@ -206,7 +206,7 @@ public class PlayerInventoryStore {
 		return result;
 	}
 
-	private static NBTTagCompound loadInventoryTag(World world, String fileId) {
+	private static CompoundNBT loadInventoryTag(World world, String fileId) {
 		File file = world.getSaveHandler().getMapFileFromName(PREFIX + stripFilename(fileId));
 
 		try (InputStream stream = new FileInputStream(file)) {
@@ -239,14 +239,14 @@ public class PlayerInventoryStore {
 	}
 
 	public LoadedInventories loadInventories(World world, String fileId) {
-		final NBTTagCompound rootTag = loadInventoryTag(world, fileId);
+		final CompoundNBT rootTag = loadInventoryTag(world, fileId);
 		if (rootTag == null) return null;
 
 		IInventory mainInventory = loadInventory(rootTag);
 
 		final Map<String, SubInventory> subInventories;
 		if (rootTag.hasKey(TAG_SUB_INVENTORIES, Constants.NBT.TAG_COMPOUND)) {
-			NBTTagCompound subsTag = rootTag.getCompoundTag(TAG_SUB_INVENTORIES);
+			CompoundNBT subsTag = rootTag.getCompoundTag(TAG_SUB_INVENTORIES);
 			subInventories = loadSubInventories(subsTag);
 		} else {
 			subInventories = Maps.newHashMap();
@@ -255,13 +255,13 @@ public class PlayerInventoryStore {
 		return new LoadedInventories(mainInventory, subInventories);
 	}
 
-	public boolean restoreInventory(EntityPlayer player, String fileId) {
+	public boolean restoreInventory(PlayerEntity player, String fileId) {
 		final LoadedInventories inventories = loadInventories(player.world, fileId);
 		if (inventories == null) return false;
 
 		final IInventory main = inventories.mainInventory;
 		if (main != null) {
-			InventoryPlayer current = player.inventory;
+			PlayerInventory current = player.inventory;
 			final int targetInventorySize = current.getSizeInventory();
 			final int sourceInventorySize = main.getSizeInventory();
 
@@ -284,8 +284,8 @@ public class PlayerInventoryStore {
 	public void onPlayerDeath(LivingDeathEvent event) {
 		if (Config.dumpStiffsStuff) {
 			final Entity rottingMeat = event.getEntity();
-			if ((rottingMeat instanceof EntityPlayerMP) && !(rottingMeat instanceof FakePlayer)) {
-				EntityPlayer player = (EntityPlayer)rottingMeat;
+			if ((rottingMeat instanceof ServerPlayerEntity) && !(rottingMeat instanceof FakePlayer)) {
+				PlayerEntity player = (PlayerEntity)rottingMeat;
 				final String playerName = player.getName();
 				try {
 

@@ -8,15 +8,15 @@ import java.util.Random;
 import javax.annotation.Nullable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -57,13 +57,13 @@ public class FlimFlamEnchantmentsHandler {
 	public static void registerCapability() {
 		CapabilityManager.INSTANCE.register(Luck.class, new Capability.IStorage<Luck>() {
 			@Override
-			public NBTBase writeNBT(Capability<Luck> capability, Luck instance, EnumFacing side) {
-				return new NBTTagInt(instance.luck);
+			public NBTBase writeNBT(Capability<Luck> capability, Luck instance, Direction side) {
+				return new IntNBT(instance.luck);
 			}
 
 			@Override
-			public void readNBT(Capability<Luck> capability, Luck instance, EnumFacing side, NBTBase nbt) {
-				instance.luck = ((NBTTagInt)nbt).getInt();
+			public void readNBT(Capability<Luck> capability, Luck instance, Direction side, NBTBase nbt) {
+				instance.luck = ((IntNBT)nbt).getInt();
 			}
 
 		}, Luck::new);
@@ -73,37 +73,37 @@ public class FlimFlamEnchantmentsHandler {
 
 	@Nullable
 	private static Luck getProperty(Entity entity) {
-		return CAPABILITY != null? entity.getCapability(CAPABILITY, EnumFacing.UP) : null;
+		return CAPABILITY != null? entity.getCapability(CAPABILITY, Direction.UP) : null;
 	}
 
 	private static class CapabilityInjector {
 
 		@SubscribeEvent
 		public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
-			if (evt.getObject() instanceof EntityPlayerMP) {
-				evt.addCapability(CAPABILITY_KEY, new ICapabilitySerializable<NBTTagInt>() {
+			if (evt.getObject() instanceof ServerPlayerEntity) {
+				evt.addCapability(CAPABILITY_KEY, new ICapabilitySerializable<IntNBT>() {
 
 					private final Luck state = new Luck();
 
 					@Override
-					public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+					public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
 						return capability == CAPABILITY;
 					}
 
 					@Override
 					@SuppressWarnings("unchecked")
-					public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+					public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
 						if (capability == CAPABILITY) return (T)state;
 						return null;
 					}
 
 					@Override
-					public NBTTagInt serializeNBT() {
-						return new NBTTagInt(state.luck);
+					public IntNBT serializeNBT() {
+						return new IntNBT(state.luck);
 					}
 
 					@Override
-					public void deserializeNBT(NBTTagInt nbt) {
+					public void deserializeNBT(IntNBT nbt) {
 						state.luck = nbt.getInt();
 					}
 				});
@@ -113,17 +113,17 @@ public class FlimFlamEnchantmentsHandler {
 
 	@SubscribeEvent
 	public void onDamage(LivingHurtEvent e) {
-		final EntityLivingBase entityLiving = e.getEntityLiving();
-		if (!(entityLiving instanceof EntityPlayer)) return;
+		final LivingEntity entityLiving = e.getEntityLiving();
+		if (!(entityLiving instanceof PlayerEntity)) return;
 		if (entityLiving.world.isRemote) return;
 
-		final EntityPlayer targetPlayer = (EntityPlayer)entityLiving;
+		final PlayerEntity targetPlayer = (PlayerEntity)entityLiving;
 
 		if (e.getSource() == null) return;
 		final Entity damageSource = e.getSource().getTrueSource();
 
-		if (!(damageSource instanceof EntityPlayer)) return;
-		final EntityPlayer sourcePlayer = (EntityPlayer)damageSource;
+		if (!(damageSource instanceof PlayerEntity)) return;
+		final PlayerEntity sourcePlayer = (PlayerEntity)damageSource;
 
 		// flim flam yerself?
 		if (sourcePlayer == targetPlayer) return;
@@ -134,7 +134,7 @@ public class FlimFlamEnchantmentsHandler {
 		// armor is less effective, since we can have more levels
 		final int flimFlamDiff = targetFlimFlam / 3 - sourceFlimFlam;
 
-		final EntityPlayer flimFlamTarget;
+		final PlayerEntity flimFlamTarget;
 		final int flimFlamsToApply;
 		if (flimFlamDiff == 0) return;
 
@@ -164,7 +164,7 @@ public class FlimFlamEnchantmentsHandler {
 		return RANDOM.nextInt(20) + 1;
 	}
 
-	public static void deliverKarma(EntityPlayerMP player) {
+	public static void deliverKarma(ServerPlayerEntity player) {
 		if (player.isDead) return;
 		Luck property = getProperty(player);
 		if (property == null || !canFlimFlam(property)) return;
@@ -195,7 +195,7 @@ public class FlimFlamEnchantmentsHandler {
 						if (effectMeta.action().execute(player)) {
 							property.luck -= effectMeta.cost();
 							Log.debug("Player %s flim-flammed with %s, current luck: %s", player, effectMeta.name(), property.luck);
-							if (!effectMeta.isSilent()) player.sendMessage(new TextComponentTranslation("openblocks.flim_flammed"));
+							if (!effectMeta.isSilent()) player.sendMessage(new TranslationTextComponent("openblocks.flim_flammed"));
 							return;
 						}
 					} catch (Throwable t) {
@@ -209,12 +209,12 @@ public class FlimFlamEnchantmentsHandler {
 		}
 	}
 
-	public static int getLuck(EntityPlayer player) {
+	public static int getLuck(PlayerEntity player) {
 		Luck property = getProperty(player);
 		return property != null? property.luck : 0;
 	}
 
-	public static int modifyLuck(EntityPlayer player, int amount) {
+	public static int modifyLuck(PlayerEntity player, int amount) {
 		Luck property = getProperty(player);
 		if (property == null) return 0;
 		property.luck += amount;
@@ -235,11 +235,11 @@ public class FlimFlamEnchantmentsHandler {
 		return r < probability;
 	}
 
-	private static int getFlimFlamToolLevel(EntityPlayer player) {
+	private static int getFlimFlamToolLevel(PlayerEntity player) {
 		return EnchantmentHelper.getEnchantmentLevel(Enchantments.flimFlam, player.getHeldItemMainhand());
 	}
 
-	private static int getFlimFlamArmorLevel(EntityPlayer player) {
+	private static int getFlimFlamArmorLevel(PlayerEntity player) {
 		int sum = 0;
 		for (ItemStack stack : player.inventory.armorInventory) {
 			sum += EnchantmentHelper.getEnchantmentLevel(Enchantments.flimFlam, stack);

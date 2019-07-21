@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
 import javax.annotation.Nonnull;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.datafix.walkers.ItemStackData;
@@ -74,15 +74,15 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		}
 
 		@Override
-		public void writeToNBT(NBTTagCompound tag, String name) {
-			NBTTagCompound result = new NBTTagCompound();
+		public void writeToNBT(CompoundNBT tag, String name) {
+			CompoundNBT result = new CompoundNBT();
 			bits.writeToNBT(result);
 			tag.setTag(name, result);
 		}
 
 		@Override
-		public void readFromNBT(NBTTagCompound tag, String name) {
-			NBTTagCompound info = tag.getCompoundTag(name);
+		public void readFromNBT(CompoundNBT tag, String name) {
+			CompoundNBT info = tag.getCompoundTag(name);
 			bits.readFromNBT(info);
 		}
 
@@ -162,13 +162,13 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		return syncMap;
 	}
 
-	public EntityCartographer(World world, EntityPlayer owner, @Nonnull ItemStack stack) {
+	public EntityCartographer(World world, PlayerEntity owner, @Nonnull ItemStack stack) {
 		super(world, owner);
 		setSpawnPosition(owner);
 
 		this.syncMap = createSyncMap(world.isRemote);
 
-		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		CompoundNBT tag = ItemUtils.getItemTag(stack);
 		readOwnDataFromNBT(tag);
 	}
 
@@ -190,7 +190,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 				}
 				yaw = randomDelta;
 			} else {
-				EntityPlayer owner = findOwner();
+				PlayerEntity owner = findOwner();
 				if (owner != null) yaw = (float)Math.toRadians(owner.rotationYaw);
 
 			}
@@ -211,16 +211,16 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tag) {
+	protected void readEntityFromNBT(CompoundNBT tag) {
 		super.readEntityFromNBT(tag);
 		readOwnDataFromNBT(tag);
 	}
 
-	private void readOwnDataFromNBT(NBTTagCompound tag) {
+	private void readOwnDataFromNBT(CompoundNBT tag) {
 		syncMap.tryRead(tag); // can be called on client!
 
 		if (tag.hasKey(TAG_MAP_ITEM)) {
-			NBTTagCompound mapItem = tag.getCompoundTag(TAG_MAP_ITEM);
+			CompoundNBT mapItem = tag.getCompoundTag(TAG_MAP_ITEM);
 			this.mapItem = new ItemStack(mapItem);
 
 			if (!this.mapItem.isEmpty() && isMapping.get()) {
@@ -232,17 +232,17 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tag) {
+	protected void writeEntityToNBT(CompoundNBT tag) {
 		super.writeEntityToNBT(tag);
 		writeOwnDataToNBT(tag);
 	}
 
-	private void writeOwnDataToNBT(NBTTagCompound tag) {
+	private void writeOwnDataToNBT(CompoundNBT tag) {
 		// some mods may call it on client side, see #834
 		syncMap.tryWrite(tag);
 
 		if (!mapItem.isEmpty()) {
-			NBTTagCompound mapItem = this.mapItem.writeToNBT(new NBTTagCompound());
+			CompoundNBT mapItem = this.mapItem.writeToNBT(new CompoundNBT());
 			tag.setTag(TAG_MAP_ITEM, mapItem);
 			tag.setInteger("Dimension", mappingDimension);
 		}
@@ -253,17 +253,17 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	public ItemStack toItemStack() {
 		if (Items.cartographer == null) return ItemStack.EMPTY;
 		final ItemStack result = new ItemStack(Items.cartographer);
-		NBTTagCompound tag = ItemUtils.getItemTag(result);
+		CompoundNBT tag = ItemUtils.getItemTag(result);
 		writeOwnDataToNBT(tag);
 		return result;
 	}
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-		if (hand != EnumHand.MAIN_HAND) return true;
+	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+		if (hand != Hand.MAIN_HAND) return true;
 
 		final ItemStack holding = player.getHeldItemMainhand();
-		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistance(player) < 3) {
+		if (player instanceof ServerPlayerEntity && player.isSneaking() && getDistance(player) < 3) {
 			if (holding.isEmpty() && !mapItem.isEmpty()) {
 				player.setHeldItem(hand, mapItem);
 				mapItem = ItemStack.EMPTY;

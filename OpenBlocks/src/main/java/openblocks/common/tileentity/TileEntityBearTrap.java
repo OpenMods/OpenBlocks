@@ -3,10 +3,10 @@ package openblocks.common.tileentity;
 import java.util.UUID;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -113,7 +113,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 
 	public void onEntityCollided(Entity entity) {
 		if (!world.isRemote) {
-			if (entity instanceof EntityCreature && !isLocked.get() && tickSinceOpened > OPENING_ANIMATION_TIME) {
+			if (entity instanceof CreatureEntity && !isLocked.get() && tickSinceOpened > OPENING_ANIMATION_TIME) {
 				close(entity);
 			}
 		}
@@ -133,7 +133,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) open();
 		return true;
 	}
@@ -157,8 +157,8 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	@Override
-	public EnumFacing getSurfaceDirection() {
-		return EnumFacing.DOWN;
+	public Direction getSurfaceDirection() {
+		return Direction.DOWN;
 	}
 
 	@Override

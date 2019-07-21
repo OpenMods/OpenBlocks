@@ -2,7 +2,7 @@ package openblocks.client;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderItem;
@@ -289,12 +289,12 @@ public class ClientProxy implements IOpenBlocksProxy {
 		visitTesrBlocks(new BlockConsumer() {
 			@Override
 			public void nomNom(OpenBlock block) {
-				ImmutableMap.Builder<IBlockState, ModelResourceLocation> statesBuilder = ImmutableMap.builder();
+				ImmutableMap.Builder<BlockState, ModelResourceLocation> statesBuilder = ImmutableMap.builder();
 				final ModelResourceLocation location = new ModelResourceLocation(block.getRegistryName(), "dummy");
-				for (IBlockState state : block.getBlockState().getValidStates())
+				for (BlockState state : block.getBlockState().getValidStates())
 					statesBuilder.put(state, location);
 
-				final Map<IBlockState, ModelResourceLocation> states = statesBuilder.build();
+				final Map<BlockState, ModelResourceLocation> states = statesBuilder.build();
 				ModelLoader.setCustomStateMapper(block, blockIn -> states);
 			}
 		});

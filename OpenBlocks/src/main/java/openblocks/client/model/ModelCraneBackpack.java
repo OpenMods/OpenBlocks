@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -85,7 +85,7 @@ public class ModelCraneBackpack extends ModelBiped {
 
 	@SubscribeEvent
 	public void renderLines(RenderPlayerEvent.Pre evt) {
-		final EntityPlayer player = evt.getEntityPlayer();
+		final PlayerEntity player = evt.getEntityPlayer();
 
 		if (!ItemCraneBackpack.isWearingCrane(player)) return;
 
@@ -148,7 +148,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		drawLine(magnetX, magnetY, magnetZ, armX, armY, armZ);
 	}
 
-	private static void drawLineFPP(EntityPlayer player, float partialTickTime) {
+	private static void drawLineFPP(PlayerEntity player, float partialTickTime) {
 		EntityMagnet magnet = CraneRegistry.instance.getMagnetForPlayer(player);
 
 		if (magnet == null) return;
@@ -197,7 +197,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		GlStateManager.glLineWidth(1);
 	}
 
-	private void drawArm(RenderWorldLastEvent evt, final EntityPlayer player) {
+	private void drawArm(RenderWorldLastEvent evt, final PlayerEntity player) {
 		final TextureManager tex = Minecraft.getMinecraft().getTextureManager();
 		tex.bindTexture(texture);
 
@@ -222,9 +222,9 @@ public class ModelCraneBackpack extends ModelBiped {
 		if (mc.gameSettings.thirdPersonView != 0) return;
 
 		final Entity rve = mc.getRenderViewEntity();
-		if (!(rve instanceof EntityPlayer)) return;
+		if (!(rve instanceof PlayerEntity)) return;
 
-		final EntityPlayer player = (EntityPlayer)rve;
+		final PlayerEntity player = (PlayerEntity)rve;
 		if (!ItemCraneBackpack.isWearingCrane(player)) return;
 
 		drawArm(evt, player);

@@ -1,10 +1,10 @@
 package openblocks.common.recipe;
 
 import javax.annotation.Nonnull;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.EnderPearlItem;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemEnderPearl;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
@@ -35,7 +35,7 @@ public class GoldenEyeRechargeRecipe extends ShapelessRecipes {
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inventory, World world) {
+	public boolean matches(CraftingInventory inventory, World world) {
 		ItemStack golden = ItemStack.EMPTY;
 		int enderCount = 0;
 
@@ -45,7 +45,7 @@ public class GoldenEyeRechargeRecipe extends ShapelessRecipes {
 
 			Item item = stack.getItem();
 			if (item instanceof ItemGoldenEye) golden = stack;
-			else if (item instanceof ItemEnderPearl) enderCount++;
+			else if (item instanceof EnderPearlItem) enderCount++;
 			else return false;
 		}
 
@@ -54,7 +54,7 @@ public class GoldenEyeRechargeRecipe extends ShapelessRecipes {
 
 	@Override
 	@Nonnull
-	public ItemStack getCraftingResult(InventoryCrafting inventory) {
+	public ItemStack getCraftingResult(CraftingInventory inventory) {
 		ItemStack golden = ItemStack.EMPTY;
 		int enderCount = 0;
 
@@ -64,7 +64,7 @@ public class GoldenEyeRechargeRecipe extends ShapelessRecipes {
 
 			Item item = stack.getItem();
 			if (item instanceof ItemGoldenEye) golden = stack;
-			else if (item instanceof ItemEnderPearl) enderCount++;
+			else if (item instanceof EnderPearlItem) enderCount++;
 		}
 
 		if (golden.isEmpty()) return ItemStack.EMPTY;

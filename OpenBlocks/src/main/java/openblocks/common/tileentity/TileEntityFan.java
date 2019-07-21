@@ -3,13 +3,13 @@ package openblocks.common.tileentity;
 import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -75,7 +75,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 		final Vec3d coneAxis = new Vec3d(basePos.x - blockPos.x, basePos.y - blockPos.y, basePos.z - blockPos.z);
 
 		for (Entity entity : entities) {
-			if (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode) continue;
+			if (entity instanceof PlayerEntity && ((PlayerEntity)entity).capabilities.isCreativeMode) continue;
 			Vec3d directionVec = new Vec3d(
 					entity.posX - blockPos.x,
 					entity.posY - blockPos.y,
@@ -120,7 +120,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 	}
 
 	@Override
-	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, @Nonnull ItemStack stack) {
+	public void onBlockPlacedBy(BlockState state, LivingEntity placer, @Nonnull ItemStack stack) {
 		final float placeAngle = placer.rotationYawHead;
 		angle.set(placeAngle);
 		setStateAngle(placeAngle);
@@ -153,8 +153,8 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
+	public boolean onBlockActivated(PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && hand == Hand.MAIN_HAND) {
 			angle.set(angle.get() + (player.isSneaking()? -10f : +10f));
 			sync();
 			return true;

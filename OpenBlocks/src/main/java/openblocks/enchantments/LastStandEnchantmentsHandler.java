@@ -4,8 +4,8 @@ import info.openmods.calc.ExprType;
 import info.openmods.calc.SingleExprEvaluator;
 import info.openmods.calc.types.fp.DoubleCalculatorFactory;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -43,8 +43,8 @@ public class LastStandEnchantmentsHandler {
 
 	@SubscribeEvent
 	public void onHurt(final LivingHurtEvent e) {
-		if (!(e.getEntityLiving() instanceof EntityPlayer)) return;
-		EntityPlayer player = (EntityPlayer)e.getEntityLiving();
+		if (!(e.getEntityLiving() instanceof PlayerEntity)) return;
+		PlayerEntity player = (PlayerEntity)e.getEntityLiving();
 
 		final int enchantmentLevels = countLastStandEnchantmentLevels(player);
 
@@ -80,7 +80,7 @@ public class LastStandEnchantmentsHandler {
 		}
 	}
 
-	public static int countLastStandEnchantmentLevels(EntityLivingBase living) {
+	public static int countLastStandEnchantmentLevels(LivingEntity living) {
 		if (living != null) {
 			int count = 0;
 			for (ItemStack stack : living.getArmorInventoryList())
