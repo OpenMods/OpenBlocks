@@ -16,18 +16,20 @@ buildscript {
 
 
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath 'net.thesilkminer.gradle.translationchecker:TranslationChecker:1.1'
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
 
 //================================================
 // Dependencies
 
 dependencies {
-    compile project(":OpenModsLib") // Load OpenModsLib from submodule
+    minecraft 'net.minecraftforge:forge:' + forge_version
+
+    //compile project(":OpenModsLib") // Load OpenModsLib from submodule
 
     compile group: 'info.openmods', name: 'calc', version: '0.3'
     compile "info.computercraft:ComputerCraft-API:1.80pr0"
@@ -89,19 +91,43 @@ def gitManifest = manifest {
 
 // Setup Forge plugin
 minecraft {
-    version = mc_version + "-" + forge_version
-    runDir = "run"
+    mappings channel: 'snapshot', version: mcp_mappings
 
-    mappings = mcp_mappings
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                openblocks {
+                    source sourceSets.main
+                }
+            }
+        }
 
-    replaceIn 'openblocks/OpenBlocks.java'
-    replace '$VERSION$', mod_version
-    replace '$OP-API-VERSION$', opc_api_version
-    replace '$LIB-VERSION$', project(':OpenModsLib').mod_version
-    replace '$NEXT-LIB-VERSION$', project(':OpenModsLib').next_mod_version
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-    replaceIn "openblocks/api/package-info.java"
-    replace '$API-VERSION$', api_version
+            mods {
+                openblocks {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+            mods {
+                openblocks {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 processResources {
@@ -120,6 +146,7 @@ processResources {
     }
 
     rename '(.+_at.cfg)', 'META-INF/$1'
+
 }
 
 //================================================
