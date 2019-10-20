@@ -6,7 +6,7 @@ achievement.openblocks.stackOverflow.desc=C'est plein d'étoiles !
 
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Soyez stupide
-#openblocks.keybind.vario_switch=Vario on/off ## NEEDS TRANSLATION ##
+openblocks.keybind.vario_switch=Vario allumé/éteind
 #openblocks.keybind.vario_vol_up=Vario volume up ## NEEDS TRANSLATION ##
 #openblocks.keybind.vario_vol_down=Vario volume down ## NEEDS TRANSLATION ##
 
@@ -32,7 +32,7 @@ openblocks.gui.autoanvil=Enclume auto
 openblocks.gui.autoeject=Éjection auto
 openblocks.gui.autoextract=Extraction auto
 openblocks.gui.autodrink=Boisson auto
-openblocks.gui.autoenchantmenttable=Table d'enchantement auto
+openblocks.gui.autoenchantmenttable=Table d'enchantement automatique
 openblocks.gui.donationstation=Donation Station
 openblocks.gui.itemdropper=Lanceur d'élément
 openblocks.gui.blockplacer=Placeur de bloc
@@ -41,13 +41,13 @@ openblocks.gui.drawingtable=Table à dessin
 openblocks.gui.digitalfuse=Fusible numérique
 openblocks.gui.xp_outputs=Sorties d'XP
 openblocks.gui.item_outputs=Sorties d'élément
-#openblocks.gui.limit=Limit ## NEEDS TRANSLATION ##
-#openblocks.gui.available_power=Available power: %d ## NEEDS TRANSLATION ##
+openblocks.gui.limit=Limite
+openblocks.gui.available_power=Energie disponible: %d
 openblocks.gui.save_folder=Dossier de sauvegarde
 
-#openblocks.gui.drawingtable.stencils=Stencils ## NEEDS TRANSLATION ##
-#openblocks.gui.drawingtable.glyphs=Glyphs ## NEEDS TRANSLATION ##
-#openblocks.gui.drawingtable.print=Print ## NEEDS TRANSLATION ##
+openblocks.gui.drawingtable.stencils=Pochoirs
+openblocks.gui.drawingtable.glyphs=Glyphes
+openblocks.gui.drawingtable.print=Imprimer
 
 openblocks.gui.welcome.title=Bienvenu !
 openblocks.gui.welcome.content=OpenBlocks est un nouveau mod open source qui introduit une variété d'idées dans Minecraft, dont les planneurs, les ascenceurs, les réservoir, les tombes, les paintures, Les grues, l'XP liquide, les cartographes, les trophées et plus !
@@ -73,125 +73,125 @@ openblocks.gui.flimflam.content=Scientists have yet to discover the properties o
 openblocks.gui.laststand.title=Last Stand Enchantment
 openblocks.gui.laststand.content=The last stand enchantment uses your XP bar as a final protection against dying.\n\nWhen you reach 0.5 hearts, the game will take XP from you whenever you're damaged instead of killing you. The higher number of enchantments you have the cheaper the XP cost will be.
 
-openblocks.changelog.title=What's new in OpenBlocks %s
+openblocks.changelog.title=Quoi de nouveau dans OpenBlocks %s
 openblocks.misc.url=URL: %s
 openblocks.misc.type=Type: %s
-openblocks.misc.uses=Uses: %.2f
-openblocks.misc.color=Color: %06X
-openblocks.misc.mode=Placement mode: %s
-openblocks.misc.mode.block=Block
-openblocks.misc.mode.panel=Panel
-openblocks.misc.mode.half_panel=Half-height panel
-openblocks.misc.mode.stairs=Stairs
-openblocks.misc.mode.inverted_block=Inverted Block
-openblocks.misc.mode.inverted_panel=Inverted Panel
-openblocks.misc.mode.inverted_half_panel=Inverted Half-height panel
-openblocks.misc.mode.inverted_stairs=Inverted Stairs
-openblocks.misc.structure_pos=Debug: found structure %s at (%d,%d,%d)
-openblocks.misc.locked=Locked
-openblocks.misc.selected_cannon=Selected cannon for targeting
-openblocks.misc.pointed_cannon=Pointed cannon at %s, %s, %s
-openblocks.misc.change_mode=Changing to %s mode
-openblocks.misc.change_size=Changing size to %sx%sx%s
+openblocks.misc.uses=Utilisations: %.2f
+openblocks.misc.color=Couleur: %06X
+openblocks.misc.mode=Mode de placement: %s
+openblocks.misc.mode.block=Bloc
+openblocks.misc.mode.panel=Panneau
+openblocks.misc.mode.half_panel=Demi panneau
+openblocks.misc.mode.stairs=Escalier
+openblocks.misc.mode.inverted_block=Bloc Inversé
+openblocks.misc.mode.inverted_panel=Panneau Inversé
+openblocks.misc.mode.inverted_half_panel=Demi panneau inversé
+openblocks.misc.mode.inverted_stairs=Escalier inversé
+openblocks.misc.structure_pos=Debug: structure trouvé %s en (%d,%d,%d)
+openblocks.misc.locked=Bloqué
+openblocks.misc.selected_cannon=Canon sélectionné pour viser
+openblocks.misc.pointed_cannon=Canon pointé en %s, %s, %s
+openblocks.misc.change_mode=Modification en mode %s
+openblocks.misc.change_size=Modification de la taille en %sx%sx%s
 #openblocks.misc.change_box_size=Changing size to (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
-openblocks.misc.total_blocks=Total block count: %d
+openblocks.misc.total_blocks=Nombre total de blocs: %d
 openblocks.misc.get_witched=Get witched!
-openblocks.misc.page=Page %d of %d
-openblocks.misc.oh_no_ceiling=You can't fall asleep here. Ceiling disturbs you too much...
-#openblocks.misc.oh_no_ground=You want to sleep on THAT!? ## NEEDS TRANSLATION ##
+openblocks.misc.page=Page %d sur %d
+openblocks.misc.oh_no_ceiling=Vous ne pouvez pas vous endormir ici. Le plafond est trop bas...
+openblocks.misc.oh_no_ground=Vous voulez dormir sur ça !?
 #openblocks.misc.sleeping_bag_broken=Item inactive due to failed initialization ## NEEDS TRANSLATION ##
-#openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
-#openblocks.misc.structure_not_locked=Not locked on any structure! ## NEEDS TRANSLATION ##
+openblocks.misc.inverted=Inversé
+openblocks.misc.structure_not_locked=N'est verrouillé sur aucune structure !
 #openblocks.misc.locked_on_nearest_structure=Locked on nearest %s ## NEEDS TRANSLATION ##
-#openblocks.misc.locked_on_structure=Locked on %s ## NEEDS TRANSLATION ##
-#openblocks.misc.no_nearby_structures=Can't find any nearby structures ## NEEDS TRANSLATION ##
+openblocks.misc.locked_on_structure=Verrouillé sur %s
+openblocks.misc.no_nearby_structures=Impossible de trouver des structures à proximité
 
-#openblocks.misc.grave_msg=%s (day: %.1f) ## NEEDS TRANSLATION ##
+openblocks.misc.grave_msg=%s (jour: %.1f)
 
-#openblocks.misc.cant_restore_player=Can't restore inventory for player %s ## NEEDS TRANSLATION ##
-#openblocks.misc.cant_restore_inventory=Can't restore inventory ## NEEDS TRANSLATION ##
-openblocks.misc.cant_store=Can't store player %s inventory
+openblocks.misc.cant_restore_player=Impossible de restaurer l'inventaire du joueur %s
+openblocks.misc.cant_restore_inventory=Impossible de restaurer l'inventaire
+openblocks.misc.cant_store=Impossible de stocker l'inventaire de %s
 #openblocks.misc.invalid_sub_inventory=Can't restore sub inventory %s ## NEEDS TRANSLATION ##
-openblocks.misc.stored_inventory=Stored player inventory to %s
-openblocks.misc.restored_inventory=Restored inventory for player %s
-#openblocks.misc.invalid_index=Invalid index ## NEEDS TRANSLATION ##
-#openblocks.misc.empty_slot=No item in slot ## NEEDS TRANSLATION ##
+openblocks.misc.stored_inventory=Stockage de l'inventaire du joueur dans %s
+openblocks.misc.restored_inventory=Restauration de l'inventaire du joueur %s
+openblocks.misc.invalid_index=Index invalide
+openblocks.misc.empty_slot=Pas d'objet dans le slot
 
-openblocks.misc.pedometer.tracking_reset=Tracking reset
-openblocks.misc.pedometer.tracking_started=Tracking started
+openblocks.misc.pedometer.tracking_reset=Réinitialisation du suivi
+openblocks.misc.pedometer.tracking_started=Début du suivi
 
-openblocks.misc.pedometer.start_point=Start point: %s
-openblocks.misc.pedometer.speed=Speed: %s
-openblocks.misc.pedometer.avg_speed=Average speed: %s
-openblocks.misc.pedometer.total_distance=Total distance: %s
+openblocks.misc.pedometer.start_point=Point de départ: %s
+openblocks.misc.pedometer.speed=Vitesse: %s
+openblocks.misc.pedometer.avg_speed=Vitesse moyenne: %s
+openblocks.misc.pedometer.total_distance=Distance totale: %s
 
-openblocks.misc.pedometer.straght_line_distance=Staight line distance: %s
-openblocks.misc.pedometer.straigh_line_speed=Straight line speed: %s
+openblocks.misc.pedometer.straght_line_distance=Distance en ligne droite : %s
+openblocks.misc.pedometer.straigh_line_speed=Vitesse en ligne droite: %s
 
-openblocks.misc.pedometer.last_check_distance=Distance from last check: %s
-openblocks.misc.pedometer.last_check_speed=Last check speed: %s
-openblocks.misc.pedometer.last_check_time=Time from last check %d ticks
+openblocks.misc.pedometer.last_check_distance=Distance depuis la dernière vérification: %s
+openblocks.misc.pedometer.last_check_speed=Dernière vitesse: %s
+openblocks.misc.pedometer.last_check_time=Temps écoulé depuis la dernière vérification : %d ticks
 
-openblocks.misc.pedometer.total_time=Total time: %d ticks
+openblocks.misc.pedometer.total_time=Temps total: %d ticks
 
-#openblocks.misc.shape=Shape: %s ## NEEDS TRANSLATION ##
-openblocks.misc.shape.sphere=Sphere
-openblocks.misc.shape.cylinder=Cylinder
-openblocks.misc.shape.cuboid=Cuboid
-#openblocks.misc.shape.full_cuboid=Full Cuboid ## NEEDS TRANSLATION ##
+openblocks.misc.shape=Forme: %s
+openblocks.misc.shape.sphere=Sphère
+openblocks.misc.shape.cylinder=Cylindre
+openblocks.misc.shape.cuboid=Cuboïde
+openblocks.misc.shape.full_cuboid=Cuboïde plein
 openblocks.misc.shape.dome=Dome
 openblocks.misc.shape.triangle=Triangle
-openblocks.misc.shape.pentagon=Pentagon
-openblocks.misc.shape.hexagon=Hexagon
-openblocks.misc.shape.octagon=Octagon
-#openblocks.misc.shape.axes=Axes ## NEEDS TRANSLATION ##
-#openblocks.misc.shape.planes=Planes ## NEEDS TRANSLATION ##
+openblocks.misc.shape.pentagon=Pentagone
+openblocks.misc.shape.hexagon=Hexagone
+openblocks.misc.shape.octagon=Octogone
+openblocks.misc.shape.axes=Axes
+openblocks.misc.shape.planes=Plans
 
-#openblocks.misc.box=Dimensions: (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
-#openblocks.misc.width=Width: %d ## NEEDS TRANSLATION ##
-#openblocks.misc.height=Height: %d ## NEEDS TRANSLATION ##
-#openblocks.misc.depth=Depth: %d ## NEEDS TRANSLATION ##
+openblocks.misc.box=Dimensions: (%d,%d,%d):(%d,%d,%d)
+openblocks.misc.width=Largeur: %d
+openblocks.misc.height=Hauteur: %d
+openblocks.misc.depth=Profondeur: %d
 
-openblocks.misc.radio.too_many=Too many radios already playing
-openblocks.misc.radio.invalid_stream=Invalid stream
-openblocks.misc.radio.invalid_url=Invalid URL
-openblocks.misc.radio.url_not_found=URL not found
-openblocks.misc.radio.unknown_stream_type=Unknown stream type
-openblocks.misc.radio.malformed_data=Malformed data in stream
-openblocks.misc.radio.not_ready=Stream not ready, try again later
-openblocks.misc.radio.cant_connect=Can't connect
-openblocks.misc.radio.unknown_error=Unknown error
-openblocks.misc.radio.muted=Sounds are muted!
+openblocks.misc.radio.too_many=Trop de radios sont déjà entrain de jouer
+openblocks.misc.radio.invalid_stream=Flux invalide
+openblocks.misc.radio.invalid_url=URL invalide
+openblocks.misc.radio.url_not_found=URL non trouvé 
+openblocks.misc.radio.unknown_stream_type=Type de flux non trouvé
+openblocks.misc.radio.malformed_data=Donné malformé dans le flux
+openblocks.misc.radio.not_ready=Flux non près, veuillez réessayer
+openblocks.misc.radio.cant_connect=Connexion impossible
+openblocks.misc.radio.unknown_error=Erreur inconnue
+openblocks.misc.radio.muted=Les sons ont été réduit au silence
 
-openblocks.misc.side.east=East side
-openblocks.misc.side.west=West side
-openblocks.misc.side.north=North side
-openblocks.misc.side.south=South side
-openblocks.misc.side.up=Top side
-openblocks.misc.side.down=Bottom side
+openblocks.misc.side.east=Face Est
+openblocks.misc.side.west=Face Ouest
+openblocks.misc.side.north=Face Nord
+openblocks.misc.side.south=Face Sud
+openblocks.misc.side.up=Face du dessus
+openblocks.misc.side.down=Face du dessous
 
-openblocks.misc.command.invalid=Invalid command arguments
+openblocks.misc.command.invalid=Arguments de la commande invalides
 openblocks.misc.command.no_flim_flam=Invalid flim-flam name
 openblocks.misc.command.flim_flam_source=Player %s had been successfully flim-flammed with %s
-openblocks.misc.command.flim_flam_target=Someone doesn't like you. Someone with power
+openblocks.misc.command.flim_flam_target=Quelqu'un ne vous aime pas. Quelqu'un avec du pouvoir
 openblocks.misc.command.flim_flam_failed=Flim-flamming failed!
-openblocks.misc.command.luck_added=Luck changed for player %s, current: %d
-openblocks.misc.command.luck_current=Player %s luck: %d
+openblocks.misc.command.luck_added=Modification de la chance pour le joueur %s, actuel: %d
+openblocks.misc.command.luck_current=Chance de %s : %d
 
-#openblocks.misc.total_ticks=Total ticks: %d (%.2fs) ## NEEDS TRANSLATION ##
+openblocks.misc.total_ticks=Ticks total: %d (%.2fs)
 
-#openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
-openblocks.flim_flammed=Something weird happens around you
+openblocks.misc.hidden_lore=§a§oMaintenez ALT pour voir l'historique§r
+openblocks.flim_flammed=Quelque chose de bizarre se passe autour de vous
 
-#openblocks.misc.dropper.speed=Speed ## NEEDS TRANSLATION ##
-#openblocks.misc.dropper.use_redstone=Scale by redstone signal strength ## NEEDS TRANSLATION ##
+openblocks.misc.dropper.speed=Vitesse
+openblocks.misc.dropper.use_redstone=Augmente la force du signal de redstone
 
-openblocks.turtle.magnet=Magnet
+openblocks.turtle.magnet=Aimant
 
-#tile.openblocks.elevator.name=Elevator ## NEEDS TRANSLATION ##
-#tile.openblocks.elevator.description=Place one elevator directly three or more blocks above another with no blocks inbetween and you'll be able to either 'jump' to move up, or 'crouch' to move down. Elevators can be dyed by clicking on them with dye, however, you can only teleport between elevators of the same color. ## NEEDS TRANSLATION ##
+tile.openblocks.elevator.name=Élevateur
+tile.openblocks.elevator.description=Placez un élevateur directement 3 blocs ou plus au-dessus sans bloc entre et vous serez capable de 'sauter' pour monter ou de 's'accroupir' pour descendre. Les élevateurs peuvent être colorés en cliquant dessus avec un colorant. Attention, vous ne pouvez vous téléporter qu'avec des élevateurs de la même couleur.
 
-#tile.openblocks.elevator_rotating.name=Rotating Elevator ## NEEDS TRANSLATION ##
+tile.openblocks.elevator_rotating.name=Élevateur rotatid
 
 #tile.openblocks.heal.name=Healer ## NEEDS TRANSLATION ##
 #tile.openblocks.heal.description=The healing block is a creative-mode only block that gives off a slight healing effect over time. ## NEEDS TRANSLATION ##
@@ -356,19 +356,19 @@ openblocks.turtle.magnet=Magnet
 #item.openblocks.wrench.name=Big Metal Bar ## NEEDS TRANSLATION ##
 #item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok? ## NEEDS TRANSLATION ##
 
-#item.openblocks.glyph.name=Glyph ## NEEDS TRANSLATION ##
-#item.openblocks.glyph.with_char='%c' Glyph ## NEEDS TRANSLATION ##
+item.openblocks.glyph.name=Glyphe
+item.openblocks.glyph.with_char='%c' Glyphe
 
-#item.openblocks.stencil.name=Stencil ## NEEDS TRANSLATION ##
+item.openblocks.stencil.name=Crayon
 #item.openblocks.crayon.name=Magic Crayon ## NEEDS TRANSLATION ##
 #item.openblocks.pencil.name=Magic Pencil ## NEEDS TRANSLATION ##
 #item.openblocks.glasses.pencil.name=Pencil Glasses ## NEEDS TRANSLATION ##
 #item.openblocks.glasses.crayon.name=Crayon Glasses ## NEEDS TRANSLATION ##
 #item.openblocks.glasses.technicolor.name=Amazing Technicolor Glasses ## NEEDS TRANSLATION ##
-#item.openblocks.glasses.admin.name=Badass Glasses ## NEEDS TRANSLATION ##
-#item.openblocks.crane_engine.name=Crane Engine ## NEEDS TRANSLATION ##
-#item.openblocks.crane_magnet.name=Crane Magnet ## NEEDS TRANSLATION ##
-#item.openblocks.beam.name=Beam ## NEEDS TRANSLATION ##
+item.openblocks.glasses.admin.name=Lunettes Badass
+item.openblocks.crane_engine.name=Moteur de grue
+item.openblocks.crane_magnet.name=Aimant de grue
+item.openblocks.beam.name=Poutre
 #item.openblocks.line.name=Line ## NEEDS TRANSLATION ##
 item.openblocks.miracle_magnet.name=§5Aimant de Miracle§r
 item.openblocks.info_book.name=Domination du monde avec OpenBlocks
@@ -384,17 +384,17 @@ item.openblocks.tasty_clay.name=Savoureux Argile
 item.openblocks.golden_eye.name=D'or œil
 item.openblocks.pointer.name=Aiguille
 #item.openblocks.tuned_crystal.name=Tuned Crystal ## NEEDS TRANSLATION ##
-#item.openblocks.pedometer.name=Pedometer ## NEEDS TRANSLATION ##
+item.openblocks.pedometer.name=Podomètre
 
 #item.openblocks.wallpaper.name=Wallpaper ## NEEDS TRANSLATION ##
 
 itemGroup.tabOpenBlocks=OpenBlocks
 
-#entity.openblocks.luggage.name=Luggage ## NEEDS TRANSLATION ##
-#entity.openblocks.cartographer.name=Cartographer ## NEEDS TRANSLATION ##
-#entity.openblocks.block.name=Floating Block ## NEEDS TRANSLATION ##
-#entity.openblocks.mini_me.name=Mini Me ## NEEDS TRANSLATION ##
+entity.openblocks.luggage.name=Bagage
+entity.openblocks.cartographer.name=Cartographe
+entity.openblocks.block.name=Bloc flottant
+entity.openblocks.mini_me.name=Mini Moi
 
-#fluid.openblocks.xp_juice=Liquid XP ## NEEDS TRANSLATION ##
+fluid.openblocks.xp_juice=XP liquide
 
-#entity.Villager.audiophile=Audiophile ## NEEDS TRANSLATION ##
+entity.Villager.audiophile=Audiophile
