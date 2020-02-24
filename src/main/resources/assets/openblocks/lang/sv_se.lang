@@ -1,0 +1,400 @@
+achievement.openblocks.droppedBrick=Hoppsan!
+achievement.openblocks.droppedBrick.desc=Förlåt, det bara hände...
+stat.openblocks.bricksDropped=Släppta tegelstenar
+achievement.openblocks.stackOverflow=Stacköverflöde
+achievement.openblocks.stackOverflow.desc=Den är full av stjärnor!
+
+openblocks.keybind.category=OpenBlocks
+openblocks.keybind.drop_brick=Var lite knasig
+openblocks.keybind.vario_switch=Aktivera/inaktivera variometer
+openblocks.keybind.vario_vol_up=Höj variometerns volym
+openblocks.keybind.vario_vol_down=Sänk variometerns volym
+
+enchantment.openblocks.explosive=Instabilitet
+enchantment.openblocks.laststand=Slutförsvar
+enchantment.openblocks.flimflam=Flimflam
+
+openblocks.gui.blocks=Block
+openblocks.gui.items=Föremål
+openblocks.gui.misc=Övrigt
+openblocks.gui.changelogs=Ändringslogg
+
+openblocks.gui.features=Funktioner
+openblocks.gui.bugfixes=Buggfixar
+openblocks.gui.tweaks=Finjusteringar
+
+openblocks.gui.luggage=Lådis
+openblocks.gui.sprinkler=Sprinkler
+openblocks.gui.vacuumhopper=Vakuumtratt
+openblocks.gui.bigbutton=Stor knapp
+openblocks.gui.xpbottler=Erfarenhetsbuteljerare
+openblocks.gui.autoanvil=Automatiskt städ
+openblocks.gui.autoeject=Mata ut autom.
+openblocks.gui.autoextract=Mata in autom.
+openblocks.gui.autodrink=Fyll på autom.
+openblocks.gui.autoenchantmenttable=Automatiskt förtrollningsbord
+openblocks.gui.donationstation=Donationsstation
+openblocks.gui.itemdropper=Föremålsutmatare
+openblocks.gui.blockplacer=Blockplacerare
+openblocks.gui.paintmixer=Färgblandare
+openblocks.gui.drawingtable=Ritbänk
+openblocks.gui.digitalfuse=Digital säkring
+openblocks.gui.xp_outputs=Erfarenhet matas ut
+openblocks.gui.item_outputs=Föremål matas ut
+openblocks.gui.limit=Gräns
+openblocks.gui.available_power=Befintlig energi: %d
+openblocks.gui.save_folder=Sparningsmapp
+
+openblocks.gui.drawingtable.stencils=Stenciler
+openblocks.gui.drawingtable.glyphs=Glyfer
+openblocks.gui.drawingtable.print=Skriv
+
+openblocks.gui.welcome.title=Välkommen!
+openblocks.gui.welcome.content=OpenBlocks är en ny mod med öppen källkod som introducerar olika idéer i Minecraft, inklusive hängglidare, hissar, tankar, gravar, färger, kranar, flytande erfarenhet, kartografer, troféer och mer!
+
+openblocks.gui.credits.title=Tack till
+openblocks.gui.credits.content=§LBoq, Mikee och NeverCast§R - OpenBlocks huvudutvecklare (kan man ens tacka sig själv?)\n\n§LSinZ och Yoshi2§R - medlemmar i OpenMods-teamet från början.\n\n§LVexatos och crafteverywhere§R - för att ha översatt moddarna regelbundet.\n\nAlla andra som har bidragit med kod de senaste två åren.\n\n§LDirewolf20 och resten av ForgeCraft§R - som stod ut med alla buggar och kraschar innan vi släppte modden.\n\nAlla som har gjort videor om modden och i allmänhet visat sitt stöd från första början!
+
+openblocks.gui.config.title=Enkel konfigurationsredigering
+openblocks.gui.config.content=OpenMods gör det möjligt att ändra klient- och serverrelaterade konfigurationsalternativ via chattkommandon. En del kräver inte ens en omstart!\n\nKonfigurationsinställningarna för servrar kan ändras med "§L/om_config_s§R" (operatörsbehörighet krävs) och konfigurationsinställningarna för klienten kan ändras med "§L/om_config_c§R'\n\nTill exempel:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nFör en fullständig lista över kommandon, skriv: §L/help om_config_s§R eller §L/help om_config_c§R
+
+openblocks.gui.restore_inv.title=Säkerhetskopiera utrustningar
+openblocks.gui.restore_inv.content=Alla kan göra misstag. Men med kommandot §L/ob_inventory§R kan du fixa några av dem. Detta kommando kan användas för att återställa utrustningen. En säkerhetskopia skapas när:\n - spelaren dör\n - en grav skapas \n - spelaren kör kommandot §L/ob_inventory store§R\n\nFör att återställa utrustningen behöver du ett namn på säkerhetskopian. Gå till mappen nedan eller till sparningsmappen på servern och leta efter filer som heter §Linventory-*.dat§R. Återställ sedan utrustningen med §L/ob_inventory restore <spelare> <ID>§R - Där ID är antingen hela filnamnet eller bara mittendelen, utan §Linventory-§R och §L.dat§R. Du kan också använda tangenten TABB för att automatiska förslag. Säkerhetskopiorna är vanliga NBT-filer och kan öppnas med en valfri redigerare.
+
+openblocks.gui.bkey.title=Den ökända b-tangenten
+openblocks.gui.bkey.content=B-tangenten är en mycket special tangent i OpenBlocks.\n\nGenom att aktivera konfigurationsalternativet "weAreSeriousPeople" i kategorin "tomfoolery" för både klientens och serverns konfigurationsfiler kommer du få ett säreget matsmältningssystem.\n\nFörsök att äta lite av den där läckra leran och tryck på "B" för att smälta den!
+
+openblocks.gui.unstable.title=Instabilitetsförtrollning
+openblocks.gui.unstable.content=Vi har fått obekräftade rapporter om att denna förtrollning får allt krut som du bär med dig att bli instabilt när du attackeras eller hoppar ned från någonting.\n\nAnvänd på eget bevåg!
+
+openblocks.gui.flimflam.title=Flimflamförtrollning
+openblocks.gui.flimflam.content=Vetenskapsmännen har fortfarande inte upptäckt egenskaperna hos denna förtrollning.
+
+openblocks.gui.laststand.title=Slutförsvarsförtrollning
+openblocks.gui.laststand.content=Förtrollningen använder din erfarenhetsmätare som ett sista skydd från en säker död.\n\nNär du når 0,5 hjärtan kommer spelet ta erfarenhet från dig varje gång du tar skada istället för att du dör. Ju högre total förtrollningsnivå du har desto billigare kommer erfarenhetskostnaden vara.
+
+openblocks.changelog.title=Vad är nytt i OpenBlocks %s
+openblocks.misc.url=Webbadress: %s
+openblocks.misc.type=Typ: %s
+openblocks.misc.uses=Användningar: %.2f
+openblocks.misc.color=Färg: %06X
+openblocks.misc.mode=Placeringsläge: %s
+openblocks.misc.mode.block=Block
+openblocks.misc.mode.panel=Panel
+openblocks.misc.mode.half_panel=Halvhög panel
+openblocks.misc.mode.stairs=Trappa
+openblocks.misc.mode.inverted_block=Inverterat block
+openblocks.misc.mode.inverted_panel=Inverterad panel
+openblocks.misc.mode.inverted_half_panel=Inverterad halvhög panel
+openblocks.misc.mode.inverted_stairs=Inverterad trappa
+openblocks.misc.structure_pos=Felsökning: Hittade strukturen %s vid (%d,%d,%d)
+openblocks.misc.locked=Låst
+openblocks.misc.selected_cannon=Valde kanon att sikta med
+openblocks.misc.pointed_cannon=Pekade kanonen mot %s, %s, %s
+openblocks.misc.change_mode=Ändrar till läget "%s"
+openblocks.misc.change_size=Ändrar storleken till %sx%sx%s
+openblocks.misc.change_box_size=Ändrar storleken till (%d,%d,%d):(%d,%d,%d)
+openblocks.misc.total_blocks=Totalt antal block: %d
+openblocks.misc.get_witched=Du blev förhäxad!
+openblocks.misc.page=Sida %d av %d
+openblocks.misc.oh_no_ceiling=Du kan inte sova här. Taket stör dig för mycket...
+openblocks.misc.oh_no_ground=Vill du sova på DET DÄR!?
+openblocks.misc.sleeping_bag_broken=Föremålet är inaktivt p.ga. en misslyckad initialisering
+openblocks.misc.inverted=Inverterad
+openblocks.misc.structure_not_locked=Inte låst till någon struktur!
+openblocks.misc.locked_on_nearest_structure=Låst till närmaste %s
+openblocks.misc.locked_on_structure=Låst till %s
+openblocks.misc.no_nearby_structures=Kan inte hitta några strukturer i närheten
+
+openblocks.misc.grave_msg=%s (dag: %.1f)
+
+openblocks.misc.cant_restore_player=Kan inte återställa utrustningen för spelaren %s
+openblocks.misc.cant_restore_inventory=Kan inte återställa utrustningen
+openblocks.misc.cant_store=Kan inte lagra spelaren %ss utrustning
+openblocks.misc.invalid_sub_inventory=Kan inte återställa underutrustningen %s
+openblocks.misc.stored_inventory=Lagrade spelarens utrustning i %s
+openblocks.misc.restored_inventory=Återställa utrustningen för spelaren %s
+openblocks.misc.invalid_index=Ogiltigt index
+openblocks.misc.empty_slot=Inget föremål i platsen
+
+openblocks.misc.pedometer.tracking_reset=Nollställde stegräknaren
+openblocks.misc.pedometer.tracking_started=Startade stegräknaren
+
+openblocks.misc.pedometer.start_point=Startpunkt: %s
+openblocks.misc.pedometer.speed=Hastighet: %s
+openblocks.misc.pedometer.avg_speed=Medelhastighet: %s
+openblocks.misc.pedometer.total_distance=Totalt avstånd: %s
+
+openblocks.misc.pedometer.straght_line_distance=Avstånd (fågelvägen): %s
+openblocks.misc.pedometer.straigh_line_speed=Hastighet (fågelvägen): %s
+
+openblocks.misc.pedometer.last_check_distance=Avstånd från senaste koll: %s
+openblocks.misc.pedometer.last_check_speed=Hastighet sedan senaste koll: %s
+openblocks.misc.pedometer.last_check_time=Tid sedan senaste koll: %d tickningar
+
+openblocks.misc.pedometer.total_time=Total tid: %d tickningar
+
+openblocks.misc.shape=Form: %s
+openblocks.misc.shape.sphere=Sfär
+openblocks.misc.shape.cylinder=Cylinder
+openblocks.misc.shape.cuboid=Kub
+openblocks.misc.shape.full_cuboid=Full kub
+openblocks.misc.shape.dome=Kupol
+openblocks.misc.shape.triangle=Triangel
+openblocks.misc.shape.pentagon=Femhörning
+openblocks.misc.shape.hexagon=Sexhörning
+openblocks.misc.shape.octagon=Åttahörning
+openblocks.misc.shape.axes=Axlar
+openblocks.misc.shape.planes=Ytor
+
+openblocks.misc.box=Dimensioner: (%d,%d,%d):(%d,%d,%d)
+openblocks.misc.width=Bredd: %d
+openblocks.misc.height=Höjd: %d
+openblocks.misc.depth=Djup: %d
+
+openblocks.misc.radio.too_many=För många radior spelas redan
+openblocks.misc.radio.invalid_stream=Ogiltig ström
+openblocks.misc.radio.invalid_url=Ogiltig webbadress
+openblocks.misc.radio.url_not_found=Webbadressen hittades inte
+openblocks.misc.radio.unknown_stream_type=Okänd strömtyp
+openblocks.misc.radio.malformed_data=Skadad data i ström
+openblocks.misc.radio.not_ready=Strömmen är inte redo, försök igen senare
+openblocks.misc.radio.cant_connect=Kan inte ansluta
+openblocks.misc.radio.unknown_error=Okänt fel
+openblocks.misc.radio.muted=Ljud är tystade!
+
+openblocks.misc.side.east=Östra sidan
+openblocks.misc.side.west=Västra sidan
+openblocks.misc.side.north=Norra sidan
+openblocks.misc.side.south=Södra sidan
+openblocks.misc.side.up=Ovansidan
+openblocks.misc.side.down=Nedersidan
+
+openblocks.misc.command.invalid=Ogiltiga kommandoargument
+openblocks.misc.command.no_flim_flam=Ogiltigt namn på en flimflam
+openblocks.misc.command.flim_flam_source=Spelaren %s har fallit offer för en flimflam av typen "%s"
+openblocks.misc.command.flim_flam_target=Någon gillar inte dig. Någon som har makt.
+openblocks.misc.command.flim_flam_failed=Flimflam misslyckades!
+openblocks.misc.command.luck_added=Tur ändrades för spelaren %s, nuvarande: %d
+openblocks.misc.command.luck_current=Spelaren %ss tur: %d
+
+openblocks.misc.total_ticks=Totalt antal tickningar: %d (%.2fs)
+
+openblocks.misc.hidden_lore=§a§oHåll ned ALT för att se historiken§r
+openblocks.flim_flammed=Någonting konstigt händer runtomkring dig.
+
+openblocks.misc.dropper.speed=Hastighet
+openblocks.misc.dropper.use_redstone=Skalas med redstonesignalens styrka
+
+openblocks.turtle.magnet=Magnet
+
+tile.openblocks.elevator.name=Hiss
+tile.openblocks.elevator.description=Placera en hiss tre eller fler block precis ovanför en annan hiss utan några block emellan så kommer du antingen kunna "hoppa" för att förflytta dig uppåt eller "ducka" för att förflytta dig nedåt. Hissar kan färgläggas genom att klicka på dem med färg, men du kan endast teleportera mellan hissar av samma färg.
+
+tile.openblocks.elevator_rotating.name=Roterande hiss
+
+tile.openblocks.heal.name=Läkning
+tile.openblocks.heal.description=Läkningsblocket är ett block som bara kan fås med kreativt läge och avger en smärre läkningseffekt med tiden.
+
+tile.openblocks.guide.name=Byggningsguide
+tile.openblocks.guide.description=När byggningsguiden förses med en redstonesignal kommer den visa en kontur med spökblock i olika former och storlekar för att hjälpa dig att planera ut rum.\nAnvänd blockets tryckkänsliga knappar för att ändra konturens dimensioner och former.\nKonturens färg kan ändras genom att högerklicka med en färg på byggningsguiden.
+
+tile.openblocks.builder_guide.name=Förbättrad byggningsguide
+tile.openblocks.builder_guide.description=Denna förbättrade version av byggningsguiden visar bara inte spökblock för att underlätta byggande, men låter dig även placera riktiga block. Klicka bara på mittenblocket med en valfri föremålsgrupp med block!\nNär du är i kreativt läge kan du placera ett obsidianblock ovanpå byggningsguiden och sedan slå på den med ett valfritt block som du vill automatiskt skapa formen med.
+
+tile.openblocks.ladder.name=Falluckestege
+tile.openblocks.ladder.description=Falluckestegen löser det irriterande problemet när man försöker hoppa förbi en fallucka längst uppe på en stege. Falluckestegen fungerar som en fallucka och stege på samma gång.
+
+tile.openblocks.tank.filled.name=%stank
+tile.openblocks.tank.name=Tank
+tile.openblocks.tank.description=Tankar kan hålla vätskor. Om du placerar tankar intill varandra kommer de distribuera sin vätska mellan tankarna. Du kan placera vätska i tankarna med hinkar. Om tanken innehåller flytande erfarenhet kan du klicka på dem med en tom hand för att ge dig själv lite av erfarenheten. När den förstörs kommer tankarna behålla sin vätska.
+
+tile.openblocks.flag.name=Flagga
+tile.openblocks.flag.description=Flaggor kan användas i dekorationssyfte eller för att markera vägen ut från en grotta du har besökt. Flaggan kommer att peka i den riktningen som du placerade den i, eller så kan du placera den på väggar. Om du Shift-klickar med en flagga i din hand kommer den ändra färg.
+
+tile.openblocks.beartrap.name=Björnsax
+tile.openblocks.beartrap.description=Placera en björnsax och klicka på den för att öppna den. När en varelse kliver på den kommer den inte kunna röra sig!
+
+tile.openblocks.sponge.name=Svamp
+tile.openblocks.sponge.description=Svampen ersätter den vanliga svampen. Perfekt för att ta bort små lava- eller vattenpölar. Var dock försiktig när du använder den på större vätskemassor då det kommer bli ganska stökigt.
+
+item.openblocks.sponge_on_a_stick.name=Svamp på pinne
+item.openblocks.sponge_on_a_stick.description=Svamp på pinne är ett verktyg för att suga upp vätskor. Fungerar precis som svampen, men är mer bärbar på bekostnad av att den slits ut alltefter den används. 
+
+item.openblocks.epic_eraser.name=Episkt suddgummi
+item.openblocks.epic_eraser.description=Varje föremål har sin egen historia...\n\nAvskyr du inte det?\nMed detta föremål kan du skrubba bort alla spår av storslagna berättelser som dina skatter har samlat på sig genom åren och sedan sälja dem på svarta marknaden utan att oroa dig över några bevis.
+
+tile.openblocks.cannon.name=Föremålskanon
+tile.openblocks.cannon.description=När föremålskanonen får en redstonesignal kommer den skjuta föremål som den hittar i en närliggande utrustning. Använd föremålet "pekarpil" för att sikta med kanonen.
+
+tile.openblocks.rope_ladder.name=Repstege
+tile.openblocks.rope_ladder.description=När du placerar en repstege kommer den rullas ut hela vägen till marken. För varje block som skapas kommer ett föremål från föremålsgruppen användas.
+
+tile.openblocks.sprinkler.name=Sprinkler
+tile.openblocks.sprinkler.description=Sprinklern hjälper till att gödsla grödor upp till 4 block bort. Placera den helt enkelt ovanför en OpenBlocks-tank med vatten! Du kan också lägg till benmjöl för att snabba på tillväxten.\nDen fungerar även som ett källvattenblock!
+
+tile.openblocks.paint_mixer.name=Färgblandare
+tile.openblocks.paint_mixer.description=Färgblandaren kan blanda alla färger du vill ha! Lägg antingen en befintlig färghink eller mjölkhink i platsen längst upp, sedan turkos, ljuslila, gul och svart färg i de andra fyra föremålsplatserna samt klicka på blandaknappen!
+
+tile.openblocks.canvas.name=Kanvas
+tile.openblocks.canvas.description=Kanvasen är ett kritvitt block som är perfekt att måla på. Se färgblandaren för information om hur man gör färger.
+
+tile.openblocks.canvas_glass.name=Kanvas
+
+tile.openblocks.fan.name=Fläkt
+tile.openblocks.fan.description=Fläkten blåser iväg spelare, varelser eller entiteter i samma riktning som den riktas mot.
+
+tile.openblocks.target.name=Måltavla
+tile.openblocks.target.description=Måltavlan kommer avge en redstonesignal med en styrka som är relativ till spelarens träffsäkerhet. Ge måltavlan ett en redstonesignal för att få den att stå upp!
+
+tile.openblocks.path.name=Stig
+tile.openblocks.path.description=Stigen gör ingenting. Den ser bara snygg ut!
+
+tile.openblocks.item_dropper.name=Föremålsutmatare
+tile.openblocks.item_dropper.description=Föremålsutmataren liknar den vanliga utmataren, förutom att den inte släpper ut föremål slumpartat. Användare kan också kontrollera hastigheten för hur föremål släpps från gränssnittet och med redstone.
+
+tile.openblocks.big_button.name=Stor stenknapp
+tile.openblocks.big_button.description=Den stora knappen är en stor knapp som kan placeras på väggar. Om du Shift-klickar på knappen med en tom hand kommer en utrustning dyka upp. Där kan du kan lägga föremål i den för att öka tidslängden som knappen är nedtryckt - ett föremål ökar varaktigheten med en tickning.
+
+tile.openblocks.big_button_wood.name=Stor träknapp
+
+tile.openblocks.xp_drain.name=Erfarenhetsbrunn
+tile.openblocks.xp_drain.description=Placera erfarenhetsbrunnen ovanför en OpenBlocks-tank och stå på den. Din erfarenhet kommer sugas in i tanken som sedan kan användas för olika block, t.ex. det automatiska förtrollningsbordet eller det automatiska städet.
+
+tile.openblocks.vacuum_hopper.name=Vakuumtratt
+tile.openblocks.vacuum_hopper.description=Vakuumtratten kommer suga upp föremål och erfarenhetsklot runtomkring den. Du kan använda flikarna till höger om gränssnittet för att välja vilken sida att mata ut till.
+
+tile.openblocks.village_highlighter.name=Bymarkerare
+tile.openblocks.village_highlighter.description=Placera bymarkeraren i en by och ge den en redstonesignal. Den kommer markera ut byns omkrets och rita ut en låda runt området där en järngolem kan skapas. Användbar om du vill se till att flera byar inte sammanfogas såvida du inte planerar att göra en järnfarm!
+
+tile.openblocks.donation_station.name=Donationsstation
+tile.openblocks.donation_station.description=Älskar du ett block eller föremål och vill visa modutvecklaren din uppskattning? Släpp den i donationsstation och om vi känner till skaparens donationssida kommer vi ge dig en länk dit.
+
+tile.openblocks.block_placer.name=Blockplacerare
+tile.openblocks.block_placer.description=Placerar ett föremål åt samma håll den är riktad mot när den får en redstonepuls.
+
+tile.openblocks.block_breaker.name=Blockbrytare
+tile.openblocks.block_breaker.description=Bryter ett block åt samma håll den är riktad mot när den får en redstonepuls.
+
+tile.openblocks.projector.name=Karthöjdsritare
+tile.openblocks.projector.description=Du får skriva infotexten till den här, Boq!
+tile.openblocks.projector.working.name=Karthöjdsritare
+
+tile.openblocks.auto_enchantment_table.name=Automatiskt förtrollningsbord
+tile.openblocks.auto_enchantment_table.description=Det automatiska förtrollningsbordet fungerar på ett liknande sätt som det vanliga förtrollningsbordet förutom att den drivs av flytande erfarenhet. Använd flikarna på höger sida om gränssnittet för att välja var föremål eller erfarenhet kan tas ifrån. Precis som det vanliga bordet behövs bokhyllor för att få högre nivåer.
+
+tile.openblocks.xp_bottler.name=Erfarenhetsbuteljerare
+tile.openblocks.xp_bottler.description=Erfarenhetsbuteljerare fyller glasflaskor med flytande erfarenhet för att skapa förtrollningsflaskor.
+
+tile.openblocks.auto_anvil.name=Automatiskt städ
+tile.openblocks.auto_anvil.description=Det automatiska städet fungerar precis som det vanliga städet, förutom att det går på flytande erfarenhet och kan automatiseras fullt ut.\n\nAnvänd flikarna till höger om gränssnittet och vänsterklicka på de sidor av städet som föremål eller vätska kan matas in eller ut. Högerklicka och dra i städet inuti fliken för att vrida på det och komma åt andra sidor!
+
+tile.openblocks.drawing_table.name=Ritbänk
+tile.openblocks.drawing_table.description=Ritbänken är till för att skapa stenciler som kan användas när man målar. Infoga en opreparerad stencil i ritbänken och använd sedan pilarna för att välja vilken stencil du vill ha!
+
+tile.openblocks.grave.name=Grav
+tile.openblocks.trophy.name=Trofé
+tile.openblocks.trophy.entity.name=%strofé
+tile.openblocks.canvasglass.name=Glaskanvas
+tile.openblocks.paint_can.name=Färgburk
+
+tile.openblocks.sky.normal.name=Himmelsblock
+tile.openblocks.sky.normal.description=Ta utomhusmiljön inomhus med det nya himmelsblocket! Tillämpa bara en redstonesignal. Vi erbjuder även en inverterad version.
+tile.openblocks.sky.inverted.name=Inverterat himmelsblock
+
+tile.openblocks.radio.name=Radio
+tile.openblocks.radio.description=Radion låter dig strömma internetradio! Först behöver du några mottagarkristaller som du kan hitta i kistor inuti monstergrottor eller från en speciell bybo. Placera kristallen i radion och ge den en redstonesignal för att slå på den. Redstonestyrkan kontrollerar volymen.\n\nDu kan konfigurera vilka radiostationer som är tillgängliga serverns konfigurationsfil.
+
+tile.openblocks.xp_shower.name=Erfarenhetsdusch
+tile.openblocks.xp_shower.description=Fäst en erfarenhetsdusch på en tank med flytande erfarenhet och den kommer att hälla ut erfarenhetsklot. Dessa klot kan samlas upp av en erfarenhetsbrunn eller en avloppstrumma från MineFactory Reloaded.
+
+tile.openblocks.scaffolding.name=Byggställning
+tile.openblocks.scaffolding.description=Har du någonsin vilja bygga en pelare för att kunna ta dig upp någonstans utan att lämna ett fult torn bakom dig? Nåväl, nu kan du göra det! Använd dig bara av byggställningar så de kommer automatiskt försvinna när du är klar.
+
+tile.openblocks.golden_egg.name=Guldägg
+
+tile.openblocks.digitalfuse.name=Digital säkring
+
+item.openblocks.cursor.name=Pekarhand
+item.openblocks.cursor.description=Pekarhanden låter dig klicka på block på avstånd.\nShift-klicka bara på ett block för att länka pekarhanden och använd sedan pekarhanden där du vill för att klicka på målblocket. Var försiktig då pekarhanden använder som standard din erfarenhet relativt till hur långt bort du är ifrån blocket du klickar på.
+
+item.openblocks.dev_null.name=/dev/null
+item.openblocks.dev_null.description=Klicka med /dev/null för att öppna utrustningen. Det finns en enda utrustningsplats - lägg ett föremål där - jord, till exempel. När du plockar upp jord från marken kommer denna plats fyllas på. När den är full kommer all jord som du plockar upp att slängas automatiskt. Du kan Shift-klicka med föremålet i din hand som om du skulle placera blocket!
+
+item.openblocks.slimalyzer.name=Slemanalyserare
+item.openblocks.slimalyzer.description=Gå omkring med slemanalyseraren i din hand så kommer den lysa upp när du är inuti ett datablock där slemkubar kan skapas.
+
+item.openblocks.hang_glider.name=Hängglidare
+item.openblocks.hang_glider.description=Hängglidaren behöver inte förklaras. Håll den i din hand och klicka för att placera den på din rygg. Nu behöver du bara hoppa!\nFör att öka din hastighet kan du trycka på Shift medan du svävar, men se upp då du kommer att förlora höjd snabbare!\n\nDin hängglidare har nu också en akustisk variometer som indikerar din vertikala förflyttning i luften. Tryck på V för att aktivera den och stanna i luften för alltid (eller tills solen går ned)!
+
+item.openblocks.glider_wing.name=Hängglidarvinge
+
+item.openblocks.sleeping_bag.name=Sovsäck
+item.openblocks.sleeping_bag.description=Sovsäcken låter dig sova ute i det vilda utan att behöva återställa din startplats. För att sova bär du den helt enkelt på ryggen.
+
+item.openblocks.luggage.name=Lådis
+item.openblocks.luggage.description=Lådis är din nya vän. Han följer efter dig vart än du går för att samla in alla föremål han hittar på marken. Tugg, tugg, tugg!\nNär du Shift-klickar på honom kommer han förvandas till ett föremål som du kan bära omkring.\nOm han någonsin träffas av en blixt kommer han kunna bära ännu fler föremål!
+
+item.openblocks.sonic_glasses.name=Överljudsglasögon
+item.openblocks.sonic_glasses.description=Introducerar de nya underbara överljudsglasögonen!\nDenna nya och spännande teknologi från OpenMods AB låter dig se saker som du vanligtvis hör!
+
+item.openblocks.squeegee.name=Gummiskrapa
+item.openblocks.squeegee.description=Gummiskrapan tar bort färg från alla färglagda block. Klicka bara på blockets sidor som du vill ta bort färgen från, eller Shift-klicka på blocket för att ta bort färg från alla sidor!
+
+item.openblocks.paintbrush.name=Färgpensel
+item.openblocks.paintbrush.description=Färgpenslar låter dig färglägga block i vilken färg du vill!\n\nStoppa ned din färgpensel i en färgburk som görs i färgblandaren och klicka sedan på ett block för att färglägga det.\n\nKanvasblock är perfekt att färglägga, men du kan också färglägga ganska många omoddade block och även några block från andra moddar. Du kan också placera stenciler på block och sedan måla över stencilen!
+
+item.openblocks.unprepared_stencil.name=Opreparerad stencil
+item.openblocks.unprepared_stencil.description=Stenciler kan placeras ovanpå block och sedan målas med målarpenslar!\n\nDu kan måla ett block med flera stenciler och du kan klicka på dem med en tom hand för att rotera dem.\n\nPlacera en opreparerad stencil i ett ritbänk för att skapa olika mönster.
+
+item.openblocks.crane_backpack.name=Kranryggsäck
+item.openblocks.crane_backpack.description=I Minecrafts värld är "magnet" ett forntida ord för "hur fungerar det här?".\n\nDenna finurliga mackapär låter dig plocka upp och bära varelser, spelare, föremål och block. Kan kontrolleras med magnetkontroll.
+
+item.openblocks.crane_control.name=Krankontroll
+item.openblocks.crane_control.description=Denna högteknologiska trådlösa fjärrkontroll används för att kontrollera magnetryggsäckar.\n\nHögerklicka för att höja, smyg + högerklicka för att sänka, vänsterklicka för att plocka upp/släppa.\nEtt blinkande ljus betyder att någonting är under magneten.
+
+item.openblocks.wrench.name=Stor metallstång
+item.openblocks.wrench.description=Detta är ett extremt sofistikerat verktyg som används för att vrida runt symmetriskt åttahörniga objekt.\n\n\nEller så är det en stor, dum metallbit som man kan använda för att rotera kuber och saker.\n\nSå ja, det är bara en annan blocknyckel. Jag försöker vara lite originell, okej?
+
+item.openblocks.glyph.name=Glyf
+item.openblocks.glyph.with_char=Glyf "%c"
+
+item.openblocks.stencil.name=Stencil
+item.openblocks.crayon.name=Magisk krita
+item.openblocks.pencil.name=Magisk penna
+item.openblocks.glasses.pencil.name=Pennglasögon
+item.openblocks.glasses.crayon.name=Kritglasögon
+item.openblocks.glasses.technicolor.name=Fantastiska technicolorglasögon
+item.openblocks.glasses.admin.name=Tuffa glasögon
+item.openblocks.crane_engine.name=Kranmotor
+item.openblocks.crane_magnet.name=Kranmagnet
+item.openblocks.beam.name=Bjälke
+item.openblocks.line.name=Lina
+item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
+item.openblocks.info_book.name=Världsdominans med OpenBlocks
+item.openblocks.xp_bucket.name=Erfarenhetshink
+item.openblocks.height_map.name=Karthöjd
+item.openblocks.empty_map.name=Tom karta
+item.openblocks.map_controller.name=Kartkontrollsmodul
+item.openblocks.map_memory.name=Kartminnesmodul
+item.openblocks.cartographer.name=Kartograf
+item.openblocks.assistant_base.name=Assistantbas
+item.openblocks.sketching_pencil.name=Skisspenna
+item.openblocks.tasty_clay.name=Läcker lera
+item.openblocks.golden_eye.name=Guldöga
+item.openblocks.pointer.name=Pekarpil
+item.openblocks.tuned_crystal.name=Mottagarkristall
+item.openblocks.pedometer.name=Stegmätare
+
+item.openblocks.wallpaper.name=Tapet
+
+itemGroup.tabOpenBlocks=OpenBlocks
+
+entity.openblocks.luggage.name=Lådis
+entity.openblocks.cartographer.name=Kartograf
+entity.openblocks.block.name=Svävande block
+entity.openblocks.mini_me.name=Minimig
+
+fluid.openblocks.xp_juice=Flytande erfarenhet
+
+entity.Villager.audiophile=Audiofil
