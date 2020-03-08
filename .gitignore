@@ -42,3 +42,4 @@ crash-reports/
 screenshots/
 usernamecache.json
 options.txt
+*.bat
