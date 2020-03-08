@@ -14,6 +14,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -111,7 +112,7 @@ public class TrophyHandler {
 				return entity;
 			}
 		},
-		Sheep(),
+		Sheep(new ItemDropBehavior(20000, new ItemStack(Blocks.wool))),
 		Blaze(new BlazeBehavior()),
 		Silverfish(),
 		Spider(),
