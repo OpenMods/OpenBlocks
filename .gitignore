@@ -1,6 +1,3 @@
-# OpenMods Java Project .gitignore file
-# Last Authored: 20150816
-
 # Runtime output
 *.class
 *.log
@@ -17,6 +14,7 @@
 build/
 run/
 bin/
+/**/generated/
 
 # Eclipse
 .classpath

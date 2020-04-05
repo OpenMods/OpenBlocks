@@ -29,7 +29,7 @@ apply plugin: 'net.minecraftforge.gradle'
 dependencies {
     minecraft 'net.minecraftforge:forge:' + forge_version
 
-    //compile project(":OpenModsLib") // Load OpenModsLib from submodule
+    compile project(":OpenModsLib") // Load OpenModsLib from submodule
 
     compile group: 'info.openmods', name: 'calc', version: '0.3'
     compile "info.computercraft:ComputerCraft-API:1.80pr0"
@@ -85,13 +85,25 @@ if (env.BUILD_NUMBER != null) {
 
 def gitManifest = manifest {
     if (branch != null) {
-        attributes("Git-Branch": branch, "Git-Hash": hash)
+        attributes(
+                "Git-Branch": branch,
+                "Git-Hash": hash,
+                "Implementation-Version": mod_version,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        )
     }
 }
+
+evaluationDependsOn ':OpenModsLib'
 
 // Setup Forge plugin
 minecraft {
     mappings channel: 'snapshot', version: mcp_mappings
+
+    accessTransformers = [
+            file('src/main/resources/META-INF/accesstransformer.cfg'),
+            file('../OpenModsLib/src/main/resources/META-INF/accesstransformer.cfg')
+    ]
 
     runs {
         client {
@@ -101,6 +113,9 @@ minecraft {
             mods {
                 openblocks {
                     source sourceSets.main
+                }
+                openmmods {
+                    source project(":OpenModsLib").sourceSets.main
                 }
             }
         }
@@ -113,6 +128,9 @@ minecraft {
                 openblocks {
                     source sourceSets.main
                 }
+                openmmods {
+                    source project(":OpenModsLib").sourceSets.main
+                }
             }
         }
 
@@ -120,10 +138,13 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'openblocks', '--all', '--output', file('src/generated/resources/')
             mods {
                 openblocks {
                     source sourceSets.main
+                }
+                openmods {
+                    source project(":OpenModsLib").sourceSets.main
                 }
             }
         }

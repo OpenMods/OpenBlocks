@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/OpenMods/OpenBlocks"
+
+[[mods]]
+modId="openblocks"
+version="${file.jarVersion}"
+displayName="OpenBlocks"
+updateJSONURL="http://openmods.info/versions/openblocks.json"
+displayURL="https://openmods.info/" #optional
+credits=""
+authors="boq"
+description="All the things you never thought you will ever need"
+[[dependencies.openblocks]]
+    modId="forge"
+    mandatory=true
+    versionRange="[28,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.openblocks]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.14.4]"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.openblocks]]
+    modId="openmods"
+    mandatory=true
+    versionRange="[0.12]"
+    ordering="NONE"
+    side="BOTH"
