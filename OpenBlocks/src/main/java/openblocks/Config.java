@@ -1,16 +1,5 @@
 package openblocks;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
-import openblocks.common.TrophyHandler;
-import openblocks.enchantments.EnchantmentExplosive;
-import openblocks.enchantments.EnchantmentFlimFlam;
-import openblocks.enchantments.EnchantmentLastStand;
-import openblocks.enchantments.ExplosiveEnchantmentsHandler;
-import openblocks.enchantments.FlimFlamEnchantmentsHandler;
-import openblocks.enchantments.LastStandEnchantmentsHandler;
 import openmods.config.properties.ConfigProperty;
 import openmods.config.properties.OnLineModifiable;
 
@@ -410,33 +399,4 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "glyphs", name = "showInCreativeSearch", comment = "Should glyphs be added to creative search GUI")
 	public static boolean showGlypsInSearch = false;
-
-	public static void register() {
-		if (OpenBlocks.Blocks.trophy != null) {
-			MinecraftForge.EVENT_BUS.register(new TrophyHandler());
-		}
-
-		if (OpenBlocks.Items.devNull != null) {
-			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.devNull);
-		}
-
-		final IForgeRegistry<Enchantment> enchantments = GameRegistry.findRegistry(Enchantment.class);
-
-		if (explosiveEnchantmentEnabled) {
-			MinecraftForge.EVENT_BUS.register(new ExplosiveEnchantmentsHandler());
-			enchantments.register(new EnchantmentExplosive().setRegistryName(OpenBlocks.location("explosive")));
-		}
-
-		if (lastStandEnchantmentEnabled) {
-			MinecraftForge.EVENT_BUS.register(new LastStandEnchantmentsHandler());
-			enchantments.register(new EnchantmentLastStand().setRegistryName(OpenBlocks.location("last_stand")));
-		}
-
-		if (flimFlamEnchantmentEnabled) {
-			FlimFlamEnchantmentsHandler.registerCapability();
-			MinecraftForge.EVENT_BUS.register(new FlimFlamEnchantmentsHandler());
-			final Enchantment flimFlam = new EnchantmentFlimFlam();
-			enchantments.register(flimFlam.setRegistryName(OpenBlocks.location("flim_flam")));
-		}
-	}
 }

@@ -1,0 +1,19 @@
+{
+    "textures": {
+        "all": "openblocks:blocks/guide_center_ender"
+    },
+    "elements": [
+        {
+            "from": [ 7.5, 7.5, 7.5 ],
+            "to": [ 8.5, 8.5, 8.5 ],
+            "faces": {
+                "north": { "texture": "#all" },
+                "east":  { "texture": "#all" },
+                "south": { "texture": "#all" },
+                "west":  { "texture": "#all" },
+                "up":    { "texture": "#all" },
+                "down":  { "texture": "#all" }
+            }
+        }
+    ]
+}

@@ -1,5 +1,27 @@
 {
   "itemGroup.openblocks": "OpenBlocks",
   "block.openblocks.ladder": "Jaded Ladder",
-  "block.openblocks.ladder.description": "The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time."
+  "block.openblocks.ladder.description": "The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time.",
+  "block.openblocks.guide": "Building Guide",
+  "block.openblocks.guide.description": "The building guide, once powered with redstone, will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\nUse touch-buttons on block to change outline dimensions and shapes.\nColor of markers can be changed by using dye on central block.",
+  "block.openblocks.builder_guide": "Enhanced Building Guide",
+  "block.openblocks.builder_guide.description": "This enhanced version of building guide not only displays ghost blocks to make building easier, but also allows you to place actual blocks. Just click central block with any block stack!\nWhen in creative mode you can place an obsidian block above, then hit the building guide with any block you like to automatically create the shape.",
+  "openblocks.misc.box": "Dimensions: (%d,%d,%d):(%d,%d,%d)",
+  "openblocks.misc.color": "Color: %s",
+  "openblocks.misc.shape": "Shape: %s",
+  "openblocks.misc.shape.sphere": "Sphere",
+  "openblocks.misc.shape.cylinder": "Cylinder",
+  "openblocks.misc.shape.cuboid": "Cuboid",
+  "openblocks.misc.shape.full_cuboid": "Full Cuboid",
+  "openblocks.misc.shape.dome": "Dome",
+  "openblocks.misc.shape.triangle": "Triangle",
+  "openblocks.misc.shape.pentagon": "Pentagon",
+  "openblocks.misc.shape.hexagon": "Hexagon",
+  "openblocks.misc.shape.octagon": "Octagon",
+  "openblocks.misc.shape.axes": "Axes",
+  "openblocks.misc.shape.planes": "Planes",
+  "openblocks.misc.change_mode": "Changing to %s mode",
+  "openblocks.misc.change_size": "Changing size to %sx%sx%s",
+  "openblocks.misc.change_box_size": "Changing size to (%d,%d,%d):(%d,%d,%d)",
+  "openblocks.misc.total_blocks": "Total block count: %d"
 }

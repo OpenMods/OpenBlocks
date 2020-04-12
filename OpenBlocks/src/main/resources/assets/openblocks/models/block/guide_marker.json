@@ -1,0 +1,19 @@
+{
+    "textures": {
+        "all": "openblocks:blocks/guide_marker"
+    },
+    "elements": [
+        {
+            "from": [ 0.8, 0.8, 0.8 ],
+            "to": [ 15.2, 15.2, 15.2 ],
+            "faces": {
+                "north": { "texture": "#all" },
+                "east": { "texture": "#all" },
+                "south": { "texture": "#all" },
+                "west": { "texture": "#all" },
+                "up": { "texture": "#all" },
+                "down": { "texture": "#all" }
+            }
+        }
+    ]
+}

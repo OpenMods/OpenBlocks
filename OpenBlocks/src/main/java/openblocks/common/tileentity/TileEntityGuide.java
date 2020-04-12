@@ -6,29 +6,29 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.common.primitives.Doubles;
-import com.google.common.primitives.Ints;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
+import net.minecraft.state.Property;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.common.item.ItemGuide;
 import openblocks.shapes.CoordShape;
 import openblocks.shapes.GuideShape;
@@ -60,7 +60,7 @@ import openperipheral.api.adapter.method.ScriptCallable;
 import openperipheral.api.struct.ScriptStruct;
 import openperipheral.api.struct.StructField;
 
-public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile, ITickable {
+public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile, ITickableTileEntity {
 
 	private interface IShapeManipulator {
 		boolean activate(TileEntityGuide te, ServerPlayerEntity player);
@@ -82,13 +82,13 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return (te, player) -> {
 			final World world = te.getWorld();
 			final BlockPos pos = te.getPos();
-			final BlockState state = world.getBlockState(pos);
+			final BlockState state = te.getBlockState();
 			final Block block = state.getBlock();
 			if (block instanceof OpenBlock) {
-				final IProperty<Orientation> orientationProperty = ((OpenBlock)block).propertyOrientation;
-				final Orientation orientation = state.getValue(orientationProperty);
+				final Property<Orientation> orientationProperty = ((OpenBlock)block).propertyOrientation;
+				final Orientation orientation = state.get(orientationProperty);
 				final Orientation newOrientation = orientation.rotateAround(ha);
-				world.setBlockState(pos, state.withProperty(orientationProperty, newOrientation));
+				world.setBlockState(pos, state.with(orientationProperty, newOrientation));
 				return true;
 			}
 
@@ -124,45 +124,18 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		COMMANDS = commands.build();
 	}
 
-	private static final Comparator<BlockPos> COMPARATOR = (o1, o2) -> {
-		{
-			// first, go from bottom to top
-			int result1 = Ints.compare(o1.getX(), o2.getX());
-			if (result1 != 0) return result1;
-		}
+	private static final Comparator<BlockPos> COMPARATOR = Comparator
+			.comparing(BlockPos::getY)    // first, go from bottom to top
+			.thenComparing(o -> Math.atan2(o.getZ(), o.getX())) // then sort by angle, to make placement more intuitive
+			.thenComparing(Comparator.comparing((BlockPos o) -> MathUtils.lengthSq(o.getX(), o.getZ())).reversed()) // then sort by distance, far ones first
+			.thenComparing(BlockPos::getX)        // then sort by x and z to make all unique BlockPosinates are included
+			.thenComparing(BlockPos::getZ);
 
-		{
-			// then sort by angle, to make placement more intuitive
-			final double angle1 = Math.atan2(o1.getZ(), o1.getX());
-			final double angle2 = Math.atan2(o2.getZ(), o2.getX());
-
-			int result2 = Doubles.compare(angle1, angle2);
-			if (result2 != 0) return result2;
-		}
-
-		{
-			// then sort by distance, far ones first
-			final double length1 = MathUtils.lengthSq(o1.getX(), o1.getZ());
-			final double length2 = MathUtils.lengthSq(o2.getX(), o2.getZ());
-
-			int result3 = Doubles.compare(length2, length1);
-			if (result3 != 0) return result3;
-		}
-
-		// then sort by x and z to make all unique BlockPosinates are included
-		{
-			int result4 = Ints.compare(o1.getX(), o2.getX());
-			if (result4 != 0) return result4;
-		}
-
-		{
-			int result5 = Ints.compare(o1.getZ(), o2.getZ());
-			return result5;
-		}
-	};
-
+	@Nullable
 	private CoordShape shape;
+	@Nullable
 	private CoordShape previousShape;
+	@Nullable
 	private CoordShape toDeleteShape;
 
 	private float timeSinceChange = 0;
@@ -197,6 +170,11 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	private final Map<HalfAxis, SyncableVarInt> axisDimensions = Maps.newEnumMap(HalfAxis.class);
 
 	public TileEntityGuide() {
+		this(OpenBlocks.TileEntities.guide);
+	}
+
+	public TileEntityGuide(final TileEntityType<? extends TileEntityGuide> type) {
+		super(type);
 		axisDimensions.put(HalfAxis.NEG_X, negX);
 		axisDimensions.put(HalfAxis.NEG_Y, negY);
 		axisDimensions.put(HalfAxis.NEG_Z, negZ);
@@ -290,7 +268,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	@Asynchronous
 	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getCount() {
-		if (shape == null) recreateShape();
+		if (shape == null) { recreateShape(); }
 		return shape.size();
 	}
 
@@ -367,7 +345,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		if (world.isRemote) {
 			if (timeSinceChange < 1.0) {
 				timeSinceChange = (float)Math.min(1.0f, timeSinceChange + 0.1);
@@ -391,7 +369,9 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 		final Set<BlockPos> uniqueResults = Sets.newHashSet();
 		final IShapeable collector = (x, y, z) -> {
-			if (canAddCoord(x, y, z)) uniqueResults.add(new BlockPos(x, y, z));
+			if (canAddCoord(x, y, z)) {
+				uniqueResults.add(new BlockPos(x, y, z));
+			}
 		};
 		generator.generateShape(-negX.get(), -negY.get(), -negZ.get(), posX.get(), posY.get(), posZ.get(), collector);
 
@@ -416,14 +396,17 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return (x != 0) || (y != 0) || (z != 0);
 	}
 
+	@Nullable
 	public CoordShape getShape() {
 		return shape;
 	}
 
+	@Nullable
 	public CoordShape getPreviousShape() {
 		return previousShape;
 	}
 
+	@Nullable
 	public CoordShape getAndDeleteShape() {
 		CoordShape toDel = toDeleteShape;
 		toDeleteShape = null;
@@ -434,13 +417,13 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	public void updateContainingBlockInfo() {
 		super.updateContainingBlockInfo();
 		// remote world will be updated by desctiption packet from block rotate
-		if (!world.isRemote) recreateShape();
+		if (!world.isRemote) { recreateShape(); }
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		if (renderAABB == null) renderAABB = createRenderAABB();
+		if (renderAABB == null) { renderAABB = createRenderAABB(); }
 		return renderAABB;
 	}
 
@@ -457,20 +440,20 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 			for (BlockPos c : shape.getCoords()) {
 				{
 					final int x = c.getX();
-					if (maxX < x) maxX = x;
-					if (minX > x) minX = x;
+					if (maxX < x) { maxX = x; }
+					if (minX > x) { minX = x; }
 				}
 
 				{
 					final int y = c.getY();
-					if (maxY < y) maxY = y;
-					if (minY > y) minY = y;
+					if (maxY < y) { maxY = y; }
+					if (minY > y) { minY = y; }
 				}
 
 				{
 					final int z = c.getZ();
-					if (maxZ < z) maxZ = z;
-					if (minZ > z) minZ = z;
+					if (maxZ < z) { maxZ = z; }
+					if (minZ > z) { minZ = z; }
 				}
 			}
 
@@ -480,7 +463,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public double getMaxRenderDistanceSquared() {
 		return Config.guideRenderRangeSq;
 	}
@@ -528,14 +511,9 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		}
 	}
 
-	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return pass == 1 && shouldRender();
-	}
-
 	private void updateRedstone() {
 		if (Config.guideRedstone != 0) {
-			boolean redstoneState = world.isBlockIndirectlyGettingPowered(pos) > 0;
+			boolean redstoneState = world.isBlockPowered(pos);
 			active.set(redstoneState);
 			sync();
 		}
@@ -552,11 +530,11 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	protected CoordShape getShapeSafe() {
-		if (shape == null) recreateShape();
+		if (shape == null) { recreateShape(); }
 		return shape;
 	}
 
-	public boolean onItemUse(ServerPlayerEntity player, @Nonnull ItemStack heldStack, Direction side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ServerPlayerEntity player, ItemStack heldStack, final BlockRayTraceResult hit) {
 		Set<ColorMeta> colors = ColorMeta.fromStack(heldStack);
 		if (!colors.isEmpty()) {
 			ColorMeta selected = CollectionUtils.getRandom(colors);
@@ -577,5 +555,10 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 				Log.info("Player %s tried to send invalid command '%s' to guide %s", sender, commandId, this);
 			}
 		}
+	}
+
+	@Override
+	public boolean hasFastRenderer() {
+		return true;
 	}
 }

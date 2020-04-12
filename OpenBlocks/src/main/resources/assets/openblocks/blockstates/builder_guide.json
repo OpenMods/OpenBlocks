@@ -1,42 +1,15 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "openmods:with-dependencies",
-        "custom": {
-            "base": "openblocks:builder_guide#main",
-            "dependencies": [
-                "openblocks:guide#marker"
-            ]
+        "model": "openblocks:block/guide",
+        "textures": {
+            "end": "openblocks:blocks/guide_end",
+            "side": "openblocks:blocks/guide_side",
+            "inner": "openblocks:blocks/guide_center_ender"
         },
         "transform": "forge:default-block"
     },
     "variants": {
-        "inventory": [{}],
-
-        "main": [{
-            "model": "openmods:multi-layer",
-            "custom": {
-                "base": "openblocks:builder_guide#outer",
-                "Solid": "openblocks:builder_guide#inner",
-                "Translucent": "openblocks:builder_guide#outer"
-            }
-        }],
-
-        "inner": [{
-            "model": "openblocks:guide_inner",
-            "textures": {
-                "texture": "openblocks:blocks/guide_center_ender"
-            }
-        }],
-
-        "outer": [{
-            "model": "cube_column",
-            "textures": {
-                "end": "openblocks:blocks/guide_top_new",
-                "side": "openblocks:blocks/guide_side_new"
-            }
-        }],
-
         "orientation" : {
             "xp_yp" : { "y" : 0 },
             "xn_yp" : { "y" : 180 },
