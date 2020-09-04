@@ -103,7 +103,26 @@ public class ElevatorActionHandler {
 			if (doTeleport) {
 				if (result.rotation != PlayerRotation.NONE) player.rotationYaw = getYaw(result.rotation);
 				if (Config.elevatorCenter) player.setPositionAndUpdate(x + 0.5, result.level + 1.1, z + 0.5);
-				else player.setPositionAndUpdate(player.posX, result.level + 1.1, player.posZ);
+				else {
+					int minX = (int)Math.floor(player.posX - player.width/2);
+					int minZ = (int)Math.floor(player.posZ - player.width/2);
+					int maxX = (int)Math.floor(player.posX + player.width/2);
+					int maxZ = (int)Math.floor(player.posZ + player.width/2);
+
+					boolean canSafelyTeleport = true;
+					for(int i = minX; i <= maxX; i++) {
+						for(int j = minZ; j <= maxZ; j++) {
+							if(!world.isAirBlock(i, result.level +1, j) || !world.isAirBlock(j, result.level+2, j))							{
+								canSafelyTeleport = false;
+								break;
+							}
+						}
+					}
+					if(canSafelyTeleport)
+						player.setPositionAndUpdate(player.posX, result.level + 1.1, player.posZ);
+					else
+						player.setPositionAndUpdate(x + 0.5, result.level + 1.1, z + 0.5);
+				}
 				world.playSoundAtEntity(player, "openblocks:elevator.activate", 1, 1);
 			}
 		}
