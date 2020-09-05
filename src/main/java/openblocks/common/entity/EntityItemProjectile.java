@@ -37,66 +37,21 @@ public class EntityItemProjectile extends EntityItem {
 		fixer.registerWalker(FixTypes.ENTITY, new ItemStackData(EntityItemProjectile.class, "Item"));
 	}
 
+	private boolean firstUpdate = true;
+
 	@Override
 	public void onUpdate() {
-		final double x = posX;
-		final double y = posY;
-		final double z = posZ;
-
-		final double vx = motionX;
-		final double vy = motionY;
-		final double vz = motionZ;
+		// Remove the air drag that EntityItem.onUpdate adds to our velocity
+		if (!firstUpdate && !this.onGround) {
+			float f = 0.98F;
+			this.motionX = this.motionX / f;
+			this.motionY = this.motionY / f;
+			this.motionZ = this.motionZ / f;
+		}
+		firstUpdate = false;
 
 		// let vanilla run
 		super.onUpdate();
-		if (!isDead) return;
-		// and then overwrite position calculations
-
-		this.posX = x;
-		this.posY = y;
-		this.posZ = z;
-
-		this.motionX = vx;
-		this.motionY = vy;
-		this.motionZ = vz;
-
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-		this.motionY -= 0.03999999910593033D;
-
-		move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-
-		boolean hasMoved = (int)this.prevPosX != (int)this.posX || (int)this.prevPosY != (int)this.posY || (int)this.prevPosZ != (int)this.posZ;
-
-		if (hasMoved || this.ticksExisted % 25 == 0) {
-			if (this.world.getBlockState(new BlockPos(this)).getMaterial() == Material.LAVA) {
-				this.motionY = 0.20000000298023224D;
-				this.motionX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
-				this.motionZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
-				playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
-			}
-		}
-
-		// Zero Air Friction
-		float f = 1F;
-
-		// Keep ground friction
-		if (this.onGround) {
-			BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
-			IBlockState underState = this.world.getBlockState(underPos);
-			f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.98F;
-		}
-
-		this.motionX *= f;
-		// Y would there be Y resistance :D
-		// ^ not my pun, I'm just porting :P, ~B
-		// motionY *= 0.98;
-		this.motionZ *= f;
-
-		if (this.onGround) this.motionY *= -0.5D;
-
-		handleWaterMovement();
 	}
 
 }

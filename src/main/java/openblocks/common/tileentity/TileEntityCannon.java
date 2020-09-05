@@ -130,9 +130,11 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		// spawn the item approximately at the end of the barrel
 		double yawr = Math.toRadians(currentYaw);
 		double pitchr = Math.toRadians(currentPitch);
-		double x = pos.getX() + 0.5 - Math.sin(yawr) * Math.cos(pitchr);
-		double y = pos.getY() + 0.3 + Math.sin(pitchr);
-		double z = pos.getZ() + 0.5 + Math.cos(yawr) * Math.cos(pitchr);
+		double barrel_length = 0.5;
+		double barrel_base_height = 0.3;
+		double x = pos.getX() + 0.5 - Math.sin(yawr) * Math.cos(pitchr) * barrel_length;
+		double y = pos.getY() + barrel_base_height + Math.sin(pitchr) * barrel_length;
+		double z = pos.getZ() + 0.5 + Math.cos(yawr) * Math.cos(pitchr) * barrel_length;
 
 		// projectileOrigin is not used here, it's used for the calculations below.
 		EntityItem item = new EntityItemProjectile(world, x, y, z, stack);
