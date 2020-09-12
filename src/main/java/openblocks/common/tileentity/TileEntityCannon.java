@@ -127,8 +127,17 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		final ITriggerable rpc = createServerRpcProxy(ITriggerable.class);
 		rpc.trigger();
 
+		// spawn the item approximately at the end of the barrel
+		double yawr = Math.toRadians(currentYaw);
+		double pitchr = Math.toRadians(currentPitch);
+		double barrelLength = 0.5;
+		double barrelBaseHeight = 0.3;
+		double x = pos.getX() + 0.5 - Math.sin(yawr) * Math.cos(pitchr) * barrelLength;
+		double y = pos.getY() + barrelBaseHeight + Math.sin(pitchr) * barrelLength;
+		double z = pos.getZ() + 0.5 + Math.cos(yawr) * Math.cos(pitchr) * barrelLength;
+
 		// projectileOrigin is not used here, it's used for the calculations below.
-		EntityItem item = new EntityItemProjectile(world, pos.getX() + 0.5, pos.getY(), pos.getZ(), stack);
+		EntityItem item = new EntityItemProjectile(world, x, y, z, stack);
 		item.setDefaultPickupDelay();
 
 		// Now that we generate vectors instead of eular angles, this should be revised.
