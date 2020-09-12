@@ -37,21 +37,18 @@ public class EntityItemProjectile extends EntityItem {
 		fixer.registerWalker(FixTypes.ENTITY, new ItemStackData(EntityItemProjectile.class, "Item"));
 	}
 
-	private boolean firstUpdate = true;
-
 	@Override
 	public void onUpdate() {
+		// let vanilla run
+		super.onUpdate();
+
 		// Remove the air drag that EntityItem.onUpdate adds to our velocity
-		if (!firstUpdate && !this.onGround) {
-			float f = 0.98F;
+		if (!this.onGround) {
+			double f = 0.98F;
 			this.motionX = this.motionX / f;
 			this.motionY = this.motionY / f;
 			this.motionZ = this.motionZ / f;
 		}
-		firstUpdate = false;
-
-		// let vanilla run
-		super.onUpdate();
 	}
 
 }
