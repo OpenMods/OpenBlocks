@@ -1,8 +1,9 @@
 package openblocks.events;
 
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import openmods.events.network.BlockEventPacket;
 import openmods.network.event.EventDirection;
 import openmods.network.event.NetworkEventMeta;
@@ -14,7 +15,7 @@ public class GuideActionEvent extends BlockEventPacket {
 
 	public GuideActionEvent() {}
 
-	public GuideActionEvent(final DimensionType dimension, final BlockPos pos, final String event) {
+	public GuideActionEvent(final RegistryKey<World> dimension, final BlockPos pos, final String event) {
 		super(dimension, pos);
 		this.command = event;
 	}

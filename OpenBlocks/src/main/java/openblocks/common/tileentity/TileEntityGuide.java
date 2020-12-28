@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.Property;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -268,7 +269,9 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	@Asynchronous
 	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getCount() {
-		if (shape == null) { recreateShape(); }
+		if (shape == null) {
+			recreateShape();
+		}
 		return shape.size();
 	}
 
@@ -333,11 +336,11 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	private void displayModeChange(PlayerEntity player) {
-		player.sendMessage(new TranslationTextComponent("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
+		player.sendMessage(new TranslationTextComponent("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()), Util.DUMMY_UUID);
 	}
 
 	private void displayBlockCount(PlayerEntity player) {
-		player.sendMessage(new TranslationTextComponent("openblocks.misc.total_blocks", shape.size()));
+		player.sendMessage(new TranslationTextComponent("openblocks.misc.total_blocks", shape.size()), Util.DUMMY_UUID);
 	}
 
 	public boolean shouldRender() {
@@ -417,13 +420,17 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	public void updateContainingBlockInfo() {
 		super.updateContainingBlockInfo();
 		// remote world will be updated by desctiption packet from block rotate
-		if (!world.isRemote) { recreateShape(); }
+		if (!world.isRemote) {
+			recreateShape();
+		}
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		if (renderAABB == null) { renderAABB = createRenderAABB(); }
+		if (renderAABB == null) {
+			renderAABB = createRenderAABB();
+		}
 		return renderAABB;
 	}
 
@@ -440,20 +447,32 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 			for (BlockPos c : shape.getCoords()) {
 				{
 					final int x = c.getX();
-					if (maxX < x) { maxX = x; }
-					if (minX > x) { minX = x; }
+					if (maxX < x) {
+						maxX = x;
+					}
+					if (minX > x) {
+						minX = x;
+					}
 				}
 
 				{
 					final int y = c.getY();
-					if (maxY < y) { maxY = y; }
-					if (minY > y) { minY = y; }
+					if (maxY < y) {
+						maxY = y;
+					}
+					if (minY > y) {
+						minY = y;
+					}
 				}
 
 				{
 					final int z = c.getZ();
-					if (maxZ < z) { maxZ = z; }
-					if (minZ > z) { minZ = z; }
+					if (maxZ < z) {
+						maxZ = z;
+					}
+					if (minZ > z) {
+						minZ = z;
+					}
 				}
 			}
 
@@ -489,8 +508,9 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	private void notifyPlayer(PlayerEntity player) {
 		player.sendMessage(new TranslationTextComponent("openblocks.misc.change_box_size",
-				-negX.get(), -negY.get(), -negZ.get(),
-				+posX.get(), +posY.get(), +posZ.get()));
+						-negX.get(), -negY.get(), -negZ.get(),
+						+posX.get(), +posY.get(), +posZ.get()),
+				Util.DUMMY_UUID);
 		displayBlockCount(player);
 	}
 
@@ -530,7 +550,9 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	protected CoordShape getShapeSafe() {
-		if (shape == null) { recreateShape(); }
+		if (shape == null) {
+			recreateShape();
+		}
 		return shape;
 	}
 
@@ -555,10 +577,5 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 				Log.info("Player %s tried to send invalid command '%s' to guide %s", sender, commandId, this);
 			}
 		}
-	}
-
-	@Override
-	public boolean hasFastRenderer() {
-		return true;
 	}
 }

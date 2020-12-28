@@ -1,6 +1,6 @@
 {
     "textures": {
-        "all": "openblocks:blocks/guide_marker"
+        "all": "openblocks:block/guide_marker"
     },
     "elements": [
         {

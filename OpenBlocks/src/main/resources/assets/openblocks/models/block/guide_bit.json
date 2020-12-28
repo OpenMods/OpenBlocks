@@ -1,6 +1,6 @@
 {
     "textures": {
-        "all": "openblocks:blocks/guide_center_ender"
+        "all": "openblocks:block/guide_center_ender"
     },
     "elements": [
         {

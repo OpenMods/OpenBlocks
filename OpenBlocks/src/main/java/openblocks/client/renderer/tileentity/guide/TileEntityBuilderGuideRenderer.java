@@ -1,11 +1,16 @@
 package openblocks.client.renderer.tileentity.guide;
 
-import java.nio.ByteBuffer;
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
-import net.minecraft.client.renderer.BufferBuilder;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
 
 public class TileEntityBuilderGuideRenderer extends TileEntityGuideRenderer<TileEntityBuilderGuide> {
@@ -32,68 +37,48 @@ public class TileEntityBuilderGuideRenderer extends TileEntityGuideRenderer<Tile
 	private static final float OMEGA_32 = 0.0351f;
 	private static final float DELTA_32 = 0.7635f;
 
-	public TileEntityBuilderGuideRenderer(GuideModelHolder holder) {
-		super(holder);
+	public TileEntityBuilderGuideRenderer(TileEntityRendererDispatcher dispatcher, GuideModelHolder holder) {
+		super(dispatcher, holder);
 	}
-
-	private static final Vector3f R = new Vector3f(RADIUS - 0.5f, -0.5f, -0.5f);
 
 	@Override
-	public void renderTileEntityFast(TileEntityBuilderGuide te, double x, double y, double z, float partialTicks, int destroyStage, BufferBuilder buffer) {
-		super.renderTileEntityFast(te, x, y, z, partialTicks, destroyStage, buffer);
+	public void render(TileEntityBuilderGuide guide, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer bufferGroup, int combinedLight, int combinedOverlay) {
+		super.render(guide, partialTicks, matrixStack, bufferGroup, combinedLight, combinedOverlay);
 
-		buffer.setTranslation(x + 0.5, y + 0.5, z + 0.5);
-		renderCubes(buffer, (te.getTicks() + partialTicks) / 2);
+		matrixStack.push();
+		matrixStack.translate(0.5, 0.5, 0.5);
+		IVertexBuilder buffer = bufferGroup.getBuffer(RenderType.getCutout());
+		renderCubes(matrixStack, buffer, (guide.getTicks() + partialTicks) / 2);
+		matrixStack.pop();
 	}
 
-	private void renderCubes(BufferBuilder buffer, float time) {
-		final Matrix4f trans = new Matrix4f();
+	private void renderCubes(MatrixStack stack, IVertexBuilder buffer, float time) {
+		stack.push();
+		createTransformation(stack, MathHelper.sin(OMEGA_11 * time + DELTA_11), MathHelper.sin(OMEGA_12 * time + DELTA_12));
+		drawCube(buffer, stack);
+		stack.pop();
 
-		createTransformation(trans, MathHelper.sin(OMEGA_11 * time + DELTA_11), MathHelper.sin(OMEGA_12 * time + DELTA_12));
-		drawCube(buffer, trans);
+		stack.push();
+		createTransformation(stack, MathHelper.sin(OMEGA_21 * time + DELTA_21), MathHelper.sin(OMEGA_22 * time + DELTA_22));
+		drawCube(buffer, stack);
+		stack.pop();
 
-		createTransformation(trans, MathHelper.sin(OMEGA_21 * time + DELTA_21), MathHelper.sin(OMEGA_22 * time + DELTA_22));
-		drawCube(buffer, trans);
-
-		createTransformation(trans, MathHelper.sin(OMEGA_31 * time + DELTA_31), MathHelper.sin(OMEGA_32 * time + DELTA_32));
-		drawCube(buffer, trans);
+		stack.push();
+		createTransformation(stack, MathHelper.sin(OMEGA_31 * time + DELTA_31), MathHelper.sin(OMEGA_32 * time + DELTA_32));
+		drawCube(buffer, stack);
+		stack.pop();
 
 	}
 
-	private void createTransformation(Matrix4f result, float theta, float phi) {
-		result.setIdentity();
-
-		final Matrix4f tmp = new Matrix4f();
-		tmp.rotY(theta * (float)Math.PI * 2);
-		result.mul(tmp);
-
-		tmp.rotZ(phi * (float)Math.PI * 2);
-		result.mul(tmp);
-
-		tmp.set(R);
-		result.mul(tmp);
+	private void createTransformation(MatrixStack result, float theta, float phi) {
+		result.rotate(new Quaternion(Vector3f.YP, theta, false));
+		result.rotate(new Quaternion(Vector3f.ZP, phi, false));
+		result.translate(RADIUS - 0.5f, -0.5f, -0.5f);
 	}
 
-	private void drawCube(BufferBuilder buffer, Matrix4f trans) {
-		final ByteBuffer quads = holder.getBitQuads();
-		while (quads.hasRemaining()) {
-			final float x = quads.getFloat();
-			final float y = quads.getFloat();
-			final float z = quads.getFloat();
-
-			final int color = quads.getInt();
-			final int red = (color >> 16) & 0xFF;
-			final int green = (color >> 8) & 0xFF;
-			final int blue = (color >> 0) & 0xFF;
-
-			final float u = quads.getFloat();
-			final float v = quads.getFloat();
-
-			quads.getInt(); // brightness
-
-			final Vector4f pos = new Vector4f(x, y, z, 1.0f);
-			trans.transform(pos);
-			buffer.pos(pos.x, pos.y, pos.z).color(red, green, blue, 0xFF).tex(u, v).lightmap(0xf0, 0xf0).endVertex();
+	private void drawCube(IVertexBuilder buffer, MatrixStack trans) {
+		for (BakedQuad quad : holder.getBitQuads()) {
+			buffer.addQuad(trans.getLast(), quad, 1.0f, 1.0f, 1.0f, LightTexture.packLight(15, 15), OverlayTexture.NO_OVERLAY);
 		}
 	}
 }

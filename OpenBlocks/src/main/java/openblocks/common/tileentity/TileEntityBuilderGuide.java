@@ -77,7 +77,7 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 				final BlockRayTraceResult fakeHit = new BlockRayTraceResult(hit.getHitVec(), hit.getFace(), absPos, hit.isInside());
 				final ActionResultType placeResult = player.interactionManager.func_219441_a(player, world, heldItem, Hand.MAIN_HAND, fakeHit);
 
-				if (placeResult == ActionResultType.SUCCESS) {
+				if (placeResult.isSuccessOrConsume()) {
 					createServerRpcProxy(IGuideAnimationTrigger.class).trigger(absPos, world.getBlockState(absPos));
 					return true;
 				}

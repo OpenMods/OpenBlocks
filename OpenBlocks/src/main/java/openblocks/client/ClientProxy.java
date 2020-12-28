@@ -1,24 +1,32 @@
 package openblocks.client;
 
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import openblocks.IOpenBlocksProxy;
+import openblocks.OpenBlocks;
 import openblocks.client.renderer.tileentity.guide.GuideModelHolder;
 import openblocks.client.renderer.tileentity.guide.TileEntityBuilderGuideRenderer;
 import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
-import openblocks.common.tileentity.TileEntityBuilderGuide;
-import openblocks.common.tileentity.TileEntityGuide;
 
 public class ClientProxy implements IOpenBlocksProxy {
+	private final GuideModelHolder holder = new GuideModelHolder();
+
+	@Override
+	public void eventInit() {
+		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		eventBus.addListener(holder::onModelBake);
+		eventBus.addListener(holder::onModelRegister);
+	}
+
 	@Override
 	public void clientInit() {
-		final GuideModelHolder holder = new GuideModelHolder();
-		holder.registerModels();
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(holder::onModelBake);
+		ClientRegistry.bindTileEntityRenderer(OpenBlocks.TileEntities.guide, dispatcher -> new TileEntityGuideRenderer<>(dispatcher, holder));
+		ClientRegistry.bindTileEntityRenderer(OpenBlocks.TileEntities.builderGuide, dispatcher -> new TileEntityBuilderGuideRenderer(dispatcher, holder));
 
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer<>(holder));
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBuilderGuide.class, new TileEntityBuilderGuideRenderer(holder));
-
+		RenderTypeLookup.setRenderLayer(OpenBlocks.Blocks.guide, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(OpenBlocks.Blocks.builderGuide, RenderType.getTranslucent());
 	}
 }

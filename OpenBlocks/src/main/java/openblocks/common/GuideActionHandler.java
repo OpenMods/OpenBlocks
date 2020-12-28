@@ -3,7 +3,6 @@ package openblocks.common;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.events.GuideActionEvent;
 

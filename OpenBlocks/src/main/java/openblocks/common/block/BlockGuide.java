@@ -9,21 +9,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.EntitySelectionContext;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.DrawHighlightEvent;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.events.GuideActionEvent;
@@ -56,11 +56,6 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	@Override
-	public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
-		return false;
-	}
-
-	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		if (context instanceof EntitySelectionContext && selection != null) {
 			final VoxelShape voxelShape = VoxelShapes.create(selection);
@@ -75,14 +70,13 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 		return VoxelShapes.fullCube();
 	}
 
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.TRANSLUCENT;
-	}
-
 	@Nullable
-	private Hitbox findClickBox(Vec3d pos) {
-		for (Hitbox h : buttonsHitbox.asList()) { if (h.aabb().contains(pos)) { return h; } }
+	private Hitbox findClickBox(Vector3d pos) {
+		for (Hitbox h : buttonsHitbox.asList()) {
+			if (h.aabb().contains(pos)) {
+				return h;
+			}
+		}
 
 		return null;
 	}
@@ -92,12 +86,12 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	@Override
-	public boolean onSelected(World world, BlockPos pos, DrawBlockHighlightEvent evt) {
+	public boolean onSelected(World world, BlockPos pos, DrawHighlightEvent evt) {
 		if (areButtonsActive(evt.getInfo().getRenderViewEntity())) {
-			final Vec3d hitVec = evt.getTarget().getHitVec();
+			final Vector3d hitVec = evt.getTarget().getHitVec();
 
 			final Orientation orientation = getOrientation(world, pos);
-			final Vec3d localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.x - pos.getX(), hitVec.y - pos.getY(), hitVec.z - pos.getZ());
+			final Vector3d localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.x - pos.getX(), hitVec.y - pos.getY(), hitVec.z - pos.getZ());
 			final Hitbox clickBox = findClickBox(localHit);
 			selection = clickBox != null? BlockSpaceTransform.instance.mapBlockToWorld(orientation, clickBox.aabb()) : null;
 		} else {
@@ -108,31 +102,33 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-		if (hand != Hand.MAIN_HAND) { return false; }
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+		if (hand != Hand.MAIN_HAND) {
+			return ActionResultType.PASS;
+		}
 
 		if (world.isRemote) {
 			if (areButtonsActive(player)) {
 				final Orientation orientation = getOrientation(world, pos);
-				final Vec3d hitVec = hit.getHitVec().subtract(pos.getX(), pos.getY(), pos.getZ());
-				final Vec3d localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.getX(), hitVec.getY(), hitVec.getZ());
+				final Vector3d hitVec = hit.getHitVec().subtract(pos.getX(), pos.getY(), pos.getZ());
+				final Vector3d localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.getX(), hitVec.getY(), hitVec.getZ());
 				final Hitbox clickBox = findClickBox(localHit);
 				if (clickBox != null) {
-					new GuideActionEvent(world.getDimension().getType(), pos, clickBox.name).sendToServer();
+					new GuideActionEvent(world.getDimensionKey(), pos, clickBox.name).sendToServer();
 				}
 			}
-			return true;
+			return ActionResultType.SUCCESS;
 		} else if (player instanceof ServerPlayerEntity) {
 			final ItemStack heldStack = player.getHeldItemMainhand();
 			if (!heldStack.isEmpty()) {
 				final TileEntityGuide guide = getTileEntity(world, pos, TileEntityGuide.class);
 				if (guide.onItemUse((ServerPlayerEntity)player, heldStack, hit)) {
-					return true;
+					return ActionResultType.SUCCESS;
 				}
 			}
 		}
 
-		return true;
+		return ActionResultType.CONSUME;
 	}
 
 	@Override

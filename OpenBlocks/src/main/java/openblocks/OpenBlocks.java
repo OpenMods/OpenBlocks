@@ -34,6 +34,7 @@ import openblocks.common.tileentity.TileEntityBuilderGuide;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.data.OpenBlockRecipes;
 import openblocks.data.OpenBlocksLoot;
+import openblocks.data.OpenBlocksModels;
 import openblocks.events.GuideActionEvent;
 import openblocks.rpc.IGuideAnimationTrigger;
 import openmods.network.event.NetworkEventEntry;
@@ -51,7 +52,7 @@ public class OpenBlocks {
 		return new ResourceLocation(MODID, path);
 	}
 
-	public static IOpenBlocksProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
+	public static IOpenBlocksProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
 	private static final String BLOCK_LADDER = "ladder";
 	private static final String BLOCK_GUIDE = "guide";
@@ -95,7 +96,7 @@ public class OpenBlocks {
 		public static TileEntityType<TileEntityGuide> guide;
 
 		@ObjectHolder(BLOCK_BUILDER_GUIDE)
-		public static TileEntityType<TileEntityGuide> builderGuide;
+		public static TileEntityType<TileEntityBuilderGuide> builderGuide;
 	}
 
 	@ObjectHolder(MODID)
@@ -105,6 +106,10 @@ public class OpenBlocks {
 
 	@ObjectHolder(MODID)
 	public static class Enchantments {
+	}
+
+	public OpenBlocks() {
+		PROXY.eventInit();
 	}
 
 	@SubscribeEvent
@@ -127,8 +132,8 @@ public class OpenBlocks {
 	public static void registerBlocks(final RegistryEvent.Register<Block> evt) {
 		final IForgeRegistry<Block> registry = evt.getRegistry();
 		registry.register(new BlockLadder(Block.Properties.from(net.minecraft.block.Blocks.OAK_TRAPDOOR)).setRegistryName(BLOCK_LADDER));
-		registry.register(new BlockGuide(Block.Properties.create(Material.ROCK).lightValue(10)).setTileEntity(TileEntityGuide.class).setRegistryName(BLOCK_GUIDE));
-		registry.register(new BlockBuilderGuide(Block.Properties.create(Material.ROCK).lightValue(10)).setTileEntity(TileEntityBuilderGuide.class).setRegistryName(BLOCK_BUILDER_GUIDE));
+		registry.register(new BlockGuide(Block.Properties.create(Material.ROCK).notSolid().setLightLevel(v -> 10)).setTileEntity(TileEntityGuide.class).setRegistryName(BLOCK_GUIDE));
+		registry.register(new BlockBuilderGuide(Block.Properties.create(Material.ROCK).notSolid().setLightLevel(v -> 10)).setTileEntity(TileEntityBuilderGuide.class).setRegistryName(BLOCK_BUILDER_GUIDE));
 	}
 
 	@SubscribeEvent
@@ -153,7 +158,7 @@ public class OpenBlocks {
 
 	@SubscribeEvent
 	public static void clientInit(final FMLClientSetupEvent evt) {
-		proxy.clientInit();
+		PROXY.clientInit();
 	}
 
 	@SubscribeEvent
@@ -161,5 +166,6 @@ public class OpenBlocks {
 		final DataGenerator generator = event.getGenerator();
 		generator.addProvider(new OpenBlockRecipes(generator));
 		generator.addProvider(new OpenBlocksLoot(generator));
+		generator.addProvider(new OpenBlocksModels(generator));
 	}
 }
