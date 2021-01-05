@@ -4,16 +4,16 @@ import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.Log;
 import openmods.utils.EnchantmentUtils;
 
 public class FluidXpUtils {
-
 	public static final int XP_PER_BOTTLE = 8;
 
 	public interface IFluidXpConverter {
@@ -86,8 +86,12 @@ public class FluidXpUtils {
 				continue;
 			}
 
-			final String fluidName = fields[0];
-			final Fluid fluid = FluidRegistry.getFluid(fluidName);
+			final ResourceLocation fluidName = ResourceLocation.tryCreate(fields[0]);
+			if (fluidName == null) {
+				Log.warn("Malformed fluid name: %s", fields[0]);
+				continue;
+			}
+			final Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName);
 
 			if (fluid == null) {
 				Log.debug("Fluid not found: %s", fluidName);
@@ -117,8 +121,6 @@ public class FluidXpUtils {
 	}
 
 	public static Optional<IFluidXpConverter> getConverter(FluidStack stack) {
-		if (stack == null) return Optional.empty();
-
 		for (ConversionEntry e : converters) {
 			if (e.matches(stack)) return e.optionalConverter;
 		}
@@ -146,7 +148,7 @@ public class FluidXpUtils {
 		return maybeConverter.map(converter -> {
 			final FluidStack result = input.copy();
 			// display levels instead of actual xp fluid level
-			result.amount = EnchantmentUtils.getLevelForExperience(converter.fluidToXp(input.amount));
+			result.setAmount(EnchantmentUtils.getLevelForExperience(converter.fluidToXp(input.getAmount())));
 			return result;
 		}).orElse(null);
 	};

@@ -4,17 +4,22 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -29,14 +34,18 @@ import openblocks.common.ServerProxy;
 import openblocks.common.block.BlockBuilderGuide;
 import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockLadder;
+import openblocks.common.block.BlockVacuumHopper;
+import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.item.ItemGuide;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
 import openblocks.common.tileentity.TileEntityGuide;
+import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openblocks.data.OpenBlockRecipes;
 import openblocks.data.OpenBlocksLoot;
 import openblocks.data.OpenBlocksModels;
 import openblocks.events.GuideActionEvent;
 import openblocks.rpc.IGuideAnimationTrigger;
+import openmods.container.TileEntityContainerFactory;
 import openmods.network.event.NetworkEventEntry;
 import openmods.network.event.NetworkEventManager;
 import openmods.network.rpc.MethodEntry;
@@ -57,6 +66,8 @@ public class OpenBlocks {
 	private static final String BLOCK_LADDER = "ladder";
 	private static final String BLOCK_GUIDE = "guide";
 	private static final String BLOCK_BUILDER_GUIDE = "builder_guide";
+	private static final String BLOCK_VACUUM_HOPPER = "vacuum_hopper";
+	private static final String FLUID_XP = "xpjuice";
 
 	public static final ItemGroup OPEN_BLOCKS_TAB = new ItemGroup("openblocks") {
 		@Override
@@ -76,6 +87,9 @@ public class OpenBlocks {
 
 		@ObjectHolder(BLOCK_BUILDER_GUIDE)
 		public static Block builderGuide;
+
+		@ObjectHolder(BLOCK_VACUUM_HOPPER)
+		public static Block vacuumHopper;
 	}
 
 	@ObjectHolder(MODID)
@@ -88,6 +102,9 @@ public class OpenBlocks {
 
 		@ObjectHolder(BLOCK_BUILDER_GUIDE)
 		public static Item builderGuide;
+
+		@ObjectHolder(BLOCK_VACUUM_HOPPER)
+		public static Item vacuumHopper;
 	}
 
 	@ObjectHolder(MODID)
@@ -97,6 +114,9 @@ public class OpenBlocks {
 
 		@ObjectHolder(BLOCK_BUILDER_GUIDE)
 		public static TileEntityType<TileEntityBuilderGuide> builderGuide;
+
+		@ObjectHolder(BLOCK_VACUUM_HOPPER)
+		public static TileEntityType<TileEntityVacuumHopper> vacuumHopper;
 	}
 
 	@ObjectHolder(MODID)
@@ -108,8 +128,25 @@ public class OpenBlocks {
 	public static class Enchantments {
 	}
 
+	@ObjectHolder(MODID)
+	public static class Fluids {
+		@ObjectHolder(FLUID_XP)
+		public static Fluid xpJuice;
+	}
+
+	@ObjectHolder(MODID)
+	public static class Containers {
+		@ObjectHolder(BLOCK_VACUUM_HOPPER)
+		public static ContainerType<ContainerVacuumHopper> vacuumHopper;
+	}
+
 	public OpenBlocks() {
 		PROXY.eventInit();
+	}
+
+	@SubscribeEvent
+	public void registerRegistry(RegistryEvent.NewRegistry e) {
+		PROXY.syncInit();
 	}
 
 	@SubscribeEvent
@@ -134,6 +171,7 @@ public class OpenBlocks {
 		registry.register(new BlockLadder(Block.Properties.from(net.minecraft.block.Blocks.OAK_TRAPDOOR)).setRegistryName(BLOCK_LADDER));
 		registry.register(new BlockGuide(Block.Properties.create(Material.ROCK).notSolid().setLightLevel(v -> 10)).setTileEntity(TileEntityGuide.class).setRegistryName(BLOCK_GUIDE));
 		registry.register(new BlockBuilderGuide(Block.Properties.create(Material.ROCK).notSolid().setLightLevel(v -> 10)).setTileEntity(TileEntityBuilderGuide.class).setRegistryName(BLOCK_BUILDER_GUIDE));
+		registry.register(new BlockVacuumHopper(Block.Properties.create(Material.ROCK)).setTileEntity(TileEntityVacuumHopper.class).setRegistryName(BLOCK_VACUUM_HOPPER));
 	}
 
 	@SubscribeEvent
@@ -142,6 +180,7 @@ public class OpenBlocks {
 		registry.register(new BlockItem(Blocks.ladder, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_LADDER));
 		registry.register(new ItemGuide(Blocks.guide, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_GUIDE));
 		registry.register(new ItemGuide(Blocks.builderGuide, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_BUILDER_GUIDE));
+		registry.register(new BlockItem(Blocks.vacuumHopper, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_VACUUM_HOPPER));
 	}
 
 	@SubscribeEvent
@@ -149,6 +188,28 @@ public class OpenBlocks {
 		final IForgeRegistry<TileEntityType<?>> registry = evt.getRegistry();
 		registry.register(new TileEntityType<>(TileEntityGuide::new, ImmutableSet.of(Blocks.guide), null).setRegistryName(BLOCK_GUIDE));
 		registry.register(new TileEntityType<>(TileEntityBuilderGuide::new, ImmutableSet.of(Blocks.builderGuide), null).setRegistryName(BLOCK_BUILDER_GUIDE));
+		registry.register(new TileEntityType<>(TileEntityVacuumHopper::new, ImmutableSet.of(Blocks.vacuumHopper), null).setRegistryName(BLOCK_VACUUM_HOPPER));
+	}
+
+	@SubscribeEvent
+	public static void registerFluids(final RegistryEvent.Register<Fluid> evt) {
+		final IForgeRegistry<Fluid> registry = evt.getRegistry();
+		registry.register(new ForgeFlowingFluid.Source(
+				new ForgeFlowingFluid.Properties(() -> Fluids.xpJuice, () -> Fluids.xpJuice,
+						FluidAttributes.builder(location("block/xp_juice_still"), location("block/xp_juice_flowing"))
+								.luminosity(10)
+								.density(800)
+								.viscosity(1500)
+								.translationKey("fluid.openblocks.xp_juice")
+								.sound(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP)
+				)
+		).setRegistryName(FLUID_XP));
+	}
+
+	@SubscribeEvent
+	public static void registerContainers(final RegistryEvent.Register<ContainerType<?>> evt) {
+		final IForgeRegistry<ContainerType<?>> registry = evt.getRegistry();
+		registry.register(new ContainerType<>(new TileEntityContainerFactory<>(ContainerVacuumHopper::new, TileEntities.vacuumHopper)).setRegistryName(BLOCK_VACUUM_HOPPER));
 	}
 
 	@SubscribeEvent

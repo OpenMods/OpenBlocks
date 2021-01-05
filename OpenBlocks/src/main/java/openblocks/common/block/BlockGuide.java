@@ -39,12 +39,7 @@ import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation(hasVideo = true)
-public class BlockGuide extends OpenBlock implements ISelectionAware {
-
-	@Override
-	public IBlockRotationMode getRotationMode() {
-		return BlockRotationMode.THREE_FOUR_DIRECTIONS;
-	}
+public class BlockGuide extends OpenBlock.Orientable implements ISelectionAware {
 
 	private AxisAlignedBB selection;
 
@@ -53,6 +48,11 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	public BlockGuide(final Block.Properties properties) {
 		super(properties);
 		setPlacementMode(BlockPlacementMode.SURFACE);
+	}
+
+	@Override
+	public IBlockRotationMode getRotationMode() {
+		return BlockRotationMode.THREE_FOUR_DIRECTIONS;
 	}
 
 	@Override

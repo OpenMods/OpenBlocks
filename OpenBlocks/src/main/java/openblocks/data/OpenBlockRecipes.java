@@ -47,5 +47,13 @@ public class OpenBlockRecipes extends RecipeProvider {
 				.key('g', Tags.Items.GLASS)
 				.addCriterion("has_redstone", hasItem(Tags.Items.DUSTS_REDSTONE))
 				.build(consumer);
+
+		shapelessRecipe(OpenBlocks.Blocks.vacuumHopper)
+				.addIngredient(Blocks.HOPPER)
+				.addIngredient(Blocks.OBSIDIAN)
+				.addIngredient(Items.ENDER_EYE)
+				.addCriterion("has_hopper", hasItem(Blocks.HOPPER))
+				.build(consumer);
+		;
 	}
 }

@@ -59,6 +59,7 @@ public class OpenBlocksModels implements IDataProvider {
 		public void func_239863_a_() {
 			makeGuide(OpenBlocks.Blocks.guide, OpenBlocks.location("block/guide_center_normal"));
 			makeGuide(OpenBlocks.Blocks.builderGuide, OpenBlocks.location("block/guide_center_ender"));
+			makeVacuumHopper();
 		}
 
 		private void makeGuide(Block block, final ResourceLocation center) {
@@ -93,6 +94,17 @@ public class OpenBlocksModels implements IDataProvider {
 					.func_240143_a_(Orientation.XN_ZN, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, sideModel).replaceInfoValue(BlockModelFields.field_240201_b_, BlockModelFields.Rotation.R90).replaceInfoValue(BlockModelFields.field_240200_a_, BlockModelFields.Rotation.R180))
 					.func_240143_a_(Orientation.YP_ZN, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, sideModel).replaceInfoValue(BlockModelFields.field_240201_b_, BlockModelFields.Rotation.R90).replaceInfoValue(BlockModelFields.field_240200_a_, BlockModelFields.Rotation.R270))
 					.func_240143_a_(Orientation.YN_ZN, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, sideModel).replaceInfoValue(BlockModelFields.field_240201_b_, BlockModelFields.Rotation.R90).replaceInfoValue(BlockModelFields.field_240200_a_, BlockModelFields.Rotation.R90));
+		}
+
+		private static BlockStateVariantBuilder.One<Orientation> createNoOrientationDispatch(ResourceLocation model) {
+			return BlockStateVariantBuilder
+					.func_240133_a_(BlockRotationMode.NONE.getProperty())
+					.func_240143_a_(Orientation.XP_YP, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, model));
+		}
+
+		private void makeVacuumHopper() {
+			blockStateOutput.accept(FinishedVariantBlockState.func_240120_a_(OpenBlocks.Blocks.vacuumHopper, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, ModelsResourceUtil.func_240221_a_(OpenBlocks.Blocks.vacuumHopper))));
+			modelOutput.accept(ModelsResourceUtil.func_240219_a_(OpenBlocks.Blocks.vacuumHopper.asItem()), new BlockModelWriter(ModelsResourceUtil.func_240222_a_(OpenBlocks.Blocks.vacuumHopper, "_body")));
 		}
 	}
 

@@ -30,7 +30,6 @@ import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openblocks.rpc.IRotatable;
 import openmods.OpenMods;
-import openmods.api.IHasGui;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
 import openmods.inventory.GenericInventory;

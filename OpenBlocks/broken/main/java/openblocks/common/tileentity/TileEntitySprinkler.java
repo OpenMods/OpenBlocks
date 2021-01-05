@@ -25,7 +25,6 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.container.ContainerSprinkler;
-import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.fakeplayer.FakePlayerPool;

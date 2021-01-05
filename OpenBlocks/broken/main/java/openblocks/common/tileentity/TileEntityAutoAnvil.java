@@ -20,7 +20,6 @@ import openblocks.common.FluidXpUtils;
 import openblocks.common.FluidXpUtils.IFluidXpConverter;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
-import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IValueProvider;
 import openmods.api.IValueReceiver;

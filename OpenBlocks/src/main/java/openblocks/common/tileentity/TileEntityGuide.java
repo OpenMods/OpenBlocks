@@ -85,8 +85,8 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 			final BlockPos pos = te.getPos();
 			final BlockState state = te.getBlockState();
 			final Block block = state.getBlock();
-			if (block instanceof OpenBlock) {
-				final Property<Orientation> orientationProperty = ((OpenBlock)block).propertyOrientation;
+			if (block instanceof OpenBlock.Orientable) {
+				final Property<Orientation> orientationProperty = ((OpenBlock.Orientable)block).getOrientationProperty();
 				final Orientation orientation = state.get(orientationProperty);
 				final Orientation newOrientation = orientation.rotateAround(ha);
 				world.setBlockState(pos, state.with(orientationProperty, newOrientation));

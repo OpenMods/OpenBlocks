@@ -5,41 +5,54 @@ import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.client.model.ModelDataManager;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import openblocks.OpenBlocks;
-import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.common.FluidXpUtils;
 import openblocks.common.container.ContainerVacuumHopper;
-import openblocks.common.entity.EntityItemProjectile;
-import openmods.OpenMods;
 import openmods.api.IActivateAwareTile;
-import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IValueProvider;
-import openmods.fixers.GenericInventoryTeFixerWalker;
-import openmods.fixers.RegisterFixer;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.ISidedInventoryDelegate;
 import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
 import openmods.liquids.SidedFluidCapabilityWrapper;
+import openmods.model.variant.VariantModelState;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
@@ -57,8 +70,8 @@ import openmods.utils.bitmap.IReadableBitMap;
 import openmods.utils.bitmap.IRpcDirectionBitMap;
 import openmods.utils.bitmap.IWriteableBitMap;
 
-@RegisterFixer(GenericInventoryTeFixerWalker.class)
-public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedInventoryDelegate, IActivateAwareTile, IHasGui, INeighbourAwareTile, ITickable {
+public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedInventoryDelegate, IActivateAwareTile, INeighbourAwareTile, ITickableTileEntity, INamedContainerProvider {
+	private static final ITextComponent CONTAINER_NAME = new TranslationTextComponent("openblocks.gui.vacuumhopper");
 
 	public static final int TANK_CAPACITY = FluidXpUtils.xpJuiceConverter.xpToFluid(EnchantmentUtils.getExperienceForLevel(5));
 
@@ -73,7 +86,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 
 	private boolean needsTankUpdate;
 
-	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "vacuumhopper", true, 10));
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, 10));
 
 	private final SidedInventoryAdapter sided = new SidedInventoryAdapter(inventory);
 
@@ -92,6 +105,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 	}
 
 	public TileEntityVacuumHopper() {
+		super(OpenBlocks.TileEntities.vacuumHopper);
 		sided.registerAllSlots(itemOutputs, false, true);
 
 		itemHandlerCapability.registerAllSlots(itemOutputs, false, true);
@@ -106,24 +120,25 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 			public void onSync(Set<ISyncableObject> changes) {
 				if (changes.contains(xpOutputs) || changes.contains(itemOutputs)) {
 					updateOutputStates();
-					world.markBlockRangeForRenderUpdate(pos, pos);
+					ModelDataManager.requestModelDataRefresh(TileEntityVacuumHopper.this);
+					world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.RERENDER_MAIN_THREAD);
 				}
 			}
 
 			private void updateOutputStates() {
 				ImmutableMap.Builder<String, String> newOutputState = ImmutableMap.builder();
-				for (Direction side : Direction.VALUES) {
+				for (Direction side : Direction.values()) {
 					final boolean outputItems = itemOutputs.get(side);
 					final boolean outputXp = xpOutputs.get(side);
 
 					if (outputItems) {
 						if (outputXp) {
-							newOutputState.put(side.getName(), OUTPUT_BOTH);
+							newOutputState.put(side.getString(), OUTPUT_BOTH);
 						} else {
-							newOutputState.put(side.getName(), OUTPUT_ITEMS);
+							newOutputState.put(side.getString(), OUTPUT_ITEMS);
 						}
 					} else if (outputXp) {
-						newOutputState.put(side.getName(), OUTPUT_FLUIDS);
+						newOutputState.put(side.getString(), OUTPUT_FLUIDS);
 					}
 				}
 
@@ -153,27 +168,34 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 	}
 
 	private final Predicate<Entity> entitySelector = entity -> {
-		if (entity.isDead) return false;
+		if (!entity.isAlive()) {
+			return false;
+		}
 
-		if (entity instanceof EntityItemProjectile) return entity.motionY < 0.01;
+		if (entity instanceof ProjectileEntity) {
+			return entity.getMotion().y < 0.01;
+		}
 
 		if (entity instanceof ItemEntity) {
 			ItemStack stack = ((ItemEntity)entity).getItem();
 			return InventoryUtils.canInsertStack(inventory.getHandler(), stack);
 		}
 
-		if (entity instanceof ExperienceOrbEntity) return tank.getSpace() > 0;
+		if (entity instanceof ExperienceOrbEntity) {
+			return tank.getSpace() > 0;
+		}
 
 		return false;
 	};
 
 	@Override
-	public void update() {
-
-		if (vacuumDisabled.get()) return;
+	public void tick() {
+		if (vacuumDisabled.get()) {
+			return;
+		}
 
 		if (world.isRemote) {
-			spawnParticle(EnumParticleTypes.PORTAL, world.rand.nextDouble() - 0.5, world.rand.nextDouble() - 1.0, world.rand.nextDouble() - 0.5);
+			spawnParticle(ParticleTypes.PORTAL, world.rand.nextDouble() - 0.5, world.rand.nextDouble() - 1.0, world.rand.nextDouble() - 0.5);
 		}
 
 		List<Entity> interestingItems = world.getEntitiesWithinAABB(Entity.class, getBB().grow(3), entitySelector);
@@ -181,21 +203,24 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 		boolean needsSync = false;
 
 		for (Entity entity : interestingItems) {
-			double dx = (pos.getX() + 0.5D - entity.posX);
-			double dy = (pos.getY() + 0.5D - entity.posY);
-			double dz = (pos.getZ() + 0.5D - entity.posZ);
+			double dx = (pos.getX() + 0.5D - entity.getPosX());
+			double dy = (pos.getY() + 0.5D - entity.getPosY());
+			double dz = (pos.getZ() + 0.5D - entity.getPosZ());
 
 			double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 			if (distance < 1.1) {
 				needsSync |= onEntityCollidedWithBlock(entity);
 			} else {
-				double var11 = 1.0 - distance / 15.0;
+				double pull = 1.0 - distance / 15.0;
 
-				if (var11 > 0.0D) {
-					var11 *= var11;
-					entity.motionX += dx / distance * var11 * 0.05;
-					entity.motionY += dy / distance * var11 * 0.2;
-					entity.motionZ += dz / distance * var11 * 0.05;
+				if (pull > 0) {
+					pull *= pull;
+					Vector3d motion = entity.getMotion();
+					entity.setMotion(
+							motion.x + dx / distance * pull * 0.05,
+							motion.y + dy / distance * pull * 0.2,
+							motion.z + dz / distance * pull * 0.05
+					);
 				}
 			}
 
@@ -203,12 +228,14 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 
 		if (!world.isRemote) {
 			needsSync |= outputToNeighbors();
-			if (needsSync) sync();
+			if (needsSync) {
+				sync();
+			}
 		}
 	}
 
 	private boolean outputToNeighbors() {
-		if (OpenMods.proxy.getTicks(world) % 10 == 0) {
+		if (world.getGameTime() % 10 == 0) {
 			if (needsTankUpdate) {
 				tank.updateNeighbours(world, pos);
 				needsTankUpdate = false;
@@ -224,44 +251,33 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 
 	private void autoInventoryOutput() {
 		final boolean outputSides = itemOutputs.getValue().isEmpty();
-		if (outputSides) return;
+		if (outputSides) {
+			return;
+		}
 		final ItemMover mover = new ItemMover(world, pos).breakAfterFirstTry().randomizeSides().setSides(itemOutputs.getValue());
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (!inventory.getStackInSlot(i).isEmpty()) {
-				if (mover.pushFromSlot(inventory.getHandler(), i) > 0) break;
+				if (mover.pushFromSlot(inventory.getHandler(), i) > 0) {
+					break;
+				}
 			}
 		}
 	}
 
 	@Override
-	public Object getServerGui(PlayerEntity player) {
-		return new ContainerVacuumHopper(player.inventory, this);
-	}
-
-	@Override
-	public Object getClientGui(PlayerEntity player) {
-		return new GuiVacuumHopper(new ContainerVacuumHopper(player.inventory, this));
-	}
-
-	@Override
-	public boolean canOpenGui(PlayerEntity player) {
-		return true;
-	}
-
-	@Override
-	public boolean onBlockActivated(PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+	public ActionResultType onBlockActivated(PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		if (!world.isRemote && hand == Hand.MAIN_HAND && player.isSneaking()) {
 			if (player.getHeldItemMainhand().isEmpty()) {
 				vacuumDisabled.toggle();
-				return true;
+				return ActionResultType.SUCCESS;
 			}
 		}
-		return false;
+		return ActionResultType.PASS;
 	}
 
 	public boolean onEntityCollidedWithBlock(Entity entity) {
 		if (!world.isRemote) {
-			if (entity instanceof ItemEntity && !entity.isDead) {
+			if (entity instanceof ItemEntity && entity.isAlive()) {
 				final ItemEntity item = (ItemEntity)entity;
 				final ItemStack toConsume = item.getItem().copy();
 				final ItemStack leftover = ItemHandlerHelper.insertItem(inventory.getHandler(), toConsume, false);
@@ -272,8 +288,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 					ExperienceOrbEntity orb = (ExperienceOrbEntity)entity;
 					int xpAmount = FluidXpUtils.xpJuiceConverter.xpToFluid(orb.getXpValue());
 					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
-					tank.fill(newFluid, true);
-					entity.setDead();
+					tank.fill(newFluid, IFluidHandler.FluidAction.EXECUTE);
+					entity.remove(false);
 					return true;
 				}
 			}
@@ -288,15 +304,15 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT tag) {
-		tag = super.writeToNBT(tag);
+	public CompoundNBT write(CompoundNBT tag) {
+		tag = super.write(tag);
 		inventory.writeToNBT(tag);
 		return tag;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT tag) {
-		super.readFromNBT(tag);
+	public void read(final BlockState blockState, CompoundNBT tag) {
+		super.read(blockState, tag);
 		inventory.readFromNBT(tag);
 	}
 
@@ -316,26 +332,33 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, Direction facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-			return itemHandlerCapability.hasHandler(facing);
-
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-			return tankCapability.hasHandler(facing);
-
-		return super.hasCapability(capability, facing);
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, Direction facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-			return (T)tankCapability.getHandler(facing);
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return LazyOptional.of(() -> tankCapability.getHandler(facing)).cast();
+		}
 
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-			return (T)itemHandlerCapability.getHandler(facing);
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return LazyOptional.of(() -> itemHandlerCapability.getHandler(facing)).cast();
+		}
 
 		return super.getCapability(capability, facing);
 	}
 
+	@Nonnull
+	@Override
+	public IModelData getModelData() {
+		return new ModelDataMap.Builder().withInitial(VariantModelState.PROPERTY, VariantModelState.create(getOutputState())).build();
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+		return CONTAINER_NAME;
+	}
+
+	@Nullable
+	@Override
+	public Container createMenu(int windowId, PlayerInventory player, PlayerEntity entity) {
+		return new ContainerVacuumHopper(player, windowId, this);
+	}
 }

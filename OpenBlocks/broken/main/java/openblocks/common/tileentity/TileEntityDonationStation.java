@@ -12,7 +12,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.client.gui.GuiDonationStation;
 import openblocks.common.DonationUrlManager;
 import openblocks.common.container.ContainerDonationStation;
-import openmods.api.IHasGui;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
 import openmods.inventory.GenericInventory;

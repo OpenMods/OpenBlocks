@@ -25,7 +25,6 @@ import openblocks.common.FluidXpUtils.IFluidXpConverter;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openblocks.rpc.ILevelChanger;
-import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IValueProvider;
 import openmods.api.IValueReceiver;

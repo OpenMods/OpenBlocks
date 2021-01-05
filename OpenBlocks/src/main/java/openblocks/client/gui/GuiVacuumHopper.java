@@ -2,9 +2,11 @@ package openblocks.client.gui;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openmods.gui.SyncedGuiContainer;
@@ -20,8 +22,8 @@ import openmods.utils.bitmap.IReadableBitMap;
 import openmods.utils.bitmap.IWriteableBitMap;
 
 public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
-	public GuiVacuumHopper(ContainerVacuumHopper container) {
-		super(container, 176, 151, "openblocks.gui.vacuumhopper");
+	public GuiVacuumHopper(ContainerVacuumHopper container, PlayerInventory player, ITextComponent name) {
+		super(container, player, name, 176, 151);
 	}
 
 	@Override
@@ -37,8 +39,8 @@ public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
 
 		final BlockState state = te.getWorld().getBlockState(te.getPos());
 		{
-			GuiComponentTab itemTab = new GuiComponentTab(StandardPalette.lightblue.getColor(), new ItemStack(Blocks.CHEST), 100, 100);
-			final GuiComponentSideSelector sideSelector = new GuiComponentSideSelector(15, 15, 40.0, state, te, false);
+			GuiComponentTab itemTab = new GuiComponentTab(StandardPalette.LIGHT_BLUE.color, new ItemStack(Blocks.CHEST), 100, 100);
+			final GuiComponentSideSelector sideSelector = new GuiComponentSideSelector(15, 15, 40.0f, state, te, false);
 			wireSideSelector(sideSelector, te.getReadableItemOutputs(), te.getWriteableItemOutputs());
 
 			itemTab.addComponent(new GuiComponentLabel(24, 10, TranslationUtils.translateToLocal("openblocks.gui.item_outputs")));
@@ -47,8 +49,8 @@ public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
 		}
 
 		{
-			GuiComponentTab xpTab = new GuiComponentTab(StandardPalette.blue.getColor(), new ItemStack(Items.EXPERIENCE_BOTTLE, 1), 100, 100);
-			GuiComponentSideSelector sideSelector = new GuiComponentSideSelector(15, 15, 40.0, state, te, false);
+			GuiComponentTab xpTab = new GuiComponentTab(StandardPalette.BLUE.color, new ItemStack(Items.EXPERIENCE_BOTTLE, 1), 100, 100);
+			GuiComponentSideSelector sideSelector = new GuiComponentSideSelector(15, 15, 40.0f, state, te, false);
 			wireSideSelector(sideSelector, te.getReadableXpOutputs(), te.getWriteableXpOutputs());
 			xpTab.addComponent(sideSelector);
 			xpTab.addComponent(new GuiComponentLabel(24, 10, TranslationUtils.translateToLocal("openblocks.gui.xp_outputs")));

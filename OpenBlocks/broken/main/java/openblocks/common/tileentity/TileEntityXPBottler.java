@@ -22,7 +22,6 @@ import openblocks.common.FluidXpUtils;
 import openblocks.common.FluidXpUtils.IFluidXpConverter;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
-import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.INeighbourTeAwareTile;
 import openmods.api.IValueProvider;

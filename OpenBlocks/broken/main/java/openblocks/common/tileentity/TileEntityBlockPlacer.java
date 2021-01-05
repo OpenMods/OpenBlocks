@@ -18,7 +18,6 @@ import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.block.BlockBlockManpulatorBase;
 import openblocks.common.block.BlockBlockPlacer;
 import openblocks.common.container.ContainerBlockPlacer;
-import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.UseItemAction;

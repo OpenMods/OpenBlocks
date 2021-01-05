@@ -22,7 +22,6 @@ import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.item.ItemPaintCan;
 import openblocks.rpc.IColorChanger;
 import openmods.OpenMods;
-import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.api.IValueProvider;
 import openmods.colors.CYMK;

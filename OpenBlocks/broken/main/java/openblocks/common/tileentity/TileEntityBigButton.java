@@ -9,7 +9,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.container.ContainerBigButton;
-import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;

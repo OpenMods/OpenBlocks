@@ -1,6 +1,12 @@
 package openblocks;
 
 public interface IOpenBlocksProxy {
-	void eventInit();
-	void clientInit();
+	default void eventInit() {
+	}
+
+	default void clientInit() {
+	}
+
+	default void syncInit() {
+	}
 }

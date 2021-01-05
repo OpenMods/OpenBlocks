@@ -43,6 +43,7 @@ public class OpenBlocksLoot extends LootTableProvider {
 		@Override
 		public void addTables() {
 			registerDropSelfLootTable(OpenBlocks.Blocks.ladder);
+			registerDropSelfLootTable(OpenBlocks.Blocks.vacuumHopper);
 			registerLootTable(OpenBlocks.Blocks.guide, BlockLootProvider::createGuideDrops);
 			registerLootTable(OpenBlocks.Blocks.builderGuide, BlockLootProvider::createGuideDrops);
 		}

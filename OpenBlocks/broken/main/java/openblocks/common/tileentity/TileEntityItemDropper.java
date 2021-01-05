@@ -17,7 +17,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.container.ContainerItemDropper;
 import openblocks.rpc.IItemDropper;
-import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.DropItemAction;
 import openmods.fakeplayer.FakePlayerPool;

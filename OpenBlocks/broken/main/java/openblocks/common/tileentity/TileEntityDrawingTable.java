@@ -16,7 +16,6 @@ import openblocks.common.item.ItemGlyph;
 import openblocks.common.item.ItemStencil;
 import openblocks.rpc.IStencilCrafter;
 import openmods.api.ICustomBreakDrops;
-import openmods.api.IHasGui;
 import openmods.api.IValueProvider;
 import openmods.fixers.GenericInventoryTeFixerWalker;
 import openmods.fixers.RegisterFixer;
