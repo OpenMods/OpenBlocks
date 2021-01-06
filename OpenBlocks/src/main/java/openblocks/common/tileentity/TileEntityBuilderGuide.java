@@ -19,7 +19,6 @@ import openblocks.rpc.IGuideAnimationTrigger;
 import openmods.utils.render.GeometryUtils;
 
 public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAnimationTrigger {
-
 	private static final Random RANDOM = new Random();
 
 	public TileEntityBuilderGuide() {

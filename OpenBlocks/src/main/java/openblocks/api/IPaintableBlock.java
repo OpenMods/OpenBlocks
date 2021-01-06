@@ -1,14 +1,11 @@
 package openblocks.api;
 
+import net.minecraft.item.DyeColor;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+// TODO 1.16 Is Forge even going to reimplement that?
 public interface IPaintableBlock {
-
-	/**
-	 * 24-bit counterpart of Block.recolorBlock
-	 */
-	boolean recolorBlock(World world, BlockPos pos, Direction side, int colour);
-
+	boolean recolorBlock(World world, BlockPos pos, Direction side, DyeColor colour);
 }

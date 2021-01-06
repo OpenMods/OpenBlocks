@@ -6,7 +6,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface IElevatorBlock {
-
 	enum PlayerRotation {
 		NONE, NORTH, SOUTH, EAST, WEST
 	}

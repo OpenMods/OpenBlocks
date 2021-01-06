@@ -1,6 +1,8 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
+@FieldsAreNonnullByDefault
 package openblocks.common.block;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import mcp.MethodsReturnNonnullByDefault;
+import openmods.utils.FieldsAreNonnullByDefault;

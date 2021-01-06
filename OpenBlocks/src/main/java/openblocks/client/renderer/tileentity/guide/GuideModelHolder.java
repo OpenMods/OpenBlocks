@@ -4,12 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -25,13 +21,11 @@ public class GuideModelHolder {
 	private List<BakedQuad> bitQuads;
 
 	public void onModelBake(ModelBakeEvent evt) {
-		Function<ResourceLocation, TextureAtlasSprite> textureMapBlocks = Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-
-		markerQuads = getModel(evt, MARKER_MODEL_LOCATION, textureMapBlocks);
-		bitQuads = getModel(evt, BIT_MODEL_LOCATION, textureMapBlocks);
+		markerQuads = getModel(evt, MARKER_MODEL_LOCATION);
+		bitQuads = getModel(evt, BIT_MODEL_LOCATION);
 	}
 
-	private static List<BakedQuad> getModel(ModelBakeEvent evt, ResourceLocation id, Function<ResourceLocation, TextureAtlasSprite> textureMapBlocks) {
+	private static List<BakedQuad> getModel(ModelBakeEvent evt, ResourceLocation id) {
 		IBakedModel marker = evt.getModelRegistry().get(id);
 		if (marker == null) {
 			marker = evt.getModelManager().getMissingModel();

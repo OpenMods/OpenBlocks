@@ -1,5 +1,6 @@
 package openblocks.api;
 
+import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
@@ -17,6 +18,7 @@ public class ElevatorCheckEvent extends BlockEvent {
 
 	private final PlayerEntity player;
 
+	@Nullable
 	private DyeColor color;
 
 	private IElevatorBlock.PlayerRotation rotation = PlayerRotation.NONE;
@@ -25,6 +27,7 @@ public class ElevatorCheckEvent extends BlockEvent {
 		return player;
 	}
 
+	@Nullable
 	public DyeColor getColor() {
 		return color;
 	}

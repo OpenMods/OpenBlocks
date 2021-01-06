@@ -1,6 +1,6 @@
 package openblocks.common;
 
-import com.google.common.base.Preconditions;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,12 +10,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.api.ElevatorCheckEvent;
@@ -26,32 +23,39 @@ import openmods.movement.PlayerMovementEvent;
 import openmods.utils.EnchantmentUtils;
 
 public class ElevatorActionHandler {
-
-	private static class SearchResult extends BlockPos {
+	private static class SearchResult {
+		private final BlockPos pos;
 		public final PlayerRotation rotation;
 
-		public SearchResult(Vec3i other, PlayerRotation rotation) {
-			super(other);
+		public SearchResult(BlockPos pos, PlayerRotation rotation) {
+			this.pos = pos.toImmutable();
 			this.rotation = rotation;
 		}
 	}
 
 	private static boolean canTeleportPlayer(World world, BlockPos pos) {
-		if (world.isAirBlock(pos)) return true;
+		if (world.isAirBlock(pos)) {
+			return true;
+		}
 
-		if (!Config.irregularBlocksArePassable) return false;
+		if (!Config.irregularBlocksArePassable) {
+			return false;
+		}
 		final BlockState blockState = world.getBlockState(pos);
-		final AxisAlignedBB aabb = blockState.getCollisionBoundingBox(world, pos);
-		return aabb == null || aabb.getAverageEdgeLength() < 0.7;
+		final VoxelShape shape = blockState.getCollisionShape(world, pos);
+		return shape.getBoundingBox().getAverageEdgeLength() < 0.7;
 	}
 
 	private static boolean canTeleportPlayer(PlayerEntity entity, World world, BlockPos pos) {
-		final AxisAlignedBB aabb = entity.getEntityBoundingBox();
+		final AxisAlignedBB aabb = entity.getBoundingBox();
 		double height = Math.abs(aabb.maxY - aabb.minY);
 		int blockHeight = Math.max(1, MathHelper.ceil(height));
 
-		for (int dy = 0; dy < blockHeight; dy++)
-			if (!canTeleportPlayer(world, pos.up(dy))) return false;
+		for (int dy = 0; dy < blockHeight; dy++) {
+			if (!canTeleportPlayer(world, pos.up(dy))) {
+				return false;
+			}
+		}
 
 		return true;
 	}
@@ -73,16 +77,18 @@ public class ElevatorActionHandler {
 		return evt;
 	}
 
-	private static SearchResult findLevel(PlayerEntity player, World world, DyeColor thisColor, BlockPos pos, Direction searchDirection) {
-		Preconditions.checkArgument(searchDirection == Direction.UP
-				|| searchDirection == Direction.DOWN, "Must be either up or down... for now");
-
+	@Nullable
+	private static SearchResult findLevel(PlayerEntity player, World world, DyeColor thisColor, BlockPos pos, Direction.AxisDirection searchDirection) {
 		int blocksInTheWay = 0;
-		BlockPos searchPos = pos;
+		final BlockPos.Mutable searchPos = pos.toMutable();
 		for (int i = 0; i < Config.elevatorTravelDistance; i++) {
-			searchPos = searchPos.offset(searchDirection);
-			if (!world.isBlockLoaded(searchPos)) break;
-			if (world.isAirBlock(searchPos)) continue;
+			searchPos.move(0, searchDirection.getOffset(), 0);
+			if (!world.isBlockLoaded(searchPos)) {
+				break;
+			}
+			if (world.isAirBlock(searchPos)) {
+				continue;
+			}
 
 			final BlockState blockState = world.getBlockState(searchPos);
 			final ElevatorCheckEvent elevatorCheckResult = checkIsElevator(player, world, searchPos, blockState);
@@ -96,7 +102,7 @@ public class ElevatorActionHandler {
 			}
 
 			if (!Config.elevatorIgnoreBlocks) {
-				ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(blockState);
+				ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(world, searchPos, blockState);
 				switch (action) {
 					case ABORT:
 						return null;
@@ -107,22 +113,29 @@ public class ElevatorActionHandler {
 						break;
 				}
 
-				if (++blocksInTheWay > Config.elevatorMaxBlockPassCount) break;
+				if (++blocksInTheWay > Config.elevatorMaxBlockPassCount) {
+					break;
+				}
 			}
 		}
 
 		return null;
 	}
 
-	private static void activate(PlayerEntity player, World world, DyeColor color, BlockPos pos, Direction dir) {
+	private static void activate(PlayerEntity player, World world, DyeColor color, BlockPos pos, Direction.AxisDirection dir) {
 		SearchResult result = findLevel(player, world, color, pos, dir);
 		if (result != null) {
 			boolean doTeleport = checkXpCost(player, result);
 
 			if (doTeleport) {
-				if (result.rotation != PlayerRotation.NONE) player.rotationYaw = getYaw(result.rotation);
-				if (Config.elevatorCenter) player.setPositionAndUpdate(result.getX() + 0.5, result.getY() + 1.1, result.getZ() + 0.5);
-				else player.setPositionAndUpdate(player.posX, result.getY() + 1.1, player.posZ);
+				if (result.rotation != PlayerRotation.NONE) {
+					player.rotationYaw = getYaw(result.rotation);
+				}
+				if (Config.elevatorCenter) {
+					player.setPositionAndUpdate(result.pos.getX() + 0.5, result.pos.getY() + 1.1, result.pos.getZ() + 0.5);
+				} else {
+					player.setPositionAndUpdate(player.getPosX(), result.pos.getY() + 1.1, player.getPosZ());
+				}
 				world.playSound(null, player.getPosition(), OpenBlocks.Sounds.BLOCK_ELEVATOR_ACTIVATE, SoundCategory.BLOCKS, 1, 1);
 			}
 		}
@@ -144,8 +157,10 @@ public class ElevatorActionHandler {
 	}
 
 	protected static boolean checkXpCost(PlayerEntity player, SearchResult result) {
-		int distance = (int)Math.abs(player.posY - result.getY());
-		if (Config.elevatorXpDrainRatio == 0 || player.capabilities.isCreativeMode) return true;
+		int distance = (int)Math.abs(player.getPosY() - result.pos.getY());
+		if (Config.elevatorXpDrainRatio == 0 || player.abilities.isCreativeMode) {
+			return true;
+		}
 
 		int playerXP = EnchantmentUtils.getPlayerXP(player);
 		int neededXP = MathHelper.ceil(Config.elevatorXpDrainRatio * distance);
@@ -157,41 +172,42 @@ public class ElevatorActionHandler {
 		return false;
 	}
 
-	@SubscribeEvent
-	public void onElevatorEvent(ElevatorActionEvent evt) {
+	public static void onElevatorEvent(ElevatorActionEvent evt) {
 		final PlayerEntity player = evt.sender;
-		if (player == null) return;
+		if (player == null) {
+			return;
+		}
 
 		final World world = player.world;
-		if (world == null) return;
+		if (world == null) {
+			return;
+		}
 
-		final int x = MathHelper.floor(player.posX);
-		final int y = MathHelper.floor(player.getEntityBoundingBox().minY) - 1;
-		final int z = MathHelper.floor(player.posZ);
-		final BlockPos blockPos = new BlockPos(x, y, z);
+		final BlockPos blockPos = player.getPosition().down();
 
 		if (evt.sender != null) {
-			if (evt.sender.isRiding()) return;
+			if (evt.sender.isPassenger()) {
+				return;
+			}
 
 			final BlockState blockState = world.getBlockState(blockPos);
 			final ElevatorCheckEvent elevatorCheckResult = checkIsElevator(evt.sender, world, blockPos, blockState);
 
 			if (elevatorCheckResult.isElevator()) {
+				DyeColor color = elevatorCheckResult.getColor();
 				switch (evt.type) {
 					case JUMP:
-						activate(evt.sender, world, elevatorCheckResult.getColor(), blockPos, Direction.UP);
+						activate(evt.sender, world, color, blockPos, Direction.AxisDirection.POSITIVE);
 						break;
 					case SNEAK:
-						activate(evt.sender, world, elevatorCheckResult.getColor(), blockPos, Direction.DOWN);
+						activate(evt.sender, world, color, blockPos, Direction.AxisDirection.NEGATIVE);
 						break;
 				}
 			}
 		}
 	}
 
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void onPlayerMovement(PlayerMovementEvent evt) {
+	public static void onPlayerMovement(PlayerMovementEvent evt) {
 		new ElevatorActionEvent(evt.type).sendToServer();
 	}
 }

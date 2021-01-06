@@ -46,6 +46,39 @@ public class OpenBlocksLoot extends LootTableProvider {
 			registerDropSelfLootTable(OpenBlocks.Blocks.vacuumHopper);
 			registerLootTable(OpenBlocks.Blocks.guide, BlockLootProvider::createGuideDrops);
 			registerLootTable(OpenBlocks.Blocks.builderGuide, BlockLootProvider::createGuideDrops);
+
+			registerDropSelfLootTable(OpenBlocks.Blocks.whiteElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.orangeElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.magentaElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.lightBlueElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.yellowElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.limeElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.pinkElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.grayElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.lightGrayElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.cyanElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.purpleElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.blueElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.brownElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.greenElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.redElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.blackElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.whiteRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.orangeRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.magentaRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.lightBlueRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.yellowRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.limeRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.pinkRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.grayRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.lightGrayRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.cyanRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.purpleRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.blueRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.brownRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.greenRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.redRotatingElevator);
+			registerDropSelfLootTable(OpenBlocks.Blocks.blackRotatingElevator);
 		}
 
 		@Override

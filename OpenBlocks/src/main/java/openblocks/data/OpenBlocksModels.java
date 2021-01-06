@@ -31,6 +31,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import openblocks.OpenBlocks;
+import openmods.OpenMods;
 import openmods.block.BlockRotationMode;
 import openmods.geometry.Orientation;
 import org.apache.logging.log4j.LogManager;
@@ -49,6 +50,9 @@ public class OpenBlocksModels implements IDataProvider {
 		private final Consumer<IFinishedBlockState> blockStateOutput;
 		private final BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput;
 
+		private static final ModelsUtil CUBE_ALL_TINTED = new ModelsUtil(Optional.of(OpenMods.location("block/cube_all_tinted")), Optional.empty(), StockTextureAliases.ALL);
+		private static final ModelsUtil CUBE_TOP_TINTED = new ModelsUtil(Optional.of(OpenMods.location("block/cube_top_tinted")), Optional.empty(), StockTextureAliases.TOP, StockTextureAliases.SIDE);
+
 		public BlockModelProvider(Consumer<IFinishedBlockState> stateOutput, BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput, Consumer<Item> itemOutput) {
 			super(stateOutput, modelOutput, itemOutput);
 			this.blockStateOutput = stateOutput;
@@ -60,6 +64,8 @@ public class OpenBlocksModels implements IDataProvider {
 			makeGuide(OpenBlocks.Blocks.guide, OpenBlocks.location("block/guide_center_normal"));
 			makeGuide(OpenBlocks.Blocks.builderGuide, OpenBlocks.location("block/guide_center_ender"));
 			makeVacuumHopper();
+			makeElevators();
+			makeRotatingElevators();
 		}
 
 		private void makeGuide(Block block, final ResourceLocation center) {
@@ -96,15 +102,77 @@ public class OpenBlocksModels implements IDataProvider {
 					.func_240143_a_(Orientation.YN_ZN, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, sideModel).replaceInfoValue(BlockModelFields.field_240201_b_, BlockModelFields.Rotation.R90).replaceInfoValue(BlockModelFields.field_240200_a_, BlockModelFields.Rotation.R90));
 		}
 
-		private static BlockStateVariantBuilder.One<Orientation> createNoOrientationDispatch(ResourceLocation model) {
+		private static BlockStateVariantBuilder.One<Orientation> createFourDirectionOrientation() {
 			return BlockStateVariantBuilder
-					.func_240133_a_(BlockRotationMode.NONE.getProperty())
-					.func_240143_a_(Orientation.XP_YP, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, model));
+					.func_240133_a_(BlockRotationMode.FOUR_DIRECTIONS.getProperty())
+					.func_240143_a_(Orientation.XP_YP, BlockModelDefinition.getNewModelDefinition())
+					.func_240143_a_(Orientation.XN_YP, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240201_b_, BlockModelFields.Rotation.R180))
+					.func_240143_a_(Orientation.ZP_YP, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240201_b_, BlockModelFields.Rotation.R90))
+					.func_240143_a_(Orientation.ZN_YP, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240201_b_, BlockModelFields.Rotation.R270));
 		}
 
 		private void makeVacuumHopper() {
 			blockStateOutput.accept(FinishedVariantBlockState.func_240120_a_(OpenBlocks.Blocks.vacuumHopper, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, ModelsResourceUtil.func_240221_a_(OpenBlocks.Blocks.vacuumHopper))));
 			modelOutput.accept(ModelsResourceUtil.func_240219_a_(OpenBlocks.Blocks.vacuumHopper.asItem()), new BlockModelWriter(ModelsResourceUtil.func_240222_a_(OpenBlocks.Blocks.vacuumHopper, "_body")));
+		}
+
+		private void makeElevators() {
+			ModelTextures textures = new ModelTextures().func_240349_a_(StockTextureAliases.ALL, OpenBlocks.location("block/elevator"));
+			ResourceLocation model = CUBE_ALL_TINTED.func_240234_a_(OpenBlocks.location("block/elevator"), textures, modelOutput);
+
+			makeElevator(OpenBlocks.Blocks.whiteElevator, model);
+			makeElevator(OpenBlocks.Blocks.orangeElevator, model);
+			makeElevator(OpenBlocks.Blocks.magentaElevator, model);
+			makeElevator(OpenBlocks.Blocks.lightBlueElevator, model);
+			makeElevator(OpenBlocks.Blocks.yellowElevator, model);
+			makeElevator(OpenBlocks.Blocks.limeElevator, model);
+			makeElevator(OpenBlocks.Blocks.pinkElevator, model);
+			makeElevator(OpenBlocks.Blocks.grayElevator, model);
+			makeElevator(OpenBlocks.Blocks.lightGrayElevator, model);
+			makeElevator(OpenBlocks.Blocks.cyanElevator, model);
+			makeElevator(OpenBlocks.Blocks.purpleElevator, model);
+			makeElevator(OpenBlocks.Blocks.blueElevator, model);
+			makeElevator(OpenBlocks.Blocks.brownElevator, model);
+			makeElevator(OpenBlocks.Blocks.greenElevator, model);
+			makeElevator(OpenBlocks.Blocks.redElevator, model);
+			makeElevator(OpenBlocks.Blocks.blackElevator, model);
+		}
+
+		private void makeElevator(Block block, ResourceLocation model) {
+			blockStateOutput.accept(FinishedVariantBlockState.func_240120_a_(block, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, model)));
+			modelOutput.accept(ModelsResourceUtil.func_240219_a_(block.asItem()), new BlockModelWriter(model));
+		}
+
+		private void makeRotatingElevators() {
+			ModelTextures textures = new ModelTextures()
+					.func_240349_a_(StockTextureAliases.SIDE, OpenBlocks.location("block/elevator"))
+					.func_240349_a_(StockTextureAliases.TOP, OpenBlocks.location("block/elevator_rot"));
+			ResourceLocation model = CUBE_TOP_TINTED.func_240234_a_(OpenBlocks.location("block/rotating_elevator"), textures, modelOutput);
+
+			makeRotatingElevator(OpenBlocks.Blocks.whiteRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.orangeRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.magentaRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.lightBlueRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.yellowRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.limeRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.pinkRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.grayRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.lightGrayRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.cyanRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.purpleRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.blueRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.brownRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.greenRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.redRotatingElevator, model);
+			makeRotatingElevator(OpenBlocks.Blocks.blackRotatingElevator, model);
+		}
+
+		private void makeRotatingElevator(Block block, ResourceLocation model) {
+			blockStateOutput.accept(FinishedVariantBlockState
+					.func_240120_a_(block, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, model))
+					.func_240125_a_(createFourDirectionOrientation())
+			);
+			modelOutput.accept(ModelsResourceUtil.func_240219_a_(block.asItem()), new BlockModelWriter(model));
 		}
 	}
 

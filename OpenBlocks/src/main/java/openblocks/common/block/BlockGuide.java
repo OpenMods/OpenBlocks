@@ -40,7 +40,7 @@ import openmods.infobook.BookDocumentation;
 
 @BookDocumentation(hasVideo = true)
 public class BlockGuide extends OpenBlock.Orientable implements ISelectionAware {
-
+	@Nullable
 	private AxisAlignedBB selection;
 
 	private final IHitboxSupplier buttonsHitbox = OpenMods.PROXY.getHitboxes(OpenBlocks.location("guide_buttons"));

@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -13,15 +14,20 @@ import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.client.renderer.tileentity.guide.GuideModelHolder;
 import openblocks.client.renderer.tileentity.guide.TileEntityBuilderGuideRenderer;
 import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
+import openblocks.common.ElevatorActionHandler;
 
 public class ClientProxy implements IOpenBlocksProxy {
 	private final GuideModelHolder holder = new GuideModelHolder();
 
 	@Override
 	public void eventInit() {
-		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		eventBus.addListener(holder::onModelBake);
-		eventBus.addListener(holder::onModelRegister);
+		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modBus.addListener(holder::onModelBake);
+		modBus.addListener(holder::onModelRegister);
+		modBus.addListener(BlockColorHandlerRegistration::registerItemColorHandlers);
+
+		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+		forgeBus.addListener(ElevatorActionHandler::onPlayerMovement);
 	}
 
 	@Override

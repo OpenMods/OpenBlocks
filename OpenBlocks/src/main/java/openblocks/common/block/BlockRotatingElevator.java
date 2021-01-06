@@ -1,59 +1,66 @@
 package openblocks.common.block;
 
 import java.util.Set;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.Property;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.api.IElevatorBlock;
+import openblocks.api.IPaintableBlock;
+import openmods.block.BlockRotationMode;
+import openmods.block.IBlockRotationMode;
 import openmods.block.OpenBlock;
 import openmods.colors.ColorMeta;
 import openmods.geometry.Orientation;
 import openmods.utils.CollectionUtils;
 
-public class BlockElevatorRotating extends OpenBlock.FourDirections implements IElevatorBlock {
-
+public class BlockRotatingElevator extends OpenBlock.Orientable implements IElevatorBlock, IPaintableBlock {
+	@Nullable
 	public static Block colorToBlock(ColorMeta color) {
 		switch (color) {
 			case BLACK:
-				return Blocks.blackElevatorRotating;
+				return Blocks.blackRotatingElevator;
 			case BLUE:
-				return Blocks.blueElevatorRotating;
+				return Blocks.blueRotatingElevator;
 			case BROWN:
-				return Blocks.brownElevatorRotating;
+				return Blocks.brownRotatingElevator;
 			case CYAN:
-				return Blocks.cyanElevatorRotating;
+				return Blocks.cyanRotatingElevator;
 			case GRAY:
-				return Blocks.grayElevatorRotating;
+				return Blocks.grayRotatingElevator;
 			case GREEN:
-				return Blocks.greenElevatorRotating;
+				return Blocks.greenRotatingElevator;
 			case LIGHT_BLUE:
-				return Blocks.lightBlueElevatorRotating;
+				return Blocks.lightBlueRotatingElevator;
 			case LIGHT_GRAY:
-				return Blocks.lightGrayElevatorRotating;
+				return Blocks.lightGrayRotatingElevator;
 			case LIME:
-				return Blocks.limeElevatorRotating;
+				return Blocks.limeRotatingElevator;
 			case MAGENTA:
-				return Blocks.magentaElevatorRotating;
+				return Blocks.magentaRotatingElevator;
 			case ORANGE:
-				return Blocks.orangeElevatorRotating;
+				return Blocks.orangeRotatingElevator;
 			case PINK:
-				return Blocks.pinkElevatorRotating;
+				return Blocks.pinkRotatingElevator;
 			case PURPLE:
-				return Blocks.purpleElevatorRotating;
+				return Blocks.purpleRotatingElevator;
 			case RED:
-				return Blocks.redElevatorRotating;
+				return Blocks.redRotatingElevator;
 			case WHITE:
-				return Blocks.whiteElevatorRotating;
+				return Blocks.whiteRotatingElevator;
 			case YELLOW:
-				return Blocks.yellowElevatorRotating;
+				return Blocks.yellowRotatingElevator;
 			default:
 				return null;
 		}
@@ -61,9 +68,18 @@ public class BlockElevatorRotating extends OpenBlock.FourDirections implements I
 
 	private final ColorMeta color;
 
-	public BlockElevatorRotating(final ColorMeta color) {
-		super(Material.ROCK);
+	public BlockRotatingElevator(Block.Properties properties, final ColorMeta color) {
+		super(properties);
 		this.color = color;
+	}
+
+	public static BlockRotatingElevator create(final Material material, final ColorMeta color) {
+		return new BlockRotatingElevator(Block.Properties.create(material, color.vanillaEnum), color);
+	}
+
+	@Override
+	public IBlockRotationMode getRotationMode() {
+		return BlockRotationMode.FOUR_DIRECTIONS;
 	}
 
 	@Override
@@ -82,7 +98,7 @@ public class BlockElevatorRotating extends OpenBlock.FourDirections implements I
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		if (hand == Hand.MAIN_HAND) {
 			final ItemStack heldItem = player.getHeldItemMainhand();
 			if (!heldItem.isEmpty()) {
@@ -91,14 +107,15 @@ public class BlockElevatorRotating extends OpenBlock.FourDirections implements I
 					final ColorMeta meta = CollectionUtils.getRandom(metas);
 					final Block newBlock = colorToBlock(meta);
 					if (newBlock != null) {
-						final BlockState newState = newBlock.getDefaultState()
-								.withProperty(getPropertyOrientation(), state.getValue(getPropertyOrientation()));
-						return world.setBlockState(pos, newState);
+						Property<Orientation> orientationProperty = getOrientationProperty();
+						final BlockState newState = newBlock.getDefaultState().with(orientationProperty, state.get(orientationProperty));
+						world.setBlockState(blockPos, newState);
+						return ActionResultType.SUCCESS;
 					}
 				}
 			}
 		}
-		return false;
+		return ActionResultType.PASS;
 	}
 
 	@Override
@@ -122,5 +139,10 @@ public class BlockElevatorRotating extends OpenBlock.FourDirections implements I
 			default:
 				return PlayerRotation.NONE;
 		}
+	}
+
+	@Override
+	public String getTranslationKey() {
+		return "block.openblocks.rotating_elevator.name";
 	}
 }

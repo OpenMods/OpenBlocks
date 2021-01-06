@@ -4,26 +4,27 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.api.IElevatorBlock;
+import openblocks.api.IPaintableBlock;
 import openmods.block.OpenBlock;
 import openmods.colors.ColorMeta;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.CollectionUtils;
 
 @BookDocumentation(hasVideo = true, customName = "elevator")
-public class BlockElevator extends OpenBlock implements IElevatorBlock {
-
+public class BlockElevator extends OpenBlock implements IElevatorBlock, IPaintableBlock {
 	@Nullable
 	public static Block colorToBlock(final ColorMeta color) {
 		switch (color) {
@@ -66,9 +67,13 @@ public class BlockElevator extends OpenBlock implements IElevatorBlock {
 
 	private final ColorMeta color;
 
-	public BlockElevator(final ColorMeta color) {
-		super(Material.ROCK);
+	public BlockElevator(Block.Properties properties, ColorMeta color) {
+		super(properties);
 		this.color = color;
+	}
+
+	public static BlockElevator create(final Material material, final ColorMeta color) {
+		return new BlockElevator(Block.Properties.create(material, color.vanillaEnum), color);
 	}
 
 	@Override
@@ -87,12 +92,7 @@ public class BlockElevator extends OpenBlock implements IElevatorBlock {
 	}
 
 	@Override
-	public MapColor getMapColor(BlockState state, IBlockAccess worldIn, BlockPos pos) {
-		return MapColor.getBlockColor(color.vanillaEnum);
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		if (hand == Hand.MAIN_HAND) {
 			final ItemStack heldItem = player.getHeldItemMainhand();
 			if (!heldItem.isEmpty()) {
@@ -100,11 +100,14 @@ public class BlockElevator extends OpenBlock implements IElevatorBlock {
 				if (!metas.isEmpty()) {
 					final ColorMeta meta = CollectionUtils.getRandom(metas);
 					final Block newBlock = colorToBlock(meta);
-					if (newBlock != null) return world.setBlockState(pos, newBlock.getDefaultState());
+					if (newBlock != null) {
+						world.setBlockState(blockPos, newBlock.getDefaultState());
+						return ActionResultType.SUCCESS;
+					}
 				}
 			}
 		}
-		return false;
+		return ActionResultType.PASS;
 	}
 
 	@Override
@@ -117,4 +120,8 @@ public class BlockElevator extends OpenBlock implements IElevatorBlock {
 		return PlayerRotation.NONE;
 	}
 
+	@Override
+	public String getTranslationKey() {
+		return "block.openblocks.elevator.name";
+	}
 }
