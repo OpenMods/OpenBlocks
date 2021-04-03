@@ -39,8 +39,10 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockRotatingElevator;
 import openblocks.common.block.BlockVacuumHopper;
+import openblocks.common.block.HealBlock;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.item.ItemGuide;
+import openblocks.common.tileentity.HealTileEntity;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
@@ -99,6 +101,7 @@ public class OpenBlocks {
 	private static final String BLOCK_GREEN_ROTATING_ELEVATOR = "green_rotating_elevator";
 	private static final String BLOCK_RED_ROTATING_ELEVATOR = "red_rotating_elevator";
 	private static final String BLOCK_BLACK_ROTATING_ELEVATOR = "black_rotating_elevator";
+	private static final String BLOCK_HEAL = "heal";
 
 	private static final String SOUND_ELEVATOR_ACTIVATE = "elevator.activate";
 	private static final String SOUND_GRAVE_ROB = "grave.rob";
@@ -245,6 +248,9 @@ public class OpenBlocks {
 
 		@ObjectHolder(BLOCK_BLACK_ROTATING_ELEVATOR)
 		public static Block blackRotatingElevator;
+
+		@ObjectHolder(BLOCK_HEAL)
+		public static Block heal;
 	}
 
 	@ObjectHolder(MODID)
@@ -260,6 +266,9 @@ public class OpenBlocks {
 
 		@ObjectHolder(BLOCK_VACUUM_HOPPER)
 		public static Item vacuumHopper;
+
+		@ObjectHolder(BLOCK_HEAL)
+		public static Item heal;
 	}
 
 	@ObjectHolder(MODID)
@@ -272,6 +281,9 @@ public class OpenBlocks {
 
 		@ObjectHolder(BLOCK_VACUUM_HOPPER)
 		public static TileEntityType<TileEntityVacuumHopper> vacuumHopper;
+
+		@ObjectHolder(BLOCK_HEAL)
+		public static TileEntityType<TileEntityVacuumHopper> heal;
 	}
 
 	@ObjectHolder(MODID)
@@ -389,6 +401,7 @@ public class OpenBlocks {
 		registry.register(new BlockGuide(Block.Properties.create(Material.ROCK).notSolid().setLightLevel(v -> 10)).setTileEntity(TileEntityGuide.class).setRegistryName(BLOCK_GUIDE));
 		registry.register(new BlockBuilderGuide(Block.Properties.create(Material.ROCK).notSolid().setLightLevel(v -> 10)).setTileEntity(TileEntityBuilderGuide.class).setRegistryName(BLOCK_BUILDER_GUIDE));
 		registry.register(new BlockVacuumHopper(Block.Properties.create(Material.ROCK)).setTileEntity(TileEntityVacuumHopper.class).setRegistryName(BLOCK_VACUUM_HOPPER));
+		registry.register(new HealBlock(Block.Properties.create(Material.ROCK)).setTileEntity(HealTileEntity.class).setRegistryName(BLOCK_HEAL));
 
 		registry.register(BlockElevator.create(Material.ROCK, ColorMeta.WHITE).setRegistryName(BLOCK_WHITE_ELEVATOR));
 		registry.register(BlockElevator.create(Material.ROCK, ColorMeta.ORANGE).setRegistryName(BLOCK_ORANGE_ELEVATOR));
@@ -432,6 +445,7 @@ public class OpenBlocks {
 		registry.register(new ItemGuide(Blocks.guide, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_GUIDE));
 		registry.register(new ItemGuide(Blocks.builderGuide, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_BUILDER_GUIDE));
 		registry.register(new BlockItem(Blocks.vacuumHopper, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_VACUUM_HOPPER));
+		registry.register(new BlockItem(Blocks.heal, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_HEAL));
 
 		registry.register(new BlockItem(Blocks.whiteElevator, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_WHITE_ELEVATOR));
 		registry.register(new BlockItem(Blocks.orangeElevator, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_ORANGE_ELEVATOR));
@@ -474,6 +488,7 @@ public class OpenBlocks {
 		registry.register(new TileEntityType<>(TileEntityGuide::new, ImmutableSet.of(Blocks.guide), null).setRegistryName(BLOCK_GUIDE));
 		registry.register(new TileEntityType<>(TileEntityBuilderGuide::new, ImmutableSet.of(Blocks.builderGuide), null).setRegistryName(BLOCK_BUILDER_GUIDE));
 		registry.register(new TileEntityType<>(TileEntityVacuumHopper::new, ImmutableSet.of(Blocks.vacuumHopper), null).setRegistryName(BLOCK_VACUUM_HOPPER));
+		registry.register(new TileEntityType<HealTileEntity>(HealTileEntity::new, ImmutableSet.of(Blocks.heal), null).setRegistryName(BLOCK_HEAL));
 	}
 
 	@SubscribeEvent

@@ -46,6 +46,7 @@ public class OpenBlocksLoot extends LootTableProvider {
 			registerDropSelfLootTable(OpenBlocks.Blocks.vacuumHopper);
 			registerLootTable(OpenBlocks.Blocks.guide, BlockLootProvider::createGuideDrops);
 			registerLootTable(OpenBlocks.Blocks.builderGuide, BlockLootProvider::createGuideDrops);
+			registerDropSelfLootTable(OpenBlocks.Blocks.heal);
 
 			registerDropSelfLootTable(OpenBlocks.Blocks.whiteElevator);
 			registerDropSelfLootTable(OpenBlocks.Blocks.orangeElevator);
