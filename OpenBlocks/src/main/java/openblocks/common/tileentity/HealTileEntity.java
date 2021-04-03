@@ -25,7 +25,7 @@ public class HealTileEntity extends OpenTileEntity implements ITickableTileEntit
                     //Just for the effectDisplay
                     player.addPotionEffect(new EffectInstance(Effects.REGENERATION, 15, 1));
                     player.addPotionEffect(new EffectInstance(Effects.SATURATION, 15, -1));
-                    //Change only happens hear
+                    //Change only happens here
                     player.getFoodStats().addStats(1,1);
                     player.heal(1);
                 }
