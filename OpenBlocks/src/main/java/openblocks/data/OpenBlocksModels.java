@@ -27,6 +27,7 @@ import net.minecraft.data.ModelTextures;
 import net.minecraft.data.ModelsResourceUtil;
 import net.minecraft.data.ModelsUtil;
 import net.minecraft.data.StockTextureAliases;
+import net.minecraft.data.TexturedModel;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
@@ -66,6 +67,13 @@ public class OpenBlocksModels implements IDataProvider {
 			makeVacuumHopper();
 			makeElevators();
 			makeRotatingElevators();
+			makeSimpleBlock(OpenBlocks.Blocks.heal);
+		}
+
+		private void makeSimpleBlock(final Block block) {
+			ResourceLocation model = TexturedModel.field_240434_a_.func_240466_a_(block, this.modelOutput);
+			blockStateOutput.accept(FinishedVariantBlockState.func_240120_a_(block, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, model)));
+			registerItem(block, model);
 		}
 
 		private void makeGuide(Block block, final ResourceLocation center) {
@@ -80,7 +88,7 @@ public class OpenBlocksModels implements IDataProvider {
 
 			blockStateOutput.accept(FinishedVariantBlockState.func_240119_a_(block).func_240125_a_(createThreeFourDispatch(topModel, sideModel)));
 
-			modelOutput.accept(ModelsResourceUtil.func_240219_a_(block.asItem()), new BlockModelWriter(topModel));
+			registerItem(block, topModel);
 		}
 
 		private static BlockStateVariantBuilder.One<Orientation> createThreeFourDispatch(ResourceLocation topModel, ResourceLocation sideModel) {
@@ -113,7 +121,7 @@ public class OpenBlocksModels implements IDataProvider {
 
 		private void makeVacuumHopper() {
 			blockStateOutput.accept(FinishedVariantBlockState.func_240120_a_(OpenBlocks.Blocks.vacuumHopper, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, ModelsResourceUtil.func_240221_a_(OpenBlocks.Blocks.vacuumHopper))));
-			modelOutput.accept(ModelsResourceUtil.func_240219_a_(OpenBlocks.Blocks.vacuumHopper.asItem()), new BlockModelWriter(ModelsResourceUtil.func_240222_a_(OpenBlocks.Blocks.vacuumHopper, "_body")));
+			registerItem(OpenBlocks.Blocks.vacuumHopper, ModelsResourceUtil.func_240222_a_(OpenBlocks.Blocks.vacuumHopper, "_body"));
 		}
 
 		private void makeElevators() {
@@ -140,7 +148,7 @@ public class OpenBlocksModels implements IDataProvider {
 
 		private void makeElevator(Block block, ResourceLocation model) {
 			blockStateOutput.accept(FinishedVariantBlockState.func_240120_a_(block, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, model)));
-			modelOutput.accept(ModelsResourceUtil.func_240219_a_(block.asItem()), new BlockModelWriter(model));
+			registerItem(block, model);
 		}
 
 		private void makeRotatingElevators() {
@@ -172,6 +180,10 @@ public class OpenBlocksModels implements IDataProvider {
 					.func_240120_a_(block, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, model))
 					.func_240125_a_(createFourDirectionOrientation())
 			);
+			registerItem(block, model);
+		}
+
+		private void registerItem(Block block, ResourceLocation model) {
 			modelOutput.accept(ModelsResourceUtil.func_240219_a_(block.asItem()), new BlockModelWriter(model));
 		}
 	}

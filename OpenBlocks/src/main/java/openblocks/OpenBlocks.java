@@ -39,7 +39,6 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockRotatingElevator;
 import openblocks.common.block.BlockVacuumHopper;
-import openblocks.common.block.HealBlock;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.item.ItemGuide;
 import openblocks.common.tileentity.HealTileEntity;
@@ -52,6 +51,7 @@ import openblocks.data.OpenBlocksModels;
 import openblocks.events.ElevatorActionEvent;
 import openblocks.events.GuideActionEvent;
 import openblocks.rpc.IGuideAnimationTrigger;
+import openmods.block.OpenBlock;
 import openmods.colors.ColorMeta;
 import openmods.container.TileEntityContainerFactory;
 import openmods.network.event.NetworkEventEntry;
@@ -401,7 +401,7 @@ public class OpenBlocks {
 		registry.register(new BlockGuide(Block.Properties.create(Material.ROCK).notSolid().setLightLevel(v -> 10)).setTileEntity(TileEntityGuide.class).setRegistryName(BLOCK_GUIDE));
 		registry.register(new BlockBuilderGuide(Block.Properties.create(Material.ROCK).notSolid().setLightLevel(v -> 10)).setTileEntity(TileEntityBuilderGuide.class).setRegistryName(BLOCK_BUILDER_GUIDE));
 		registry.register(new BlockVacuumHopper(Block.Properties.create(Material.ROCK)).setTileEntity(TileEntityVacuumHopper.class).setRegistryName(BLOCK_VACUUM_HOPPER));
-		registry.register(new HealBlock(Block.Properties.create(Material.ROCK)).setTileEntity(HealTileEntity.class).setRegistryName(BLOCK_HEAL));
+		registry.register(new OpenBlock(Block.Properties.create(Material.ROCK)).setTileEntity(HealTileEntity.class).setRegistryName(BLOCK_HEAL));
 
 		registry.register(BlockElevator.create(Material.ROCK, ColorMeta.WHITE).setRegistryName(BLOCK_WHITE_ELEVATOR));
 		registry.register(BlockElevator.create(Material.ROCK, ColorMeta.ORANGE).setRegistryName(BLOCK_ORANGE_ELEVATOR));
