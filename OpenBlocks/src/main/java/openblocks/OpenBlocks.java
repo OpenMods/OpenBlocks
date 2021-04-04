@@ -41,6 +41,7 @@ import openblocks.common.block.BlockRotatingElevator;
 import openblocks.common.block.BlockVacuumHopper;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.item.ItemGuide;
+import openblocks.common.item.SlimalyzerItem;
 import openblocks.common.tileentity.HealTileEntity;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
 import openblocks.common.tileentity.TileEntityGuide;
@@ -102,6 +103,8 @@ public class OpenBlocks {
 	private static final String BLOCK_RED_ROTATING_ELEVATOR = "red_rotating_elevator";
 	private static final String BLOCK_BLACK_ROTATING_ELEVATOR = "black_rotating_elevator";
 	private static final String BLOCK_HEAL = "heal";
+
+	private static final String ITEM_SLIMALYZER = "slimalyzer";
 
 	private static final String SOUND_ELEVATOR_ACTIVATE = "elevator.activate";
 	private static final String SOUND_GRAVE_ROB = "grave.rob";
@@ -269,6 +272,9 @@ public class OpenBlocks {
 
 		@ObjectHolder(BLOCK_HEAL)
 		public static Item heal;
+
+		@ObjectHolder(ITEM_SLIMALYZER)
+		public static Item slimalyzer;
 	}
 
 	@ObjectHolder(MODID)
@@ -480,6 +486,8 @@ public class OpenBlocks {
 		registry.register(new BlockItem(Blocks.greenRotatingElevator, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_GREEN_ROTATING_ELEVATOR));
 		registry.register(new BlockItem(Blocks.redRotatingElevator, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_RED_ROTATING_ELEVATOR));
 		registry.register(new BlockItem(Blocks.blackRotatingElevator, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_BLACK_ROTATING_ELEVATOR));
+
+		registry.register(new SlimalyzerItem(new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(ITEM_SLIMALYZER));
 	}
 
 	@SubscribeEvent
@@ -550,7 +558,7 @@ public class OpenBlocks {
 
 	@SubscribeEvent
 	public static void clientInit(final FMLClientSetupEvent evt) {
-		PROXY.clientInit();
+		PROXY.clientInit(evt);
 	}
 
 	@SubscribeEvent
