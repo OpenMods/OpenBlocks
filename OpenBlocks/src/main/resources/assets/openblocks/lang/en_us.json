@@ -11,6 +11,7 @@
     "block.openblocks.elevator.name": "Elevator",
     "block.openblocks.elevator.description": "Place one elevator directly three or more blocks above another with no blocks inbetween and you'll be able to either 'jump' to move up, or 'crouch' to move down. Elevators can be dyed by clicking on them with dye, however, you can only teleport between elevators of the same color.",
     "block.openblocks.rotating_elevator.name": "Rotating Elevator",
+    "block.openblocks.heal": "Healer",
     "openblocks.gui.vacuumhopper": "Vacuum Hopper",
     "openblocks.gui.xp_outputs": "XP Outputs",
     "openblocks.gui.item_outputs": "Item Outputs:",
