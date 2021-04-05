@@ -13,6 +13,7 @@
     "block.openblocks.rotating_elevator.name": "Rotating Elevator",
     "block.openblocks.heal": "Healer",
     "item.openblocks.slimalyzer": "Slimalyzer",
+    "item.openblocks.slimalyzer.description": "Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk.",
     "openblocks.gui.vacuumhopper": "Vacuum Hopper",
     "openblocks.gui.xp_outputs": "XP Outputs",
     "openblocks.gui.item_outputs": "Item Outputs:",
