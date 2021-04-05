@@ -64,7 +64,9 @@ public class OpenBlocksModels implements IDataProvider {
 		public void func_239863_a_() {
 			makeGuide(OpenBlocks.Blocks.guide, OpenBlocks.location("block/guide_center_normal"));
 			makeGuide(OpenBlocks.Blocks.builderGuide, OpenBlocks.location("block/guide_center_ender"));
-			makeVacuumHopper();
+			makeCustomModel(OpenBlocks.Blocks.vacuumHopper);
+			registerItem(OpenBlocks.Blocks.vacuumHopper, ModelsResourceUtil.func_240222_a_(OpenBlocks.Blocks.vacuumHopper, "_body"));
+			makeCustomModel(OpenBlocks.Blocks.tank);
 			makeElevators();
 			makeRotatingElevators();
 			makeSimpleBlock(OpenBlocks.Blocks.heal);
@@ -119,9 +121,8 @@ public class OpenBlocksModels implements IDataProvider {
 					.func_240143_a_(Orientation.ZN_YP, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240201_b_, BlockModelFields.Rotation.R270));
 		}
 
-		private void makeVacuumHopper() {
-			blockStateOutput.accept(FinishedVariantBlockState.func_240120_a_(OpenBlocks.Blocks.vacuumHopper, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, ModelsResourceUtil.func_240221_a_(OpenBlocks.Blocks.vacuumHopper))));
-			registerItem(OpenBlocks.Blocks.vacuumHopper, ModelsResourceUtil.func_240222_a_(OpenBlocks.Blocks.vacuumHopper, "_body"));
+		private void makeCustomModel(final Block block) {
+			blockStateOutput.accept(FinishedVariantBlockState.func_240120_a_(block, BlockModelDefinition.getNewModelDefinition().replaceInfoValue(BlockModelFields.field_240202_c_, ModelsResourceUtil.func_240221_a_(block))));
 		}
 
 		private void makeElevators() {

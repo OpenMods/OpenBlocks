@@ -121,8 +121,14 @@ public class FluidXpUtils {
 	}
 
 	public static Optional<IFluidXpConverter> getConverter(FluidStack stack) {
+		if (stack.isEmpty()) {
+			return Optional.empty();
+		}
+
 		for (ConversionEntry e : converters) {
-			if (e.matches(stack)) return e.optionalConverter;
+			if (e.matches(stack)) {
+				return e.optionalConverter;
+			}
 		}
 
 		return Optional.empty();
@@ -143,7 +149,9 @@ public class FluidXpUtils {
 	}
 
 	public static final Function<FluidStack, FluidStack> FLUID_TO_LEVELS = input -> {
-		if (input == null) return null;
+		if (input.isEmpty()) {
+			return FluidStack.EMPTY;
+		}
 		final Optional<IFluidXpConverter> maybeConverter = getConverter(input);
 		return maybeConverter.map(converter -> {
 			final FluidStack result = input.copy();

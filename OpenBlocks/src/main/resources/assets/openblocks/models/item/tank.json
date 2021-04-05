@@ -1,0 +1,15 @@
+{
+    "parent": "block/block",
+    "loader": "openmods:multipart",
+    "parts": {
+        "frame": {
+            "parent": "openblocks:item/tank_frame"
+        },
+        "fluid": {
+            "loader": "openmods:textured_item",
+            "untexturedModel": "openblocks:item/tank_fluid_empty",
+            "texturedModel": "openblocks:item/tank_fluid",
+            "placeholder": "_placeholder:fluid"
+        }
+    }
+}

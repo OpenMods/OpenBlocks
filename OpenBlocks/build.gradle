@@ -9,8 +9,8 @@ buildscript {
             url = 'http://files.minecraftforge.net/maven'
         }
         maven {
-              name 'OpenMods Third Party'
-              url 'http://repo.openmods.info/artifactory/simple/thirdparty'
+            name 'OpenMods Third Party'
+            url 'http://repo.openmods.info/artifactory/simple/thirdparty'
         }
     }
 
@@ -33,7 +33,7 @@ dependencies {
 
     compile group: 'info.openmods', name: 'calc', version: '0.3'
     compile "info.computercraft:ComputerCraft-API:1.80pr0"
-    compile "info.openmods:OpenPeripheralCore-API:"+opc_api_version
+    compile "info.openmods:OpenPeripheralCore-API:" + opc_api_version
 }
 
 //================================================
@@ -159,20 +159,12 @@ sourceSets {
     }
 }
 
-processResources {
-    inputs.property "version", mod_version
-    inputs.property "mc_version", mc_version
-
-    rename '(.+_at.cfg)', 'META-INF/$1'
-}
-
 //================================================
 // Jar tasks
 
 // Generate FML Coremod manifest
 ext.fmlManifest = manifest {
     attributes(
-        "FMLAT": "openblocks_at.cfg",
     )
 }
 

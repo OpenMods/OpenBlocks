@@ -4,8 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import openblocks.IOpenBlocksProxy;
@@ -14,7 +17,9 @@ import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.client.renderer.tileentity.guide.GuideModelHolder;
 import openblocks.client.renderer.tileentity.guide.TileEntityBuilderGuideRenderer;
 import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
+import openblocks.client.renderer.tileentity.tank.TileEntityTankRenderer;
 import openblocks.common.ElevatorActionHandler;
+import openblocks.common.item.ItemTankBlock;
 
 public class ClientProxy implements IOpenBlocksProxy {
 	private final GuideModelHolder holder = new GuideModelHolder();
@@ -34,12 +39,18 @@ public class ClientProxy implements IOpenBlocksProxy {
 	public void clientInit() {
 		ClientRegistry.bindTileEntityRenderer(OpenBlocks.TileEntities.guide, dispatcher -> new TileEntityGuideRenderer<>(dispatcher, holder));
 		ClientRegistry.bindTileEntityRenderer(OpenBlocks.TileEntities.builderGuide, dispatcher -> new TileEntityBuilderGuideRenderer(dispatcher, holder));
+		ClientRegistry.bindTileEntityRenderer(OpenBlocks.TileEntities.tank, TileEntityTankRenderer::new);
 
 		RenderTypeLookup.setRenderLayer(OpenBlocks.Blocks.guide, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(OpenBlocks.Blocks.builderGuide, RenderType.getTranslucent());
 
-		Minecraft.getInstance().deferTask(() ->
-				ScreenManager.registerFactory(OpenBlocks.Containers.vacuumHopper, GuiVacuumHopper::new)
+		Minecraft.getInstance().deferTask(() -> {
+					ScreenManager.registerFactory(OpenBlocks.Containers.vacuumHopper, GuiVacuumHopper::new);
+					ItemModelsProperties.registerProperty(OpenBlocks.Items.tank, new ResourceLocation("level"), (stack, worldIn, entityIn) -> {
+						final FluidTank tank = ItemTankBlock.readTank(stack);
+						return 16.0f * tank.getFluidAmount() / tank.getCapacity();
+					});
+				}
 		);
 	}
 }

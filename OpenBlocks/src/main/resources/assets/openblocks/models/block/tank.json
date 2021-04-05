@@ -1,0 +1,45 @@
+{
+    "loader": "openmods:variant",
+    "base": {
+        "parent": "openblocks:block/tank_base"
+    },
+    "_comments" : [
+        "Can I interest you in Karnaugh maps? -b",
+        "n_x is present when block has connected neigbour on side x, n_xy is present when neigbour is on diagonal between x and y",
+        "Whole logic stuff and how I got those equations would be really hard to document here. Sorry.",
+        "Symmetry of equations is broken by special casing for blocks on diagonal (to prevent edge from being drawn twice)"
+    ],
+    "expansions": [
+        "edgeT(n_1, n_2, n_12) := (n_1 = n_2) & !n_12",
+        "edgeB(n_1, n_2, n_12) := (!n_2 & !n_1) | (n_2 & !n_12 & n_1)",
+
+        "bs := edgeT(n_b, n_s, n_bs)",
+        "bn := edgeT(n_b, n_n, n_bn)",
+        "ts := edgeB(n_t, n_s, n_ts)",
+        "tn := edgeB(n_t, n_n, n_tn)",
+
+        "ne := edgeT(n_n, n_e, n_ne)",
+        "nw := edgeT(n_n, n_w, n_nw)",
+        "se := edgeB(n_s, n_e, n_se)",
+        "sw := edgeB(n_s, n_w, n_sw)",
+
+        "be := edgeT(n_b, n_e, n_be)",
+        "bw := edgeT(n_b, n_w, n_bw)",
+        "te := edgeB(n_t, n_e, n_te)",
+        "tw := edgeB(n_t, n_w, n_tw)"
+    ],
+    "variants": {
+        "nw" : { "parent": "openblocks:block/tank_frame_y", "transform" : { "translation": [0, 0, 0] } },
+        "ne" : { "parent": "openblocks:block/tank_frame_y", "transform" : { "translation": [1, 0, 0] } },
+        "se" : { "parent": "openblocks:block/tank_frame_y", "transform" : { "translation": [1, 0, 1] } },
+        "sw" : { "parent": "openblocks:block/tank_frame_y", "transform" : { "translation": [0, 0, 1] } },
+        "tw" : { "parent": "openblocks:block/tank_frame_z", "transform" : { "translation": [0, 1, 0] } },
+        "te" : { "parent": "openblocks:block/tank_frame_z", "transform" : { "translation": [1, 1, 0] } },
+        "be" : { "parent": "openblocks:block/tank_frame_z", "transform" : { "translation": [1, 0, 0] } },
+        "bw" : { "parent": "openblocks:block/tank_frame_z", "transform" : { "translation": [0, 0, 0] } },
+        "tn" : { "parent": "openblocks:block/tank_frame_x", "transform" : { "translation": [0, 1, 0] } },
+        "ts" : { "parent": "openblocks:block/tank_frame_x", "transform" : { "translation": [0, 1, 1] } },
+        "bs" : { "parent": "openblocks:block/tank_frame_x", "transform" : { "translation": [0, 0, 1] } },
+        "bn" : { "parent": "openblocks:block/tank_frame_x", "transform" : { "translation": [0, 0, 0] } }
+    }
+}
