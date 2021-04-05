@@ -28,7 +28,7 @@ import openmods.sync.drops.SyncDropsFunction;
 public class OpenBlocksLoot extends LootTableProvider {
 
 	private static class BlockLootProvider extends BlockLootTables {
-		private static LootTable.Builder createGuideDrops(final Block block) {
+		private static LootTable.Builder createDroppableTileEntityDrops(final Block block) {
 			return LootTable.builder().addLootPool(
 					withSurvivesExplosion(block,
 							LootPool.builder()
@@ -44,8 +44,8 @@ public class OpenBlocksLoot extends LootTableProvider {
 		public void addTables() {
 			registerDropSelfLootTable(OpenBlocks.Blocks.ladder);
 			registerDropSelfLootTable(OpenBlocks.Blocks.vacuumHopper);
-			registerLootTable(OpenBlocks.Blocks.guide, BlockLootProvider::createGuideDrops);
-			registerLootTable(OpenBlocks.Blocks.builderGuide, BlockLootProvider::createGuideDrops);
+			registerLootTable(OpenBlocks.Blocks.guide, BlockLootProvider::createDroppableTileEntityDrops);
+			registerLootTable(OpenBlocks.Blocks.builderGuide, BlockLootProvider::createDroppableTileEntityDrops);
 			registerDropSelfLootTable(OpenBlocks.Blocks.heal);
 
 			registerDropSelfLootTable(OpenBlocks.Blocks.whiteElevator);
@@ -80,6 +80,8 @@ public class OpenBlocksLoot extends LootTableProvider {
 			registerDropSelfLootTable(OpenBlocks.Blocks.greenRotatingElevator);
 			registerDropSelfLootTable(OpenBlocks.Blocks.redRotatingElevator);
 			registerDropSelfLootTable(OpenBlocks.Blocks.blackRotatingElevator);
+
+			registerLootTable(OpenBlocks.Blocks.tank, BlockLootProvider::createDroppableTileEntityDrops);
 		}
 
 		@Override

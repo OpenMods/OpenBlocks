@@ -3,7 +3,6 @@ package openblocks.common.tileentity;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -94,7 +93,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 
 	private final SidedFluidCapabilityWrapper tankCapability = SidedFluidCapabilityWrapper.wrap(tank, xpOutputs, true, false);
 
-	private Map<String, String> outputState = ImmutableMap.of();
+	private VariantModelState outputState = VariantModelState.EMPTY;
 
 	@Override
 	protected void createSyncedFields() {
@@ -120,7 +119,6 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 			public void onSync(Set<ISyncableObject> changes) {
 				if (changes.contains(xpOutputs) || changes.contains(itemOutputs)) {
 					updateOutputStates();
-					ModelDataManager.requestModelDataRefresh(TileEntityVacuumHopper.this);
 					world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.RERENDER_MAIN_THREAD);
 				}
 			}
@@ -142,7 +140,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 					}
 				}
 
-				outputState = newOutputState.build();
+				outputState = VariantModelState.create(newOutputState.build());
 			}
 		});
 	}
@@ -327,10 +325,6 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 		this.needsTankUpdate = true;
 	}
 
-	public Map<String, String> getOutputState() {
-		return outputState;
-	}
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
@@ -348,7 +342,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements ISidedIn
 	@Nonnull
 	@Override
 	public IModelData getModelData() {
-		return new ModelDataMap.Builder().withInitial(VariantModelState.PROPERTY, VariantModelState.create(getOutputState())).build();
+		return new ModelDataMap.Builder().withInitial(VariantModelState.PROPERTY, () -> outputState).build();
 	}
 
 	@Override

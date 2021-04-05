@@ -10,6 +10,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -38,13 +39,16 @@ import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockRotatingElevator;
+import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockVacuumHopper;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.item.ItemGuide;
 import openblocks.common.item.SlimalyzerItem;
 import openblocks.common.tileentity.HealTileEntity;
+import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
 import openblocks.common.tileentity.TileEntityGuide;
+import openblocks.common.tileentity.TileEntityTank;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openblocks.data.OpenBlockRecipes;
 import openblocks.data.OpenBlocksLoot;
@@ -103,6 +107,7 @@ public class OpenBlocks {
 	private static final String BLOCK_RED_ROTATING_ELEVATOR = "red_rotating_elevator";
 	private static final String BLOCK_BLACK_ROTATING_ELEVATOR = "black_rotating_elevator";
 	private static final String BLOCK_HEAL = "heal";
+	private static final String BLOCK_TANK = "tank";
 
 	private static final String ITEM_SLIMALYZER = "slimalyzer";
 
@@ -126,7 +131,8 @@ public class OpenBlocks {
 	private static final String SOUND_ANNOYING_ALARMCLOCK = "annoying.alarmclock";
 	private static final String SOUND_ANNOYING_VIBRATE = "annoying.vibrate";
 
-	private static final String FLUID_XP = "xpjuice";
+	private static final String FLUID_XP_STILL = "xpjuice_still";
+	private static final String FLUID_XP_FLOWING = "xpjuice_flowing";
 
 	public static ResourceLocation location(String path) {
 		return new ResourceLocation(MODID, path);
@@ -254,6 +260,9 @@ public class OpenBlocks {
 
 		@ObjectHolder(BLOCK_HEAL)
 		public static Block heal;
+
+		@ObjectHolder(BLOCK_TANK)
+		public static Block tank;
 	}
 
 	@ObjectHolder(MODID)
@@ -275,6 +284,8 @@ public class OpenBlocks {
 
 		@ObjectHolder(ITEM_SLIMALYZER)
 		public static Item slimalyzer;
+		@ObjectHolder(BLOCK_TANK)
+		public static Item tank;
 	}
 
 	@ObjectHolder(MODID)
@@ -290,6 +301,9 @@ public class OpenBlocks {
 
 		@ObjectHolder(BLOCK_HEAL)
 		public static TileEntityType<TileEntityVacuumHopper> heal;
+
+		@ObjectHolder(BLOCK_TANK)
+		public static TileEntityType<TileEntityTank> tank;
 	}
 
 	@ObjectHolder(MODID)
@@ -364,8 +378,11 @@ public class OpenBlocks {
 
 	@ObjectHolder(MODID)
 	public static class Fluids {
-		@ObjectHolder(FLUID_XP)
+		@ObjectHolder(FLUID_XP_STILL)
 		public static Fluid xpJuice;
+
+		@ObjectHolder(FLUID_XP_FLOWING)
+		public static Fluid xpJuiceFlowing;
 	}
 
 	@ObjectHolder(MODID)
@@ -442,6 +459,8 @@ public class OpenBlocks {
 		registry.register(BlockRotatingElevator.create(Material.ROCK, ColorMeta.GREEN).setRegistryName(BLOCK_GREEN_ROTATING_ELEVATOR));
 		registry.register(BlockRotatingElevator.create(Material.ROCK, ColorMeta.RED).setRegistryName(BLOCK_RED_ROTATING_ELEVATOR));
 		registry.register(BlockRotatingElevator.create(Material.ROCK, ColorMeta.BLACK).setRegistryName(BLOCK_BLACK_ROTATING_ELEVATOR));
+
+		registry.register(new BlockTank(Block.Properties.create(Material.ROCK).notSolid()).setTileEntity(TileEntityTank.class).setRegistryName(BLOCK_TANK));
 	}
 
 	@SubscribeEvent
@@ -488,6 +507,7 @@ public class OpenBlocks {
 		registry.register(new BlockItem(Blocks.blackRotatingElevator, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_BLACK_ROTATING_ELEVATOR));
 
 		registry.register(new SlimalyzerItem(new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(ITEM_SLIMALYZER));
+		registry.register(new ItemTankBlock(Blocks.tank, new Item.Properties().group(OPEN_BLOCKS_TAB)).setRegistryName(BLOCK_TANK));
 	}
 
 	@SubscribeEvent
@@ -496,22 +516,31 @@ public class OpenBlocks {
 		registry.register(new TileEntityType<>(TileEntityGuide::new, ImmutableSet.of(Blocks.guide), null).setRegistryName(BLOCK_GUIDE));
 		registry.register(new TileEntityType<>(TileEntityBuilderGuide::new, ImmutableSet.of(Blocks.builderGuide), null).setRegistryName(BLOCK_BUILDER_GUIDE));
 		registry.register(new TileEntityType<>(TileEntityVacuumHopper::new, ImmutableSet.of(Blocks.vacuumHopper), null).setRegistryName(BLOCK_VACUUM_HOPPER));
-		registry.register(new TileEntityType<HealTileEntity>(HealTileEntity::new, ImmutableSet.of(Blocks.heal), null).setRegistryName(BLOCK_HEAL));
+		registry.register(new TileEntityType<>(HealTileEntity::new, ImmutableSet.of(Blocks.heal), null).setRegistryName(BLOCK_HEAL));
+		registry.register(new TileEntityType<>(TileEntityTank::new, ImmutableSet.of(Blocks.tank), null).setRegistryName(BLOCK_TANK));
 	}
 
 	@SubscribeEvent
 	public static void registerFluids(final RegistryEvent.Register<Fluid> evt) {
 		final IForgeRegistry<Fluid> registry = evt.getRegistry();
-		registry.register(new ForgeFlowingFluid.Source(
-				new ForgeFlowingFluid.Properties(() -> Fluids.xpJuice, () -> Fluids.xpJuice,
-						FluidAttributes.builder(location("block/xp_juice_still"), location("block/xp_juice_flowing"))
-								.luminosity(10)
-								.density(800)
-								.viscosity(1500)
-								.translationKey("fluid.openblocks.xp_juice")
-								.sound(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP)
-				)
-		).setRegistryName(FLUID_XP));
+		FluidAttributes.Builder xpJuiceAttributes = FluidAttributes.builder(location("block/xp_juice_still"), location("block/xp_juice_flowing"))
+				.luminosity(10)
+				.density(800)
+				.viscosity(1500)
+				.translationKey("fluid.openblocks.xp_juice")
+				.sound(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP);
+
+		registry.register(new ForgeFlowingFluid.Source(new ForgeFlowingFluid.Properties(
+				() -> Fluids.xpJuice,
+				() -> Fluids.xpJuiceFlowing,
+				xpJuiceAttributes
+		)).setRegistryName(FLUID_XP_STILL));
+
+		registry.register(new ForgeFlowingFluid.Flowing(new ForgeFlowingFluid.Properties(
+				() -> Fluids.xpJuice,
+				() -> Fluids.xpJuiceFlowing,
+				xpJuiceAttributes
+		)).setRegistryName(FLUID_XP_FLOWING));
 	}
 
 	@SubscribeEvent
@@ -554,6 +583,11 @@ public class OpenBlocks {
 	public static void commonInit(final FMLCommonSetupEvent evt) {
 		MinecraftForge.EVENT_BUS.addListener(GuideActionHandler::onEvent);
 		MinecraftForge.EVENT_BUS.addListener(ElevatorActionHandler::onElevatorEvent);
+		MinecraftForge.EVENT_BUS.register(new TileEntityTank.BucketFillHandler()
+				.addFilledBucket(net.minecraft.item.Items.LAVA_BUCKET)
+				.addFilledBucket(net.minecraft.item.Items.WATER_BUCKET)
+				// TODO xp bucket? Figure out correct approach.
+		);
 	}
 
 	@SubscribeEvent
