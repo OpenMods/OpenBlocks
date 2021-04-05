@@ -11,6 +11,7 @@ import net.minecraft.data.RecipeProvider;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ForgeItemTagsProvider;
 import openblocks.OpenBlocks;
 
 public class OpenBlockRecipes extends RecipeProvider {
@@ -36,7 +37,6 @@ public class OpenBlockRecipes extends RecipeProvider {
 				.key('g', Tags.Items.GLASS)
 				.addCriterion("has_guide", hasItem(OpenBlocks.Items.guide))
 				.build(consumer);
-		;
 
 		shapedRecipe(OpenBlocks.Blocks.guide)
 				.patternLine("grg")
@@ -54,6 +54,16 @@ public class OpenBlockRecipes extends RecipeProvider {
 				.addIngredient(Items.ENDER_EYE)
 				.addCriterion("has_hopper", hasItem(Blocks.HOPPER))
 				.build(consumer);
-		;
+
+		shapedRecipe(OpenBlocks.Items.slimalyzer)
+				.patternLine("igi")
+				.patternLine("isi")
+				.patternLine("iri")
+				.key('i', Tags.Items.INGOTS_IRON)
+				.key('g', Tags.Items.GLASS_PANES)
+				.key('s', Tags.Items.SLIMEBALLS)
+				.key('r', Tags.Items.DUSTS_REDSTONE)
+				.addCriterion("has_slime", hasItem(Tags.Items.SLIMEBALLS))
+				.build(consumer);
 	}
 }

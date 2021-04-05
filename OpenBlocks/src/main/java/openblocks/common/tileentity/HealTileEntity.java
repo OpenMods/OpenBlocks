@@ -7,7 +7,6 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import openblocks.OpenBlocks;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.BlockUtils;
-
 import java.util.List;
 
 public class HealTileEntity extends OpenTileEntity implements ITickableTileEntity {
@@ -18,6 +17,7 @@ public class HealTileEntity extends OpenTileEntity implements ITickableTileEntit
     @Override
     public void tick() {
         if (world.isRemote) return;
+
         if (world.getGameTime() % 10 == 0) {
             List<ServerPlayerEntity> playersOnTop = world.getEntitiesWithinAABB(ServerPlayerEntity.class, BlockUtils.expandAround(pos, 1, 2, 1));
             for (ServerPlayerEntity player : playersOnTop) {
