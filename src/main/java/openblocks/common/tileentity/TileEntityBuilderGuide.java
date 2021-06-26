@@ -7,6 +7,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.event.world.BlockEvent;
 import openblocks.rpc.IGuideAnimationTrigger;
 import openmods.shapes.IShapeable;
 import openmods.utils.BlockNotifyFlags;
@@ -37,7 +40,7 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 					creativeReplaceBlocks(block, blockMeta);
 					return true;
 				} else {
-					return survivalPlaceBlocks(player, heldStack, block, blockMeta, side, hitX, hitY, hitZ);
+					return survivalPlaceBlocks(itemBlock, player, heldStack, block, blockMeta, side, hitX, hitY, hitZ);
 				}
 			}
 		}
@@ -63,20 +66,25 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 		return Math.abs(x) > 1 || Math.abs(y) > 1 || Math.abs(z) > 1;
 	}
 
-	private boolean survivalPlaceBlocks(EntityPlayerMP player, ItemStack heldItem, Block block, int blockMeta, int side, float hitX, float hitY, float hitZ) {
+	private boolean survivalPlaceBlocks(ItemBlock itemBlock, EntityPlayerMP player, ItemStack heldItem, Block block, int blockMeta, int side, float hitX, float hitY, float hitZ) {
 		for (Coord relCoord : getShapeSafe().getCoords()) {
 			final int absX = relCoord.x + xCoord;
 			final int absY = relCoord.y + yCoord;
 			final int absZ = relCoord.z + zCoord;
 			if (worldObj.blockExists(absX, absY, absZ) && worldObj.isAirBlock(absX, absY, absZ)) {
-				boolean hasPlaced = player.theItemInWorldManager.activateBlockOrUseItem(player, worldObj, heldItem, absX, absY, absZ, side, hitX, hitY, hitZ);
-				if (hasPlaced) {
+				BlockSnapshot snapshot = BlockSnapshot.getBlockSnapshot(worldObj, absX, absY, absZ);
+				BlockEvent.PlaceEvent event = new BlockEvent.PlaceEvent(snapshot, worldObj.getBlock(absX, absY, absZ), player);
+				MinecraftForge.EVENT_BUS.post(event);
+				if (!event.isCanceled()) {
+					itemBlock.placeBlockAt(heldItem, player, worldObj, absX, absY, absZ, side, hitX, hitY, hitZ, blockMeta);
 					final String particle = "blockdust_" + Block.getIdFromBlock(block) + "_" + blockMeta;
 					createServerRpcProxy(IGuideAnimationTrigger.class).trigger(absX, absY, absZ, particle);
+					--heldItem.stackSize;
 					return true;
+				} else {
+					snapshot.restore();
 				}
 			}
-
 		}
 
 		return false;
