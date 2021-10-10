@@ -9,27 +9,30 @@
 buildscript {
     repositories {
         // General deps
+buildscript {
+    repositories {
         mavenCentral()
-        // Minecraft Forge
         maven {
-            name = 'Forge'
-            url = 'http://files.minecraftforge.net/maven'
+            name = "gt"
+            url = "https://gregtech.overminddl1.com/"
         }
         // Sonatype (for SpecialSource in 1.7+)
         maven {
             name = "Sonatype Nexus"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
-
+        maven {
+            name = "jitpack.io"
+            url = "https://jitpack.io"
+        }
         maven {
               name 'OpenMods Third Party'
               url 'http://repo.openmods.info/artifactory/simple/thirdparty'
         }
     }
 
-
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'com.github.GTNH2:ForgeGradle:FG_1.2-SNAPSHOT'
         classpath 'net.thesilkminer.gradle.translationchecker:TranslationChecker:1.1'
     }
 }
