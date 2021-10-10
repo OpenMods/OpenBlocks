@@ -230,7 +230,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 		if (player.dimension != 0)
 			noise = 0;
-		else if (worldObj.isRaining() && !strong)
+		else if (worldObj.isRaining() && player.isWet() && !strong)
 			noise = (biomeRain > 0? -0.5 : 0);
 		return noise;
 	}
