@@ -8,9 +8,6 @@
 
 buildscript {
     repositories {
-        // General deps
-buildscript {
-    repositories {
         mavenCentral()
         maven {
             name = "gt"
