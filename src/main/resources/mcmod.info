@@ -3,11 +3,11 @@
   "modList":
   [
     {
-      "modid": "OpenBlocks",
-      "name": "OpenBlocks",
+      "modid": "${modId}",
+      "name": "${modName}",
       "description": "All the things you never thought you will ever need",
-      "version": "${version}",
-      "mcversion": "${mc_version}",
+      "version": "${modVersion}",
+      "mcversion": "${minecraftVersion}",
       "url": "http://openmods.info/",
       "updateUrl": "",
       "authorList": [

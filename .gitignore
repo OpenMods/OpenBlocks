@@ -1,45 +1,28 @@
-# OpenMods Java Project .gitignore file
-# Last Authored: 20150816
-
-# Runtime output
-*.class
-*.log
-*.pid
-*.log.gz
-
-# Package Files
-*.jar
-*.war
-*.ear
-
-# Gradle
-.gradle/
-build/
-run/
-bin/
-
-# Eclipse
+.gradle
+.settings
+/.idea/
+/run/
+/build/
+/eclipse/
 .classpath
 .project
-.settings/
-
-# IntelliJ IDEA
-*.iml
-*.iws
-*.ipr
-.idea/
-
-# OS Garbage
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Misc
-download/
-config/
-saves/
-crash-reports/
-screenshots/
-usernamecache.json
+/bin/
+/config/
+/crash-reports/
+/logs/
 options.txt
-*.bat
+/saves/
+usernamecache.json
+banned-ips.json
+banned-players.json
+eula.txt
+ops.json
+server.properties
+servers.dat
+usercache.json
+whitelist.json
+/out/
+*.iml
+*.ipr
+*.iws
+src/main/resources/mixins.*.json
