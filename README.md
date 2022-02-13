@@ -6,7 +6,7 @@ An open source random collection of blocks and miscellaneous cool stuff.
 
 For stable release downloads, click [here](https://www.openmods.info).
 
-For snapshot versions, check the [Jenkins](https://builds.openmods.info).
+For snapshot versions, check the [Jenkins](http://jenkins.usrv.eu:8080/job/OpenBlocks/).
 
 **[FAQ](https://openmods.info/faq.html)**
 

@@ -1,7 +1,7 @@
 // Add your dependencies here
 
 dependencies {
-    compile("com.github.GTNewHorizons:OpenModsLib:master-SNAPSHOT:dev")
+    compile("com.github.GTNewHorizons:OpenModsLib:0.10.4:dev")
 
     compile("openperipheral:OpenPeripheralCore-API:3.4.1")
 

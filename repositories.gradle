@@ -2,6 +2,11 @@
 
 repositories {
     maven {
+        name 'GTNH Maven'
+        url 'http://jenkins.usrv.eu:8081/nexus/content/groups/public/'
+        allowInsecureProtocol
+    }
+    maven {
         url = "https://repo.openmods.info/artifactory/openmods/"
     }
     maven {
