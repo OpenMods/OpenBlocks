@@ -1,26 +1,26 @@
 {
   "modListVersion": "2",
-  "modList":
-  [
-    {
-      "modid": "${modId}",
-      "name": "${modName}",
-      "description": "All the things you never thought you will ever need",
-      "version": "${modVersion}",
-      "mcversion": "${minecraftVersion}",
-      "url": "http://openmods.info/",
-      "updateUrl": "",
-      "authorList": [
-        "Mikee",
-        "NeverCast",
-        "boq",
-        "Lyqyd"
-      ],
-      "credits": "",
-      "logoFile": "",
-      "screenshots": [
-      ],
-      "parent": ""
-    }
-  ]
+  "modList": [{
+    "modid": "${modId}",
+    "name": "${modName}",
+    "description": "All the things you never thought you will ever need",
+    "version": "${modVersion}",
+    "mcversion": "${minecraftVersion}",
+    "url": "http://openmods.info/",
+    "updateUrl": "",
+    "authorList": [
+      "Mikee",
+      "NeverCast",
+      "boq",
+      "Lyqyd"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "parent": "",
+    "requiredMods": ["Forge","OpenMods@[0.10.1,)"],
+    "dependencies": ["OpenMods@[0.10.1,)"],
+    "dependants": [],
+    "useDependencyInformation": true
+  }]
 }

@@ -1,13 +1,15 @@
 package openblocks;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
 import java.util.Map;
 import net.minecraft.launchwrapper.Launch;
 import openmods.core.OpenModsCorePlugin;
 
-//must be higher than one in openmodslib
+//must be higher than the one in OpenModslib
 @SortingIndex(32)
+@MCVersion("1.7.10")
 public class OpenBlocksCorePlugin implements IFMLLoadingPlugin {
 
 	@Override

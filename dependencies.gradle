@@ -1,15 +1,10 @@
 // Add your dependencies here
 
 dependencies {
-    compile("com.github.GTNewHorizons:OpenModsLib:0.10.4:dev")
+    compile('com.github.GTNewHorizons:OpenModsLib:0.10.4:dev')
 
-    compile("openperipheral:OpenPeripheralCore-API:3.4.1")
+    compile('openperipheral:OpenPeripheralCore-API:3.4.1')
 
-    compileOnly("com.github.GTNewHorizons:NotenoughItems:master-SNAPSHOT:dev") {
-        transitive = false
-    }
-
-    compileOnly("curse.maven:computercraft-67504:2269339") {
-        transitive = false
-    }
+    compileOnly('com.github.GTNewHorizons:NotEnoughItems:2.2.7-GTNH:dev')
+    compileOnly('curse.maven:computercraft-67504:2269339')
 }
